@@ -615,7 +615,14 @@ function rangeBar(t){
 /* NOTE BLOCK — RICH TEXT + RUDY */
 function subtaskBlock(t){
   var tid=t.id;
-  if(!t._subtasks)t._subtasks=loadSubtasks(t.id);
+  // ครั้งแรกที่เจอ task นี้ — ยังไม่เคยโหลดงานย่อยจาก Notion
+  if (t._subtasks === undefined) {
+    t._subtasks = null; // null = กำลังโหลดอยู่
+    fetchSubtasks(tid);
+  }
+  if (t._subtasks === null) {
+    return '<div class="st-wrap"><div class="st-body" style="padding:14px;text-align:center;color:#bbb;font-size:11px">⏳ กำลังโหลดงานย่อย...</div></div>';
+  }
   var subs=t._subtasks||[];
   var done=subs.filter(function(s){return s.done;}).length;
   var total=subs.length;
@@ -648,12 +655,12 @@ function subtaskBlock(t){
       h+='<div class="st-name '+nameCls+'">'+s.name+'</div>';
       if(isDone)h+='<span class="st-badge" style="background:#EAF3DE;color:#27500A">เสร็จ</span>';
       else if(isActive)h+='<span class="st-badge" style="background:#EEF4FF;color:#534AB7">กำลังทำ</span>';
-      h+='<button class="st-del" data-tid="'+tid+'" data-idx="'+idx2+'" onclick="toggleSubtask(this.dataset.tid,this.dataset.idx)">'+( isDone?'↩':'✓' )+'</button>';
-      h+='<button class="st-del" data-tid="'+tid+'" data-idx="'+idx2+'" onclick="delSubtask(this.dataset.tid,this.dataset.idx)" style="margin-left:2px">×</button>';
+      h+='<button class="st-del" data-tid="'+tid+'" data-bid="'+s.id+'" data-done="'+isDone+'" onclick="toggleSubtask(this.dataset.tid,this.dataset.bid,this.dataset.done)">'+( isDone?'↩':'✓' )+'</button>';
+      h+='<button class="st-del" data-tid="'+tid+'" data-bid="'+s.id+'" onclick="delSubtask(this.dataset.tid,this.dataset.bid)" style="margin-left:2px">×</button>';
       h+='</div>';
     });
   }
-  h+='<div class="st-add-row" data-stid="\'+tid+\'" onclick="addSubtask(this.dataset.stid)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>เพิ่มงานย่อย</div>';
+  h+='<div class="st-add-row" data-stid="'+tid+'" onclick="addSubtask(this.dataset.stid)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>เพิ่มงานย่อย</div>';
   h+='</div></div></div>';
   return h;
 }
@@ -662,42 +669,50 @@ function getTask(tid){
   [todayTasks,overdueTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid)found=t;});});
   return found;
 }
-function saveSubtasks(tid){
-  var t=getTask(tid);
-  if(!t)return;
-  try{localStorage.setItem('subtasks_'+tid,JSON.stringify(t._subtasks||[]));}catch(e){}
-  // re-render card
-  var el=document.getElementById('tc-'+tid);
-  if(el){el.outerHTML=taskCard(t,{move:true});}
+function fetchSubtasks(tid){
+  api({action:'getSubtasks', id:tid}, function(d){
+    var t=getTask(tid);
+    if(!t) return;
+    t._subtasks = d && d.subtasks ? d.subtasks : [];
+    rerenderTaskCard(tid);
+  });
 }
-function loadSubtasks(tid){
-  try{
-    var raw=localStorage.getItem('subtasks_'+tid);
-    return raw?JSON.parse(raw):[];
-  }catch(e){return [];}
+function rerenderTaskCard(tid){
+  var el=document.getElementById('tc-'+tid);
+  if(!el) return;
+  var t=getTask(tid);
+  if(!t) return;
+  el.outerHTML = tcCard(t, {move:true});
 }
 function addSubtask(tid){
   var name=prompt('ชื่องานย่อย:');
   if(!name||!name.trim())return;
-  var t=getTask(tid);
-  if(!t)return;
-  if(!t._subtasks)t._subtasks=loadSubtasks(tid);
-  t._subtasks.push({name:name.trim(),done:false});
-  saveSubtasks(tid);
+  showToast('⏳ กำลังเพิ่ม...');
+  apiS({action:'addSubtask', id:tid, name:encodeURIComponent(name.trim())});
+  // รอ Notion เขียนเสร็จ แล้วโหลดรายการใหม่ทั้งหมด (จะได้ blockId จริงของอันที่เพิ่ม)
+  setTimeout(function(){
+    var t=getTask(tid);
+    if(t) t._subtasks=undefined; // force reload รอบหน้า
+    fetchSubtasks(tid);
+  }, 700);
 }
-function toggleSubtask(tid,idx2){
-  idx2=parseInt(idx2);
+function toggleSubtask(tid, blockId, currentlyDoneStr){
+  var newDone = !(currentlyDoneStr === 'true');
   var t=getTask(tid);
-  if(!t||!t._subtasks)return;
-  t._subtasks[idx2].done=!t._subtasks[idx2].done;
-  saveSubtasks(tid);
+  if(t && t._subtasks){
+    var s=t._subtasks.find(function(x){return x.id===blockId;});
+    if(s) s.done=newDone;
+  }
+  rerenderTaskCard(tid);
+  apiS({action:'toggleSubtask', blockId:blockId, done:newDone});
 }
-function delSubtask(tid,idx2){
-  idx2=parseInt(idx2);
+function delSubtask(tid, blockId){
   var t=getTask(tid);
-  if(!t||!t._subtasks)return;
-  t._subtasks.splice(idx2,1);
-  saveSubtasks(tid);
+  if(t && t._subtasks){
+    t._subtasks=t._subtasks.filter(function(x){return x.id!==blockId;});
+  }
+  rerenderTaskCard(tid);
+  apiS({action:'deleteSubtask', blockId:blockId});
 }
 function noteBlock(t){
   var tid=t.id,note=t.note||'',saved=t._noteSaved||false;
@@ -742,6 +757,8 @@ function noteBlock(t){
   h+='<button class="btn-cancel-note" data-nid="'+tid+'" onclick="closeNoteInline(this.dataset.nid)">ยกเลิก</button>';
   h+='<button class="btn-save-note" data-nid="'+tid+'" onclick="saveNoteInline(this.dataset.nid)">&#128190; บันทึก</button>';
   h+='</div></div></div>';
+  // SUBTASK (Notion to-do block sync)
+  h+=subtaskBlock(t);
   // RUDY
   h+='<div id="rudy-'+tid+'" class="rudy-box">';
   h+='<div class="rudy-box-hdr">';
@@ -946,7 +963,7 @@ function tcCard(t,opts){
   var st=getStatus(t),col=priCol(t.priority);
   var sn=(t.name||'').replace(/'/g,"'");
   var isDone=t.done;
-  var h='<div class="tc" style="border-left-color:'+col+(isDone?';opacity:.7':'')+'">'+
+  var h='<div class="tc" id="tc-'+t.id+'" style="border-left-color:'+col+(isDone?';opacity:.7':'')+'">'+
     '<div class="tc-hdr"><div class="tc-name'+(isDone?' done-name':'')+'">'+t.name+'</div>'+
     '<div class="tc-acts">'+statusBadge(st,t)+' <span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span>';
   if(!isDone){
@@ -970,7 +987,7 @@ function tcCard(t,opts){
 function tcCard2(t){
   var st=getStatus(t),col=priCol(t.priority);
   var sn=(t.name||'').replace(/'/g,"'");
-  var h='<div class="tc" style="border-left-color:'+col+'">';
+  var h='<div class="tc" id="tc-'+t.id+'" style="border-left-color:'+col+'">';
   h+='<div class="tc-hdr"><div class="tc-name">'+t.name+'</div>';
   h+='<div class="tc-acts">'+statusBadge(st,t)+' <span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span></div></div>';
   h+=rangeBar(t)+noteBlock(t);
@@ -1451,37 +1468,6 @@ function asgnClear(){
 function asgnConfirm(){
   var st=window._asgnState;if(!st||!st.selStart){showToast('⚠️ กรุณาเลือกวันเริ่ม');return;}
   doAssign(st.id,st.selStart,st.selEnd||'');
-}
-function asgnNav(dir){
-  var st=window._asgnState;if(!st)return;
-  st.mo+=dir;
-  if(st.mo>11){st.mo=0;st.yr++;}
-  if(st.mo<0){st.mo=11;st.yr--;}
-  var box=document.getElementById('modal-body');
-  if(box)box.innerHTML='<div class="modal-title">เลือกช่วงเวลา "'+st.name+'" <button class="modal-x" onclick="closeModal()">×</button></div>'+st.build();
-}
-function asgnPick(ds){
-  var st=window._asgnState;if(!st)return;
-  if(ds<TODAY_STR)return;
-  if(!st.selStart||ds<st.selStart||(st.selStart&&st.selEnd)){
-    st.selStart=ds;st.selEnd='';
-  } else if(ds===st.selStart){
-    st.selStart='';st.selEnd='';
-  } else {
-    st.selEnd=ds;
-  }
-  var box=document.getElementById('modal-body');
-  if(box)box.innerHTML='<div class="modal-title">เลือกช่วงเวลา "'+st.name+'" <button class="modal-x" onclick="closeModal()">×</button></div>'+st.build();
-}
-function asgnClear(){
-  var st=window._asgnState;if(!st)return;
-  st.selStart='';st.selEnd='';
-  var box=document.getElementById('modal-body');
-  if(box)box.innerHTML='<div class="modal-title">เลือกช่วงเวลา "'+st.name+'" <button class="modal-x" onclick="closeModal()">×</button></div>'+st.build();
-}
-function asgnConfirm(id){
-  var st=window._asgnState;if(!st||!st.selStart){showToast('⚠️ กรุณาเลือกวันเริ่ม');return;}
-  doAssign(id,st.selStart,st.selEnd||'');
 }
 function doAssign(id,date,endDate){
   if(!date){showToast('⚠️ กรุณาเลือกวันเริ่ม');return;}
