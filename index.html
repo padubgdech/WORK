@@ -556,6 +556,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 var GAS="https://script.google.com/macros/s/AKfycbzUocf5fXk59buzOHC7vOYPfuXJC2x5vxozg6AfC9VpA3mlFRxV53aJ_8jnrvFc4eHA/exec";
 var TODAY=new Date(), TODAY_STR=d2s(TODAY);
 var todayTasks=[], overdueTasks=[], todayEvents=[], routineItems=[], noDateTasks=[];
+var historyTasksCache={};
 var calY=TODAY.getFullYear(), calMo=TODAY.getMonth();
 var calCache={t:{},e:{}}, calSel=TODAY_STR;
 var _addPri='Medium';
@@ -1461,9 +1462,8 @@ function renderNDTasks(){
             h+='<div style="height:100%;width:'+pct+'%;background:'+pCol+';border-radius:2px;transition:width .3s"></div>';
             h+='</div></div>';
           }
-          // meta + actions
-          h+='<div class="nd-c-bottom">';
-          h+='<div class="nd-c-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ยังไม่มีวัน</div>';
+          // actions
+          h+='<div class="nd-c-bottom" style="justify-content:flex-end">';
           h+='<div class="nd-c-acts">';
           h+='<button class="nd-c-btn-done" data-doneid="'+t.id+'" data-donename="'+sn+'" onclick="doDoneND(this.dataset.doneid,this.dataset.donename)">✓ Done</button>';
           h+='<button class="nd-c-btn-date" data-nid="'+t.id+'" data-nname="'+sn+'" onclick="assignDate(this.dataset.nid,this.dataset.nname)">📅 + วัน</button>';
@@ -1589,6 +1589,8 @@ function doAssignDate(){var id=document.getElementById('as-id').value,d=document
 function renderHistory(){
   api({action:'getCompletedTasks',days:30},function(data){
     var tasks=data?data.tasks||[]:[]; 
+    historyTasksCache={};
+    tasks.forEach(function(t){historyTasksCache[t.id]=t;});
     var byDate={};tasks.forEach(function(t){var d=t.completedDate||TODAY_STR;if(!byDate[d])byDate[d]=[];byDate[d].push(t);});
     var dates=Object.keys(byDate).sort().reverse(),h='';
     dates.forEach(function(date){
@@ -1597,7 +1599,11 @@ function renderHistory(){
       var thM=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
       var isT=date===TODAY_STR;
       h+='<div class="hist-card"><div class="hist-hdr"><div style="font-size:14px;font-weight:600;color:#111">วัน'+thDF[d.getDay()]+' '+d.getDate()+' '+thM[d.getMonth()]+'</div><span style="background:'+(isT?'#111':'#f7f6f3')+';color:'+(isT?'#fff':'#555')+';padding:3px 12px;border-radius:10px;font-size:11px;font-weight:600;border:.5px solid '+(isT?'#111':'var(--border)')+'">'+list.length+' งาน</span></div>';
-      list.forEach(function(t){h+='<div class="hist-row"><span style="color:#0f7b55;font-size:16px">✓</span><div style="flex:1;font-size:13px;color:#888;text-decoration:line-through;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+t.name+'</div><span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span></div>';});
+      list.forEach(function(t){h+='<div class="hist-row" data-hid="'+t.id+'" onclick="openHistoryDetail(this.dataset.hid)" style="cursor:pointer">' +
+        '<span style="color:#0f7b55;font-size:16px">✓</span>' +
+        '<div style="flex:1;font-size:13px;color:#888;text-decoration:line-through;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+t.name+'</div>' +
+        '<span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span>' +
+        '<span style="color:#ccc;font-size:12px;margin-left:4px">›</span></div>';});
       h+='</div>';
     });
     if(!h)h='<div style="color:#bbb;text-align:center;padding:40px;font-size:13px">ยังไม่มีงานที่เสร็จ</div>';
@@ -1610,6 +1616,32 @@ function renderHistory(){
     var tot=ph+pm+pl||1;
     document.getElementById('hs-pribar').innerHTML='<div style="flex:'+ph+';background:#111;border-radius:4px 0 0 4px"></div><div style="flex:'+pm+';background:#c97575"></div><div style="flex:'+pl+';background:#f0d0d0;border-radius:0 4px 4px 0"></div>';
     document.getElementById('hs-prileg').innerHTML=[{l:'High',c:'#111',n:ph,p:Math.round(ph/tot*100)},{l:'Medium',c:'#c97575',n:pm,p:Math.round(pm/tot*100)},{l:'Low',c:'#f0d0d0',n:pl,p:Math.round(pl/tot*100)}].map(function(x){return'<div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:'+x.c+'"></div><div style="flex:1;font-size:12px;color:#555">'+x.l+'</div><div style="font-size:12px;font-weight:600;color:#111">'+x.n+' งาน · '+x.p+'%</div></div>';}).join('');
+  });
+}
+function openHistoryDetail(id){
+  var t=historyTasksCache[id];
+  if(!t)return;
+  var dateLbl='';
+  if(t.actionDate){dateLbl=fmtShort(t.actionDate)+(t.endDate?' – '+fmtShort(t.endDate):'');}
+  var h='<div class="modal-title">'+t.name+' <button class="modal-x" onclick="closeModal()">×</button></div>';
+  h+='<div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;align-items:center">';
+  h+='<span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span>';
+  h+='<span class="badge b-on">✓ เสร็จ '+fmtShort(t.completedDate)+'</span>';
+  if(dateLbl)h+='<span style="font-size:11px;color:#aaa">📅 '+dateLbl+'</span>';
+  h+='</div>';
+  h+='<div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">📝 Note</div>';
+  h+='<div style="font-size:13px;color:#555;line-height:1.7;background:#f8f8fc;border-radius:8px;padding:10px 12px;margin-bottom:16px;white-space:pre-wrap">'+(t.note?t.note:'<span style="color:#ccc;font-style:italic">ไม่มี note</span>')+'</div>';
+  h+='<div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">✓ งานย่อย</div>';
+  h+='<div id="hist-subtasks-'+id+'" style="font-size:12px;color:#bbb">⏳ กำลังโหลด...</div>';
+  showModal(h);
+  api({action:'getSubtasks', id:id}, function(d){
+    var el=document.getElementById('hist-subtasks-'+id);
+    if(!el)return; // ปิด modal ไปแล้ว
+    var subs=d&&d.subtasks?d.subtasks:[];
+    if(!subs.length){el.innerHTML='<span style="color:#ccc;font-style:italic">ไม่มีงานย่อย</span>';return;}
+    el.innerHTML=subs.map(function(s){
+      return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px;'+(s.done?'color:#bbb;text-decoration:line-through':'color:#333')+'">'+(s.done?'✓':'○')+' '+s.name+'</div>';
+    }).join('');
   });
 }
 function renderSummary(){
