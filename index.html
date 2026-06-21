@@ -170,7 +170,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .st-body{padding:10px 12px 8px}
 .st-timeline{position:relative;padding-left:20px}
 .st-timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:14px;width:1.5px;background:#BFE3C8}
-.st-item{position:relative;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.st-item{position:relative;display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
 .st-item:last-child{margin-bottom:0}
 .st-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;margin-left:-20px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #F3FAF0;z-index:1}
 .st-dot.done{background:#0f7b55;color:#fff;border-color:#F3FAF0}
@@ -180,10 +180,10 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .st-name.done{text-decoration:line-through;color:#9BC4A8}
 .st-name.active{color:#1F6B43;font-weight:600}
 .st-badge{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;flex-shrink:0}
-.st-toggle-btn{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid #BFE3C8;background:#fff;color:#1F6B43;font-size:11px;cursor:pointer;flex-shrink:0;padding:0;line-height:1}
-.st-toggle-btn:hover{background:#1F6B43;color:#fff;border-color:#1F6B43}
-.st-del{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;background:transparent;color:#9BC4A8;font-size:13px;cursor:pointer;flex-shrink:0;padding:0;line-height:1}
-.st-del:hover{color:#fff;background:#FF3B30}
+.st-toggle-btn{height:22px;padding:0 10px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;border:none;background:#D9EEDD;color:#1F6B43;font-size:9.5px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
+.st-toggle-btn:hover{background:#c5e6cc}
+.st-del{height:22px;padding:0 10px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;border:none;background:#FBE3E3;color:#C0392B;font-size:9.5px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
+.st-del:hover{background:#f6cfcf}
 .st-add-row{display:flex;align-items:center;gap:6px;padding:5px 4px 0;color:#7FAE8E;font-size:11px;cursor:pointer;margin-top:6px;border-top:1px dashed #BFE3C8}
 .st-add-row:hover{color:#1F6B43}
 .st-bar-wrap{height:3px;background:#D9EEDD;border-radius:2px;margin:0 12px 8px;overflow:hidden}
@@ -701,8 +701,8 @@ function subtaskBlock(t){
       h+='<div class="st-name '+nameCls+'">'+s.name+'</div>';
       if(isDone)h+='<span class="st-badge" style="background:#0f7b55;color:#fff">เสร็จ</span>';
       else if(isActive)h+='<span class="st-badge" style="background:#6FBF85;color:#fff">กำลังทำ</span>';
-      h+='<button class="st-toggle-btn" data-tid="'+tid+'" data-bid="'+s.id+'" data-done="'+isDone+'" onclick="toggleSubtask(this.dataset.tid,this.dataset.bid,this.dataset.done)">'+( isDone?'↩':'✓' )+'</button>';
-      h+='<button class="st-del" data-tid="'+tid+'" data-bid="'+s.id+'" onclick="delSubtask(this.dataset.tid,this.dataset.bid)" style="margin-left:3px">×</button>';
+      h+='<button class="st-toggle-btn" data-tid="'+tid+'" data-bid="'+s.id+'" data-done="'+isDone+'" onclick="toggleSubtask(this.dataset.tid,this.dataset.bid,this.dataset.done)">'+( isDone?'↩ ยกเลิก':'✓ เสร็จ' )+'</button>';
+      h+='<button class="st-del" data-tid="'+tid+'" data-bid="'+s.id+'" onclick="delSubtask(this.dataset.tid,this.dataset.bid)">ลบ</button>';
       h+='</div>';
     });
   }
