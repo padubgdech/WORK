@@ -1492,10 +1492,15 @@ function ndCardHtml(t,col){
   h+='</div>';
   return h;
 }
+function ndShouldShow(t){
+  if(!t.actionDate)return true; // ไม่มีวันเลย -> โชว์ในหน้า Tasks เสมอ
+  // มีวันแล้ว -> โชว์เฉพาะที่ "ยังไม่ถึง" (upcoming) เท่านั้น เพราะ overdue/ongoing/วันนี้ ไปอยู่หน้า Main แล้ว ไม่ต้องซ้ำ
+  return getStatus(t)==='upcoming';
+}
 function renderNDColumnsFromCache(){
   ['High','Medium','Low'].forEach(function(pri){
     var id=pri==='High'?'nd-high':pri==='Medium'?'nd-med':'nd-low';
-    var list=noDateTasks.filter(function(t){return t.priority===pri;});
+    var list=noDateTasks.filter(function(t){return t.priority===pri&&ndShouldShow(t);});
     list.sort(function(a,b){
       var ad=a.actionDate||'9999-99-99', bd=b.actionDate||'9999-99-99';
       return ad<bd?-1:ad>bd?1:0;
