@@ -472,21 +472,21 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <div>
       <div class="sec" style="color:#FF3B30;border-bottom-color:#FFCDD2">
         <span>🔴 HIGH</span>
-        <button onclick="openAdd('High')" style="padding:5px 12px;background:#FCEAEA;border:none;color:#D6453D;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+        <button onclick="openAddND('High')" style="padding:5px 12px;background:#FCEAEA;border:none;color:#D6453D;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
       </div>
       <div id="nd-high"><div class="ld">⏳</div></div>
     </div>
     <div>
       <div class="sec" style="color:#FF9500;border-bottom-color:#FAEEDA">
         <span>🟡 MEDIUM</span>
-        <button onclick="openAdd('Medium')" style="padding:5px 12px;background:#FAEEDA;border:none;color:#BA7517;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+        <button onclick="openAddND('Medium')" style="padding:5px 12px;background:#FAEEDA;border:none;color:#BA7517;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
       </div>
       <div id="nd-med"><div class="ld">⏳</div></div>
     </div>
     <div>
       <div class="sec" style="color:#34C759;border-bottom-color:#EAF3DE">
         <span>🟢 LOW</span>
-        <button onclick="openAdd('Low')" style="padding:5px 12px;background:#EAF3DE;border:none;color:#1D9E75;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+        <button onclick="openAddND('Low')" style="padding:5px 12px;background:#EAF3DE;border:none;color:#1D9E75;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
       </div>
       <div id="nd-low"><div class="ld">⏳</div></div>
     </div>
@@ -1242,6 +1242,27 @@ function openAdd(pri){
   setTimeout(function(){var el=document.getElementById('add-nm');if(el)el.focus();},80);
 }
 function selPri(el,p){_addPri=p;document.querySelectorAll('.pri-btn').forEach(function(b){b.className='pri-btn';});el.className='pri-btn active-'+p.toLowerCase()[0];}
+function openAddND(pri){
+  _addPri=pri||'Medium';
+  var h='<div class="modal-title">เพิ่มงาน ('+pri+') <button class="modal-x" onclick="closeModal()">×</button></div>';
+  h+='<div class="fld"><label>ชื่องาน</label><input type="text" id="addnd-nm" placeholder="ชื่องาน..."></div>';
+  h+='<div class="fld"><label>Note (ไม่บังคับ)</label><textarea id="addnd-note" rows="3" placeholder="รายละเอียด..."></textarea></div>';
+  h+='<button class="btn-submit" onclick="submitAddND()">+ บันทึกงาน</button>';
+  showModal(h);
+  setTimeout(function(){var el=document.getElementById('addnd-nm');if(el)el.focus();},80);
+}
+function submitAddND(){
+  var name=(document.getElementById('addnd-nm')||{}).value||'';
+  var note=(document.getElementById('addnd-note')||{}).value||'';
+  if(!name.trim()){showToast('กรุณาใส่ชื่องาน');return;}
+  showToast('⏳ กำลังเพิ่มงาน...');closeModal();
+  var p={action:'addTask',name:encodeURIComponent(name.trim()),priority:_addPri};
+  if(note.trim())p.note=encodeURIComponent(note.trim());
+  api(p,function(){
+    showToast('✅ เพิ่มงานแล้ว: '+name.trim());
+    renderNDTasks(); // รีเฟรชคอลัมน์ไม่มีวันให้เห็นทันที (ไม่ส่ง date เลย เพื่อให้เป็นงาน "ไม่มีวัน" จริงๆ)
+  });
+}
 function submitAdd(){
   var name=(document.getElementById('add-nm')||{}).value||'';
   var sd=(document.getElementById('add-sd')||{}).value||TODAY_STR;
