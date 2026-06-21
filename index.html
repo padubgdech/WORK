@@ -34,8 +34,50 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .page{display:none;padding:28px 32px;min-height:calc(100vh - 120px);overflow-x:hidden}
 .page.show{display:block}
 .grid2{display:grid;grid-template-columns:1fr 340px;gap:24px;min-width:0}
+#page-main .grid2{grid-template-columns:1fr 250px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 .grid22{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* Compact 3-per-row task grid (Main page งานค้าง/กำลังดำเนินการ/etc) — same tcCard markup, just resized via cascade */
+.tc-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
+.tc-grid3 .tc{padding:11px 12px}
+.tc-grid3 .tc-hdr{margin-bottom:7px}
+.tc-grid3 .tc-name{font-size:12.5px}
+.tc-grid3 .act{padding:5px 9px;font-size:10px}
+.tc-grid3 .badge{font-size:8.5px;padding:2px 7px}
+.tc-grid3 .pri-h,.tc-grid3 .pri-m,.tc-grid3 .pri-l{font-size:8.5px;padding:2px 7px}
+.tc-grid3 .rng{padding:7px 9px;margin-bottom:8px}
+.tc-grid3 .rdate{padding:4px 7px;min-width:34px}
+.tc-grid3 .rdate .d{font-size:13px}
+.tc-grid3 .rdate .m{font-size:8px}
+.tc-grid3 .rbar-label{font-size:8.5px;margin-bottom:4px}
+.tc-grid3 .note-section{margin-bottom:8px}
+.tc-grid3 .note-lbl-row{padding:6px 10px}
+.tc-grid3 .note-lbl-txt{font-size:9px}
+.tc-grid3 .btn-edit-note{font-size:9px;padding:2px 7px}
+.tc-grid3 .note-view-body{padding:8px 10px;font-size:10.5px}
+.tc-grid3 .st-wrap{margin-bottom:8px}
+.tc-grid3 .st-hdr{padding:6px 10px}
+.tc-grid3 .st-hdr-left{font-size:9px}
+.tc-grid3 .st-hdr-prog{font-size:8.5px;padding:1px 6px}
+.tc-grid3 .st-add-btn{font-size:9px;padding:2px 7px}
+.tc-grid3 .st-bar-wrap{margin:0 10px 6px}
+.tc-grid3 .st-body{padding:8px 9px 6px}
+.tc-grid3 .st-timeline{padding-left:16px}
+.tc-grid3 .st-timeline::before{left:5px;top:5px;bottom:10px}
+.tc-grid3 .st-item{margin-bottom:6px}
+.tc-grid3 .st-dot{width:11px;height:11px;font-size:7px;margin-left:-16px}
+.tc-grid3 .st-name{font-size:10.5px}
+.tc-grid3 .rudy-box{padding:9px 10px;margin-bottom:8px}
+.tc-grid3 .rudy-box-lbl{font-size:9px}
+.tc-grid3 .btn-rudy-new{font-size:9px;padding:3px 8px}
+.tc-grid3 .rudy-txt{font-size:10.5px;margin-bottom:5px}
+.tc-grid3 .rudy-steps{gap:4px;margin-top:6px}
+.tc-grid3 .rudy-step{padding:5px 7px;font-size:10px;gap:6px}
+.tc-grid3 .rudy-step-num{width:16px;height:16px;font-size:8.5px}
+.tc-grid3 .rudy-chips{gap:4px;margin-top:6px}
+.tc-grid3 .rudy-chip{padding:2px 8px;font-size:8.5px}
+@media(max-width:1100px){.tc-grid3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.tc-grid3{grid-template-columns:1fr}}
 .grid2-hist{display:grid;grid-template-columns:1fr 280px;gap:24px}
 .sec{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#aaa;padding-bottom:8px;margin-top:22px;border-bottom:.5px solid var(--border);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
 .sec:first-child{margin-top:0}
@@ -682,6 +724,12 @@ function rerenderTaskCard(tid){
   if(!el) return;
   var t=getTask(tid);
   if(!t) return;
+  // กันบั๊ก note หาย: ถ้ามี note HTML แคชไว้ใน localStorage ให้ใช้ตัวนั้นแสดง
+  // ไม่ให้ค่า t.note (plain text จาก Notion) มาทับของเดิมที่มี formatting/รูป
+  try{
+    var cachedNote=localStorage.getItem('note_html_'+tid);
+    if(cachedNote) t.note=cachedNote;
+  }catch(e){}
   el.outerHTML = tcCard(t, {move:true});
 }
 function addSubtask(tid){
@@ -965,15 +1013,7 @@ function tcCard(t,opts){
   var isDone=t.done;
   var h='<div class="tc" id="tc-'+t.id+'" style="border-left-color:'+col+(isDone?';opacity:.7':'')+'">'+
     '<div class="tc-hdr"><div class="tc-name'+(isDone?' done-name':'')+'">'+t.name+'</div>'+
-    '<div class="tc-acts">'+statusBadge(st,t)+' <span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span>';
-  if(!isDone){
-    h+=' <button class="act act-done" data-doneid="'+t.id+'">✓ Done</button>';
-    if(opts.move!==false)h+=' <button class="act act-move" data-moveid="'+t.id+'" data-movename="'+sn+'">เลื่อน</button>';
-    h+=' <button class="act act-del" data-delid="'+t.id+'" data-delname="'+sn+'">ลบ</button>';
-  }else{
-    h+=' <button class="act act-undo" data-undoid="'+t.id+'">↩ ยกเลิก</button>';
-  }
-  h+='</div></div>'+rangeBar(t);
+    '<div class="tc-acts">'+statusBadge(st,t)+' <span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span></div></div>'+rangeBar(t);
   if(!isDone){
     h+=noteBlock(t);
   } else if(t.note){
@@ -981,7 +1021,15 @@ function tcCard(t,opts){
     h+='<div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px">&#128221; Note</div>';
     h+='<div style="font-size:12px;color:#888;line-height:1.75">'+t.note+'</div></div>';
   }
-  h+='</div>';
+  h+='<div class="tc-acts" style="margin-top:8px">';
+  if(!isDone){
+    h+='<button class="act act-done" data-doneid="'+t.id+'">✓ Done</button>';
+    if(opts.move!==false)h+='<button class="act act-move" data-moveid="'+t.id+'" data-movename="'+sn+'">เลื่อน</button>';
+    h+='<button class="act act-del" data-delid="'+t.id+'" data-delname="'+sn+'">ลบ</button>';
+  }else{
+    h+='<button class="act act-undo" data-undoid="'+t.id+'">↩ ยกเลิก</button>';
+  }
+  h+='</div></div>';
   return h;
 }
 function tcCard2(t){
@@ -1002,19 +1050,47 @@ function renderMain(){
   updateStats();
   var od=overdueTasks.filter(function(t){return!t.done;});
   var odEl=document.getElementById('main-od');
-  if(od.length){var h='<div class="sec" style="color:#e03e3e;border-bottom-color:#FFCDD2"><span>⚠️ งานค้าง · '+od.length+' งาน</span></div>';od.forEach(function(t){h+=tcCard(t,{move:true});});odEl.innerHTML=h;}
+  if(od.length){
+    var h='<div class="sec" style="color:#e03e3e;border-bottom-color:#FFCDD2"><span>⚠️ งานค้าง · '+od.length+' งาน</span></div>';
+    h+='<div class="tc-grid3">';
+    od.forEach(function(t){h+=tcCard(t,{move:true});});
+    h+='</div>';
+    odEl.innerHTML=h;
+  }
   else odEl.innerHTML='';
   var ongoing=todayTasks.filter(function(t){return!t.done&&getStatus(t)==='ongoing';});
   var todayOnly=todayTasks.filter(function(t){return!t.done&&(getStatus(t)==='today'||(!t.actionDate&&!t.endDate));});
   var upcoming=todayTasks.filter(function(t){return!t.done&&getStatus(t)==='upcoming';});
   var done=todayTasks.filter(function(t){return t.done;});
   var h2='';
-  if(ongoing.length){h2+='<div class="sec" style="color:#0f7b55;border-bottom-color:#EAF3DE"><span>📋 กำลังดำเนินการ · '+ongoing.length+' งาน</span></div>';if(ongoing.length===1){h2+=tcCard(ongoing[0],{move:true});}else{h2+='<div class="grid22">';ongoing.forEach(function(t){h2+=tcCard2(t);});h2+='</div>';}}
-  if(todayOnly.length){h2+='<div class="sec" style="color:#3949AB;border-bottom-color:#E8EAF6"><span>📅 งานวันนี้ · '+todayOnly.length+' งาน</span></div>';if(todayOnly.length===1){h2+=tcCard(todayOnly[0],{move:true});}else{h2+='<div class="grid22">';todayOnly.forEach(function(t){h2+=tcCard2(t);});h2+='</div>';}}
+  if(ongoing.length){
+    h2+='<div class="sec" style="color:#0f7b55;border-bottom-color:#EAF3DE"><span>📋 กำลังดำเนินการ · '+ongoing.length+' งาน</span></div>';
+    h2+='<div class="tc-grid3">';
+    ongoing.forEach(function(t){h2+=tcCard(t,{move:true});});
+    h2+='</div>';
+  }
+  if(todayOnly.length){
+    h2+='<div class="sec" style="color:#3949AB;border-bottom-color:#E8EAF6"><span>📅 งานวันนี้ · '+todayOnly.length+' งาน</span></div>';
+    h2+='<div class="tc-grid3">';
+    todayOnly.forEach(function(t){h2+=tcCard(t,{move:true});});
+    h2+='</div>';
+  }
   document.getElementById('main-ongoing').innerHTML=h2;
-  var h3='';if(upcoming.length){h3+='<div class="sec" style="color:#3949AB;border-bottom-color:#E8EAF6"><span>📅 กำลังจะถึง · '+upcoming.length+' งาน</span></div>';upcoming.forEach(function(t){h3+=tcCard(t,{move:true});});}
+  var h3='';
+  if(upcoming.length){
+    h3+='<div class="sec" style="color:#3949AB;border-bottom-color:#E8EAF6"><span>📅 กำลังจะถึง · '+upcoming.length+' งาน</span></div>';
+    h3+='<div class="tc-grid3">';
+    upcoming.forEach(function(t){h3+=tcCard(t,{move:true});});
+    h3+='</div>';
+  }
   document.getElementById('main-upcoming').innerHTML=h3;
-  var h4='';if(done.length){h4+='<div class="sec" style="color:#0f7b55;border-bottom-color:#EAF3DE"><span>✅ เสร็จแล้ว · '+done.length+' งาน</span></div>';done.forEach(function(t){h4+=tcCard(t);});}
+  var h4='';
+  if(done.length){
+    h4+='<div class="sec" style="color:#0f7b55;border-bottom-color:#EAF3DE"><span>✅ เสร็จแล้ว · '+done.length+' งาน</span></div>';
+    h4+='<div class="tc-grid3">';
+    done.forEach(function(t){h4+=tcCard(t);});
+    h4+='</div>';
+  }
   document.getElementById('main-done').innerHTML=h4;
   attachEv('page-main');
   // โหลด note HTML จาก localStorage (มีรูปด้วย)
