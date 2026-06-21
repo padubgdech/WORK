@@ -161,30 +161,30 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .nd-col-add-row:hover{background:rgba(0,0,0,.03);color:#888}
 .nd-c-progress-wrap{margin-bottom:7px}.nd-c-progress-wrap{margin-bottom:7px}
 /* Subtask Timeline C */
-.st-wrap{margin-bottom:10px;border:.5px solid #e9e7e2;border-radius:10px;overflow:hidden;background:#fff}
-.st-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 13px;background:#fafaf9;border-bottom:.5px solid #f0f0f0}
-.st-hdr-left{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#aaa;letter-spacing:.6px;text-transform:uppercase}
-.st-hdr-prog{font-size:10px;padding:2px 8px;border-radius:8px;background:#EAF3DE;color:#27500A;font-weight:700}
-.st-add-btn{font-size:10px;padding:3px 9px;border-radius:5px;background:#fff;border:.5px solid #e9e7e2;color:#555;cursor:pointer;font-weight:600}
-.st-add-btn:hover{border-color:#534AB7;color:#534AB7}
+.st-wrap{margin-bottom:10px;border:1px solid #BFE3C8;border-radius:10px;overflow:hidden;background:#F3FAF0}
+.st-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 13px;background:#E3F4E5;border-bottom:1px solid #BFE3C8}
+.st-hdr-left{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#2E7D4F;letter-spacing:.6px;text-transform:uppercase}
+.st-hdr-prog{font-size:10px;padding:2px 8px;border-radius:8px;background:#0f7b55;color:#fff;font-weight:700}
+.st-add-btn{font-size:10px;padding:3px 9px;border-radius:5px;background:#fff;border:1px solid #8FCB9F;color:#1F6B43;cursor:pointer;font-weight:600}
+.st-add-btn:hover{background:#1F6B43;color:#fff;border-color:#1F6B43}
 .st-body{padding:10px 12px 8px}
 .st-timeline{position:relative;padding-left:20px}
-.st-timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:14px;width:1.5px;background:#e9e7e2}
+.st-timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:14px;width:1.5px;background:#BFE3C8}
 .st-item{position:relative;display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .st-item:last-child{margin-bottom:0}
-.st-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;margin-left:-20px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #f0eeea;z-index:1}
-.st-dot.done{background:#0f7b55;color:#fff;border-color:#f0eeea}
-.st-dot.active{background:#534AB7;color:#fff;border-color:#f0eeea}
-.st-dot.todo{background:#e9e7e2;color:#aaa;border-color:#f0eeea}
-.st-name{flex:1;font-size:12px;color:#111;font-weight:500;line-height:1.3}
-.st-name.done{text-decoration:line-through;color:#bbb}
-.st-name.active{color:#534AB7;font-weight:600}
+.st-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;margin-left:-20px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #F3FAF0;z-index:1}
+.st-dot.done{background:#0f7b55;color:#fff;border-color:#F3FAF0}
+.st-dot.active{background:#6FBF85;color:#fff;border-color:#F3FAF0}
+.st-dot.todo{background:#D9EEDD;color:#7FAE8E;border-color:#F3FAF0}
+.st-name{flex:1;font-size:12px;color:#1F4D32;font-weight:500;line-height:1.3}
+.st-name.done{text-decoration:line-through;color:#9BC4A8}
+.st-name.active{color:#1F6B43;font-weight:600}
 .st-badge{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;flex-shrink:0}
-.st-del{color:#ddd;font-size:13px;cursor:pointer;flex-shrink:0;line-height:1}
+.st-del{color:#9BC4A8;font-size:13px;cursor:pointer;flex-shrink:0;line-height:1}
 .st-del:hover{color:#FF3B30}
-.st-add-row{display:flex;align-items:center;gap:6px;padding:5px 4px 0;color:#bbb;font-size:11px;cursor:pointer;margin-top:6px;border-top:.5px dashed #f0f0f0}
-.st-add-row:hover{color:#534AB7}
-.st-bar-wrap{height:3px;background:#f0f0f0;border-radius:2px;margin:0 12px 8px;overflow:hidden}
+.st-add-row{display:flex;align-items:center;gap:6px;padding:5px 4px 0;color:#7FAE8E;font-size:11px;cursor:pointer;margin-top:6px;border-top:1px dashed #BFE3C8}
+.st-add-row:hover{color:#1F6B43}
+.st-bar-wrap{height:3px;background:#D9EEDD;border-radius:2px;margin:0 12px 8px;overflow:hidden}
 .st-bar-fill{height:100%;border-radius:2px;background:#0f7b55;transition:width .3s}
 .sc{background:#fff;border-radius:10px;border:.5px solid var(--border);padding:14px 16px}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;display:none;align-items:center;justify-content:center}
@@ -665,7 +665,7 @@ function subtaskBlock(t){
     fetchSubtasks(tid);
   }
   if (t._subtasks === null) {
-    return '<div class="st-wrap"><div class="st-body" style="padding:14px;text-align:center;color:#bbb;font-size:11px">⏳ กำลังโหลดงานย่อย...</div></div>';
+    return '<div class="st-wrap"><div class="st-body" style="padding:14px;text-align:center;color:#7FAE8E;font-size:11px">⏳ กำลังโหลดงานย่อย...</div></div>';
   }
   var subs=t._subtasks||[];
   var done=subs.filter(function(s){return s.done;}).length;
@@ -686,7 +686,7 @@ function subtaskBlock(t){
   }
   h+='<div class="st-body"><div class="st-timeline">';
   if(subs.length===0){
-    h+='<div style="font-size:11px;color:#ccc;font-style:italic;padding:4px 0">ยังไม่มีงานย่อย — กด + เพิ่ม</div>';
+    h+='<div style="font-size:11px;color:#9BC4A8;font-style:italic;padding:4px 0">ยังไม่มีงานย่อย — กด + เพิ่ม</div>';
   } else {
     subs.forEach(function(s,idx2){
       var isDone=s.done;
@@ -697,8 +697,8 @@ function subtaskBlock(t){
       h+='<div class="st-item">';
       h+='<div class="st-dot '+dotCls+'">'+dotLbl+'</div>';
       h+='<div class="st-name '+nameCls+'">'+s.name+'</div>';
-      if(isDone)h+='<span class="st-badge" style="background:#EAF3DE;color:#27500A">เสร็จ</span>';
-      else if(isActive)h+='<span class="st-badge" style="background:#EEF4FF;color:#534AB7">กำลังทำ</span>';
+      if(isDone)h+='<span class="st-badge" style="background:#0f7b55;color:#fff">เสร็จ</span>';
+      else if(isActive)h+='<span class="st-badge" style="background:#6FBF85;color:#fff">กำลังทำ</span>';
       h+='<button class="st-del" data-tid="'+tid+'" data-bid="'+s.id+'" data-done="'+isDone+'" onclick="toggleSubtask(this.dataset.tid,this.dataset.bid,this.dataset.done)">'+( isDone?'↩':'✓' )+'</button>';
       h+='<button class="st-del" data-tid="'+tid+'" data-bid="'+s.id+'" onclick="delSubtask(this.dataset.tid,this.dataset.bid)" style="margin-left:2px">×</button>';
       h+='</div>';
@@ -735,10 +735,26 @@ function rerenderTaskCard(tid){
   el.outerHTML = tcCard(t, {move:true});
 }
 function addSubtask(tid){
-  var name=prompt('ชื่องานย่อย:');
-  if(!name||!name.trim())return;
+  // prompt() ถูกบล็อกใน LINE LIFF WebView ส่วนใหญ่ — ใช้ modal เดิมของแอปแทน
+  var h='<div class="modal-title">เพิ่มงานย่อย <button class="modal-x" onclick="closeModal()">×</button></div>';
+  h+='<div class="fld"><label>ชื่องานย่อย</label><input type="text" id="subtask-name-input" placeholder="ชื่องานย่อย..."></div>';
+  h+='<button class="btn-submit" data-stid="'+tid+'" onclick="submitAddSubtask(this.dataset.stid)">+ เพิ่มงานย่อย</button>';
+  showModal(h);
+  setTimeout(function(){
+    var el=document.getElementById('subtask-name-input');
+    if(el){
+      el.focus();
+      el.onkeydown=function(e){ if(e.key==='Enter') submitAddSubtask(tid); };
+    }
+  },80);
+}
+function submitAddSubtask(tid){
+  var input=document.getElementById('subtask-name-input');
+  var name=input?input.value.trim():'';
+  if(!name){showToast('⚠️ กรุณาใส่ชื่องานย่อย');return;}
+  closeModal();
   showToast('⏳ กำลังเพิ่ม...');
-  apiS({action:'addSubtask', id:tid, name:encodeURIComponent(name.trim())});
+  apiS({action:'addSubtask', id:tid, name:encodeURIComponent(name)});
   // รอ Notion เขียนเสร็จ แล้วโหลดรายการใหม่ทั้งหมด (จะได้ blockId จริงของอันที่เพิ่ม)
   setTimeout(function(){
     var t=getTask(tid);
