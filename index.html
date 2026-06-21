@@ -139,26 +139,26 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .bar-lbl{font-size:9px;color:#aaa;text-align:center;margin-top:4px}
 .nd-row{display:flex;align-items:center;gap:10px;padding:10px 13px;background:#fff;border-radius:8px;border:.5px solid var(--border);margin-bottom:6px}
 /* Tasks Kanban Style C */
-.nd-c-item{border-radius:11px;margin-bottom:7px;display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 10px;box-shadow:0 2px 8px rgba(0,0,0,.045);transition:box-shadow .15s;touch-action:pan-y}
-.nd-c-item:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.nd-c-item{border-radius:14px;margin-bottom:9px;padding:10px 12px;box-shadow:0 3px 10px rgba(0,0,0,.05);transition:box-shadow .15s;touch-action:pan-y}
+.nd-c-item:hover{box-shadow:0 5px 14px rgba(0,0,0,.09)}
 .nd-c-item.nd-dragging-src{opacity:.3}
 .nd-c-stripe{width:4px;flex-shrink:0}
-.nd-c-body{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
-.nd-c-top{display:none}
+.nd-c-body{display:block}
+.nd-c-top{display:flex;align-items:center;gap:7px;margin-bottom:7px}
 .nd-c-handle{cursor:grab;color:#cfcabe;font-size:14px;line-height:1.2;flex-shrink:0;padding:4px 6px;margin:0 0 0 -4px;touch-action:none;user-select:none;-webkit-user-select:none}
 .nd-c-handle:active{cursor:grabbing}
-.nd-c-name-wrap{flex:1;min-width:0}
-.nd-c-name{font-size:12.5px;font-weight:700;color:#222;line-height:1.3}
-.nd-c-chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}
-.nd-c-note{font-size:10.5px;color:#888;line-height:1.4;margin-top:4px;padding:5px 7px;background:rgba(255,255,255,.65);border-radius:6px;border-left:2px solid rgba(0,0,0,.08);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.nd-c-bottom{display:flex;align-items:center}
+.nd-c-name-wrap{display:contents}
+.nd-c-name{font-size:13px;font-weight:700;color:#222;flex:1;line-height:1.3}
+.nd-c-chips{display:flex;gap:4px;flex-wrap:wrap}
+.nd-c-note{font-size:11px;color:#888;line-height:1.5;margin-bottom:7px;padding:6px 8px;background:rgba(255,255,255,.65);border-radius:6px;border-left:2px solid rgba(0,0,0,.08);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nd-c-bottom{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
 .nd-c-meta{font-size:10px;color:#ccc;display:flex;align-items:center;gap:4px}
-.nd-c-acts{display:flex;gap:4px;flex-shrink:0}
-.nd-c-btn-date{width:26px;height:26px;border-radius:20px;background:#1c1c1e;color:#fff;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nd-c-acts{display:flex;gap:5px;margin-left:auto;flex-shrink:0}
+.nd-c-btn-date{height:28px;padding:0 12px;border-radius:20px;background:#1c1c1e;color:#fff;border:none;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
 .nd-c-btn-date:hover{background:#333}
-.nd-c-btn-done{width:26px;height:26px;border-radius:20px;background:#0f7b55;color:#fff;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nd-c-btn-done{height:28px;padding:0 12px;border-radius:20px;background:#0f7b55;color:#fff;border:none;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
 .nd-c-btn-done:hover{background:#0c6344}
-.nd-c-btn-del{width:26px;height:26px;border-radius:20px;background:#FCEAEA;color:#D6453D;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nd-c-btn-del{width:28px;height:28px;border-radius:20px;background:#FCEAEA;color:#D6453D;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .nd-c-btn-del:hover{background:#FFCDD2}
 .nd-col-dragover{background:rgba(0,0,0,.035);border-radius:14px;outline:2px dashed #bbb;outline-offset:6px}
 .nd-drag-ghost{position:fixed;z-index:9999;pointer-events:none;opacity:.92;transform:scale(1.03) rotate(-1.5deg);box-shadow:0 14px 34px rgba(0,0,0,.22)}
@@ -1436,28 +1436,29 @@ function ndCardHtml(t,col){
   });
 
   var h='<div class="nd-c-item" id="nd-row-'+t.id+'" data-ndid="'+t.id+'" data-ndpri="'+t.priority+'" style="background:'+ndGradient(t.priority)+'">';
+  h+='<div class="nd-c-top">';
   h+='<span class="nd-c-handle" title="ลากเพื่อเปลี่ยน priority">⠿</span>';
-  h+='<div class="nd-c-body"><div class="nd-c-name-wrap">';
   h+='<div class="nd-c-name">'+t.name+'</div>';
-  if(chips)h+='<div class="nd-c-chips">'+chips+'</div>';
+  h+='</div>';
   if(notePreview)h+='<div class="nd-c-note">'+notePreview+'</div>';
   var total=0,done2=0;
   if(t.note){var matches=t.note.match(/\[.\]/g)||[];total=matches.length;done2=(t.note.match(/\[x\]/gi)||[]).length;}
   if(total>0){
     var pct=Math.round(done2/total*100);
     var pCol=pct===100?'#34C759':pct>0?'#FF9500':col;
-    h+='<div class="nd-c-progress-wrap" style="margin-top:5px">';
+    h+='<div class="nd-c-progress-wrap" style="margin-bottom:7px">';
     h+='<div style="display:flex;justify-content:space-between;font-size:9px;color:#bbb;margin-bottom:3px"><span>Checklist</span><span>'+done2+'/'+total+'</span></div>';
     h+='<div style="height:4px;background:#f0f0f0;border-radius:2px;overflow:hidden">';
     h+='<div style="height:100%;width:'+pct+'%;background:'+pCol+';border-radius:2px;transition:width .3s"></div>';
     h+='</div></div>';
   }
-  h+='</div></div>';
+  h+='<div class="nd-c-bottom">';
+  h+='<div class="nd-c-chips">'+(chips||'')+'</div>';
   h+='<div class="nd-c-acts">';
-  h+='<button class="nd-c-btn-done" data-doneid="'+t.id+'" data-donename="'+sn+'" onclick="doDoneND(this.dataset.doneid,this.dataset.donename)" title="เสร็จแล้ว">✓</button>';
-  h+='<button class="nd-c-btn-date" data-nid="'+t.id+'" data-nname="'+sn+'" onclick="assignDate(this.dataset.nid,this.dataset.nname)" title="ลงวัน">📅</button>';
-  h+='<button class="nd-c-btn-del" data-delid="'+t.id+'" onclick="delNDFast(this.dataset.delid)" title="ลบ">🗑</button>';
-  h+='</div>';
+  h+='<button class="nd-c-btn-done" data-doneid="'+t.id+'" data-donename="'+sn+'" onclick="doDoneND(this.dataset.doneid,this.dataset.donename)">✓ Done</button>';
+  h+='<button class="nd-c-btn-date" data-nid="'+t.id+'" data-nname="'+sn+'" onclick="assignDate(this.dataset.nid,this.dataset.nname)">📅 +วัน</button>';
+  h+='<button class="nd-c-btn-del" data-delid="'+t.id+'" onclick="delNDFast(this.dataset.delid)">🗑</button>';
+  h+='</div></div>';
   h+='</div>';
   return h;
 }
