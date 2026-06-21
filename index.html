@@ -152,6 +152,8 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .nd-c-acts{display:flex;gap:4px}
 .nd-c-btn-date{height:26px;padding:0 10px;border-radius:6px;background:#111;color:#fff;border:none;cursor:pointer;font-size:10px;font-weight:600;display:flex;align-items:center;gap:3px}
 .nd-c-btn-date:hover{background:#333}
+.nd-c-btn-done{height:26px;padding:0 10px;border-radius:6px;background:#0f7b55;color:#fff;border:none;cursor:pointer;font-size:10px;font-weight:600;display:flex;align-items:center;gap:3px}
+.nd-c-btn-done:hover{background:#0c6344}
 .nd-c-btn-del{width:26px;height:26px;border-radius:6px;background:#FFF0F0;color:#FF3B30;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center}
 .nd-c-btn-del:hover{background:#FFCDD2}
 /* column header add button */
@@ -1445,6 +1447,7 @@ function renderNDTasks(){
           h+='<div class="nd-c-bottom">';
           h+='<div class="nd-c-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ยังไม่มีวัน</div>';
           h+='<div class="nd-c-acts">';
+          h+='<button class="nd-c-btn-done" data-doneid="'+t.id+'" data-donename="'+sn+'" onclick="doDoneND(this.dataset.doneid,this.dataset.donename)">✓ Done</button>';
           h+='<button class="nd-c-btn-date" data-nid="'+t.id+'" data-nname="'+sn+'" onclick="assignDate(this.dataset.nid,this.dataset.nname)">📅 + วัน</button>';
           h+='<button class="nd-c-btn-del" data-delid="'+t.id+'" onclick="delNDFast(this.dataset.delid)">🗑</button>';
           h+='</div></div>';
@@ -1455,6 +1458,13 @@ function renderNDTasks(){
       if(el)el.innerHTML=h;
     });
   });
+}
+function doDoneND(id,name){
+  var row=document.getElementById('nd-row-'+id);
+  if(row){row.style.opacity='0';row.style.transition='opacity .15s';setTimeout(function(){if(row.parentNode)row.parentNode.removeChild(row);},150);}
+  noDateTasks=noDateTasks.filter(function(t){return t.id!==id;});
+  showToast('✅ เสร็จแล้ว: '+(name||''));
+  apiS({action:'updateTask',id:id,done:'true'});
 }
 function delNDFast(id){
   var row=document.getElementById('nd-row-'+id);
