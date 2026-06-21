@@ -1455,6 +1455,15 @@ function ndCardHtml(t,col){
       chips+='<span style="font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;background:'+kw.bg+';color:'+kw.tc+'">'+kw.label+'</span>';
     }
   });
+  // badge วันที่ — แสดงเมื่องานนี้มีการลงวันไว้ (เลยกำหนด/เหลือกี่วัน/เริ่มในกี่วัน/วันนี้)
+  if(t.actionDate){
+    var ndSt=getStatus(t);
+    if(ndSt==='today'){
+      chips='<span class="badge" style="background:#E8EAF6;color:#283593">📅 วันนี้</span>'+chips;
+    } else {
+      chips=statusBadge(ndSt,t)+chips;
+    }
+  }
 
   var h='<div class="nd-c-item" id="nd-row-'+t.id+'" data-ndid="'+t.id+'" data-ndpri="'+t.priority+'" style="background:'+ndGradient(t.priority)+'">';
   h+='<div class="nd-c-top">';
@@ -1487,6 +1496,10 @@ function renderNDColumnsFromCache(){
   ['High','Medium','Low'].forEach(function(pri){
     var id=pri==='High'?'nd-high':pri==='Medium'?'nd-med':'nd-low';
     var list=noDateTasks.filter(function(t){return t.priority===pri;});
+    list.sort(function(a,b){
+      var ad=a.actionDate||'9999-99-99', bd=b.actionDate||'9999-99-99';
+      return ad<bd?-1:ad>bd?1:0;
+    });
     var col=priCol(pri),h='';
     if(!list.length){
       h='<div style="color:#bbb;font-size:12px;padding:14px;text-align:center;border:.5px dashed #e0e0e0;border-radius:8px">ไม่มีงาน</div>';
@@ -1503,7 +1516,7 @@ function renderNDTasks(){
     var el=document.getElementById(eid);
     if(el)el.innerHTML='<div class="ld" style="padding:12px 0;font-size:12px">⏳</div>';
   });
-  api({action:'getNoDateTasks'},function(data){
+  api({action:'getAllActiveTasks'},function(data){
     noDateTasks=data?data.tasks||[]:[]; 
     renderNDColumnsFromCache();
   });
