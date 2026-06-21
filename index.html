@@ -180,8 +180,10 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .st-name.done{text-decoration:line-through;color:#9BC4A8}
 .st-name.active{color:#1F6B43;font-weight:600}
 .st-badge{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;flex-shrink:0}
-.st-del{color:#9BC4A8;font-size:13px;cursor:pointer;flex-shrink:0;line-height:1}
-.st-del:hover{color:#FF3B30}
+.st-toggle-btn{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid #BFE3C8;background:#fff;color:#1F6B43;font-size:11px;cursor:pointer;flex-shrink:0;padding:0;line-height:1}
+.st-toggle-btn:hover{background:#1F6B43;color:#fff;border-color:#1F6B43}
+.st-del{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;background:transparent;color:#9BC4A8;font-size:13px;cursor:pointer;flex-shrink:0;padding:0;line-height:1}
+.st-del:hover{color:#fff;background:#FF3B30}
 .st-add-row{display:flex;align-items:center;gap:6px;padding:5px 4px 0;color:#7FAE8E;font-size:11px;cursor:pointer;margin-top:6px;border-top:1px dashed #BFE3C8}
 .st-add-row:hover{color:#1F6B43}
 .st-bar-wrap{height:3px;background:#D9EEDD;border-radius:2px;margin:0 12px 8px;overflow:hidden}
@@ -699,8 +701,8 @@ function subtaskBlock(t){
       h+='<div class="st-name '+nameCls+'">'+s.name+'</div>';
       if(isDone)h+='<span class="st-badge" style="background:#0f7b55;color:#fff">เสร็จ</span>';
       else if(isActive)h+='<span class="st-badge" style="background:#6FBF85;color:#fff">กำลังทำ</span>';
-      h+='<button class="st-del" data-tid="'+tid+'" data-bid="'+s.id+'" data-done="'+isDone+'" onclick="toggleSubtask(this.dataset.tid,this.dataset.bid,this.dataset.done)">'+( isDone?'↩':'✓' )+'</button>';
-      h+='<button class="st-del" data-tid="'+tid+'" data-bid="'+s.id+'" onclick="delSubtask(this.dataset.tid,this.dataset.bid)" style="margin-left:2px">×</button>';
+      h+='<button class="st-toggle-btn" data-tid="'+tid+'" data-bid="'+s.id+'" data-done="'+isDone+'" onclick="toggleSubtask(this.dataset.tid,this.dataset.bid,this.dataset.done)">'+( isDone?'↩':'✓' )+'</button>';
+      h+='<button class="st-del" data-tid="'+tid+'" data-bid="'+s.id+'" onclick="delSubtask(this.dataset.tid,this.dataset.bid)" style="margin-left:3px">×</button>';
       h+='</div>';
     });
   }
