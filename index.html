@@ -113,17 +113,21 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .rt-card{background:#fff;border-radius:10px;border:.5px solid var(--border);padding:11px 14px;display:flex;align-items:center;gap:12px;margin-bottom:7px}
 .rt-card.rt-now{border-color:#111;background:#fafaf9}
 .rt-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.cal-hdr-d{padding:8px;text-align:center;font-size:10px;color:#aaa;font-weight:700;letter-spacing:.3px}
-.cal-cell{background:#fff;padding:5px 6px;min-height:88px;cursor:pointer;transition:background .1s;border:.5px solid #f0f0f0;vertical-align:top}
-.cal-cell:hover{background:#fafaf9}
-.cal-cell.today-c{background:#fafaf8}
-.cal-cell.past-c{background:#fafaf9}
-.cal-cell.sel-c{box-shadow:inset 0 0 0 2px #111}
-.cal-dn{font-size:11px;font-weight:500;color:#777;margin-bottom:3px}
-.cal-dn.today-n{background:#111;color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;line-height:1}
-.chip{font-size:7px;padding:2px 4px;border-radius:3px;margin-bottom:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.4;display:block}
-.cal-btn{padding:6px 12px;background:#f7f6f3;border:.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:12px;color:#555}
-.cal-btn:hover{background:#eee}
+.cal-hdr-d{padding:8px;text-align:center;font-size:10px;color:#999;font-weight:700;letter-spacing:.3px}
+.cal-cell{background:rgba(255,255,255,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:7px;min-height:88px;cursor:pointer;transition:background .15s;border:1px solid rgba(255,255,255,.7);border-radius:12px;vertical-align:top}
+.cal-cell:hover{background:rgba(255,255,255,.8)}
+.cal-cell.today-c{background:rgba(28,28,30,.88);border-color:transparent}
+.cal-cell.past-c{background:rgba(255,255,255,.3)}
+.cal-cell.sel-c{box-shadow:0 0 0 2px #1c1c1e}
+.cal-dn{font-size:11px;font-weight:600;color:#888;margin-bottom:3px}
+.cal-cell.today-c .cal-dn{color:rgba(255,255,255,.5)}
+.cal-dn.today-n{background:#fff;color:#1c1c1e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;line-height:1}
+.chip{font-size:7px;padding:2px 4px;border-radius:4px;margin-bottom:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.4;display:block;background:rgba(57,73,171,.14)!important;color:#3949AB!important}
+.cal-cell.today-c .chip{background:rgba(255,255,255,.18)!important;color:#fff!important}
+.cal-btn{padding:6px 14px;background:rgba(255,255,255,.6);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.7);border-radius:20px;cursor:pointer;font-size:12px;color:#555;font-weight:600}
+.cal-btn:hover{background:rgba(255,255,255,.85)}
+.cal-btn-today{padding:6px 14px;background:rgba(28,28,30,.9);backdrop-filter:blur(6px);border:none;border-radius:20px;cursor:pointer;font-size:12px;color:#fff;font-weight:700}
+.cal-btn-today:hover{background:#000}
 .hist-card{background:#fff;border-radius:12px;border:.5px solid var(--border);overflow:hidden;margin-bottom:10px}
 .hist-hdr{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:.5px solid var(--border);background:#fafaf9}
 .hist-row{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:.5px solid #f7f6f3}
@@ -221,7 +225,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 22px;border-radius:22px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:999;white-space:nowrap;letter-spacing:.2px}
 .toast.show{opacity:1}
 .scroll-y{overflow-y:auto;max-height:calc(100vh - 180px);min-width:0;overflow-x:hidden}
-#cal-detail{padding:16px}
+#cal-detail{padding:16px;background:rgba(255,255,255,.65);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.85);border-radius:20px}
 /* NOTEBOOK */
 .notebook{background:#fff;border-radius:12px;border:.5px solid #e9e7e2;overflow:hidden;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
 .nb-wrap{display:flex}
@@ -264,7 +268,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .d-tl-day-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
 .d-tl-dot{width:13px;height:13px;border-radius:50%;border:2.5px solid #f7f6f3;margin-left:-18px;flex-shrink:0;z-index:1}
 .d-tl-date-lbl{font-size:11px;font-weight:700}
-.d-tl-ev{background:#fff;border-radius:8px;border:.5px solid #e9e7e2;border-left:3px solid #2383e2;padding:9px 11px;margin-bottom:5px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.d-tl-ev{background:rgba(255,255,255,.75);border-radius:12px;border:1px solid rgba(255,255,255,.9);border-left:3px solid #2383e2;padding:9px 11px;margin-bottom:5px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .d-tl-ev-info{flex:1}
 .d-tl-ev-name{font-size:12px;color:#111;font-weight:600}
 .d-tl-ev-time{font-size:10px;color:#2383e2;font-weight:600;margin-top:3px}
@@ -441,23 +445,23 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     </div>
   </div>
 </div>
-<div id="page-cal" class="page">
+<div id="page-cal" class="page" style="background:linear-gradient(135deg,#fdf2f2 0%,#f2f7fd 50%,#f2fdf6 100%);margin-top:-1px">
   <div class="grid2">
     <div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div id="cal-title" style="font-size:18px;font-weight:700;color:#111"></div>
+        <div id="cal-title" style="font-size:18px;font-weight:800;color:#111"></div>
         <div style="display:flex;gap:6px">
           <button class="cal-btn" onclick="calMove(-1)">‹</button>
-          <button class="cal-btn" onclick="calMove(0)">วันนี้</button>
+          <button class="cal-btn-today" onclick="calMove(0)">วันนี้</button>
           <button class="cal-btn" onclick="calMove(1)">›</button>
         </div>
       </div>
-      <div style="border-radius:8px 8px 0 0;overflow:hidden">
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);background:#f7f6f3;border:.5px solid var(--border);border-bottom:none">
+      <div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr)">
           <div class="cal-hdr-d">จ</div><div class="cal-hdr-d">อ</div><div class="cal-hdr-d">พ</div>
           <div class="cal-hdr-d">พฤ</div><div class="cal-hdr-d">ศ</div><div class="cal-hdr-d">ส</div><div class="cal-hdr-d">อา</div>
         </div>
-        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);border:.5px solid var(--border);border-radius:0 0 8px 8px;overflow:hidden">
+        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
           <div class="ld" style="grid-column:1/-1">⏳ กำลังโหลด...</div>
         </div>
       </div>
@@ -1379,7 +1383,7 @@ function renderCalDetail(ds){
   }
   if(!hasAny)h+='<div style="color:#bbb;font-size:12px;text-align:center;padding:10px 0">ไม่มีนัดหมายในเดือนนี้</div>';
   h+='</div>';
-  h+='<div style="margin-top:14px"><button onclick="openAdd()" style="width:100%;padding:9px;background:#111;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer">+ Task</button></div>';
+  h+='<div style="margin-top:14px"><button onclick="openAdd()" style="width:100%;padding:12px;background:rgba(28,28,30,.9);backdrop-filter:blur(6px);color:#fff;border:none;border-radius:14px;font-size:12px;font-weight:700;cursor:pointer">+ Task</button></div>';
   detail.innerHTML=h;
   detail.addEventListener('click',function(e){
     var b;
