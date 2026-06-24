@@ -838,16 +838,6 @@ function noteBlock(t){
   h+='</div></div></div>';
   // SUBTASK (Notion to-do block sync)
   h+=subtaskBlock(t);
-  // RUDY
-  h+='<div id="rudy-'+tid+'" class="rudy-box">';
-  h+='<div class="rudy-box-hdr">';
-  h+='<div class="rudy-box-lbl">&#10024; Rudy วิเคราะห์<span class="rudy-status" id="rs-'+tid+'"></span></div>';
-  h+='<button class="btn-rudy-new" data-nid="'+tid+'" onclick="runRudyInline(this.dataset.nid)">&#8635; วิเคราะห์ใหม่</button>';
-  h+='</div>';
-  var rudyHtml=t._rudyHtml||'';
-  h+='<div id="rt-'+tid+'">'+( rudyHtml ? rudyHtml : '<div class="rudy-txt" style="color:#AFA9EC;font-style:italic">⏳ กำลังวิเคราะห์...</div>' )+'</div>';
-  if(!rudyHtml){ setTimeout(function(){ runRudyInline(tid,true); },300); }
-  h+='</div>';
   return h;
 }
 
@@ -1080,17 +1070,18 @@ function tcCard2(t){
 function renderMain(){
   updateStats();
   var od=overdueTasks.filter(function(t){return!t.done;});
+  var todayOnly=todayTasks.filter(function(t){return!t.done&&(getStatus(t)==='today'||(!t.actionDate&&!t.endDate));});
   var odEl=document.getElementById('main-od');
-  if(od.length){
-    var h='<div class="sec" style="color:#e03e3e;border-bottom-color:#FFCDD2"><span>⚠️ งานค้าง · '+od.length+' งาน</span></div>';
+  var odCombined=od.concat(todayOnly); // รวมงานค้าง+วันนี้ ให้อยู่กริดเดียวกันต่อแถวกันเลย ไม่เสียพื้นที่
+  if(odCombined.length){
+    var h='<div class="sec" style="color:#e03e3e;border-bottom-color:#FFCDD2"><span>⚠️ งานค้าง '+od.length+' · 📅 วันนี้ '+todayOnly.length+'</span></div>';
     h+='<div class="tc-grid3">';
-    od.forEach(function(t){h+=tcCard(t,{move:true});});
+    odCombined.forEach(function(t){h+=tcCard(t,{move:true});});
     h+='</div>';
     odEl.innerHTML=h;
   }
   else odEl.innerHTML='';
   var ongoing=todayTasks.filter(function(t){return!t.done&&getStatus(t)==='ongoing';});
-  var todayOnly=todayTasks.filter(function(t){return!t.done&&(getStatus(t)==='today'||(!t.actionDate&&!t.endDate));});
   var upcoming=todayTasks.filter(function(t){return!t.done&&getStatus(t)==='upcoming';});
   var done=todayTasks.filter(function(t){return t.done;});
   var h2='';
@@ -1098,12 +1089,6 @@ function renderMain(){
     h2+='<div class="sec" style="color:#0f7b55;border-bottom-color:#EAF3DE"><span>📋 กำลังดำเนินการ · '+ongoing.length+' งาน</span></div>';
     h2+='<div class="tc-grid3">';
     ongoing.forEach(function(t){h2+=tcCard(t,{move:true});});
-    h2+='</div>';
-  }
-  if(todayOnly.length){
-    h2+='<div class="sec" style="color:#3949AB;border-bottom-color:#E8EAF6"><span>📅 งานวันนี้ · '+todayOnly.length+' งาน</span></div>';
-    h2+='<div class="tc-grid3">';
-    todayOnly.forEach(function(t){h2+=tcCard(t,{move:true});});
     h2+='</div>';
   }
   document.getElementById('main-ongoing').innerHTML=h2;
