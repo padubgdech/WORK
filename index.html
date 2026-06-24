@@ -37,6 +37,10 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 #page-main .grid2{grid-template-columns:1fr 250px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+.nd-viewtab{padding:8px 16px;border-radius:20px;border:none;background:#f0eeea;color:#888;font-size:12.5px;font-weight:700;cursor:pointer}
+.nd-viewtab-active{background:#1c1c1e;color:#fff}
+.nd-cat-chip{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:600;background:#f0f0f0;color:#666;cursor:pointer;white-space:nowrap}
+.nd-cat-chip:hover{background:#e3e1dc}
 .grid22{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 /* Compact 3-per-row task grid (Main page งานค้าง/กำลังดำเนินการ/etc) — same tcCard markup, just resized via cascade */
 .tc-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
@@ -473,7 +477,36 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 <div id="page-tasks" class="page">
-  <div class="grid4">
+  <div style="display:flex;gap:8px;margin-bottom:18px">
+    <button id="nd-tab-priority" class="nd-viewtab nd-viewtab-active" onclick="ndShowView('priority')">📊 ตามความสำคัญ</button>
+    <button id="nd-tab-category" class="nd-viewtab" onclick="ndShowView('category')">🏷️ ตามหมวดหมู่</button>
+  </div>
+
+  <div id="nd-board-priority" class="grid3">
+    <div>
+      <div class="sec" style="color:#FF3B30;border-bottom-color:#FFCDD2">
+        <span>🔴 HIGH</span>
+        <button onclick="openAddND('High')" style="padding:5px 12px;background:#FCEAEA;border:none;color:#D6453D;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+      </div>
+      <div id="nd-high"><div class="ld">⏳</div></div>
+    </div>
+    <div>
+      <div class="sec" style="color:#FF9500;border-bottom-color:#FAEEDA">
+        <span>🟡 MEDIUM</span>
+        <button onclick="openAddND('Medium')" style="padding:5px 12px;background:#FAEEDA;border:none;color:#BA7517;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+      </div>
+      <div id="nd-med"><div class="ld">⏳</div></div>
+    </div>
+    <div>
+      <div class="sec" style="color:#34C759;border-bottom-color:#EAF3DE">
+        <span>🟢 LOW</span>
+        <button onclick="openAddND('Low')" style="padding:5px 12px;background:#EAF3DE;border:none;color:#1D9E75;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+      </div>
+      <div id="nd-low"><div class="ld">⏳</div></div>
+    </div>
+  </div>
+
+  <div id="nd-board-category" class="grid4" style="display:none">
     <div>
       <div class="sec" style="color:#1D9E75;border-bottom-color:#EAF3DE">
         <span>💰 สร้างรายได้</span>
@@ -1268,6 +1301,27 @@ function submitAddCat(){
     renderNDTasks(); // รีเฟรชคอลัมน์หมวดธุรกิจให้เห็นทันที (ตั้ง category ตรงกับคอลัมน์ที่กดเพิ่ม ไม่ต้องรอ Gemini เดา)
   });
 }
+function openAddND(pri){
+  _addPri=pri||'Medium';
+  var h='<div class="modal-title">เพิ่มงาน ('+pri+') <button class="modal-x" onclick="closeModal()">×</button></div>';
+  h+='<div class="fld"><label>ชื่องาน</label><input type="text" id="addnd-nm" placeholder="ชื่องาน..."></div>';
+  h+='<div class="fld"><label>Note (ไม่บังคับ)</label><textarea id="addnd-note" rows="3" placeholder="รายละเอียด..."></textarea></div>';
+  h+='<button class="btn-submit" onclick="submitAddND()">+ บันทึกงาน</button>';
+  showModal(h);
+  setTimeout(function(){var el=document.getElementById('addnd-nm');if(el)el.focus();},80);
+}
+function submitAddND(){
+  var name=(document.getElementById('addnd-nm')||{}).value||'';
+  var note=(document.getElementById('addnd-note')||{}).value||'';
+  if(!name.trim()){showToast('กรุณาใส่ชื่องาน');return;}
+  showToast('⏳ กำลังเพิ่มงาน...');closeModal();
+  var p={action:'addTask',name:encodeURIComponent(name.trim()),priority:_addPri};
+  if(note.trim())p.note=encodeURIComponent(note.trim());
+  api(p,function(){
+    showToast('✅ เพิ่มงานแล้ว: '+name.trim());
+    renderNDTasks(); // รีเฟรชทั้ง 2 บอร์ด (หมวดธุรกิจจะรอ Gemini เดาให้ตอนโหลดรอบนี้)
+  });
+}
 function submitAdd(){
   var name=(document.getElementById('add-nm')||{}).value||'';
   var sd=(document.getElementById('add-sd')||{}).value||TODAY_STR;
@@ -1469,12 +1523,16 @@ function ndCardHtml(t,col){
       chips=statusBadge(ndSt,t)+chips;
     }
   }
-  // badge priority — โชว์เสมอ เพราะตอนนี้คอลัมน์คือหมวดธุรกิจ ไม่ใช่ priority แล้ว
+  // badge priority — โชว์เสมอ เพราะตอนนี้คอลัมน์อาจเป็นได้ทั้ง priority หรือหมวดธุรกิจ
   chips='<span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span>'+chips;
+  // chip หมวดธุรกิจ — กดเพื่อเปลี่ยนหมวดได้ตรงนี้เลย ไม่ต้องลาก
+  var ndCatIcons={'revenue':'💰','ops':'🏢','cost':'📉','brand':'🎨'};
+  var ndCatNow=t.category||'ops';
+  chips+='<span class="nd-cat-chip" data-catid="'+t.id+'" data-catnow="'+ndCatNow+'" onclick="openCatPicker(this.dataset.catid,this.dataset.catnow)">'+(ndCatIcons[ndCatNow]||'🏢')+' ▾</span>';
 
-  var h='<div class="nd-c-item" id="nd-row-'+t.id+'" data-ndid="'+t.id+'" data-ndcat="'+(t.category||'ops')+'" style="background:'+ndGradient(t.priority)+'">';
+  var h='<div class="nd-c-item" id="nd-row-'+t.id+'" data-ndid="'+t.id+'" data-ndpri="'+t.priority+'" data-ndcat="'+ndCatNow+'" style="background:'+ndGradient(t.priority)+'">';
   h+='<div class="nd-c-top">';
-  h+='<span class="nd-c-handle" title="ลากเพื่อเปลี่ยนหมวด">⠿</span>';
+  h+='<span class="nd-c-handle" title="ลากเพื่อเปลี่ยนคอลัมน์">⠿</span>';
   h+='<div class="nd-c-name">'+t.name+'</div>';
   h+='</div>';
   if(notePreview)h+='<div class="nd-c-note">'+notePreview+'</div>';
@@ -1504,7 +1562,33 @@ function ndShouldShow(t){
   // มีวันแล้ว -> โชว์เฉพาะที่ "ยังไม่ถึง" (upcoming) เท่านั้น เพราะ overdue/ongoing/วันนี้ ไปอยู่หน้า Main แล้ว ไม่ต้องซ้ำ
   return getStatus(t)==='upcoming';
 }
+var ndViewMode='priority'; // 'priority' หรือ 'category'
+function ndShowView(mode){
+  ndViewMode=mode;
+  document.getElementById('nd-board-priority').style.display=mode==='priority'?'grid':'none';
+  document.getElementById('nd-board-category').style.display=mode==='category'?'grid':'none';
+  document.getElementById('nd-tab-priority').classList.toggle('nd-viewtab-active',mode==='priority');
+  document.getElementById('nd-tab-category').classList.toggle('nd-viewtab-active',mode==='category');
+}
 function renderNDColumnsFromCache(){
+  // บอร์ดที่ 1: เรียงตามความสำคัญ
+  ['High','Medium','Low'].forEach(function(pri){
+    var id=pri==='High'?'nd-high':pri==='Medium'?'nd-med':'nd-low';
+    var list=noDateTasks.filter(function(t){return t.priority===pri&&ndShouldShow(t);});
+    list.sort(function(a,b){
+      var ad=a.actionDate||'9999-99-99', bd=b.actionDate||'9999-99-99';
+      return ad<bd?-1:ad>bd?1:0;
+    });
+    var h='';
+    if(!list.length){
+      h='<div style="color:#bbb;font-size:12px;padding:14px;text-align:center;border:.5px dashed #e0e0e0;border-radius:8px">ไม่มีงาน</div>';
+    } else {
+      list.forEach(function(t){h+=ndCardHtml(t,priCol(pri));});
+    }
+    var el=document.getElementById(id);
+    if(el)el.innerHTML=h;
+  });
+  // บอร์ดที่ 2: เรียงตามหมวดธุรกิจ
   ['revenue','ops','cost','brand'].forEach(function(cat){
     var id='nd-'+cat;
     var list=noDateTasks.filter(function(t){return (t.category||'ops')===cat&&ndShouldShow(t);});
@@ -1524,7 +1608,7 @@ function renderNDColumnsFromCache(){
   attachNDDragOnce();
 }
 function renderNDTasks(){
-  ['nd-revenue','nd-ops','nd-cost','nd-brand'].forEach(function(eid){
+  ['nd-high','nd-med','nd-low','nd-revenue','nd-ops','nd-cost','nd-brand'].forEach(function(eid){
     var el=document.getElementById(eid);
     if(el)el.innerHTML='<div class="ld" style="padding:12px 0;font-size:12px">⏳</div>';
   });
@@ -1533,8 +1617,33 @@ function renderNDTasks(){
     renderNDColumnsFromCache();
   });
 }
-/* ===== ลากการ์ดข้ามคอลัมน์เพื่อเปลี่ยนหมวดธุรกิจ (รองรับมือถือ/ทัชสกรีนด้วย Pointer Events) ===== */
+function openCatPicker(taskId,currentCat){
+  var cats=[['revenue','💰 สร้างรายได้'],['ops','🏢 ระบบหลังบ้าน'],['cost','📉 ลดต้นทุน/Loss'],['brand','🎨 Brand & Marketing']];
+  var h='<div class="modal-title">เปลี่ยนหมวดธุรกิจ <button class="modal-x" onclick="closeModal()">×</button></div>';
+  h+='<div style="display:flex;flex-direction:column;gap:8px">';
+  cats.forEach(function(c){
+    var isCur=c[0]===currentCat;
+    h+='<button onclick="pickCategory(\''+taskId+'\',\''+c[0]+'\')" style="text-align:left;padding:12px 14px;border-radius:10px;border:'+(isCur?'2px solid #111':'.5px solid #e9e7e2')+';background:'+(isCur?'#f7f6f3':'#fff')+';font-size:13px;font-weight:600;cursor:pointer">'+c[1]+(isCur?' &nbsp;✓':'')+'</button>';
+  });
+  h+='</div>';
+  showModal(h);
+}
+function pickCategory(taskId,newCat){
+  var t=noDateTasks.find(function(x){return x.id===taskId;});
+  if(t){
+    t.category=newCat;
+    renderNDColumnsFromCache();
+  }
+  apiS({action:'setTaskCategory',id:taskId,category:newCat});
+  closeModal();
+  showToast('✅ เปลี่ยนหมวดแล้ว');
+}
+/* ===== ลากการ์ดข้ามคอลัมน์ — เปลี่ยน priority หรือหมวดธุรกิจ ขึ้นอยู่กับบอร์ดที่กำลังดูอยู่ (รองรับมือถือด้วย Pointer Events) ===== */
 var _ndDrag=null;
+var ND_PRI_COLS={'nd-high':'High','nd-med':'Medium','nd-low':'Low'};
+var ND_CAT_COLS={'nd-revenue':'revenue','nd-ops':'ops','nd-cost':'cost','nd-brand':'brand'};
+var ND_CAT_LABELS={'revenue':'สร้างรายได้','ops':'ระบบหลังบ้าน','cost':'ลดต้นทุน/Loss','brand':'Brand & Marketing'};
+function ndActiveColMap(){return ndViewMode==='category'?ND_CAT_COLS:ND_PRI_COLS;}
 function attachNDDragOnce(){
   var pg=document.getElementById('page-tasks');
   if(!pg||pg._ndDragAttached)return;
@@ -1556,7 +1665,7 @@ function attachNDDragOnce(){
     card.classList.add('nd-dragging-src');
     _ndDrag={
       id:card.dataset.ndid,
-      fromCat:card.dataset.ndcat,
+      fromVal:ndViewMode==='category'?card.dataset.ndcat:card.dataset.ndpri,
       ghost:ghost,
       card:card,
       offX:e.clientX-rect.left,
@@ -1570,7 +1679,7 @@ function ndDragMove(e){
   if(!_ndDrag)return;
   _ndDrag.ghost.style.left=(e.clientX-_ndDrag.offX)+'px';
   _ndDrag.ghost.style.top=(e.clientY-_ndDrag.offY)+'px';
-  ['nd-revenue','nd-ops','nd-cost','nd-brand'].forEach(function(colId){
+  Object.keys(ndActiveColMap()).forEach(function(colId){
     var colEl=document.getElementById(colId);
     if(!colEl)return;
     var r=colEl.getBoundingClientRect();
@@ -1582,28 +1691,34 @@ function ndDragEnd(e){
   if(!_ndDrag)return;
   document.removeEventListener('pointermove',ndDragMove);
   document.removeEventListener('pointerup',ndDragEnd);
-  var map={'nd-revenue':'revenue','nd-ops':'ops','nd-cost':'cost','nd-brand':'brand'};
-  var catLabels={'revenue':'สร้างรายได้','ops':'ระบบหลังบ้าน','cost':'ลดต้นทุน/Loss','brand':'Brand & Marketing'};
-  var targetCat=null;
+  var map=ndActiveColMap();
+  var targetVal=null;
   Object.keys(map).forEach(function(colId){
     var colEl=document.getElementById(colId);
     if(!colEl)return;
     var r=colEl.getBoundingClientRect();
     if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
-      targetCat=map[colId];
+      targetVal=map[colId];
     }
     colEl.classList.remove('nd-col-dragover');
   });
   _ndDrag.ghost.remove();
   if(_ndDrag.card)_ndDrag.card.classList.remove('nd-dragging-src');
-  if(targetCat&&targetCat!==_ndDrag.fromCat){
+  if(targetVal&&targetVal!==_ndDrag.fromVal){
     var id=_ndDrag.id;
     var t=noDateTasks.find(function(x){return x.id===id;});
     if(t){
-      t.category=targetCat;
-      renderNDColumnsFromCache();
-      showToast('✅ ย้ายไปหมวด '+(catLabels[targetCat]||targetCat)+' แล้ว');
-      apiS({action:'setTaskCategory',id:id,category:targetCat});
+      if(ndViewMode==='category'){
+        t.category=targetVal;
+        renderNDColumnsFromCache();
+        showToast('✅ ย้ายไปหมวด '+(ND_CAT_LABELS[targetVal]||targetVal)+' แล้ว');
+        apiS({action:'setTaskCategory',id:id,category:targetVal});
+      } else {
+        t.priority=targetVal;
+        renderNDColumnsFromCache();
+        showToast('✅ เปลี่ยนเป็น '+targetVal+' แล้ว');
+        apiS({action:'editTask',id:id,priority:targetVal});
+      }
     }
   }
   _ndDrag=null;
