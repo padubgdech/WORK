@@ -1,2037 +1,1531 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KHUMTONE</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:'IBM Plex Sans Thai',sans-serif}
-html{overflow-x:hidden;width:100%}
-:root{--mono:'IBM Plex Mono',monospace;--bg:#f7f6f3;--card:#fff;--border:#e9e7e2;--sub:#aaa;--blk:#111}
-body{background:var(--bg);min-height:100vh;overflow-x:hidden}
-.topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:200;height:60px;width:100%;gap:0}
-.brand{font-size:13px;font-weight:700;color:#111;letter-spacing:2.5px;display:flex;align-items:center;margin-right:0;text-transform:uppercase;flex-shrink:0}
-.tabs{display:flex;align-items:center;background:#f0eeea;border-radius:20px;padding:4px;gap:2px;position:absolute;left:50%;transform:translateX(-50%)}
-.tab{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:14px;font-size:12px;font-weight:500;color:#888;cursor:pointer;white-space:nowrap;transition:all .15s;border:none;background:transparent}
-.tab:hover:not(.active){color:#555}
-.tab.active{background:#fff;color:#111;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.tab svg{flex-shrink:0;transition:opacity .15s}
-.topbar-r{margin-left:auto;display:flex;align-items:center;gap:10px}
-.btn-add{padding:7px 18px;background:#111;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
-.btn-add:hover{background:#333}
-.avatar{width:32px;height:32px;border-radius:50%;background:#f0eeea;border:.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer}
-.phdr{background:#fff;border-bottom:1px solid var(--border);padding:18px 32px 0}
-.phdr-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
-.phdr-date{font-size:11px;color:#aaa;margin-bottom:4px}
-.phdr-title{font-size:26px;font-weight:700;color:#111;letter-spacing:-.5px}
-.stat-row{display:flex;gap:1px;background:var(--border);border-radius:10px;overflow:hidden}
-.stat-item{flex:1;background:#fff;padding:11px 18px;text-align:center;min-width:80px}
-.stat-n{font-size:22px;font-weight:700;font-family:var(--mono)}
-.stat-l{font-size:10px;color:#aaa;margin-top:2px;letter-spacing:.2px}
-.hdr-prog{height:3px;background:var(--border);margin:0 -32px}
-.hdr-prog-fill{height:100%;background:#0f7b55;transition:width .4s ease}
-.page{display:none;padding:28px 32px;min-height:calc(100vh - 120px);overflow-x:hidden}
-.page.show{display:block}
-.grid2{display:grid;grid-template-columns:1fr 340px;gap:24px;min-width:0}
-#page-main .grid2{grid-template-columns:1fr 250px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
-.nd-viewtab{padding:8px 16px;border-radius:20px;border:none;background:#f0eeea;color:#888;font-size:12.5px;font-weight:700;cursor:pointer}
-.nd-viewtab-active{background:#1c1c1e;color:#fff}
-.nd-cat-chip{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:600;background:#f0f0f0;color:#666;cursor:pointer;white-space:nowrap}
-.nd-cat-chip:hover{background:#e3e1dc}
-.grid22{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-/* Compact 3-per-row task grid (Main page งานค้าง/กำลังดำเนินการ/etc) — same tcCard markup, just resized via cascade */
-.tc-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
-.tc-grid3 .tc{padding:11px 12px}
-.tc-grid3 .tc-hdr{margin-bottom:7px}
-.tc-grid3 .tc-name{font-size:12.5px}
-.tc-grid3 .act{padding:5px 9px;font-size:10px}
-.tc-grid3 .badge{font-size:8.5px;padding:2px 7px}
-.tc-grid3 .pri-h,.tc-grid3 .pri-m,.tc-grid3 .pri-l{font-size:8.5px;padding:2px 7px}
-.tc-grid3 .rng{padding:7px 9px;margin-bottom:8px}
-.tc-grid3 .rdate{padding:4px 7px;min-width:34px}
-.tc-grid3 .rdate .d{font-size:13px}
-.tc-grid3 .rdate .m{font-size:8px}
-.tc-grid3 .rbar-label{font-size:8.5px;margin-bottom:4px}
-.tc-grid3 .note-section{margin-bottom:8px}
-.tc-grid3 .note-lbl-row{padding:6px 10px}
-.tc-grid3 .note-lbl-txt{font-size:9px}
-.tc-grid3 .btn-edit-note{font-size:9px;padding:2px 7px}
-.tc-grid3 .note-view-body{padding:8px 10px;font-size:10.5px}
-.tc-grid3 .st-wrap{margin-bottom:8px}
-.tc-grid3 .st-hdr{padding:6px 10px}
-.tc-grid3 .st-hdr-left{font-size:9px}
-.tc-grid3 .st-hdr-prog{font-size:8.5px;padding:1px 6px}
-.tc-grid3 .st-add-btn{font-size:9px;padding:2px 7px}
-.tc-grid3 .st-bar-wrap{margin:0 10px 6px}
-.tc-grid3 .st-body{padding:8px 9px 6px}
-.tc-grid3 .st-timeline{padding-left:16px}
-.tc-grid3 .st-timeline::before{left:5px;top:5px;bottom:10px}
-.tc-grid3 .st-item{margin-bottom:6px}
-.tc-grid3 .st-dot{width:11px;height:11px;font-size:7px;margin-left:-16px}
-.tc-grid3 .st-name{font-size:10.5px}
-.tc-grid3 .rudy-box{padding:9px 10px;margin-bottom:8px}
-.tc-grid3 .rudy-box-lbl{font-size:9px}
-.tc-grid3 .btn-rudy-new{font-size:9px;padding:3px 8px}
-.tc-grid3 .rudy-txt{font-size:10.5px;margin-bottom:5px}
-.tc-grid3 .rudy-steps{gap:4px;margin-top:6px}
-.tc-grid3 .rudy-step{padding:5px 7px;font-size:10px;gap:6px}
-.tc-grid3 .rudy-step-num{width:16px;height:16px;font-size:8.5px}
-.tc-grid3 .rudy-chips{gap:4px;margin-top:6px}
-.tc-grid3 .rudy-chip{padding:2px 8px;font-size:8.5px}
-@media(max-width:1100px){.tc-grid3{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.tc-grid3{grid-template-columns:1fr}}
-.grid2-hist{display:grid;grid-template-columns:1fr 280px;gap:24px}
-.sec{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#aaa;padding-bottom:8px;margin-top:22px;border-bottom:.5px solid var(--border);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-.sec:first-child{margin-top:0}
-.tc{background:#fff;border-radius:12px;border:.5px solid var(--border);border-left:3px solid;padding:16px 18px;margin-bottom:10px;max-width:100%;overflow:hidden}
-.tc-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:12px;min-width:0}
-.tc-name{font-size:15px;font-weight:600;color:#111;flex:1;line-height:1.4;min-width:0;word-break:break-word}
-.tc-name.done-name{text-decoration:line-through;color:#aaa;font-weight:400}
-.tc-acts{display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap}
-.act{padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .12s;white-space:nowrap}
-.act:hover{opacity:.85}
-.act-done{background:#111;color:#fff}
-.act-move{background:#f7f6f3;color:#555;border:.5px solid var(--border)}
-.act-del{background:#FFF0F0;color:#FF3B30;border:.5px solid #FFCDD2}
-.act-undo{background:#f0f0f0;color:#777;border:.5px solid #ddd}
-.rng{background:#f7f6f3;border-radius:8px;border:.5px solid var(--border);padding:12px 14px;margin-bottom:10px;overflow:hidden}
-.rng-row{display:flex;align-items:center;gap:10px}
-.rdate{padding:6px 10px;border-radius:6px;text-align:center;flex-shrink:0;min-width:44px}
-.rdate .d{font-size:16px;font-weight:700;font-family:var(--mono);display:block;line-height:1}
-.rdate .m{font-size:9px;display:block;margin-top:2px}
-.rbar-wrap{flex:1;min-width:0}
-.rbar-label{display:flex;justify-content:space-between;font-size:10px;color:#aaa;margin-bottom:6px}
-.rbar-label .mid{font-weight:700}
-.rbar{height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden}
-.rbar-f{height:100%;border-radius:3px}
-.rbar-meta{display:flex;justify-content:space-between;font-size:10px;color:#aaa;margin-top:5px}
-.badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:6px;font-size:9px;font-weight:700;letter-spacing:.3px}
-.b-over{background:#FFCDD2;color:#c62828}
-.b-on{background:#EAF3DE;color:#27500A}
-.b-up{background:#E8EAF6;color:#283593}
-.pri-h{background:#111;color:#fff;font-size:9px;padding:3px 9px;border-radius:4px;font-weight:700;display:inline-block}
-.pri-m{background:#f0f0f0;color:#777;font-size:9px;padding:3px 9px;border-radius:4px;font-weight:700;display:inline-block}
-.pri-l{background:#f7f6f3;color:#bbb;font-size:9px;padding:3px 9px;border-radius:4px;border:.5px solid #e0e0e0;font-weight:700;display:inline-block}
-.rt-card{background:#fff;border-radius:10px;border:.5px solid var(--border);padding:11px 14px;display:flex;align-items:center;gap:12px;margin-bottom:7px}
-.rt-card.rt-now{border-color:#111;background:#fafaf9}
-.rt-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.cal-hdr-d{padding:8px;text-align:center;font-size:10px;color:#999;font-weight:700;letter-spacing:.3px}
-.cal-cell{background:rgba(255,255,255,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:7px;min-height:88px;cursor:pointer;transition:background .15s;border:1px solid rgba(255,255,255,.7);border-radius:12px;vertical-align:top}
-.cal-cell:hover{background:rgba(255,255,255,.8)}
-.cal-cell.today-c{background:rgba(28,28,30,.88);border-color:transparent}
-.cal-cell.past-c{background:rgba(255,255,255,.3)}
-.cal-cell.sel-c{box-shadow:0 0 0 2px #1c1c1e}
-.cal-dn{font-size:11px;font-weight:600;color:#888;margin-bottom:3px}
-.cal-cell.today-c .cal-dn{color:rgba(255,255,255,.5)}
-.cal-dn.today-n{background:#fff;color:#1c1c1e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;line-height:1}
-.chip{font-size:7px;padding:2px 4px;border-radius:4px;margin-bottom:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.4;display:block;background:rgba(57,73,171,.14)!important;color:#3949AB!important}
-.cal-cell.today-c .chip{background:rgba(255,255,255,.18)!important;color:#fff!important}
-.cal-btn{padding:6px 14px;background:rgba(255,255,255,.6);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.7);border-radius:20px;cursor:pointer;font-size:12px;color:#555;font-weight:600}
-.cal-btn:hover{background:rgba(255,255,255,.85)}
-.cal-btn-today{padding:6px 14px;background:rgba(28,28,30,.9);backdrop-filter:blur(6px);border:none;border-radius:20px;cursor:pointer;font-size:12px;color:#fff;font-weight:700}
-.cal-btn-today:hover{background:#000}
-.hist-card{background:#fff;border-radius:12px;border:.5px solid var(--border);overflow:hidden;margin-bottom:10px}
-.hist-hdr{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:.5px solid var(--border);background:#fafaf9}
-.hist-row{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:.5px solid #f7f6f3}
-.hist-row:last-child{border-bottom:none}
-.sum-stat{background:#fff;border-radius:12px;border:.5px solid var(--border);padding:16px 18px}
-.sum-stat.dark{background:#111;border-color:#111}
-.sum-n{font-size:30px;font-weight:700;font-family:var(--mono);color:#111}
-.sum-stat.dark .sum-n{color:#fff}
-.sum-l{font-size:11px;color:#aaa;margin-top:3px}
-.sum-stat.dark .sum-l{color:rgba(255,255,255,.4)}
-.hm{height:14px;border-radius:2px}
-.bar{border-radius:3px 3px 0 0;flex:1;min-width:0}
-.bar-lbl{font-size:9px;color:#aaa;text-align:center;margin-top:4px}
-.nd-row{display:flex;align-items:center;gap:10px;padding:10px 13px;background:#fff;border-radius:8px;border:.5px solid var(--border);margin-bottom:6px}
-/* Tasks Kanban Style C */
-.nd-c-item{border-radius:14px;margin-bottom:9px;padding:10px 12px;box-shadow:0 3px 10px rgba(0,0,0,.05);transition:box-shadow .15s;touch-action:pan-y}
-.nd-c-item:hover{box-shadow:0 5px 14px rgba(0,0,0,.09)}
-.nd-c-item.nd-dragging-src{opacity:.3}
-.nd-c-stripe{width:4px;flex-shrink:0}
-.nd-c-body{display:block}
-.nd-c-top{display:flex;align-items:center;gap:7px;margin-bottom:7px}
-.nd-c-handle{cursor:grab;color:#cfcabe;font-size:14px;line-height:1.2;flex-shrink:0;padding:4px 6px;margin:0 0 0 -4px;touch-action:none;user-select:none;-webkit-user-select:none}
-.nd-c-handle:active{cursor:grabbing}
-.nd-c-name-wrap{display:contents}
-.nd-c-name{font-size:13px;font-weight:700;color:#222;flex:1;line-height:1.3}
-.nd-c-chips{display:flex;gap:4px;flex-wrap:wrap}
-.nd-c-note{font-size:11px;color:#888;line-height:1.5;margin-bottom:7px;padding:6px 8px;background:rgba(255,255,255,.65);border-radius:6px;border-left:2px solid rgba(0,0,0,.08);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.nd-c-bottom{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
-.nd-c-meta{font-size:10px;color:#ccc;display:flex;align-items:center;gap:4px}
-.nd-c-acts{display:flex;gap:5px;margin-left:auto;flex-shrink:0}
-.nd-c-btn-date{height:28px;padding:0 12px;border-radius:20px;background:#1c1c1e;color:#fff;border:none;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
-.nd-c-btn-date:hover{background:#333}
-.nd-c-btn-done{height:28px;padding:0 12px;border-radius:20px;background:#0f7b55;color:#fff;border:none;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
-.nd-c-btn-done:hover{background:#0c6344}
-.nd-c-btn-del{width:28px;height:28px;border-radius:20px;background:#FCEAEA;color:#D6453D;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.nd-c-btn-del:hover{background:#FFCDD2}
-.nd-col-dragover{background:rgba(0,0,0,.035);border-radius:14px;outline:2px dashed #bbb;outline-offset:6px}
-.nd-drag-ghost{position:fixed;z-index:9999;pointer-events:none;opacity:.92;transform:scale(1.03) rotate(-1.5deg);box-shadow:0 14px 34px rgba(0,0,0,.22)}
-/* column header add button */
-.nd-col-add-row{display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:8px;color:#aaa;font-size:12px;cursor:pointer;border:.5px dashed #e0e0e0;background:transparent;margin-top:4px;width:100%}
-.nd-col-add-row:hover{background:rgba(0,0,0,.03);color:#888}
-.nd-c-progress-wrap{margin-bottom:7px}.nd-c-progress-wrap{margin-bottom:7px}
-/* Subtask Timeline C */
-.st-wrap{margin-bottom:10px;border:1px solid #BFE3C8;border-radius:10px;overflow:hidden;background:#F3FAF0}
-.st-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 13px;background:#E3F4E5;border-bottom:1px solid #BFE3C8}
-.st-hdr-left{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#2E7D4F;letter-spacing:.6px;text-transform:uppercase}
-.st-hdr-prog{font-size:10px;padding:2px 8px;border-radius:8px;background:#0f7b55;color:#fff;font-weight:700}
-.st-add-btn{font-size:10px;padding:3px 9px;border-radius:5px;background:#fff;border:1px solid #8FCB9F;color:#1F6B43;cursor:pointer;font-weight:600}
-.st-add-btn:hover{background:#1F6B43;color:#fff;border-color:#1F6B43}
-.st-body{padding:10px 12px 8px}
-.st-timeline{position:relative;padding-left:20px}
-.st-timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:14px;width:1.5px;background:#BFE3C8}
-.st-item{position:relative;display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
-.st-item:last-child{margin-bottom:0}
-.st-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;margin-left:-20px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #F3FAF0;z-index:1}
-.st-dot.done{background:#0f7b55;color:#fff;border-color:#F3FAF0}
-.st-dot.active{background:#6FBF85;color:#fff;border-color:#F3FAF0}
-.st-dot.todo{background:#D9EEDD;color:#7FAE8E;border-color:#F3FAF0}
-.st-name{flex:1;font-size:12px;color:#1F4D32;font-weight:500;line-height:1.3}
-.st-name.done{text-decoration:line-through;color:#9BC4A8}
-.st-name.active{color:#1F6B43;font-weight:600}
-.st-badge{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;flex-shrink:0}
-.st-toggle-btn{height:22px;padding:0 10px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;border:none;background:#D9EEDD;color:#1F6B43;font-size:9.5px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
-.st-toggle-btn:hover{background:#c5e6cc}
-.st-del{height:22px;padding:0 10px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;border:none;background:#FBE3E3;color:#C0392B;font-size:9.5px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
-.st-del:hover{background:#f6cfcf}
-.st-add-row{display:flex;align-items:center;gap:6px;padding:5px 4px 0;color:#7FAE8E;font-size:11px;cursor:pointer;margin-top:6px;border-top:1px dashed #BFE3C8}
-.st-add-row:hover{color:#1F6B43}
-.st-bar-wrap{height:3px;background:#D9EEDD;border-radius:2px;margin:0 12px 8px;overflow:hidden}
-.st-bar-fill{height:100%;border-radius:2px;background:#0f7b55;transition:width .3s}
-.sc{background:#fff;border-radius:10px;border:.5px solid var(--border);padding:14px 16px}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;display:none;align-items:center;justify-content:center}
-.overlay.open{display:flex;animation:fi .15s}
-@keyframes fi{from{opacity:0}to{opacity:1}}
-.modal{background:#fff;border-radius:14px;padding:24px 28px;width:500px;max-width:92vw;max-height:88vh;overflow-y:auto;animation:su .2s ease}
-@keyframes su{from{transform:translateY(10px)}to{transform:translateY(0)}}
-.modal-title{font-size:16px;font-weight:700;color:#111;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
-.modal-x{font-size:22px;color:#ccc;cursor:pointer;line-height:1;background:none;border:none;padding:0}
-.modal-x:hover{color:#888}
-.fld{margin-bottom:14px}
-.fld label{font-size:11px;font-weight:600;color:#555;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
-.fld input,.fld textarea,.fld select{width:100%;padding:10px 12px;border:.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'IBM Plex Sans Thai',sans-serif;color:#111;outline:none;transition:border .15s;background:#fff}
-.fld input:focus,.fld textarea:focus{border-color:#555}
-.fld textarea{resize:vertical;min-height:80px;line-height:1.6}
-.pri-btns{display:flex;gap:8px}
-.pri-btn{flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid transparent;text-align:center;transition:all .12s}
-.pri-btn.active-h{border-color:#A32D2D;outline:2px solid #A32D2D}
-.pri-btn.active-m{border-color:#BA7517;outline:2px solid #BA7517}
-.pri-btn.active-l{border-color:#3B6D11;outline:2px solid #3B6D11}
-.date-flex{display:flex;gap:10px;align-items:flex-end}
-.date-flex>div{flex:1}
-.date-arrow{color:#ccc;font-size:16px;padding-bottom:2px;flex-shrink:0;align-self:flex-end}
-.btn-submit{width:100%;padding:13px;background:#111;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px}
-.btn-submit:hover{background:#333}
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 22px;border-radius:22px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:999;white-space:nowrap;letter-spacing:.2px}
-.toast.show{opacity:1}
-.scroll-y{overflow-y:auto;max-height:calc(100vh - 180px);min-width:0;overflow-x:hidden}
-#cal-detail{padding:16px;background:rgba(255,255,255,.65);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.85);border-radius:20px}
-/* NOTEBOOK */
-.notebook{background:#fff;border-radius:12px;border:.5px solid #e9e7e2;overflow:hidden;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
-.nb-wrap{display:flex}
-.nb-spine{width:34px;background:linear-gradient(180deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.nb-spine-txt{font-size:9px;font-weight:700;color:rgba(255,255,255,.4);writing-mode:vertical-rl;text-transform:uppercase;letter-spacing:1.5px}
-.nb-body{flex:1;padding:13px 15px}
-.nb-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:11px}
-.nb-date-big{font-size:26px;font-weight:700;color:#111;font-family:var(--mono);line-height:1}
-.nb-date-sub{font-size:11px;color:#aaa;margin-top:3px}
-.nb-today-badge{background:#111;color:#fff;font-size:9px;padding:3px 9px;border-radius:8px;font-weight:600;flex-shrink:0;margin-top:3px}
-.nb-editor-wrap{background:linear-gradient(135deg,#F8F7FF,#EEF0FF);border:.5px solid rgba(83,74,183,.15);border-radius:8px;overflow:hidden}
-.nb-toolbar{display:flex;align-items:center;gap:3px;padding:7px 10px;background:rgba(255,255,255,.75);border-bottom:.5px solid rgba(83,74,183,.1);flex-wrap:wrap}
-.nb-tb-btn{height:26px;padding:0 8px;border-radius:5px;border:.5px solid rgba(83,74,183,.15);background:rgba(255,255,255,.85);cursor:pointer;font-size:11px;font-weight:700;color:#534AB7;display:inline-flex;align-items:center;justify-content:center}
-.nb-tb-btn:hover{background:#EEF4FF;border-color:#534AB7}
-.nb-tb-sep{width:1px;height:16px;background:rgba(83,74,183,.12);margin:0 3px;display:inline-block}
-.nb-tb-swatch{width:14px;height:14px;border-radius:50%;cursor:pointer;border:2px solid transparent;display:inline-block;flex-shrink:0}
-.nb-tb-swatch:hover{border-color:#534AB7;transform:scale(1.2)}
-.nb-editor{padding:11px 13px;min-height:88px;font-size:13px;color:#2d2060;line-height:1.8;outline:none;background:transparent}
-.nb-footer{display:flex;align-items:center;justify-content:space-between;padding:7px 11px;background:rgba(255,255,255,.65);border-top:.5px solid rgba(83,74,183,.1)}
-.nb-charcount{font-size:10px;color:#A09DC8;font-family:'IBM Plex Mono',monospace}
-.nb-save{font-size:11px;padding:5px 14px;border-radius:7px;background:linear-gradient(135deg,#534AB7,#3C3489);color:#fff;border:none;cursor:pointer;font-weight:600;box-shadow:0 2px 8px rgba(83,74,183,.3)}
-.nb-save:hover{opacity:.9}
-/* TIMELINE */
-.hist-lbl{font-size:10px;font-weight:700;color:#aaa;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px}
-.timeline{position:relative;padding-left:20px}
-.timeline::before{content:'';position:absolute;left:7px;top:4px;bottom:0;width:1.5px;background:linear-gradient(180deg,#CECBF6,rgba(233,231,226,0) 95%)}
-.tl-item{position:relative;margin-bottom:14px}
-.tl-item:last-child{margin-bottom:0}
-.tl-dot{position:absolute;left:-16px;top:4px;width:9px;height:9px;border-radius:50%;background:#CECBF6;border:2px solid #f7f6f3;z-index:1}
-.tl-dot.has-note{background:#534AB7}
-.tl-dot.no-note{background:#e9e7e2}
-.tl-date{font-size:10px;font-weight:700;color:#888;margin-bottom:4px}
-.tl-date.no-note{color:#ccc}
-.tl-txt{font-size:12px;color:#555;line-height:1.65;background:#fff;border-radius:7px;padding:8px 10px;border:.5px solid #e9e7e2}
-.tl-txt.no-note{color:#ccc;font-style:italic;background:transparent;border:none;padding:2px 0;font-size:11px}
-/* Calendar Month Timeline */
-.d-tl{position:relative;padding-left:18px}
-.d-tl::before{content:'';position:absolute;left:6px;top:6px;bottom:0;width:1.5px;background:linear-gradient(180deg,#2383e2,rgba(233,231,226,0) 95%)}
-.d-tl-group{margin-bottom:14px}
-.d-tl-day-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
-.d-tl-dot{width:13px;height:13px;border-radius:50%;border:2.5px solid #f7f6f3;margin-left:-18px;flex-shrink:0;z-index:1}
-.d-tl-date-lbl{font-size:11px;font-weight:700}
-.d-tl-ev{background:rgba(255,255,255,.75);border-radius:12px;border:1px solid rgba(255,255,255,.9);border-left:3px solid #2383e2;padding:9px 11px;margin-bottom:5px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.d-tl-ev-info{flex:1}
-.d-tl-ev-name{font-size:12px;color:#111;font-weight:600}
-.d-tl-ev-time{font-size:10px;color:#2383e2;font-weight:600;margin-top:3px}
-.d-tl-ev-cancel{font-size:10px;padding:3px 8px;background:#fbe4e4;color:#e03e3e;border:.5px solid #facccc;border-radius:5px;cursor:pointer;flex-shrink:0;white-space:nowrap;border:none}
-.ld{text-align:center;padding:32px;color:#bbb;font-size:13px}
-.ev-card{background:#f0f5ff;border-radius:10px;border-left:3px solid #2383e2;padding:12px 14px;margin-bottom:8px}
-/* NOTE INLINE — Style C: Dark Header */
-.note-section{border-radius:10px;overflow:hidden;margin-bottom:8px;background:#fff;border:.5px solid #e9e7e2;box-shadow:0 4px 16px rgba(0,0,0,.06)}
-.note-lbl-row{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)}
-.note-lbl-txt{font-size:10px;font-weight:700;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:.8px}
-.note-saved-badge{background:#0f7b55;color:#fff;font-size:9px;padding:1px 7px;border-radius:3px;font-weight:500}
-.btn-edit-note{font-size:11px;padding:3px 10px;border-radius:5px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);border:.5px solid rgba(255,255,255,.2);cursor:pointer}
-.btn-edit-note:hover{background:rgba(255,255,255,.2)}
-.note-view-body{padding:12px 16px;font-size:13px;color:#111;line-height:1.8;background:#fff;min-height:40px}
-.note-toolbar{display:flex;align-items:center;gap:3px;padding:7px 14px;background:#f8f8fc;border-bottom:.5px solid #e9e7e2;flex-wrap:wrap}
-.tool-btn{width:30px;height:30px;border-radius:7px;border:.5px solid #e9e7e2;background:#fff;cursor:pointer;font-size:12px;font-weight:700;color:#444;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.tool-btn:hover{background:#f0f0ff;border-color:#534AB7;color:#534AB7}
-.tool-sep{width:1px;height:20px;background:#e9e7e2;margin:0 4px;display:inline-block}
-.color-swatch{width:16px;height:16px;border-radius:5px;cursor:pointer;border:2px solid transparent;display:inline-block;box-shadow:0 1px 3px rgba(0,0,0,.15)}
-.color-swatch:hover,.color-swatch.sel{border-color:#534AB7;transform:scale(1.15)}
-.note-editor{padding:14px 16px;min-height:90px;outline:none;font-size:13px;color:#111;line-height:1.8;background:#fff}
-.note-editor img{max-width:100%;border-radius:6px;margin:4px 0;display:block;cursor:pointer}
-.note-view-body img{max-width:100%;border-radius:6px;margin:4px 0;display:block}
-.note-footer-row{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#f8f8fc;border-top:.5px solid #e9e7e2}
-.note-auto-lbl{font-size:11px;color:#888;cursor:pointer;display:flex;align-items:center;gap:5px}
-.btn-cancel-note{font-size:12px;padding:5px 12px;border-radius:7px;background:transparent;color:#888;border:.5px solid #e9e7e2;cursor:pointer}
-.btn-save-note{font-size:12px;padding:6px 16px;border-radius:7px;background:linear-gradient(135deg,#534AB7,#3C3489);color:#fff;border:none;cursor:pointer;font-weight:600;box-shadow:0 2px 8px rgba(83,74,183,.3)}
-.btn-save-note:hover{opacity:.9}
-/* RUDY */
-.rudy-box{background:#fff;border:.5px solid #e9e7e2;border-radius:10px;padding:12px 14px;margin-bottom:8px;box-shadow:0 2px 10px rgba(83,74,183,.08)}
-.rudy-box-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.rudy-box-lbl{font-size:10px;font-weight:700;color:#3C3489;display:flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:.6px}
-.rudy-status{font-size:10px;color:#AFA9EC;margin-left:4px;font-weight:400}
-.btn-rudy-new{font-size:11px;padding:4px 11px;border-radius:7px;background:linear-gradient(135deg,#534AB7,#3C3489);color:#fff;border:none;cursor:pointer;font-weight:600;box-shadow:0 2px 6px rgba(83,74,183,.25)}
-.btn-rudy-new:hover{opacity:.9}
-.rudy-search-badge{display:inline-flex;align-items:center;gap:4px;background:#EEF4FF;color:#3949AB;padding:3px 10px;border-radius:20px;font-size:10px;margin-bottom:8px;border:.5px solid #C5CAE9;font-weight:500}
-.rudy-txt{font-size:12px;color:#333;line-height:1.75}
-.rudy-steps{margin-top:8px;display:flex;flex-direction:column;gap:5px}
-.rudy-step{display:flex;align-items:flex-start;gap:8px;padding:7px 10px;background:#f8f8fc;border-radius:8px;font-size:12px;color:#333;border:.5px solid #e9e7e2}
-.rudy-step-num{width:20px;height:20px;background:linear-gradient(135deg,#534AB7,#3C3489);color:#fff;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.rudy-chips{margin-top:8px;display:flex;gap:5px;flex-wrap:wrap}
-.rudy-chip{padding:3px 10px;border-radius:20px;font-size:10px;background:#EEF4FF;color:#3949AB;border:.5px solid #C5CAE9;font-weight:500}
-.rudy-loading{display:flex;gap:4px;padding:6px 0}
-.rudy-dot{width:7px;height:7px;border-radius:50%;background:#534AB7;animation:rudypulse 1s infinite}
-@keyframes rudypulse{0%,100%{opacity:.2}50%{opacity:1}}
-</style>
-</head>
-<body>
-<div class="topbar">
-  <div class="brand">KHUMTONE</div>
-  <div class="tabs">
-    <div class="tab active" onclick="goTab('main',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24">
-        <rect x="3" y="3" width="8" height="8" rx="1.5" fill="currentColor"/>
-        <rect x="13" y="3" width="8" height="8" rx="1.5" fill="currentColor" opacity=".35"/>
-        <rect x="3" y="13" width="8" height="8" rx="1.5" fill="currentColor" opacity=".35"/>
-        <rect x="13" y="13" width="8" height="8" rx="1.5" fill="currentColor" opacity=".35"/>
-      </svg>
-      Main
-    </div>
-    <div class="tab" onclick="goTab('cal',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24">
-        <rect x="3" y="4" width="18" height="17" rx="2" fill="currentColor" opacity=".25"/>
-        <rect x="3" y="4" width="18" height="6" rx="2" fill="currentColor" opacity=".5"/>
-        <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      Calendar
-    </div>
-    <div class="tab" onclick="goTab('tasks',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24">
-        <rect x="3" y="3" width="18" height="18" rx="2" fill="currentColor" opacity=".2"/>
-        <polyline points="8 12 11 15 16 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Tasks
-    </div>
-    <div class="tab" onclick="goTab('history',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="9" fill="currentColor" opacity=".2"/>
-        <polyline points="12 7 12 12 15 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      History
-    </div>
-    <div class="tab" onclick="goTab('summary',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24">
-        <rect x="4" y="13" width="4" height="8" rx="1" fill="currentColor" opacity=".4"/>
-        <rect x="10" y="8" width="4" height="13" rx="1" fill="currentColor" opacity=".4"/>
-        <rect x="16" y="4" width="4" height="17" rx="1" fill="currentColor" opacity=".4"/>
-      </svg>
-      Summary
-    </div>
-  </div>
-  <div class="topbar-r">
-    <button class="btn-add" onclick="openAdd()">+ เพิ่มงาน</button>
-    <div class="avatar">👤</div>
-  </div>
-</div>
-<div class="phdr" id="phdr">
-  <div class="phdr-row">
-    <div>
-      <div class="phdr-date" id="ph-date"></div>
-      <div class="phdr-title" id="ph-title">งานวันนี้</div>
-    </div>
-    <div class="stat-row" id="ph-stats">
-      <div class="stat-item"><div class="stat-n" id="st-od" style="color:#e03e3e">–</div><div class="stat-l">ค้าง</div></div>
-      <div class="stat-item"><div class="stat-n" id="st-pend" style="color:#3949AB">–</div><div class="stat-l">วันนี้</div></div>
-      <div class="stat-item"><div class="stat-n" id="st-done" style="color:#0f7b55">–</div><div class="stat-l">เสร็จ</div></div>
-      <div class="stat-item"><div class="stat-n" id="st-pct" style="color:#9065b0">–%</div><div class="stat-l">สำเร็จ</div></div>
-    </div>
-  </div>
-  <div class="hdr-prog"><div class="hdr-prog-fill" id="hdr-prog" style="width:0%"></div></div>
-</div>
-<div id="page-main" class="page show">
-  <div class="grid2">
-    <div>
-      <div id="main-od"></div>
-      <div id="main-ongoing"></div>
-      <div id="main-upcoming"></div>
-      <div id="main-done"></div>
-    </div>
-    <div class="scroll-y">
-      <!-- นัดหมายวันนี้ -->
-      <div class="sec"><span>นัดหมายวันนี้</span></div>
-      <div id="main-events"><div class="ld">⏳</div></div>
-      <!-- NOTEBOOK NOTE -->
-      <div style="margin-top:16px">
-        <div class="notebook" id="main-notebook">
-          <div class="nb-wrap">
-            <div class="nb-spine"><div class="nb-spine-txt">NOTE</div></div>
-            <div class="nb-body">
-              <div class="nb-hdr">
-                <div>
-                  <div class="nb-date-big" id="nb-day"></div>
-                  <div class="nb-date-sub" id="nb-datesub"></div>
-                </div>
-                <span class="nb-today-badge">วันนี้</span>
-              </div>
-              <div class="nb-editor-wrap">
-                <div class="nb-toolbar">
-                  <button class="nb-tb-btn" data-cmd="bold" onclick="nbCmd(this)"><b>B</b></button>
-                  <button class="nb-tb-btn" data-cmd="italic" onclick="nbCmd(this)"><i style="font-style:italic">I</i></button>
-                  <button class="nb-tb-btn" data-cmd="underline" onclick="nbCmd(this)"><u>U</u></button>
-                  <span class="nb-tb-sep"></span>
-                  <button class="nb-tb-btn" data-cmd="insertUnorderedList" onclick="nbCmd(this)">•</button>
-                  <button class="nb-tb-btn" data-cmd="insertOrderedList" onclick="nbCmd(this)" style="font-size:10px">1.</button>
-                  <span class="nb-tb-sep"></span>
-                  <span style="font-size:10px;color:#A09DC8;margin-right:2px">สี</span>
-                  <span class="nb-tb-swatch" style="background:#2d2060" data-col="#2d2060" onclick="nbColor(this)"></span>
-                  <span class="nb-tb-swatch" style="background:#c62828" data-col="#c62828" onclick="nbColor(this)"></span>
-                  <span class="nb-tb-swatch" style="background:#0f7b55" data-col="#0f7b55" onclick="nbColor(this)"></span>
-                  <span class="nb-tb-swatch" style="background:#854F0B" data-col="#854F0B" onclick="nbColor(this)"></span>
-                  <span class="nb-tb-swatch" style="background:#534AB7" data-col="#534AB7" onclick="nbColor(this)"></span>
-                </div>
-                <div id="main-note-editor" class="nb-editor" contenteditable="true"
-                  onkeyup="nbCount()" onmouseup="nbCount()"></div>
-                <div class="nb-footer">
-                  <span class="nb-charcount" id="nb-charcount">0 ตัวอักษร</span>
-                  <button onclick="saveMainNote()" class="nb-save">💾 บันทึก</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Timeline History -->
-        <div class="hist-lbl">7 วันย้อนหลัง</div>
-        <div class="timeline" id="main-note-history"><div class="ld" style="padding:12px 0;font-size:12px">⏳</div></div>
-      </div>
-      <!-- RUDY บอก -->
-      <div class="sec" style="margin-top:18px"><span>RUDY บอก</span></div>
-      <div id="main-rudy" style="background:#111;border-radius:12px;padding:16px">
-        <div style="font-size:10px;color:rgba(255,255,255,.4);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px">วิเคราะห์วันนี้</div>
-        <div id="main-rudy-text" style="font-size:13px;color:rgba(255,255,255,.75);line-height:1.75">⏳ กำลังโหลด...</div>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="page-cal" class="page" style="background:linear-gradient(135deg,#fdf2f2 0%,#f2f7fd 50%,#f2fdf6 100%);margin-top:-1px">
-  <div class="grid2">
-    <div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div id="cal-title" style="font-size:18px;font-weight:800;color:#111"></div>
-        <div style="display:flex;gap:6px">
-          <button class="cal-btn" onclick="calMove(-1)">‹</button>
-          <button class="cal-btn-today" onclick="calMove(0)">วันนี้</button>
-          <button class="cal-btn" onclick="calMove(1)">›</button>
-        </div>
-      </div>
-      <div>
-        <div style="display:grid;grid-template-columns:repeat(7,1fr)">
-          <div class="cal-hdr-d">จ</div><div class="cal-hdr-d">อ</div><div class="cal-hdr-d">พ</div>
-          <div class="cal-hdr-d">พฤ</div><div class="cal-hdr-d">ศ</div><div class="cal-hdr-d">ส</div><div class="cal-hdr-d">อา</div>
-        </div>
-        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
-          <div class="ld" style="grid-column:1/-1">⏳ กำลังโหลด...</div>
-        </div>
-      </div>
-    </div>
-    <div class="scroll-y" id="cal-detail">
-      <div style="color:#bbb;font-size:13px;padding:24px 0;text-align:center">กดวันในปฏิทินเพื่อดูรายละเอียด</div>
-    </div>
-  </div>
-</div>
-<div id="page-tasks" class="page">
-  <div style="display:flex;gap:8px;margin-bottom:18px">
-    <button id="nd-tab-priority" class="nd-viewtab nd-viewtab-active" onclick="ndShowView('priority')">📊 ตามความสำคัญ</button>
-    <button id="nd-tab-category" class="nd-viewtab" onclick="ndShowView('category')">🏷️ ตามหมวดหมู่</button>
-  </div>
-
-  <div id="nd-board-priority" class="grid3">
-    <div>
-      <div class="sec" style="color:#FF3B30;border-bottom-color:#FFCDD2">
-        <span>🔴 HIGH</span>
-        <button onclick="openAddND('High')" style="padding:5px 12px;background:#FCEAEA;border:none;color:#D6453D;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-high"><div class="ld">⏳</div></div>
-    </div>
-    <div>
-      <div class="sec" style="color:#FF9500;border-bottom-color:#FAEEDA">
-        <span>🟡 MEDIUM</span>
-        <button onclick="openAddND('Medium')" style="padding:5px 12px;background:#FAEEDA;border:none;color:#BA7517;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-med"><div class="ld">⏳</div></div>
-    </div>
-    <div>
-      <div class="sec" style="color:#34C759;border-bottom-color:#EAF3DE">
-        <span>🟢 LOW</span>
-        <button onclick="openAddND('Low')" style="padding:5px 12px;background:#EAF3DE;border:none;color:#1D9E75;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-low"><div class="ld">⏳</div></div>
-    </div>
-  </div>
-
-  <div id="nd-board-category" class="grid4" style="display:none">
-    <div>
-      <div class="sec" style="color:#1D9E75;border-bottom-color:#EAF3DE">
-        <span>💰 สร้างรายได้</span>
-        <button onclick="openAddCat('revenue','สร้างรายได้')" style="padding:5px 12px;background:#EAF3DE;border:none;color:#1D9E75;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-revenue"><div class="ld">⏳</div></div>
-    </div>
-    <div>
-      <div class="sec" style="color:#1A73E8;border-bottom-color:#EEF4FF">
-        <span>🏢 ระบบหลังบ้าน</span>
-        <button onclick="openAddCat('ops','ระบบหลังบ้าน')" style="padding:5px 12px;background:#EEF4FF;border:none;color:#1A73E8;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-ops"><div class="ld">⏳</div></div>
-    </div>
-    <div>
-      <div class="sec" style="color:#BA7517;border-bottom-color:#FAEEDA">
-        <span>📉 ลดต้นทุน/Loss</span>
-        <button onclick="openAddCat('cost','ลดต้นทุน/Loss')" style="padding:5px 12px;background:#FAEEDA;border:none;color:#BA7517;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-cost"><div class="ld">⏳</div></div>
-    </div>
-    <div>
-      <div class="sec" style="color:#7C3AED;border-bottom-color:#F3E8FF">
-        <span>🎨 Brand & Marketing</span>
-        <button onclick="openAddCat('brand','Brand &amp; Marketing')" style="padding:5px 12px;background:#F3E8FF;border:none;color:#7C3AED;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-brand"><div class="ld">⏳</div></div>
-    </div>
-  </div>
-</div>
-<div id="page-history" class="page">
-  <div class="grid2-hist">
-    <div class="scroll-y" id="hist-list"><div class="ld">⏳ กำลังโหลด...</div></div>
-    <div>
-      <div class="sec"><span>สถิติรวม</span></div>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-        <div class="sc" style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:11px;color:#aaa">วันนี้</div><div style="font-size:24px;font-weight:700;font-family:var(--mono)" id="hs-today">–</div></div><span style="font-size:22px">✅</span></div>
-        <div class="sc" style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:11px;color:#aaa">สัปดาห์นี้</div><div style="font-size:24px;font-weight:700;font-family:var(--mono)" id="hs-week">–</div></div><span style="font-size:22px">📈</span></div>
-        <div style="background:#111;border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:11px;color:rgba(255,255,255,.4)">30 วัน</div><div style="font-size:24px;font-weight:700;font-family:var(--mono);color:#fff" id="hs-30">–</div></div><span style="font-size:22px">🏆</span></div>
-      </div>
-      <div class="sec"><span>Priority สัดส่วน</span></div>
-      <div class="sc">
-        <div id="hs-pribar" style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:10px"><div style="flex:1;background:#f0f0f0"></div></div>
-        <div id="hs-prileg" style="display:flex;flex-direction:column;gap:7px"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="page-summary" class="page">
-  <div class="grid2">
-    <div>
-      <div class="grid22" style="margin-bottom:18px">
-        <div class="sum-stat"><div class="sum-n" id="sm-today" style="color:#e03e3e">–</div><div class="sum-l">งานวันนี้</div></div>
-        <div class="sum-stat"><div class="sum-n" id="sm-week" style="color:#0f7b55">–</div><div class="sum-l">สัปดาห์นี้</div></div>
-        <div class="sum-stat dark"><div class="sum-n" id="sm-streak">–</div><div class="sum-l">วัน streak 🔥</div></div>
-        <div class="sum-stat dark"><div class="sum-n" id="sm-month">–</div><div class="sum-l">30 วันล่าสุด</div></div>
-      </div>
-      <div class="sc" style="margin-bottom:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div style="font-size:13px;font-weight:600;color:#111">Productivity รายวัน (7 วัน)</div>
-          <span id="sm-trlbl" style="font-size:11px;color:#aaa">⏳</span>
-        </div>
-        <div id="sm-bars" style="display:flex;align-items:flex-end;gap:4px;height:64px"><div class="ld">⏳</div></div>
-      </div>
-      <div class="sc">
-        <div style="font-size:13px;font-weight:600;color:#111;margin-bottom:10px">Heatmap 30 วัน</div>
-        <div id="sm-hm" style="display:grid;grid-template-columns:repeat(15,1fr);gap:3px"></div>
-        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:#aaa;margin-top:8px">น้อย
-          <div class="hm" style="width:10px;background:#f0f0f0"></div><div class="hm" style="width:10px;background:#f5e6e6"></div>
-          <div class="hm" style="width:10px;background:#c97575"></div><div class="hm" style="width:10px;background:#a84040"></div>
-          <div class="hm" style="width:10px;background:#8B2A2A"></div>เยอะ</div>
-      </div>
-    </div>
-    <div>
-      <div style="background:#111;border-radius:12px;padding:18px;margin-bottom:16px;display:flex;align-items:center;gap:16px">
-        <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">👤</div>
-        <div style="flex:1"><div style="font-size:14px;font-weight:600;color:#fff">คุณเดช</div><div id="sm-totaldone" style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">–</div></div>
-        <div style="text-align:center"><div id="sm-streak-big" style="font-size:26px;font-weight:700;color:#fff;font-family:var(--mono)">🔥 –</div><div style="font-size:10px;color:rgba(255,255,255,.4)">วันติดต่อกัน</div></div>
-      </div>
-      <div class="sc" style="margin-bottom:16px">
-        <div style="font-size:13px;font-weight:600;color:#111;margin-bottom:12px">เทียบสัปดาห์นี้ vs ที่แล้ว</div>
-        <div id="sm-cmp" style="display:flex;flex-direction:column;gap:8px"><div class="ld">⏳</div></div>
-        <div style="display:flex;gap:12px;margin-top:10px;font-size:10px;color:#aaa">
-          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#111;display:inline-block;border-radius:1px"></span>สัปดาห์นี้</span>
-          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#ddd;display:inline-block;border-radius:1px"></span>สัปดาห์ที่แล้ว</span>
-        </div>
-      </div>
-      <div style="background:#111;border-radius:12px;padding:16px">
-        <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Rudy วิเคราะห์</div>
-        <div id="sm-rudy" style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.7">⏳ กำลังวิเคราะห์...</div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()"></div>
-<div class="toast" id="toast"></div>
-<script>
-var GAS="https://script.google.com/macros/s/AKfycbzUocf5fXk59buzOHC7vOYPfuXJC2x5vxozg6AfC9VpA3mlFRxV53aJ_8jnrvFc4eHA/exec";
-var TODAY=new Date(), TODAY_STR=d2s(TODAY);
-var todayTasks=[], overdueTasks=[], todayEvents=[], routineItems=[], noDateTasks=[];
-var historyTasksCache={};
-var calY=TODAY.getFullYear(), calMo=TODAY.getMonth();
-var calCache={t:{},e:{}}, calSel=TODAY_STR;
-var _addPri='Medium';
-function d2s(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-function addDays(base,n){var d=new Date(base+'T00:00:00+07:00');d.setDate(d.getDate()+n);return d2s(d);}
-function diffD(a,b){return Math.round((new Date(b+'T00:00:00+07:00')-new Date(a+'T00:00:00+07:00'))/864e5);}
-function fmtThai(ds){var d=new Date(ds+'T00:00:00+07:00');var dy=['อา','จ','อ','พ','พฤ','ศ','ส'];var m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return dy[d.getDay()]+' '+d.getDate()+' '+m[d.getMonth()];}
-function fmtShort(ds){if(!ds)return'วันนี้';var d=new Date(ds+'T00:00:00+07:00');var m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return d.getDate()+' '+m[d.getMonth()];}
-function nowS(){var n=new Date();return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');}
-function isNow(s,e){var n=nowS();return n>=s&&n<=e;}
-function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
-function api(p,cb){
-  var n='cb_'+Date.now()+'_'+Math.floor(Math.random()*9999);
-  p.callback=n;
-  var url=GAS+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k]);}).join('&');
-  var s=document.createElement('script');
-  var to=setTimeout(function(){delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(null);},12000);
-  window[n]=function(d){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(d);};
-  s.src=url;document.head.appendChild(s);
-}
-function apiS(p){var url=GAS+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k]);}).join('&');var i=new Image();i.src=url;}
-// POST สำหรับข้อมูลยาว (note)
-function apiPost(p,cb){
-  var n='cb_'+Date.now()+'_'+Math.floor(Math.random()*9999);
-  var callback=n;
-  var qs=GAS+'?callback='+n;
-  // ส่ง action และ id ใน URL, ส่ง note ใน body ผ่าน no-cors fetch
-  // เพราะ GAS ไม่รับ POST body ตรงๆ — ใช้วิธี chunk แทน
-  // แบ่ง note เป็น chunks แล้วส่งทีละ chunk
-  var note=p.note||'';
-  var chunkSize=800; // URL safe limit
-  var chunks=[];
-  for(var i=0;i<note.length;i+=chunkSize) chunks.push(note.substring(i,i+chunkSize));
-  if(chunks.length===0)chunks=[''];
-  // ส่ง chunk แรก แล้วต่อด้วย append
-  var sent=0;
-  function sendChunk(){
-    if(sent>=chunks.length){if(cb)cb({ok:true});return;}
-    var cp=Object.assign({},p);
-    cp.note=chunks[sent];
-    cp.chunkIndex=sent;
-    cp.chunkTotal=chunks.length;
-    delete cp.note;
-    cp.note=chunks[sent];
-    apiS(cp);
-    sent++;
-    if(sent<chunks.length)setTimeout(sendChunk,300);
-    else{if(cb)cb({ok:true});}
-  }
-  sendChunk();
-}
-function getStatus(t){
-  var a=t.actionDate||'',e=t.endDate||'';
-  if(!a&&!e)return'today';
-  if(!e){if(!a)return'today';if(a<TODAY_STR)return'overdue';if(a===TODAY_STR)return'today';return'upcoming';}
-  if(e<TODAY_STR)return'overdue';
-  if(a&&a>TODAY_STR)return'upcoming';
-  return'ongoing';
-}
-function statusBadge(st,t){
-  if(st==='overdue'){var base=t.endDate||t.actionDate||TODAY_STR;var d=diffD(base,TODAY_STR);return'<span class="badge b-over">เลยกำหนด '+(d>0?d:1)+' วัน</span>';}
-  if(st==='ongoing'&&t.endDate){var l=diffD(TODAY_STR,t.endDate);return'<span class="badge b-on">เหลือ '+l+' วัน</span>';}
-  if(st==='upcoming'&&t.actionDate){var s2=diffD(TODAY_STR,t.actionDate);return'<span class="badge b-up">เริ่มใน '+s2+' วัน</span>';}
-  return'';
-}
-function priCls(p){return p==='High'?'pri-h':p==='Medium'?'pri-m':'pri-l';}
-function priCol(p){return p==='High'?'#FF3B30':p==='Medium'?'#FF9500':'#34C759';}
-function priDk(p){return p==='High'?'#791F1F':p==='Medium'?'#854F0B':'#27500A';}
-function priBg(p){return p==='High'?'#FFCDD2':p==='Medium'?'#FAEEDA':'#EAF3DE';}
-function rangeBar(t){
-  var mNames=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  var status=getStatus(t);
-  var stBg=status==='overdue'?'#fbe4e4':status==='ongoing'?'#EAF3DE':'#E8EAF6';
-  var stCol=status==='overdue'?'#c62828':status==='ongoing'?'#27500A':'#283593';
-  var col=status==='overdue'?'#FF3B30':status==='ongoing'?'#34C759':'#5C6BC0';
-  if(!t.endDate){
-    var ad=t.actionDate||TODAY_STR;
-    var dAd=new Date(ad+'T00:00:00+07:00');
-    var overDays=diffD(ad,TODAY_STR);
-    var label=status==='overdue'?'เลยกำหนด '+overDays+' วัน':status==='today'?'วันนี้':'';
-    if(!label)return'';
-    var parts=['<div class="rng" style="padding:8px 12px"><div style="display:flex;align-items:center;gap:10px">',
-      '<div class="rdate" style="background:'+stBg+';color:'+stCol+'"><span class="d">'+dAd.getDate()+'</span><span class="m">'+mNames[dAd.getMonth()]+'</span></div>',
-      '<div style="flex:1"><div style="height:5px;background:#e0e0e0;border-radius:3px"><div style="width:100%;height:100%;background:'+col+';border-radius:3px"></div></div>',
-      '<div style="font-size:10px;color:'+col+';font-weight:600;margin-top:4px">'+label+'</div></div>',
-      '</div></div>'];
-    return parts.join('');
-  }
-  var st=t.actionDate||TODAY_STR,en=t.endDate;
-  var total=diffD(st,en);if(total<=0)return'';
-  var passed=Math.min(diffD(st,TODAY_STR),total);
-  var pct=Math.max(0,Math.min(100,Math.round(passed/total*100)));
-  var dSt=new Date(st+'T00:00:00+07:00'),dEn=new Date(en+'T00:00:00+07:00');
-  var midLabel=status==='overdue'?'▲ วันนี้ · เลย '+diffD(t.endDate,TODAY_STR)+' วัน':status==='ongoing'?passed+'/'+total+' วัน':status==='upcoming'?'ยังไม่เริ่ม · '+total+' วัน':'';
-  return '<div class="rng"><div class="rng-row">'
-    +'<div class="rdate" style="background:'+stBg+';color:'+stCol+'"><span class="d">'+dSt.getDate()+'</span><span class="m">'+mNames[dSt.getMonth()]+'</span></div>'
-    +'<div class="rbar-wrap"><div class="rbar-label"><span>เริ่ม</span><span class="mid" style="color:'+col+'">'+midLabel+'</span><span>สิ้นสุด</span></div>'
-    +'<div class="rbar"><div class="rbar-f" style="width:'+pct+'%;background:'+col+'"></div></div>'
-    +'<div class="rbar-meta"><span>ผ่านมา '+passed+' วัน</span><span>ครบ '+total+' วัน</span></div></div>'
-    +'<div class="rdate" style="background:'+stBg+';color:'+stCol+'"><span class="d">'+dEn.getDate()+'</span><span class="m">'+mNames[dEn.getMonth()]+'</span></div>'
-    +'</div></div>';
-}
-/* NOTE BLOCK — RICH TEXT + RUDY */
-function subtaskBlock(t){
-  var tid=t.id;
-  // ครั้งแรกที่เจอ task นี้ — ยังไม่เคยโหลดงานย่อยจาก Notion
-  if (t._subtasks === undefined) {
-    t._subtasks = null; // null = กำลังโหลดอยู่
-    fetchSubtasks(tid);
-  }
-  if (t._subtasks === null) {
-    return '<div class="st-wrap"><div class="st-body" style="padding:14px;text-align:center;color:#7FAE8E;font-size:11px">⏳ กำลังโหลดงานย่อย...</div></div>';
-  }
-  var subs=t._subtasks||[];
-  var done=subs.filter(function(s){return s.done;}).length;
-  var total=subs.length;
-  var pct=total>0?Math.round(done/total*100):0;
-  var h='<div class="st-wrap">';
-  h+='<div class="st-hdr">';
-  h+='<div class="st-hdr-left">';
-  h+='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>';
-  h+='งานย่อย';
-  if(total>0)h+='<span class="st-hdr-prog">'+done+'/'+total+' เสร็จ</span>';
-  h+='</div>';
-  h+='<button class="st-add-btn" data-stid="'+tid+'" onclick="addSubtask(this.dataset.stid)">+ เพิ่ม</button>';
-  h+='</div>';
-  // progress bar
-  if(total>0){
-    h+='<div class="st-bar-wrap"><div class="st-bar-fill" style="width:'+pct+'%"></div></div>';
-  }
-  h+='<div class="st-body"><div class="st-timeline">';
-  if(subs.length===0){
-    h+='<div style="font-size:11px;color:#9BC4A8;font-style:italic;padding:4px 0">ยังไม่มีงานย่อย — กด + เพิ่ม</div>';
-  } else {
-    subs.forEach(function(s,idx2){
-      var isDone=s.done;
-      var isActive=!isDone && idx2===subs.findIndex(function(x){return !x.done;});
-      var dotCls=isDone?'done':isActive?'active':'todo';
-      var dotLbl=isDone?'✓':isActive?'●':(idx2+1);
-      var nameCls=isDone?'done':isActive?'active':'';
-      h+='<div class="st-item">';
-      h+='<div class="st-dot '+dotCls+'">'+dotLbl+'</div>';
-      h+='<div class="st-name '+nameCls+'">'+s.name+'</div>';
-      if(isDone)h+='<span class="st-badge" style="background:#0f7b55;color:#fff">เสร็จ</span>';
-      else if(isActive)h+='<span class="st-badge" style="background:#6FBF85;color:#fff">กำลังทำ</span>';
-      h+='<button class="st-toggle-btn" data-tid="'+tid+'" data-bid="'+s.id+'" data-done="'+isDone+'" onclick="toggleSubtask(this.dataset.tid,this.dataset.bid,this.dataset.done)">'+( isDone?'↩ ยกเลิก':'✓ เสร็จ' )+'</button>';
-      h+='<button class="st-del" data-tid="'+tid+'" data-bid="'+s.id+'" onclick="delSubtask(this.dataset.tid,this.dataset.bid)">ลบ</button>';
-      h+='</div>';
-    });
-  }
-  h+='<div class="st-add-row" data-stid="'+tid+'" onclick="addSubtask(this.dataset.stid)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>เพิ่มงานย่อย</div>';
-  h+='</div></div></div>';
-  return h;
-}
-function getTask(tid){
-  var found=null;
-  [todayTasks,overdueTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid)found=t;});});
-  return found;
-}
-function fetchSubtasks(tid){
-  api({action:'getSubtasks', id:tid}, function(d){
-    var t=getTask(tid);
-    if(!t) return;
-    t._subtasks = d && d.subtasks ? d.subtasks : [];
-    rerenderTaskCard(tid);
-  });
-}
-function rerenderTaskCard(tid){
-  var el=document.getElementById('tc-'+tid);
-  if(!el) return;
-  var t=getTask(tid);
-  if(!t) return;
-  // กันบั๊ก note หาย: ถ้ามี note HTML แคชไว้ใน localStorage ให้ใช้ตัวนั้นแสดง
-  // ไม่ให้ค่า t.note (plain text จาก Notion) มาทับของเดิมที่มี formatting/รูป
-  try{
-    var cachedNote=localStorage.getItem('note_html_'+tid);
-    if(cachedNote) t.note=cachedNote;
-  }catch(e){}
-  el.outerHTML = tcCard(t, {move:true});
-}
-function addSubtask(tid){
-  // prompt() ถูกบล็อกใน LINE LIFF WebView ส่วนใหญ่ — ใช้ modal เดิมของแอปแทน
-  var h='<div class="modal-title">เพิ่มงานย่อย <button class="modal-x" onclick="closeModal()">×</button></div>';
-  h+='<div class="fld"><label>ชื่องานย่อย</label><input type="text" id="subtask-name-input" placeholder="ชื่องานย่อย..."></div>';
-  h+='<button class="btn-submit" data-stid="'+tid+'" onclick="submitAddSubtask(this.dataset.stid)">+ เพิ่มงานย่อย</button>';
-  showModal(h);
-  setTimeout(function(){
-    var el=document.getElementById('subtask-name-input');
-    if(el){
-      el.focus();
-      el.onkeydown=function(e){ if(e.key==='Enter') submitAddSubtask(tid); };
-    }
-  },80);
-}
-function submitAddSubtask(tid){
-  var input=document.getElementById('subtask-name-input');
-  var name=input?input.value.trim():'';
-  if(!name){showToast('⚠️ กรุณาใส่ชื่องานย่อย');return;}
-  closeModal();
-  showToast('⏳ กำลังเพิ่ม...');
-  apiS({action:'addSubtask', id:tid, name:encodeURIComponent(name)});
-  // รอ Notion เขียนเสร็จ แล้วโหลดรายการใหม่ทั้งหมด (จะได้ blockId จริงของอันที่เพิ่ม)
-  setTimeout(function(){
-    var t=getTask(tid);
-    if(t) t._subtasks=undefined; // force reload รอบหน้า
-    fetchSubtasks(tid);
-  }, 700);
-}
-function toggleSubtask(tid, blockId, currentlyDoneStr){
-  var newDone = !(currentlyDoneStr === 'true');
-  var t=getTask(tid);
-  if(t && t._subtasks){
-    var s=t._subtasks.find(function(x){return x.id===blockId;});
-    if(s) s.done=newDone;
-  }
-  rerenderTaskCard(tid);
-  apiS({action:'toggleSubtask', blockId:blockId, done:newDone});
-}
-function delSubtask(tid, blockId){
-  var t=getTask(tid);
-  if(t && t._subtasks){
-    t._subtasks=t._subtasks.filter(function(x){return x.id!==blockId;});
-  }
-  rerenderTaskCard(tid);
-  apiS({action:'deleteSubtask', blockId:blockId});
-}
-function noteBlock(t){
-  var tid=t.id,note=t.note||'',saved=t._noteSaved||false;
-  var dateLbl=t.actionDate?fmtShort(t.actionDate):'วันนี้';
-  var savedBadge=saved?'<span class="note-saved-badge">&#10003; บันทึกแล้ว</span>':'';
-  var colors=['#412402','#c62828','#0f7b55','#1a56aa','#854F0B','#534AB7'];
-  var swatches=colors.map(function(c){return'<span class="color-swatch" style="background:'+c+'" data-col="'+c+'" data-nid="'+tid+'" onclick="ncolor(this.dataset.col,this.dataset.nid)"></span>';}).join('');
-  var h='';
-  // VIEW
-  h+='<div id="nv-'+tid+'" class="note-section">';
-  h+='<div class="note-lbl-row">';
-  h+='<div class="note-lbl-txt">&#128221; Note &middot; '+dateLbl+savedBadge+'</div>';
-  h+='<button class="btn-edit-note" data-nid="'+tid+'" onclick="openNoteInline(this.dataset.nid)">&#9999; แก้ไข</button>';
-  h+='</div>';
-  h+='<div class="note-view-body" id="nvb-'+tid+'">'+(note||'<span style="color:#ccc;font-style:italic">ยังไม่มี note</span>')+'</div>';
-
-  h+='</div>';
-  // EDIT
-  h+='<div id="ne-'+tid+'" class="note-section" style="display:none">';
-  h+='<div class="note-lbl-row"><div class="note-lbl-txt">&#128221; แก้ไข Note</div></div>';
-  h+='<div class="note-toolbar">';
-  h+='<button class="tool-btn" data-nid="'+tid+'" data-cmd="bold" onclick="nc(this.dataset.cmd,this.dataset.nid)"><b>B</b></button>';
-  h+='<button class="tool-btn" data-nid="'+tid+'" data-cmd="italic" onclick="nc(this.dataset.cmd,this.dataset.nid)"><i style="font-style:italic">I</i></button>';
-  h+='<button class="tool-btn" data-nid="'+tid+'" data-cmd="underline" onclick="nc(this.dataset.cmd,this.dataset.nid)"><u>U</u></button>';
-  h+='<span class="tool-sep"></span>';
-  h+='<button class="tool-btn" data-nid="'+tid+'" data-cmd="insertUnorderedList" onclick="nc(this.dataset.cmd,this.dataset.nid)">&#8226;</button>';
-  h+='<button class="tool-btn" data-nid="'+tid+'" data-cmd="insertOrderedList" onclick="nc(this.dataset.cmd,this.dataset.nid)">1.</button>';
-  h+='<span class="tool-sep"></span>';
-  h+='<span style="font-size:10px;color:#854F0B">สี:</span>'+swatches;
-  h+='<span class="tool-sep"></span>';
-  h+='<span style="font-size:10px;color:#854F0B">ขนาด:</span>';
-  h+='<button class="tool-btn" data-nid="'+tid+'" data-sz="1" onclick="nfsize(this.dataset.sz,this.dataset.nid)" style="font-size:9px">S</button>';
-  h+='<button class="tool-btn" data-nid="'+tid+'" data-sz="3" onclick="nfsize(this.dataset.sz,this.dataset.nid)" style="font-size:11px">M</button>';
-  h+='<button class="tool-btn" data-nid="'+tid+'" data-sz="5" onclick="nfsize(this.dataset.sz,this.dataset.nid)" style="font-size:13px">L</button>';
-  h+='<span class="tool-sep"></span>';
-  h+='<button class="tool-btn" data-nid="'+tid+'" onclick="nimgUpload(this.dataset.nid)" title="แนบรูป" style="font-size:14px">🖼</button>';
-  h+='</div>';
-  h+='<div id="nta-'+tid+'" class="note-editor" contenteditable="true" data-nid="'+tid+'" onmouseup="_savedSel=window.getSelection()&&window.getSelection().rangeCount>0?window.getSelection().getRangeAt(0).cloneRange():_savedSel" onkeyup="_savedSel=window.getSelection()&&window.getSelection().rangeCount>0?window.getSelection().getRangeAt(0).cloneRange():_savedSel">'+(note||'')+'</div>';
-  h+='<div class="note-footer-row">';
-  h+='<div></div>';
-  h+='<div style="display:flex;gap:5px">';
-  h+='<button class="btn-cancel-note" data-nid="'+tid+'" onclick="closeNoteInline(this.dataset.nid)">ยกเลิก</button>';
-  h+='<button class="btn-save-note" data-nid="'+tid+'" onclick="saveNoteInline(this.dataset.nid)">&#128190; บันทึก</button>';
-  h+='</div></div></div>';
-  // SUBTASK (Notion to-do block sync)
-  h+=subtaskBlock(t);
-  return h;
-}
-
-// save/restore selection for toolbar buttons
-var _savedSel=null;
-function saveSelForNote(tid){
-  var ed=document.getElementById('nta-'+tid);
-  if(!ed)return;
-  var sel=window.getSelection();
-  if(sel&&sel.rangeCount>0&&ed.contains(sel.anchorNode)){_savedSel=sel.getRangeAt(0).cloneRange();}
-}
-function restoreSel(tid){
-  var ed=document.getElementById('nta-'+tid);
-  if(!ed)return;
-  ed.focus();
-  if(_savedSel){try{var sel=window.getSelection();sel.removeAllRanges();sel.addRange(_savedSel);}catch(e){}}
-}
-function nc(cmd,tid){restoreSel(tid);document.execCommand(cmd,false,null);}
-function ncolor(color,tid){restoreSel(tid);document.execCommand('foreColor',false,color);}
-function nfsize(sz,tid){restoreSel(tid);document.execCommand('fontSize',false,parseInt(sz));}
-// รูปภาพ — upload ขึ้น Google Drive ผ่าน GAS
-function nimgUpload(tid){
-  var inp=document.createElement('input');
-  inp.type='file';inp.accept='image/*';
-  inp.onchange=function(){
-    var file=inp.files[0];if(!file)return;
-    // แสดง placeholder ก่อน
-    restoreSel(tid);
-    var placeholderId='img-uploading-'+Date.now();
-    document.execCommand('insertHTML',false,'<span id="'+placeholderId+'" style="background:#f0f0ff;padding:2px 8px;border-radius:4px;font-size:11px;color:#534AB7">⏳ กำลังอัพโหลดรูป...</span>');
-    var reader=new FileReader();
-    reader.onload=function(ev){
-      var base64=ev.target.result;
-      // ส่ง base64 ไป GAS อัพขึ้น Drive
-      api({action:'uploadImage',imageData:encodeURIComponent(base64),fileName:encodeURIComponent(file.name||'image.jpg')},function(d){
-        var ph=document.getElementById(placeholderId);
-        if(d&&d.ok&&d.url){
-          // แทน placeholder ด้วยรูปจริง
-          var img=document.createElement('img');
-          img.src=d.url;
-          img.style.cssText='max-width:100%;border-radius:6px;margin:4px 0;display:block';
-          img.setAttribute('data-drive-url',d.url);
-          if(ph)ph.parentNode.replaceChild(img,ph);
-          showToast('🖼 อัพโหลดรูปแล้ว');
-        } else {
-          // ถ้า upload ไม่ได้ — ใช้ base64 แทน (local only)
-          if(ph){
-            var img2=document.createElement('img');
-            img2.src=base64;
-            img2.style.cssText='max-width:100%;border-radius:6px;margin:4px 0;display:block';
-            ph.parentNode.replaceChild(img2,ph);
-          }
-          showToast('⚠️ ใช้รูปแบบ local (ไม่ถาวร)');
-        }
-      });
-    };
-    reader.readAsDataURL(file);
+ { icon: "📖", color: "#6A4C93" },
+    "REST":     { icon: "😴", color: "#888888" }
   };
-  inp.click();
-}
-function openNoteInline(tid){
-  var editor=document.getElementById('nta-'+tid);
-  var viewBody=document.getElementById('nvb-'+tid);
-  // โหลด HTML จาก localStorage ก่อน (มีรูปด้วย)
-  var saved=null;
-  try{ saved=localStorage.getItem('note_html_'+tid); }catch(e){}
-  if(saved){
-    editor.innerHTML=saved;
-    viewBody.innerHTML=saved;
-  } else {
-    editor.innerHTML=viewBody.innerHTML.indexOf('ยังไม่มี note')!==-1?'':viewBody.innerHTML;
-  }
-  document.getElementById('nv-'+tid).style.display='none';
-  document.getElementById('ne-'+tid).style.display='block';
-  editor.focus();
-}
-function closeNoteInline(tid){
-  document.getElementById('ne-'+tid).style.display='none';
-  document.getElementById('nv-'+tid).style.display='block';
-}
-function saveNoteInline(tid){
-  var editor=document.getElementById('nta-'+tid);
-  var noteHtml=editor.innerHTML.trim();
-  // บันทึก HTML (รวมรูป base64) ลง localStorage
-  try{ localStorage.setItem('note_html_'+tid, noteHtml); }catch(e){}
-  // แปลง HTML เป็น plain text รักษา newline
-  var tmp=document.createElement('div');
-  tmp.innerHTML=noteHtml;
-  // แทน <br> และ block elements ด้วย newline
-  noteHtml.replace(/<br\s*\/?>/gi,'\n').replace(/<\/?(p|div|li)[^>]*>/gi,'\n');
-  var walker=document.createTreeWalker(tmp,NodeFilter.SHOW_TEXT,null,false);
-  var parts=[];
-  while(walker.nextNode()){
-    var node=walker.currentNode;
-    var parent=node.parentNode;
-    var tag=parent.tagName?parent.tagName.toLowerCase():'';
-    parts.push(node.textContent);
-    if(tag==='li'||tag==='p'||tag==='div')parts.push('\n');
-  }
-  // fallback: ใช้ innerText ที่รักษา newline ได้ดีกว่า
-  var noteTxt=(editor.innerText||editor.textContent||'').trim();
-  var viewBody=document.getElementById('nvb-'+tid);
-  var lbl=document.getElementById('nv-'+tid).querySelector('.note-lbl-txt');
-  viewBody.innerHTML=noteHtml||'<span style="color:#ccc;font-style:italic">ยังไม่มี note</span>';
-  lbl.innerHTML='&#128221; Note <span class="note-saved-badge">&#10003; บันทึกแล้ว</span>';
-  document.getElementById('ne-'+tid).style.display='none';
-  document.getElementById('nv-'+tid).style.display='block';
-  [todayTasks,overdueTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid){t.note=noteHtml;t._noteSaved=true;}});});
-  // ส่ง plain text ไป GAS (GAS จะแบ่ง chunk เอง)
-  // ส่ง note ผ่าน JSONP (api) แบ่ง chunk ละ 600 chars รอ callback ก่อนส่งต่อ
-  var noteChunks=[];
-  var chSz=600;
-  for(var ci=0;ci<noteTxt.length;ci+=chSz) noteChunks.push(noteTxt.substring(ci,ci+chSz));
-  if(!noteChunks.length) noteChunks=[''];
-  var totalChunks=noteChunks.length;
-  function sendNoteChunk(idx){
-    if(idx>=totalChunks) return;
-    var p={action:'saveNote',id:tid,note:noteChunks[idx],chunkIdx:idx,chunkTotal:totalChunks};
-    api(p,function(d){
-      if(idx+1<totalChunks) setTimeout(function(){sendNoteChunk(idx+1);},100);
+
+  if (routines.length > 0) {
+    headerContents.push({
+      type: "text", text: "ROUTINE วันนี้",
+      size: "xxs", color: "#FFFFFF66",
+      margin: "md", weight: "bold"
+    });
+    routines.slice(0, 5).forEach(function(r) {
+      var nameUpper = r.name.toUpperCase();
+      var iconData = { icon: "📌", color: "#888888" };
+      Object.keys(routineIconMap).forEach(function(k) {
+        if (nameUpper.indexOf(k) !== -1) iconData = routineIconMap[k];
+      });
+      headerContents.push({
+        type: "box", layout: "horizontal",
+        margin: "sm", alignItems: "center",
+        contents: [
+          {
+            type: "box", layout: "vertical",
+            width: "26px", height: "26px",
+            cornerRadius: "8px",
+            backgroundColor: iconData.color + "33",
+            justifyContent: "center", alignItems: "center",
+            contents: [{ type: "text", text: iconData.icon, size: "xs", align: "center" }]
+          },
+          { type: "text", text: r.name, size: "sm", color: "#FFFFFF", flex: 1, margin: "sm" },
+          { type: "text", text: r.start + "–" + r.end, size: "xxs", color: "#FFFFFF59", align: "end" }
+        ]
+      });
     });
   }
-  sendNoteChunk(0);
-  showToast('&#128221; บันทึก Note แล้ว');
-  // หลังบันทึก note ใหม่ → ล้าง Rudy cache แล้ววิเคราะห์ใหม่
-  try{localStorage.removeItem('rudy_'+tid);}catch(e){}
-  var t2=null;
-  [todayTasks,overdueTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid)t2=t;});});
-  if(t2)t2._rudyHtml=null;
-  setTimeout(function(){runRudyInline(tid,false);},500);
-}
-function runRudyInline(tid,autoMode){
-  var rtEl=document.getElementById('rt-'+tid);
-  var rsEl=document.getElementById('rs-'+tid);
-  if(!rtEl)return;
-  // ถ้า auto mode — เช็ค localStorage cache ก่อน
-  var cacheKey='rudy_'+tid;
-  if(autoMode){
-    try{
-      var cached=localStorage.getItem(cacheKey);
-      if(cached){
-        rtEl.innerHTML=cached;
-        var task2=null;
-        [todayTasks,overdueTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid)task2=t;});});
-        if(task2)task2._rudyHtml=cached;
-        return; // ใช้ cache ไม่ต้องเรียก API
-      }
-    }catch(e){}
+
+  // ===== BODY CONTENTS =====
+  var bodyContents = [];
+
+  // นัดหมาย
+  if (calEvents.length > 0) {
+    bodyContents.push({
+      type: "text", text: "นัดหมาย",
+      size: "xxs", weight: "bold", color: "#8E8E93",
+      margin: "none"
+    });
+    var evRows = calEvents.slice(0, 3).map(function(ev, i) {
+      var isLast = i === Math.min(calEvents.length, 3) - 1;
+      return {
+        type: "box", layout: "horizontal",
+        paddingAll: "11px", spacing: "md", alignItems: "center",
+        borderWidth: isLast ? "0px" : "1px",
+        borderColor: "#00000012",
+        contents: [
+          {
+            type: "box", layout: "vertical",
+            width: "10px", height: "10px",
+            cornerRadius: "5px",
+            backgroundColor: "#185FA5",
+            contents: []
+          },
+          {
+            type: "box", layout: "vertical", flex: 1,
+            contents: [
+              { type: "text", text: ev.title, size: "sm", color: "#000000", wrap: true },
+              { type: "text", text: ev.start + "–" + ev.end, size: "xxs", color: "#185FA5", margin: "xs", weight: "bold" }
+            ]
+          }
+        ]
+      };
+    });
+    bodyContents.push({
+      type: "box", layout: "vertical",
+      backgroundColor: "#FFFFFF",
+      cornerRadius: "14px",
+      margin: "sm",
+      contents: evRows
+    });
   }
-  rsEl.textContent=' · กำลังวิเคราะห์...';
-  rtEl.innerHTML='<div class="rudy-loading"><div class="rudy-dot" style="animation-delay:0s"></div><div class="rudy-dot" style="animation-delay:.2s"></div><div class="rudy-dot" style="animation-delay:.4s"></div></div>';
-  var task=null;
-  [todayTasks,overdueTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid)task=t;});});
-  var noteEl=document.getElementById('nvb-'+tid);
-  var note=(noteEl?noteEl.textContent:task?task.note||'':'').trim();
-  var name=task?task.name||'':'';
-  var prompt='คุณคือผู้ช่วยธุรกิจ วิเคราะห์งานนี้แบบผู้เชี่ยวชาญ:\n\n'
-    +'ชื่องาน: '+name+'\nNote: '+(note||'ไม่มี')+'\n\n'
-    +'ตอบ JSON เท่านั้น รูปแบบ:\n'
-    +'{"search":"คำค้นหาที่ใช้ได้จริง 1 ประโยค","summary":"สรุป 1-2 ประโยค ภาษาไทย","steps":["step 1","step 2","step 3"],"tags":["tag1","tag2","tag3"]}\n'
-    +'หมายเหตุ: steps ต้องเป็น next action จริงๆ ที่ทำได้เลย ไม่ใช่คำทั่วไป';
-  api({action:'askRudy',prompt:encodeURIComponent(prompt)},function(d){
-    rsEl.textContent='';
-    if(!d||!d.reply){rtEl.innerHTML='<div class="rudy-txt" style="color:#AFA9EC">ไม่สามารถวิเคราะห์ได้ ลองใหม่</div>';return;}
-    try{
-      var clean=d.reply.replace(/```json|```/g,'').trim();
-      var js=JSON.parse(clean);
-      var h='';
-      if(js.search)h+='<div class="rudy-search-badge">🔍 ค้นหา: '+js.search+'</div>';
-      if(js.summary)h+='<div class="rudy-txt" style="margin-bottom:6px">'+js.summary+'</div>';
-      if(js.steps&&js.steps.length){
-        h+='<div class="rudy-steps">';
-        js.steps.forEach(function(s,i){h+='<div class="rudy-step"><div class="rudy-step-num">'+(i+1)+'</div><div>'+s+'</div></div>';});
-        h+='</div>';
-      }
-      if(js.tags&&js.tags.length){
-        h+='<div class="rudy-chips">';
-        js.tags.forEach(function(tg){h+='<span class="rudy-chip">'+tg+'</span>';});
-        h+='</div>';
-      }
-      rtEl.innerHTML=h||'<div class="rudy-txt">'+d.reply+'</div>';
-      if(task)task._rudyHtml=h;
-      // บันทึก cache ลง localStorage
-      try{localStorage.setItem('rudy_'+tid,h);}catch(e2){}
-    }catch(e){rtEl.innerHTML='<div class="rudy-txt">'+d.reply.replace(/\n/g,'<br>')+'</div>';}
-  });
-}
-/* TASK CARDS */
-/* TASK CARDS */
-function tcCard(t,opts){
-  opts=opts||{};
-  var st=getStatus(t),col=priCol(t.priority);
-  var sn=(t.name||'').replace(/'/g,"'");
-  var isDone=t.done;
-  var h='<div class="tc" id="tc-'+t.id+'" style="border-left-color:'+col+(isDone?';opacity:.7':'')+'">'+
-    '<div class="tc-hdr"><div class="tc-name'+(isDone?' done-name':'')+'">'+t.name+'</div>'+
-    '<div class="tc-acts">'+statusBadge(st,t)+' <span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span></div></div>'+rangeBar(t);
-  if(!isDone){
-    h+=noteBlock(t);
-  } else if(t.note){
-    h+='<div style="background:#f8f8fc;border:.5px solid #e9e7e2;border-radius:8px;padding:10px 14px;margin-bottom:8px">';
-    h+='<div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px">&#128221; Note</div>';
-    h+='<div style="font-size:12px;color:#888;line-height:1.75">'+t.note+'</div></div>';
+
+  // งานวันนี้
+  var pending = tasks.filter(function(t){ return t.priority; });
+  if (pending.length > 0) {
+    bodyContents.push({
+      type: "text", text: "งานวันนี้",
+      size: "xxs", weight: "bold", color: "#8E8E93",
+      margin: calEvents.length > 0 ? "md" : "none"
+    });
+    var taskRows = pending.slice(0, 5).map(function(t, i) {
+      var priColor = t.priority === "High" ? "#FF3B30" :
+                     t.priority === "Medium" ? "#FF9500" : "#34C759";
+      var isLast = i === Math.min(pending.length, 5) - 1;
+      return {
+        type: "box", layout: "horizontal",
+        paddingAll: "11px", spacing: "md", alignItems: "flex-start",
+        borderWidth: isLast ? "0px" : "1px",
+        borderColor: "#00000012",
+        contents: [
+          {
+            type: "box", layout: "vertical",
+            width: "10px", height: "10px",
+            cornerRadius: "5px",
+            backgroundColor: priColor,
+            offsetTop: "3px",
+            contents: []
+          },
+          {
+            type: "box", layout: "vertical", flex: 1,
+            contents: [
+              { type: "text", text: t.name, size: "sm", color: "#000000", wrap: true },
+              { type: "text", text: t.priority, size: "xxs", color: priColor, margin: "xs", weight: "bold" }
+            ]
+          }
+        ]
+      };
+    });
+    bodyContents.push({
+      type: "box", layout: "vertical",
+      backgroundColor: "#FFFFFF",
+      cornerRadius: "14px",
+      margin: "sm",
+      contents: taskRows
+    });
   }
-  h+='<div class="tc-acts" style="margin-top:8px">';
-  if(!isDone){
-    h+='<button class="act act-done" data-doneid="'+t.id+'">✓ Done</button>';
-    if(opts.move!==false)h+='<button class="act act-move" data-moveid="'+t.id+'" data-movename="'+sn+'">เลื่อน</button>';
-    h+='<button class="act act-del" data-delid="'+t.id+'" data-delname="'+sn+'">ลบ</button>';
-  }else{
-    h+='<button class="act act-undo" data-undoid="'+t.id+'">↩ ยกเลิก</button>';
+
+  if (pending.length === 0 && calEvents.length === 0) {
+    bodyContents.push({
+      type: "text", text: "🎉 ไม่มีงานและนัดหมายวันนี้",
+      size: "sm", color: "#34C759", align: "center", margin: "md"
+    });
   }
-  h+='</div></div>';
-  return h;
-}
-function tcCard2(t){
-  var st=getStatus(t),col=priCol(t.priority);
-  var sn=(t.name||'').replace(/'/g,"'");
-  var h='<div class="tc" id="tc-'+t.id+'" style="border-left-color:'+col+'">';
-  h+='<div class="tc-hdr"><div class="tc-name">'+t.name+'</div>';
-  h+='<div class="tc-acts">'+statusBadge(st,t)+' <span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span></div></div>';
-  h+=rangeBar(t)+noteBlock(t);
-  h+='<div class="tc-acts" style="margin-top:8px">';
-  h+='<button class="act act-done" data-doneid="'+t.id+'">✓ Done</button>';
-  h+='<button class="act act-move" data-moveid="'+t.id+'" data-movename="'+sn+'">เลื่อน</button>';
-  h+='<button class="act act-del" data-delid="'+t.id+'" data-delname="'+sn+'">ลบ</button>';
-  h+='</div></div>';
-  return h;
-}
-function renderMain(){
-  updateStats();
-  var od=overdueTasks.filter(function(t){return!t.done;});
-  var todayOnly=todayTasks.filter(function(t){return!t.done&&(getStatus(t)==='today'||(!t.actionDate&&!t.endDate));});
-  var odEl=document.getElementById('main-od');
-  var odCombined=od.concat(todayOnly); // รวมงานค้าง+วันนี้ ให้อยู่กริดเดียวกันต่อแถวกันเลย ไม่เสียพื้นที่
-  if(odCombined.length){
-    var h='<div class="sec" style="color:#e03e3e;border-bottom-color:#FFCDD2"><span>⚠️ งานค้าง '+od.length+' · 📅 วันนี้ '+todayOnly.length+'</span></div>';
-    h+='<div class="tc-grid3">';
-    odCombined.forEach(function(t){h+=tcCard(t,{move:true});});
-    h+='</div>';
-    odEl.innerHTML=h;
-  }
-  else odEl.innerHTML='';
-  var ongoing=todayTasks.filter(function(t){return!t.done&&getStatus(t)==='ongoing';});
-  var upcoming=todayTasks.filter(function(t){return!t.done&&getStatus(t)==='upcoming';});
-  var done=todayTasks.filter(function(t){return t.done;});
-  var h2='';
-  if(ongoing.length){
-    h2+='<div class="sec" style="color:#0f7b55;border-bottom-color:#EAF3DE"><span>📋 กำลังดำเนินการ · '+ongoing.length+' งาน</span></div>';
-    h2+='<div class="tc-grid3">';
-    ongoing.forEach(function(t){h2+=tcCard(t,{move:true});});
-    h2+='</div>';
-  }
-  document.getElementById('main-ongoing').innerHTML=h2;
-  var h3='';
-  if(upcoming.length){
-    h3+='<div class="sec" style="color:#3949AB;border-bottom-color:#E8EAF6"><span>📅 กำลังจะถึง · '+upcoming.length+' งาน</span></div>';
-    h3+='<div class="tc-grid3">';
-    upcoming.forEach(function(t){h3+=tcCard(t,{move:true});});
-    h3+='</div>';
-  }
-  document.getElementById('main-upcoming').innerHTML=h3;
-  var h4='';
-  if(done.length){
-    h4+='<div class="sec" style="color:#0f7b55;border-bottom-color:#EAF3DE"><span>✅ เสร็จแล้ว · '+done.length+' งาน</span></div>';
-    h4+='<div class="tc-grid3">';
-    done.forEach(function(t){h4+=tcCard(t);});
-    h4+='</div>';
-  }
-  document.getElementById('main-done').innerHTML=h4;
-  attachEv('page-main');
-  // โหลด note HTML จาก localStorage (มีรูปด้วย)
-  setTimeout(loadLocalNotes, 80);
-}
-function loadLocalNotes(){
-  try{
-    var keys=Object.keys(localStorage);
-    keys.forEach(function(k){
-      if(k.indexOf('note_html_')===0){
-        var tid=k.replace('note_html_','');
-        var html=localStorage.getItem(k);
-        if(html){
-          var el=document.getElementById('nvb-'+tid);
-          if(el)el.innerHTML=html;
+
+  return {
+  type: "bubble", size: "mega",
+hero: {
+  type: "image",
+  url: "https://padubgdech.github.io/khumtone-app/logo.jpg",
+  size: "full",
+  aspectRatio: "20:9",
+  aspectMode: "fit",
+  backgroundColor: "#000000"
+},
+  header: {
+    type: "box", layout: "vertical",
+    backgroundColor: "#1C1C1E",
+    paddingAll: "18px",
+    contents: headerContents
+  },
+  body: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#F2F2F7",
+      paddingAll: "14px",
+      spacing: "none",
+      contents: bodyContents
+    },
+    footer: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#F2F2F7",
+      paddingAll: "0px",
+      paddingStart: "14px", paddingEnd: "14px", paddingBottom: "14px",
+      contents: [{
+        type: "button", style: "primary",
+        height: "md", color: "#1A2B4A",
+        action: {
+          type: "uri",
+          label: "เปิด To Do List",
+          uri: "https://liff.line.me/2010213644-d72CVt0y?page=todo"
         }
-      }
-    });
-  }catch(e){}
+      }]
+    }
+  };
 }
-function updateStats(){
-  var od=overdueTasks.filter(function(t){return!t.done;}).length;
-  var pend=todayTasks.filter(function(t){return!t.done;}).length;
-  var done=todayTasks.filter(function(t){return t.done;}).length;
-  var pct=todayTasks.length?Math.round(done/todayTasks.length*100):0;
-  document.getElementById('st-od').textContent=od;
-  document.getElementById('st-pend').textContent=pend;
-  document.getElementById('st-done').textContent=done;
-  document.getElementById('st-pct').textContent=pct+'%';
-  document.getElementById('hdr-prog').style.width=pct+'%';
-}
-function renderRoutine(){
-  var el=document.getElementById('main-routine');
-  if(!routineItems.length){el.innerHTML='<div style="color:#bbb;font-size:12px;padding:6px 0">ไม่มี routine</div>';return;}
-  var iMap={'EXERCISE':'💪','STUDY':'📚','ENGLISH':'🗣️','READ':'📖','REST':'😴','WORK':'💼'};
-  var h='';
-  routineItems.forEach(function(r){
-    var isN=isNow(r.start,r.end);
-    var nu=r.name.toUpperCase(),icon='📌';
-    Object.keys(iMap).forEach(function(k){if(nu.indexOf(k)!==-1)icon=iMap[k];});
-    if(nu.indexOf('ENGLISH')!==-1)icon='🇬🇧';
-    h+='<div class="rt-card'+(isN?' rt-now':'')+'"><div class="rt-icon" style="background:'+(isN?'#f0eeea':'#f7f6f3')+'">'+icon+'</div>'+
-      '<div style="flex:1"><div style="font-size:13px;font-weight:'+(isN?'700':'500')+';color:#111">'+r.name+'</div>'+
-      '<div style="font-size:11px;color:#aaa;margin-top:1px">'+r.start+'–'+r.end+'</div></div>';
-    if(isN&&!r.done)h+='<span style="font-size:10px;background:#f7f6f3;color:#555;padding:2px 8px;border-radius:4px;border:.5px solid var(--border);font-weight:600;letter-spacing:.3px">NOW</span>';
-    else if(r.done)h+='<span style="font-size:12px;font-weight:600;color:#0f7b55">✓ ครบ</span>';
-    else h+='<span style="color:#ddd;font-size:14px">–</span>';
-    h+='</div>';
+
+function flexTaskDone(taskName, remaining) {
+  var remainRows = remaining.slice(0,4).map(function(t) {
+    var priEmoji = t.priority === "High" ? "🔴" :
+                   t.priority === "Medium" ? "🟡" :
+                   t.priority === "Low" ? "🟢" : "⚪";
+    return {
+      type: "box", layout: "horizontal", margin: "sm",
+      contents: [
+        { type: "text", text: priEmoji + " " + t.name, size: "sm", color: "#333333", wrap: true, flex: 1 }
+      ]
+    };
   });
-  el.innerHTML=h;
-}
-function renderEvents(){
-  var el=document.getElementById('main-events');
-  if(!todayEvents.length){el.innerHTML='<div style="color:#bbb;font-size:12px;padding:6px 0">ไม่มีนัดหมาย</div>';return;}
-  var h='';
-  todayEvents.forEach(function(e){h+='<div class="ev-card"><div style="font-size:13px;font-weight:500;color:#111">'+e.title+'</div><div style="font-size:11px;color:#2383e2;margin-top:3px">🕐 '+e.start+' – '+e.end+'</div></div>';});
-  el.innerHTML=h;
-}
-function attachEv(pid){
-  var pg=document.getElementById(pid);if(!pg||pg._ev)return;pg._ev=true;
-  pg.addEventListener('click',function(e){
-    var b;
-    if((b=e.target.closest('[data-doneid]'))){doDone(b.getAttribute('data-doneid'));return;}
-    if((b=e.target.closest('[data-undoid]'))){doUndo(b.getAttribute('data-undoid'));return;}
-    if((b=e.target.closest('[data-delid]'))){openDel(b.getAttribute('data-delid'),b.getAttribute('data-delname'));return;}
-    if((b=e.target.closest('[data-moveid]'))){openMove(b.getAttribute('data-moveid'),b.getAttribute('data-movename'));return;}
-  });
-}
-function doDone(id){
-  var t=findT(id);
-  if(t){t.done=true;showToast('✅ เสร็จแล้ว: '+t.name);apiS({action:'updateTask',id:id,done:'true'});renderMain();updateStats();}
-  else{var f=overdueTasks.find(function(x){return x.id===id;});if(f){overdueTasks=overdueTasks.filter(function(x){return x.id!==id;});showToast('✅ เสร็จแล้ว: '+f.name);apiS({action:'updateTask',id:id,done:'true'});renderMain();}}
-}
-function doUndo(id){var t=findT(id);if(t){t.done=false;showToast('↩ ยกเลิกแล้ว');apiS({action:'updateTask',id:id,done:'false'});renderMain();}}
-function findT(id){
-  var r=todayTasks.find(function(t){return t.id===id;});
-  if(!r){Object.values(calCache.t).forEach(function(arr){var f=arr.find(function(t){return t.id===id;});if(f)r=f;});}
-  return r;
-}
-function openDel(id,name){
-  showModal('<div class="modal-title">ลบงาน <button class="modal-x" onclick="closeModal()">×</button></div>'
-    +'<p style="font-size:14px;color:#555;margin-bottom:20px">ต้องการลบ "<b>'+name+'</b>" ใช่ไหม?</p>'
-    +'<div style="display:flex;gap:10px"><button onclick="closeModal()" style="flex:1;padding:11px;background:#f7f6f3;border:.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer">ยกเลิก</button>'
-    +'<button onclick="doDel(\''+id+'\')" style="flex:1;padding:11px;background:#FF3B30;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">🗑 ลบ</button></div>');
-}
-function doDel(id){
-  todayTasks=todayTasks.filter(function(t){return t.id!==id;});
-  overdueTasks=overdueTasks.filter(function(t){return t.id!==id;});
-  noDateTasks=noDateTasks.filter(function(t){return t.id!==id;});
-  Object.keys(calCache.t).forEach(function(k){calCache.t[k]=calCache.t[k].filter(function(t){return t.id!==id;});});
-  showToast('🗑 ลบแล้ว');apiS({action:'deleteTask',id:id});closeModal();renderMain();renderNDTasks();
-}
-function openMove(id,name){
-  showModal('<div class="modal-title">เลื่อน "'+name+'" <button class="modal-x" onclick="closeModal()">×</button></div>'
-    +'<div style="display:flex;gap:8px;margin-bottom:14px">'
-    +'<button onclick="doMove(\''+id+'\',\''+addDays(TODAY_STR,1)+'\')" style="flex:1;padding:9px;background:#f7f6f3;border:.5px solid var(--border);border-radius:7px;font-size:12px;cursor:pointer">พรุ่งนี้</button>'
-    +'<button onclick="doMove(\''+id+'\',\''+addDays(TODAY_STR,3)+'\')" style="flex:1;padding:9px;background:#f7f6f3;border:.5px solid var(--border);border-radius:7px;font-size:12px;cursor:pointer">+3 วัน</button>'
-    +'<button onclick="doMove(\''+id+'\',\''+addDays(TODAY_STR,7)+'\')" style="flex:1;padding:9px;background:#f7f6f3;border:.5px solid var(--border);border-radius:7px;font-size:12px;cursor:pointer">สัปดาห์หน้า</button>'
-    +'</div><div class="fld"><label>หรือระบุวันเอง</label><input type="date" id="mv-d" value="'+addDays(TODAY_STR,1)+'"></div>'
-    +'<input type="hidden" id="mv-id" value="'+id+'"><button class="btn-submit" onclick="doMoveDate()">✓ ยืนยัน</button>');
-}
-function doMove(id,date){todayTasks=todayTasks.filter(function(t){return t.id!==id;});overdueTasks=overdueTasks.filter(function(t){return t.id!==id;});showToast('📅 เลื่อนไป '+fmtThai(date));apiS({action:'moveTask',id:id,date:date});closeModal();renderMain();}
-function doMoveDate(){var id=document.getElementById('mv-id').value,d=document.getElementById('mv-d').value;if(d)doMove(id,d);}
-function openAdd(pri){
-  _addPri=pri||'Medium';
-  var h='<div class="modal-title">เพิ่มงาน <button class="modal-x" onclick="closeModal()">×</button></div>';
-  h+='<div class="fld"><label>ชื่องาน</label><input type="text" id="add-nm" placeholder="ชื่องาน..."></div>';
-  h+='<div class="fld"><label>Priority</label><div class="pri-btns">';
-  [['High','🔴','#FCEBEB','#791F1F'],['Medium','🟡','#FAEEDA','#633806'],['Low','🟢','#EAF3DE','#27500A']].forEach(function(p){
-    var sel=_addPri===p[0]?'active-'+p[0].toLowerCase()[0]:'';
-    h+='<div class="pri-btn '+sel+'" onclick="selPri(this,\''+p[0]+'\')" style="background:'+p[2]+';color:'+p[3]+'">'+p[1]+' '+p[0]+'</div>';
-  });
-  h+='</div></div>';
-  h+='<div class="fld"><label>ช่วงเวลา</label><div class="date-flex">';
-  h+='<div><label style="font-size:10px;color:#aaa;font-weight:400;margin-bottom:3px;display:block">วันเริ่ม</label><input type="date" id="add-sd" value="'+TODAY_STR+'"></div>';
-  h+='<div class="date-arrow">→</div>';
-  h+='<div><label style="font-size:10px;color:#aaa;font-weight:400;margin-bottom:3px;display:block">วันสิ้นสุด (ถ้ามี)</label><input type="date" id="add-ed"></div>';
-  h+='</div></div>';
-  h+='<div class="fld"><label>Note</label><textarea id="add-note" rows="3" placeholder="รายละเอียด..."></textarea></div>';
-  h+='<button class="btn-submit" onclick="submitAdd()">+ บันทึกงาน</button>';
-  showModal(h);
-  setTimeout(function(){var el=document.getElementById('add-nm');if(el)el.focus();},80);
-}
-function selPri(el,p){_addPri=p;document.querySelectorAll('.pri-btn').forEach(function(b){b.className='pri-btn';});el.className='pri-btn active-'+p.toLowerCase()[0];}
-var _addCat='ops';
-function openAddCat(catKey,catLabel){
-  _addCat=catKey||'ops';
-  _addPri='Medium';
-  var h='<div class="modal-title">เพิ่มงาน ('+catLabel+') <button class="modal-x" onclick="closeModal()">×</button></div>';
-  h+='<div class="fld"><label>ชื่องาน</label><input type="text" id="addnd-nm" placeholder="ชื่องาน..."></div>';
-  h+='<div class="fld"><label>Priority</label><div class="pri-btns">';
-  [['High','🔴','#FCEBEB','#791F1F'],['Medium','🟡','#FAEEDA','#633806'],['Low','🟢','#EAF3DE','#27500A']].forEach(function(p){
-    var sel=p[0]==='Medium'?'active-'+p[0].toLowerCase()[0]:'';
-    h+='<div class="pri-btn '+sel+'" onclick="selPri(this,\''+p[0]+'\')" style="background:'+p[2]+';color:'+p[3]+'">'+p[1]+' '+p[0]+'</div>';
-  });
-  h+='</div></div>';
-  h+='<div class="fld"><label>Note (ไม่บังคับ)</label><textarea id="addnd-note" rows="3" placeholder="รายละเอียด..."></textarea></div>';
-  h+='<button class="btn-submit" onclick="submitAddCat()">+ บันทึกงาน</button>';
-  showModal(h);
-  setTimeout(function(){var el=document.getElementById('addnd-nm');if(el)el.focus();},80);
-}
-function submitAddCat(){
-  var name=(document.getElementById('addnd-nm')||{}).value||'';
-  var note=(document.getElementById('addnd-note')||{}).value||'';
-  if(!name.trim()){showToast('กรุณาใส่ชื่องาน');return;}
-  showToast('⏳ กำลังเพิ่มงาน...');closeModal();
-  var p={action:'addTask',name:encodeURIComponent(name.trim()),priority:_addPri,category:_addCat};
-  if(note.trim())p.note=encodeURIComponent(note.trim());
-  api(p,function(){
-    showToast('✅ เพิ่มงานแล้ว: '+name.trim());
-    renderNDTasks(); // รีเฟรชคอลัมน์หมวดธุรกิจให้เห็นทันที (ตั้ง category ตรงกับคอลัมน์ที่กดเพิ่ม ไม่ต้องรอ Gemini เดา)
-  });
-}
-function openAddND(pri){
-  _addPri=pri||'Medium';
-  var h='<div class="modal-title">เพิ่มงาน ('+pri+') <button class="modal-x" onclick="closeModal()">×</button></div>';
-  h+='<div class="fld"><label>ชื่องาน</label><input type="text" id="addnd-nm" placeholder="ชื่องาน..."></div>';
-  h+='<div class="fld"><label>Note (ไม่บังคับ)</label><textarea id="addnd-note" rows="3" placeholder="รายละเอียด..."></textarea></div>';
-  h+='<button class="btn-submit" onclick="submitAddND()">+ บันทึกงาน</button>';
-  showModal(h);
-  setTimeout(function(){var el=document.getElementById('addnd-nm');if(el)el.focus();},80);
-}
-function submitAddND(){
-  var name=(document.getElementById('addnd-nm')||{}).value||'';
-  var note=(document.getElementById('addnd-note')||{}).value||'';
-  if(!name.trim()){showToast('กรุณาใส่ชื่องาน');return;}
-  showToast('⏳ กำลังเพิ่มงาน...');closeModal();
-  var p={action:'addTask',name:encodeURIComponent(name.trim()),priority:_addPri};
-  if(note.trim())p.note=encodeURIComponent(note.trim());
-  api(p,function(){
-    showToast('✅ เพิ่มงานแล้ว: '+name.trim());
-    renderNDTasks(); // รีเฟรชทั้ง 2 บอร์ด (หมวดธุรกิจจะรอ Gemini เดาให้ตอนโหลดรอบนี้)
-  });
-}
-function submitAdd(){
-  var name=(document.getElementById('add-nm')||{}).value||'';
-  var sd=(document.getElementById('add-sd')||{}).value||TODAY_STR;
-  var ed=(document.getElementById('add-ed')||{}).value||'';
-  var note=(document.getElementById('add-note')||{}).value||'';
-  if(!name.trim()){showToast('กรุณาใส่ชื่องาน');return;}
-  if(ed&&ed<sd){showToast('⚠️ วันสิ้นสุดต้องหลังวันเริ่ม');return;}
-  showToast('⏳ กำลังเพิ่มงาน...');closeModal();
-  var p={action:'addTask',name:encodeURIComponent(name.trim()),date:sd,priority:_addPri};
-  if(ed)p.endDate=ed;if(note.trim())p.note=encodeURIComponent(note.trim());
-  api(p,function(){
-    showToast('✅ เพิ่มงานแล้ว: '+name.trim());
-    api({action:'getTasks',date:TODAY_STR},function(d){todayTasks=d?d.tasks||[]:[]; calCache.t[TODAY_STR]=todayTasks; renderMain();});
-    if(sd!==TODAY_STR)renderNDTasks();
-  });
-}
-function showModal(html){var ov=document.getElementById('overlay');ov.innerHTML='<div class="modal" onclick="event.stopPropagation()"><div id="modal-body">'+html+'</div></div>';ov.classList.add('open');}
-function closeModal(){var ov=document.getElementById('overlay');ov.classList.remove('open');ov.innerHTML='';}
-var tabMeta={main:{title:'งานวันนี้',stats:true},cal:{title:'Calendar',stats:false},tasks:{title:'Tasks',stats:false},history:{title:'ประวัติงาน',stats:false},summary:{title:'Summary',stats:false}};
-function goTab(p,btn){
-  document.querySelectorAll('.tab').forEach(function(b){b.className='tab';});btn.className='tab active';
-  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('show');});document.getElementById('page-'+p).classList.add('show');
-  var m=tabMeta[p];document.getElementById('ph-title').textContent=m.title;document.getElementById('ph-stats').style.display=m.stats?'flex':'none';
-  if(p==='tasks')renderNDTasks();if(p==='history')renderHistory();if(p==='summary')renderSummary();if(p==='cal')renderCal();
-}
-function calMove(dir){
-  if(dir===0){calY=TODAY.getFullYear();calMo=TODAY.getMonth();calSel=TODAY_STR;}
-  else{calMo+=dir;if(calMo<0){calMo=11;calY--;}if(calMo>11){calMo=0;calY++;}}
-  renderCal();
-}
-function renderCal(){
-  var thMF=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-  document.getElementById('cal-title').textContent=thMF[calMo]+' '+(calY+543);
-  var mo=calMo+1,dim=new Date(calY,mo,0).getDate();
-  var first=new Date(calY,calMo,1).getDay();first=first===0?6:first-1;
-  var cells=[];for(var i=0;i<first;i++)cells.push(null);for(var d=1;d<=dim;d++)cells.push(calY+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0'));
-  while(cells.length%7!==0)cells.push(null);
-  var h='';
-  cells.forEach(function(ds){
-    if(!ds){h+='<div style="background:#fafaf9;border:.5px solid #f0f0f0;min-height:88px"></div>';return;}
-    var dn=parseInt(ds.split('-')[2]),isT=ds===TODAY_STR,isPast=ds<TODAY_STR,isSel=ds===calSel;
-    var cls='cal-cell'+(isT?' today-c':isPast?' past-c':'')+(isSel?' sel-c':'');
-    h+='<div class="'+cls+'" onclick="calSelect(\''+ds+'\')"><div class="cal-dn'+(isT?' today-n':'')+'">'+dn+'</div><div id="cc-'+ds+'">'+cellChips(ds)+'</div></div>';
-  });
-  document.getElementById('cal-grid').innerHTML=h;
-  cells.filter(Boolean).forEach(function(ds){loadCalDay(ds);});
-  renderCalDetail(calSel);
-}
-function loadCalDay(ds){
-  if(calCache.t[ds]!==undefined&&calCache.e[ds]!==undefined)return;
-  if(calCache.t[ds]===undefined)api({action:'getTasks',date:ds},function(d){calCache.t[ds]=d?d.tasks||[]:[]; var el=document.getElementById('cc-'+ds);if(el)el.innerHTML=cellChips(ds);});
-  if(calCache.e[ds]===undefined)api({action:'getCalendarEvents',date:ds},function(d){calCache.e[ds]=d?d.events||[]:[]; var el=document.getElementById('cc-'+ds);if(el)el.innerHTML=cellChips(ds);});
-}
-function cellChips(ds){
-  var events=calCache.e[ds]||[],h='';
-  // แสดงแค่ events — งานไม่แสดงใน cell
-  events.slice(0,3).forEach(function(ev){
-    h+='<span class="chip" style="background:#dbeafe;color:#1d4ed8">'+ev.start+' '+ev.title+'</span>';
-  });
-  if(events.length>3)h+='<span style="font-size:7px;color:#aaa">+' +(events.length-3)+'</span>';
-  // แสดง note indicator ถ้ามี
-  var hasNote=false;
-  try{hasNote=!!localStorage.getItem('cal_note_'+ds);}catch(e){}
-  if(hasNote)h+='<span class="chip" style="background:#FFF8EE;color:#854F0B">📝</span>';
-  return h;
-}
-function calSelect(ds){
-  calSel=ds;delete calCache.e[ds];
-  document.querySelectorAll('.cal-cell').forEach(function(el){el.classList.remove('sel-c');});
-  var el=document.querySelector('.cal-cell[onclick*="\''+ds+'\'"]');if(el)el.classList.add('sel-c');
-  loadCalDay(ds);renderCalDetail(ds);
-}
-function renderCalDetail(ds){
-  var detail=document.getElementById('cal-detail');
-  if(!ds){detail.innerHTML='<div style="color:#bbb;font-size:13px;padding:24px 0;text-align:center">กดวันในปฏิทินเพื่อดูรายละเอียด</div>';return;}
-  var thD=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
-  var thM=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  var d=new Date(ds+'T00:00:00+07:00');
-  var isToday=ds===TODAY_STR;
-  // header
-  var h='<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:16px">';
-  h+='<div style="font-size:28px;font-weight:700;color:#111;font-family:var(--mono)">'+d.getDate()+'</div>';
-  h+='<div style="font-size:14px;color:#aaa">'+thM[d.getMonth()]+'</div>';
-  if(isToday)h+='<div style="background:#111;color:#fff;font-size:9px;padding:2px 9px;border-radius:6px;font-weight:600;margin-left:2px">วันนี้</div>';
-  h+='</div>';
-  // โหลด events ของเดือนที่เลือก — แสดงทุกวันที่มีนัด ข้ามวันว่าง
-  // ใช้ calCache.e ที่โหลดมาแล้ว สร้าง timeline จากทุกวันในเดือน
-  var mo=d.getMonth(),yr=d.getFullYear();
-  var dim=new Date(yr,mo+1,0).getDate();
-  var hasAny=false;
-  h+='<div class="d-tl">';
-  for(var day=d.getDate();day<=dim;day++){
-    var dayDs=yr+'-'+String(mo+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
-    var evs=calCache.e[dayDs]||[];
-    if(!evs.length)continue; // ข้ามวันไม่มีนัด
-    hasAny=true;
-    var dd=new Date(dayDs+'T00:00:00+07:00');
-    var isT=dayDs===TODAY_STR;
-    var dotColor=isT?'#0f7b55':'#2383e2';
-    var lblColor=isT?'#0f7b55':'#555';
-    var lblText=thD[dd.getDay()]+' '+dd.getDate()+' '+thM[dd.getMonth()]+(isT?' — วันนี้':'');
-    h+='<div class="d-tl-group">';
-    h+='<div class="d-tl-day-row"><div class="d-tl-dot" style="background:'+dotColor+'"></div>';
-    h+='<div class="d-tl-date-lbl" style="color:'+lblColor+'">'+lblText+'</div></div>';
-    evs.forEach(function(ev){
-      var sn=(ev.title||'').replace(/'/g,"'");
-      h+='<div class="d-tl-ev">';
-      h+='<div class="d-tl-ev-info"><div class="d-tl-ev-name">'+ev.title+'</div>';
-      h+='<div class="d-tl-ev-time">🕐 '+ev.start+' – '+ev.end+'</div></div>';
-      if(ev.id)h+='<button data-evid="'+ev.id+'" data-evds="'+dayDs+'" data-evtitle="'+sn+'" onclick="delEvBtn(this)" class="d-tl-ev-cancel">ยกเลิก</button>';
-      h+='</div>';
-    });
-    h+='</div>';
-  }
-  if(!hasAny)h+='<div style="color:#bbb;font-size:12px;text-align:center;padding:10px 0">ไม่มีนัดหมายในเดือนนี้</div>';
-  h+='</div>';
-  h+='<div style="margin-top:14px"><button onclick="openAdd()" style="width:100%;padding:12px;background:rgba(28,28,30,.9);backdrop-filter:blur(6px);color:#fff;border:none;border-radius:14px;font-size:12px;font-weight:700;cursor:pointer">+ Task</button></div>';
-  detail.innerHTML=h;
-  detail.addEventListener('click',function(e){
-    var b;
-    if((b=e.target.closest('[data-doneid]'))){apiS({action:'updateTask',id:b.getAttribute('data-doneid'),done:'true'});showToast('✅ เสร็จแล้ว');return;}
-    if((b=e.target.closest('[data-moveid]'))){openMove(b.getAttribute('data-moveid'),b.getAttribute('data-movename'));return;}
-  });
-  // โหลด events ของวันที่ยังไม่มีใน cache
-  for(var day2=d.getDate();day2<=dim;day2++){
-    var ds2=yr+'-'+String(mo+1).padStart(2,'0')+'-'+String(day2).padStart(2,'0');
-    if(calCache.e[ds2]===undefined){
-      api({action:'getCalendarEvents',date:ds2},function(res){
-        if(res&&res.events){
-          calCache.e[ds2]=res.events;
-          renderCalDetail(ds); // re-render เมื่อโหลดครบ
+
+  return {
+    type: "bubble",
+    header: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#1D9E75", paddingAll: "12px",
+      contents: [
+        { type: "text", text: "🎉 ทำเสร็จแล้ว!", weight: "bold", color: "#ffffff", size: "md" },
+        { type: "text", text: taskName, color: "#d0f0e0", size: "sm", margin: "xs", wrap: true }
+      ]
+    },
+    body: {
+      type: "box", layout: "vertical", paddingAll: "14px",
+      contents: remaining.length === 0 ? [
+        { type: "text", text: "✨ หมดแล้ว! วันนี้ทำงานครบทุกอย่าง 🎊",
+          size: "sm", color: "#1D9E75", wrap: true }
+      ] : [
+        { type: "text", text: "งานที่เหลือ (" + remaining.length + " งาน)",
+          size: "sm", color: "#888888", weight: "bold" },
+        { type: "separator", margin: "xs" }
+      ].concat(remainRows)
+    },
+    footer: {
+      type: "box", layout: "horizontal", spacing: "sm", paddingAll: "10px",
+      contents: [
+        {
+          type: "button", style: "primary", height: "sm", flex: 1,
+          color: "#534AB7",
+          action: { type: "message", label: "📋 ดูงาน", text: "ดูงานวันนี้" }
+        },
+        {
+          type: "button", style: "secondary", height: "sm", flex: 1,
+          action: { type: "message", label: "➕ เพิ่มงาน", text: "เพิ่มงาน " }
         }
+      ]
+    }
+  };
+}
+
+function flexEveningReview(taskNames, routines, todayThai) {
+  var today = Utilities.formatDate(new Date(), "Asia/Bangkok", "dd/MM/yyyy");
+  var dayNames = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัส","ศุกร์","เสาร์"];
+  var dayThai = dayNames[new Date().getDay()];
+
+  // ดึงงานเสร็จวันนี้
+  var todayStr = Utilities.formatDate(new Date(), "Asia/Bangkok", "yyyy-MM-dd");
+  var doneRes = UrlFetchApp.fetch("https://api.notion.com/v1/databases/" + CONFIG.NOTION_DATABASE_ID + "/query", {
+    method: "post",
+    headers: {
+      Authorization: "Bearer " + CONFIG.NOTION_TOKEN,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    payload: JSON.stringify({
+      filter: { and: [
+        { property: "Status", status: { equals: "Done" } },
+        { property: "Completed Date", date: { equals: todayStr } }
+      ]}
+    }),
+    muteHttpExceptions: true
+  });
+  var doneTasks = (JSON.parse(doneRes.getContentText()).results || []).map(function(p) {
+    return p.properties.Task && p.properties.Task.title[0]
+      ? p.properties.Task.title[0].plain_text : "?";
+  });
+
+  // ดึงงานและนัดพรุ่งนี้
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var tomorrowStr = Utilities.formatDate(tomorrow, "Asia/Bangkok", "yyyy-MM-dd");
+
+  var tmrTaskRes = UrlFetchApp.fetch("https://api.notion.com/v1/databases/" + CONFIG.NOTION_DATABASE_ID + "/query", {
+    method: "post",
+    headers: {
+      Authorization: "Bearer " + CONFIG.NOTION_TOKEN,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    payload: JSON.stringify({
+      filter: { and: [
+        { property: "Status", status: { does_not_equal: "Done" } },
+        { property: "Action Date", date: { equals: tomorrowStr } }
+      ]},
+      sorts: [{ property: "Priority", direction: "descending" }]
+    }),
+    muteHttpExceptions: true
+  });
+  var tmrTasks = (JSON.parse(tmrTaskRes.getContentText()).results || []).map(function(p) {
+    return {
+      name: p.properties.Task && p.properties.Task.title[0] ? p.properties.Task.title[0].plain_text : "?",
+      priority: p.properties.Priority && p.properties.Priority.select ? p.properties.Priority.select.name : "Low"
+    };
+  });
+
+  var tmrEvents = [];
+  try {
+    var cal = CalendarApp.getCalendarById("padungdech.w@gmail.com");
+    if (cal) {
+      var s = new Date(tomorrowStr + "T00:00:00+07:00");
+      var e = new Date(tomorrowStr + "T23:59:59+07:00");
+      cal.getEvents(s, e).forEach(function(ev) {
+        tmrEvents.push({
+          title: ev.getTitle(),
+          start: Utilities.formatDate(ev.getStartTime(), "Asia/Bangkok", "HH:mm"),
+          end: Utilities.formatDate(ev.getEndTime(), "Asia/Bangkok", "HH:mm")
+        });
       });
     }
-  }
-}
-function saveDayNote(ds){/* ลบแล้ว */}
-function editDayNote(ds){/* ลบแล้ว */}
-function saveDayNote(ds){
-  var el=document.getElementById('cal-ne-'+ds);
-  if(!el)return;
-  var html=el.innerHTML.trim();
-  try{localStorage.setItem('cal_note_'+ds,html);}catch(e){}
-  renderCalDetail(ds);
-  showToast('📝 บันทึก Note แล้ว');
-}
-function editDayNote(ds){
-  var viewEl=document.getElementById('cal-note-view-'+ds);
-  var editEl=document.getElementById('cal-note-edit-'+ds);
-  if(viewEl)viewEl.style.display='none';
-  if(editEl){editEl.style.display='block';var ed=document.getElementById('cal-ne-'+ds);if(ed)ed.focus();}
-}
-function delEvBtn(btn){
-  var evId=btn.getAttribute('data-evid');
-  var ds=btn.getAttribute('data-evds');
-  var title=btn.getAttribute('data-evtitle');
-  delEv(evId,title,ds);
-}
-function delEv(evId,title,ds){if(!confirm('ยกเลิก "'+title+'" ?'))return;apiS({action:'deleteCalendarEvent',id:evId});delete calCache.e[ds];showToast('✅ ยกเลิกนัดหมายแล้ว');api({action:'getCalendarEvents',date:ds},function(d){calCache.e[ds]=d?d.events||[]:[]; renderCalDetail(ds);var el=document.getElementById('cc-'+ds);if(el)el.innerHTML=cellChips(ds);});}
-function ndGradient(pri){
-  return pri==='High' ? 'linear-gradient(160deg,#FFF3F2,#ffffff)' :
-         pri==='Medium' ? 'linear-gradient(160deg,#FFF8EC,#ffffff)' :
-         'linear-gradient(160deg,#F0FAF4,#ffffff)';
-}
-function ndCardHtml(t,col){
-  var sn=(t.name||'').replace(/'/g,"'");
-  var notePreview='';
-  if(t.note){
-    var tmp=document.createElement('div');tmp.innerHTML=t.note;
-    notePreview=(tmp.innerText||tmp.textContent||'').trim().substring(0,60);
-    if((tmp.innerText||tmp.textContent||'').length>60)notePreview+='...';
-  }
-  // chip tags จาก ชื่องาน
-  var chips='';
-  var keywords=[
-    {k:'AI',label:'🤖 AI',bg:'#F3E8FF',tc:'#7C3AED'},
-    {k:'VDO',label:'📹 VDO',bg:'#EEF4FF',tc:'#3949AB'},
-    {k:'WEB',label:'🌐 Web',bg:'#EEF4FF',tc:'#3949AB'},
-    {k:'REPORT',label:'📊 Report',bg:'#f0f0f0',tc:'#777'},
-    {k:'BOT',label:'🤖 Bot',bg:'#F3E8FF',tc:'#7C3AED'},
-    {k:'สินค้า',label:'📦 สินค้า',bg:'#EEF4FF',tc:'#3949AB'},
-    {k:'เอกสาร',label:'📋 เอกสาร',bg:'#EEF4FF',tc:'#3949AB'},
-    {k:'CODE',label:'💻 Code',bg:'#f0f0f0',tc:'#555'},
-    {k:'SALE',label:'💰 Sale',bg:'#EAF3DE',tc:'#27500A'},
-    {k:'LABEL',label:'🏷 Label',bg:'#FFF8EE',tc:'#854F0B'},
-  ];
-  var nameUp=(t.name||'').toUpperCase();
-  keywords.forEach(function(kw){
-    if(chips.split('span').length<5 && nameUp.indexOf(kw.k)!==-1){
-      chips+='<span style="font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;background:'+kw.bg+';color:'+kw.tc+'">'+kw.label+'</span>';
-    }
-  });
-  // badge วันที่ — แสดงเมื่องานนี้มีการลงวันไว้ (เลยกำหนด/เหลือกี่วัน/เริ่มในกี่วัน/วันนี้)
-  if(t.actionDate){
-    var ndSt=getStatus(t);
-    if(ndSt==='today'){
-      chips='<span class="badge" style="background:#E8EAF6;color:#283593">📅 วันนี้</span>'+chips;
-    } else {
-      chips=statusBadge(ndSt,t)+chips;
-    }
-  }
-  // badge priority — โชว์เสมอ เพราะตอนนี้คอลัมน์อาจเป็นได้ทั้ง priority หรือหมวดธุรกิจ
-  chips='<span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span>'+chips;
-  // chip หมวดธุรกิจ — กดเพื่อเปลี่ยนหมวดได้ตรงนี้เลย ไม่ต้องลาก
-  var ndCatIcons={'revenue':'💰','ops':'🏢','cost':'📉','brand':'🎨'};
-  var ndCatNow=t.category||'ops';
-  chips+='<span class="nd-cat-chip" data-catid="'+t.id+'" data-catnow="'+ndCatNow+'" onclick="openCatPicker(this.dataset.catid,this.dataset.catnow)">'+(ndCatIcons[ndCatNow]||'🏢')+' ▾</span>';
+  } catch(e) {}
 
-  var h='<div class="nd-c-item" id="nd-row-'+t.id+'" data-ndid="'+t.id+'" data-ndpri="'+t.priority+'" data-ndcat="'+ndCatNow+'" style="background:'+ndGradient(t.priority)+'">';
-  h+='<div class="nd-c-top">';
-  h+='<span class="nd-c-handle" title="ลากเพื่อเปลี่ยนคอลัมน์">⠿</span>';
-  h+='<div class="nd-c-name">'+t.name+'</div>';
-  h+='</div>';
-  if(notePreview)h+='<div class="nd-c-note">'+notePreview+'</div>';
-  var total=0,done2=0;
-  if(t.note){var matches=t.note.match(/\[.\]/g)||[];total=matches.length;done2=(t.note.match(/\[x\]/gi)||[]).length;}
-  if(total>0){
-    var pct=Math.round(done2/total*100);
-    var pCol=pct===100?'#34C759':pct>0?'#FF9500':col;
-    h+='<div class="nd-c-progress-wrap" style="margin-bottom:7px">';
-    h+='<div style="display:flex;justify-content:space-between;font-size:9px;color:#bbb;margin-bottom:3px"><span>Checklist</span><span>'+done2+'/'+total+'</span></div>';
-    h+='<div style="height:4px;background:#f0f0f0;border-radius:2px;overflow:hidden">';
-    h+='<div style="height:100%;width:'+pct+'%;background:'+pCol+';border-radius:2px;transition:width .3s"></div>';
-    h+='</div></div>';
-  }
-  h+='<div class="nd-c-bottom">';
-  h+='<div class="nd-c-chips">'+(chips||'')+'</div>';
-  h+='<div class="nd-c-acts">';
-  h+='<button class="nd-c-btn-done" data-doneid="'+t.id+'" data-donename="'+sn+'" onclick="doDoneND(this.dataset.doneid,this.dataset.donename)">✓ Done</button>';
-  h+='<button class="nd-c-btn-date" data-nid="'+t.id+'" data-nname="'+sn+'" onclick="assignDate(this.dataset.nid,this.dataset.nname)">📅 +วัน</button>';
-  h+='<button class="nd-c-btn-del" data-delid="'+t.id+'" onclick="delNDFast(this.dataset.delid)">🗑</button>';
-  h+='</div></div>';
-  h+='</div>';
-  return h;
-}
-function ndShouldShow(t){
-  if(!t.actionDate)return true; // ไม่มีวันเลย -> โชว์ในหน้า Tasks เสมอ
-  // มีวันแล้ว -> โชว์เฉพาะที่ "ยังไม่ถึง" (upcoming) เท่านั้น เพราะ overdue/ongoing/วันนี้ ไปอยู่หน้า Main แล้ว ไม่ต้องซ้ำ
-  return getStatus(t)==='upcoming';
-}
-var ndViewMode='priority'; // 'priority' หรือ 'category'
-function ndShowView(mode){
-  ndViewMode=mode;
-  document.getElementById('nd-board-priority').style.display=mode==='priority'?'grid':'none';
-  document.getElementById('nd-board-category').style.display=mode==='category'?'grid':'none';
-  document.getElementById('nd-tab-priority').classList.toggle('nd-viewtab-active',mode==='priority');
-  document.getElementById('nd-tab-category').classList.toggle('nd-viewtab-active',mode==='category');
-}
-function renderNDColumnsFromCache(){
-  // บอร์ดที่ 1: เรียงตามความสำคัญ
-  ['High','Medium','Low'].forEach(function(pri){
-    var id=pri==='High'?'nd-high':pri==='Medium'?'nd-med':'nd-low';
-    var list=noDateTasks.filter(function(t){return t.priority===pri&&ndShouldShow(t);});
-    list.sort(function(a,b){
-      var ad=a.actionDate||'9999-99-99', bd=b.actionDate||'9999-99-99';
-      return ad<bd?-1:ad>bd?1:0;
+  // ===== HEADER — Routine =====
+  var routineIconMap = {
+    "EXERCISE": { icon: "💪", color: "#2A9D8F" },
+    "WORK":     { icon: "💼", color: "#E76F51" },
+    "STUDY":    { icon: "📚", color: "#6A4C93" },
+    "ENGLISH":  { icon: "🇬🇧", color: "#457B9D" },
+    "READ":     { icon: "📖", color: "#457853" },
+    "REST":     { icon: "😴", color: "#888888" }
+  };
+
+  var headerContents = [
+    {
+      type: "box", layout: "horizontal", spacing: "md",
+      contents: [
+        {
+          type: "box", layout: "vertical",
+          width: "28px", height: "28px",
+          cornerRadius: "14px",
+          backgroundColor: "#FFFFFF1A",
+          justifyContent: "center", alignItems: "center",
+          contents: [{ type: "text", text: "🌙", size: "sm", align: "center" }]
+        },
+        {
+          type: "box", layout: "vertical",
+          contents: [
+            { type: "text", text: "Evening Review", size: "md", weight: "bold", color: "#FFFFFF" },
+            { type: "text", text: "วัน" + dayThai + " " + today, size: "xs", color: "#FFFFFF59" }
+          ]
+        }
+      ]
+    },
+    { type: "separator", margin: "md", color: "#FFFFFF1A" },
+    { type: "text", text: "ROUTINE TODAY", size: "xxs", color: "#FFFFFF66", margin: "md", weight: "bold" }
+  ];
+
+  routines.slice(0, 5).forEach(function(name) {
+    var nameUpper = name.toUpperCase();
+    var iconData = { icon: "📌", color: "#888888" };
+    Object.keys(routineIconMap).forEach(function(k) {
+      if (nameUpper.indexOf(k) !== -1) iconData = routineIconMap[k];
     });
-    var h='';
-    if(!list.length){
-      h='<div style="color:#bbb;font-size:12px;padding:14px;text-align:center;border:.5px dashed #e0e0e0;border-radius:8px">ไม่มีงาน</div>';
-    } else {
-      list.forEach(function(t){h+=ndCardHtml(t,priCol(pri));});
-    }
-    var el=document.getElementById(id);
-    if(el)el.innerHTML=h;
-  });
-  // บอร์ดที่ 2: เรียงตามหมวดธุรกิจ
-  ['revenue','ops','cost','brand'].forEach(function(cat){
-    var id='nd-'+cat;
-    var list=noDateTasks.filter(function(t){return (t.category||'ops')===cat&&ndShouldShow(t);});
-    list.sort(function(a,b){
-      var ad=a.actionDate||'9999-99-99', bd=b.actionDate||'9999-99-99';
-      return ad<bd?-1:ad>bd?1:0;
+    headerContents.push({
+      type: "box", layout: "horizontal",
+      margin: "sm", alignItems: "center",
+      contents: [
+        {
+          type: "box", layout: "vertical",
+          width: "24px", height: "24px",
+          cornerRadius: "8px",
+          backgroundColor: iconData.color + "33",
+          justifyContent: "center", alignItems: "center",
+          contents: [{ type: "text", text: iconData.icon, size: "xs", align: "center" }]
+        },
+        { type: "text", text: name, size: "sm", color: "#FFFFFF", flex: 1, margin: "sm" },
+        { type: "text", text: "✓ ครบ", size: "xxs", color: "#34C759", weight: "bold" }
+      ]
     });
-    var h='';
-    if(!list.length){
-      h='<div style="color:#bbb;font-size:12px;padding:14px;text-align:center;border:.5px dashed #e0e0e0;border-radius:8px">ไม่มีงาน</div>';
-    } else {
-      list.forEach(function(t){h+=ndCardHtml(t,priCol(t.priority));});
-    }
-    var el=document.getElementById(id);
-    if(el)el.innerHTML=h;
   });
-  attachNDDragOnce();
-}
-function renderNDTasks(){
-  ['nd-high','nd-med','nd-low','nd-revenue','nd-ops','nd-cost','nd-brand'].forEach(function(eid){
-    var el=document.getElementById(eid);
-    if(el)el.innerHTML='<div class="ld" style="padding:12px 0;font-size:12px">⏳</div>';
-  });
-  api({action:'getAllActiveTasks'},function(data){
-    noDateTasks=data?data.tasks||[]:[]; 
-    renderNDColumnsFromCache();
-  });
-}
-function openCatPicker(taskId,currentCat){
-  var cats=[['revenue','💰 สร้างรายได้'],['ops','🏢 ระบบหลังบ้าน'],['cost','📉 ลดต้นทุน/Loss'],['brand','🎨 Brand & Marketing']];
-  var h='<div class="modal-title">เปลี่ยนหมวดธุรกิจ <button class="modal-x" onclick="closeModal()">×</button></div>';
-  h+='<div style="display:flex;flex-direction:column;gap:8px">';
-  cats.forEach(function(c){
-    var isCur=c[0]===currentCat;
-    h+='<button onclick="pickCategory(\''+taskId+'\',\''+c[0]+'\')" style="text-align:left;padding:12px 14px;border-radius:10px;border:'+(isCur?'2px solid #111':'.5px solid #e9e7e2')+';background:'+(isCur?'#f7f6f3':'#fff')+';font-size:13px;font-weight:600;cursor:pointer">'+c[1]+(isCur?' &nbsp;✓':'')+'</button>';
-  });
-  h+='</div>';
-  showModal(h);
-}
-function pickCategory(taskId,newCat){
-  var t=noDateTasks.find(function(x){return x.id===taskId;});
-  if(t){
-    t.category=newCat;
-    renderNDColumnsFromCache();
+
+  // ===== BODY =====
+  var bodyContents = [];
+
+  // งานเสร็จวันนี้
+  if (doneTasks.length > 0) {
+    bodyContents.push({
+      type: "text", text: "COMPLETED TODAY",
+      size: "xxs", weight: "bold", color: "#8E8E93", margin: "none"
+    });
+    var doneRows = doneTasks.slice(0, 4).map(function(name, i) {
+      var isLast = i === Math.min(doneTasks.length, 4) - 1;
+      return {
+        type: "box", layout: "horizontal",
+        paddingAll: "10px", spacing: "sm", alignItems: "center",
+        borderWidth: isLast ? "0px" : "1px", borderColor: "#00000012",
+        contents: [
+          {
+            type: "box", layout: "vertical",
+            width: "16px", height: "16px",
+            cornerRadius: "8px", backgroundColor: "#34C759",
+            justifyContent: "center", alignItems: "center",
+            contents: [{ type: "text", text: "✓", size: "xxs", color: "#FFFFFF", weight: "bold" }]
+          },
+          { type: "text", text: name, size: "sm", color: "#8E8E93",
+            decoration: "line-through", flex: 1, wrap: true }
+        ]
+      };
+    });
+    bodyContents.push({
+      type: "box", layout: "vertical",
+      backgroundColor: "#FFFFFF", cornerRadius: "12px",
+      margin: "sm", contents: doneRows
+    });
   }
-  apiS({action:'setTaskCategory',id:taskId,category:newCat});
-  closeModal();
-  showToast('✅ เปลี่ยนหมวดแล้ว');
+
+  // งานและนัดพรุ่งนี้
+  if (tmrTasks.length > 0 || tmrEvents.length > 0) {
+    bodyContents.push({
+      type: "text", text: "TOMORROW",
+      size: "xxs", weight: "bold", color: "#8E8E93",
+      margin: doneTasks.length > 0 ? "md" : "none"
+    });
+
+    var tmrRows = [];
+    tmrEvents.slice(0, 2).forEach(function(ev, i) {
+      tmrRows.push({
+        type: "box", layout: "horizontal",
+        paddingAll: "10px", spacing: "sm", alignItems: "flex-start",
+        borderWidth: "1px", borderColor: "#00000012",
+        contents: [
+          {
+            type: "box", layout: "vertical",
+            width: "8px", height: "8px",
+            cornerRadius: "4px", backgroundColor: "#185FA5",
+            offsetTop: "4px", contents: []
+          },
+          {
+            type: "box", layout: "vertical", flex: 1,
+            contents: [
+              { type: "text", text: ev.title, size: "sm", color: "#000000", wrap: true },
+              { type: "text", text: ev.start + " – " + ev.end, size: "xxs", color: "#185FA5", margin: "xs", weight: "bold" }
+            ]
+          }
+        ]
+      });
+    });
+
+    tmrTasks.slice(0, 3).forEach(function(t, i) {
+      var priColor = t.priority === "High" ? "#FF3B30" :
+                     t.priority === "Medium" ? "#FF9500" : "#34C759";
+      var isLast = i === Math.min(tmrTasks.length, 3) - 1 && tmrEvents.length === 0;
+      tmrRows.push({
+        type: "box", layout: "horizontal",
+        paddingAll: "10px", spacing: "sm", alignItems: "flex-start",
+        borderWidth: isLast ? "0px" : "1px", borderColor: "#00000012",
+        contents: [
+          {
+            type: "box", layout: "vertical",
+            width: "8px", height: "8px",
+            cornerRadius: "4px", backgroundColor: priColor,
+            offsetTop: "4px", contents: []
+          },
+          {
+            type: "box", layout: "vertical", flex: 1,
+            contents: [
+              { type: "text", text: t.name, size: "sm", color: "#000000", wrap: true },
+              { type: "text", text: t.priority, size: "xxs", color: priColor, margin: "xs", weight: "bold" }
+            ]
+          }
+        ]
+      });
+    });
+
+    bodyContents.push({
+      type: "box", layout: "vertical",
+      backgroundColor: "#FFFFFF", cornerRadius: "12px",
+      margin: "sm", contents: tmrRows
+    });
+  }
+
+  // งานค้างวันนี้
+  if (taskNames.length > 0) {
+    bodyContents.push({
+      type: "text", text: "PENDING TODAY",
+      size: "xxs", weight: "bold", color: "#8E8E93",
+      margin: doneTasks.length > 0 ? "md" : "none"
+    });
+    var pendingRows = taskNames.slice(0, 5).map(function(name, i) {
+      var isLast = i === Math.min(taskNames.length, 5) - 1;
+      return {
+        type: "box", layout: "horizontal",
+        paddingAll: "10px", spacing: "sm", alignItems: "center",
+        borderWidth: isLast ? "0px" : "1px", borderColor: "#00000012",
+        contents: [
+          {
+            type: "box", layout: "vertical",
+            width: "16px", height: "16px",
+            cornerRadius: "8px", backgroundColor: "#FF9500",
+            justifyContent: "center", alignItems: "center",
+            contents: [{ type: "text", text: "!", size: "xxs",
+              color: "#FFFFFF", weight: "bold" }]
+          },
+          { type: "text", text: name, size: "sm",
+            color: "#000000", flex: 1, wrap: true }
+        ]
+      };
+    });
+    bodyContents.push({
+      type: "box", layout: "vertical",
+      backgroundColor: "#FFFFFF", cornerRadius: "12px",
+      margin: "sm", contents: pendingRows
+    });
+  }
+
+  if (bodyContents.length === 0) {
+    bodyContents.push({
+      type: "text", text: "🎉 วันดีมากครับ ทำครบทุกอย่าง!",
+      size: "sm", color: "#34C759", align: "center", margin: "md"
+    });
+  }
+
+  return {
+    type: "bubble", size: "mega",
+    header: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#1A2B4A", paddingAll: "18px",
+      contents: headerContents
+    },
+    body: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#F2F2F7", paddingAll: "14px",
+      spacing: "none", contents: bodyContents
+    },
+    footer: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#F2F2F7",
+      paddingStart: "14px", paddingEnd: "14px", paddingBottom: "14px",
+      contents: [{
+        type: "button", style: "primary", height: "md",
+        color: "#1A2B4A",
+        action: {
+          type: "uri", label: "เปิด To Do List",
+          uri: "https://liff.line.me/2010213644-d72CVt0y?page=todo"
+        }
+      }]
+    }
+  };
 }
-/* ===== ลากการ์ดข้ามคอลัมน์ — เปลี่ยน priority หรือหมวดธุรกิจ ขึ้นอยู่กับบอร์ดที่กำลังดูอยู่ (รองรับมือถือด้วย Pointer Events) ===== */
-var _ndDrag=null;
-var ND_PRI_COLS={'nd-high':'High','nd-med':'Medium','nd-low':'Low'};
-var ND_CAT_COLS={'nd-revenue':'revenue','nd-ops':'ops','nd-cost':'cost','nd-brand':'brand'};
-var ND_CAT_LABELS={'revenue':'สร้างรายได้','ops':'ระบบหลังบ้าน','cost':'ลดต้นทุน/Loss','brand':'Brand & Marketing'};
-function ndActiveColMap(){return ndViewMode==='category'?ND_CAT_COLS:ND_PRI_COLS;}
-function attachNDDragOnce(){
-  var pg=document.getElementById('page-tasks');
-  if(!pg||pg._ndDragAttached)return;
-  pg._ndDragAttached=true;
-  pg.addEventListener('pointerdown',function(e){
-    var handle=e.target.closest('.nd-c-handle');
-    if(!handle)return;
-    var card=handle.closest('.nd-c-item');
-    if(!card)return;
-    e.preventDefault();
-    var rect=card.getBoundingClientRect();
-    var ghost=card.cloneNode(true);
-    ghost.classList.add('nd-drag-ghost');
-    ghost.style.width=rect.width+'px';
-    ghost.style.left=rect.left+'px';
-    ghost.style.top=rect.top+'px';
-    ghost.style.margin='0';
-    document.body.appendChild(ghost);
-    card.classList.add('nd-dragging-src');
-    _ndDrag={
-      id:card.dataset.ndid,
-      fromVal:ndViewMode==='category'?card.dataset.ndcat:card.dataset.ndpri,
-      ghost:ghost,
-      card:card,
-      offX:e.clientX-rect.left,
-      offY:e.clientY-rect.top
+function testFlexMorning() {
+  morningRoutine();
+}
+
+function testFlexEvening() {
+  eveningReview();
+}
+
+function testFlexDone() {
+  var fakeRemaining = [
+    { name: "เช็คสต็อค", priority: "High" },
+    { name: "อ่านรายงาน", priority: "Medium" }
+  ];
+  pushFlex(flexTaskDone("ประชุมลูกค้า", fakeRemaining));
+}
+function getChecklistHtml(parentName) {
+  var items = [];
+  if (parentName) {
+    var url = "https://api.notion.com/v1/databases/" + CONFIG.NOTION_DATABASE_ID + "/query";
+    var res = UrlFetchApp.fetch(url, {
+      method: "post",
+      headers: {
+        Authorization: "Bearer " + CONFIG.NOTION_TOKEN,
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json"
+      },
+      payload: JSON.stringify({
+        filter: { property: "Parent Task", rich_text: { contains: parentName } }
+      }),
+      muteHttpExceptions: true
+    });
+    var results = JSON.parse(res.getContentText()).results || [];
+    items = results.map(function(p) {
+      return {
+        id: p.id,
+        name: p.properties.Task && p.properties.Task.title[0]
+          ? p.properties.Task.title[0].plain_text : "?",
+        done: p.properties.Status && p.properties.Status.status
+          ? p.properties.Status.status.name === "Done" : false
+      };
+    });
+  }
+
+  var itemsJson = JSON.stringify(items);
+  var webAppUrl = ScriptApp.getService().getUrl();
+
+  return '<!DOCTYPE html><html lang="th"><head>' +
+    '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">' +
+    '<title>Checklist</title>' +
+    '<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"><\/script>' +
+    '<style>' +
+    '*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}' +
+    'body{font-family:-apple-system,sans-serif;background:#f5f5f7;min-height:100vh}' +
+    '.header{background:#534AB7;color:#fff;padding:16px 20px;position:sticky;top:0;z-index:10}' +
+    '.header h1{font-size:16px;font-weight:600}' +
+    '.header p{font-size:12px;opacity:.8;margin-top:3px}' +
+    '.progress-wrap{background:#fff;padding:14px 20px;border-bottom:0.5px solid #e5e5ea}' +
+    '.prog-bar{height:6px;background:#eee;border-radius:3px;margin-top:6px}' +
+    '.prog-fill{height:100%;background:#1D9E75;border-radius:3px;transition:width .3s}' +
+    '.prog-text{font-size:12px;color:#888;display:flex;justify-content:space-between}' +
+    '.list{padding:12px 16px}' +
+    '.item{background:#fff;border-radius:12px;margin-bottom:8px;display:flex;align-items:center;' +
+    'gap:12px;padding:14px 16px;border:0.5px solid #e5e5ea;transition:all .2s;cursor:pointer}' +
+    '.item:active{transform:scale(0.98)}' +
+    '.item.done{opacity:.6}' +
+    '.chk{width:22px;height:22px;border-radius:50%;border:2px solid #ddd;display:flex;' +
+    'align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}' +
+    '.chk.done{background:#1D9E75;border-color:#1D9E75;color:#fff;font-size:12px}' +
+    '.name{font-size:14px;color:#333;flex:1;line-height:1.4}' +
+    '.name.done{text-decoration:line-through;color:#999}' +
+    '.footer{padding:16px 20px;background:#fff;border-top:0.5px solid #e5e5ea;position:sticky;bottom:0}' +
+    '.btn{width:100%;padding:14px;background:#534AB7;color:#fff;border:none;' +
+    'border-radius:12px;font-size:15px;font-weight:600;cursor:pointer}' +
+    '.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);' +
+    'background:#333;color:#fff;padding:10px 20px;border-radius:20px;' +
+    'font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}' +
+    '.toast.show{opacity:1}' +
+    '<\/style></head><body>' +
+    '<div class="header"><h1>📋 ' + parentName + '</h1><p id="hdr-sub">โหลดข้อมูล...</p></div>' +
+    '<div class="progress-wrap">' +
+    '<div class="prog-text"><span id="prog-lbl">0 / 0 งาน</span><span id="prog-pct">0%</span></div>' +
+    '<div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>' +
+    '</div>' +
+    '<div class="list" id="list"></div>' +
+    '<div class="footer"><button class="btn" onclick="closeAndNotify()">✅ เสร็จแล้ว — ปิดหน้าต่าง</button></div>' +
+    '<div class="toast" id="toast"></div>' +
+    '<script>' +
+    'var WEB_APP_URL="' + webAppUrl + '";' +
+    'var items=' + itemsJson + ';' +
+    'var saving={};' +
+    'function updateProgress(){' +
+    '  var d=items.filter(function(i){return i.done;}).length;' +
+    '  var t=items.length;' +
+    '  var p=t>0?Math.round(d/t*100):0;' +
+    '  document.getElementById("prog-lbl").textContent=d+"/"+t+" งาน";' +
+    '  document.getElementById("prog-pct").textContent=p+"%";' +
+    '  document.getElementById("prog-fill").style.width=p+"%";' +
+    '  document.getElementById("hdr-sub").textContent=p===100?"🎉 เสร็จครบแล้ว!":"กดติ๊กงานที่ทำเสร็จ";' +
+    '}' +
+    'function renderList(){' +
+    '  var h="";' +
+    '  items.forEach(function(item){' +
+    '    h+=\'<div class="item\'+(item.done?" done":"")+\'" onclick="toggle(\\\'"+item.id+"\\\')">\';' +
+    '    h+=\'<div class="chk\'+(item.done?" done":"")+(item.done?"">✓":">")+\'<\/div>\';' +
+    '    h+=\'<span class="name\'+(item.done?" done":"")+\'">\'+ item.name+\'<\/span>\';' +
+    '    h+=\'<\/div>\';' +
+    '  });' +
+    '  document.getElementById("list").innerHTML=h;' +
+    '}' +
+    'function toggle(id){' +
+'  var item=items.find(function(i){return i.id===id;});' +
+'  if(!item)return;' +
+'  item.done=!item.done;' +
+'  renderList();updateProgress();' +
+'  showToast(item.done?"✅ "+item.name:"↩️ ยกเลิก: "+item.name);' +
+'  fetch(WEB_APP_URL+"?action=updateTask&id="+encodeURIComponent(id)+"&done="+item.done,{' +
+'    method:"get",' +
+'    mode:"no-cors"' +
+'  }).catch(function(){});' +
+'}' +
+    'function showToast(msg){' +
+    '  var t=document.getElementById("toast");' +
+    '  t.textContent=msg;t.classList.add("show");' +
+    '  setTimeout(function(){t.classList.remove("show");},2000);' +
+    '}' +
+    'function closeAndNotify(){' +
+    '  var d=items.filter(function(i){return i.done;}).length;' +
+    '  fetch(WEB_APP_URL+"?action=notifyProgress&parent="+encodeURIComponent("' + parentName + '")+"&done="+d+"&total="+items.length)' +
+    '    .finally(function(){' +
+    '      if(typeof liff!=="undefined"&&liff.isInClient()){liff.closeWindow();}' +
+    '      else{window.close();}' +
+    '    });' +
+    '}' +
+    'liff.init({liffId:"2010213644-d72CVt0y"}).then(function(){renderList();updateProgress();})' +
+    '.catch(function(){renderList();updateProgress();});' +
+    '<\/script></body></html>';
+}
+function getTodoHtml(e) {
+  return HtmlService.createHtmlOutputFromFile('khumtone_liff')
+    .setTitle('KHUMTONE')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+function getTodoListData() {
+  var today = Utilities.formatDate(new Date(), "Asia/Bangkok", "yyyy-MM-dd");
+  var url = "https://api.notion.com/v1/databases/" + CONFIG.NOTION_DATABASE_ID + "/query";
+  var headers = {
+    Authorization: "Bearer " + CONFIG.NOTION_TOKEN,
+    "Notion-Version": "2022-06-28",
+    "Content-Type": "application/json"
+  };
+
+  var resPending = UrlFetchApp.fetch(url, {
+    method: "post", headers: headers,
+    payload: JSON.stringify({
+      filter: { and: [
+        { property: "Status", status: { does_not_equal: "Done" } },
+        { property: "Action Date", date: { equals: today } }
+      ]},
+      sorts: [{ property: "Priority", direction: "descending" }]
+    }),
+    muteHttpExceptions: true
+  });
+
+  var resDone = UrlFetchApp.fetch(url, {
+    method: "post", headers: headers,
+    payload: JSON.stringify({
+      filter: { and: [
+        { property: "Status", status: { equals: "Done" } },
+        { property: "Completed Date", date: { equals: today } }
+      ]}
+    }),
+    muteHttpExceptions: true
+  });
+
+  var tasks = (JSON.parse(resPending.getContentText()).results || []).map(function(p) {
+    return {
+      name: p.properties.Task && p.properties.Task.title[0]
+        ? p.properties.Task.title[0].plain_text : "?",
+      priority: p.properties.Priority && p.properties.Priority.select
+        ? p.properties.Priority.select.name : "Low",
+      overdue: false
     };
-    document.addEventListener('pointermove',ndDragMove);
-    document.addEventListener('pointerup',ndDragEnd);
   });
-}
-function ndDragMove(e){
-  if(!_ndDrag)return;
-  _ndDrag.ghost.style.left=(e.clientX-_ndDrag.offX)+'px';
-  _ndDrag.ghost.style.top=(e.clientY-_ndDrag.offY)+'px';
-  Object.keys(ndActiveColMap()).forEach(function(colId){
-    var colEl=document.getElementById(colId);
-    if(!colEl)return;
-    var r=colEl.getBoundingClientRect();
-    var over=e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
-    colEl.classList.toggle('nd-col-dragover',over);
+
+  // งานค้างจากวันก่อน
+  var resOverdue = UrlFetchApp.fetch(url, {
+    method: "post", headers: headers,
+    payload: JSON.stringify({
+      filter: { and: [
+        { property: "Status", status: { does_not_equal: "Done" } },
+        { property: "Action Date", date: { before: today } }
+      ]},
+      sorts: [{ property: "Priority", direction: "descending" }],
+      page_size: 10
+    }),
+    muteHttpExceptions: true
   });
-}
-function ndDragEnd(e){
-  if(!_ndDrag)return;
-  document.removeEventListener('pointermove',ndDragMove);
-  document.removeEventListener('pointerup',ndDragEnd);
-  var map=ndActiveColMap();
-  var targetVal=null;
-  Object.keys(map).forEach(function(colId){
-    var colEl=document.getElementById(colId);
-    if(!colEl)return;
-    var r=colEl.getBoundingClientRect();
-    if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
-      targetVal=map[colId];
-    }
-    colEl.classList.remove('nd-col-dragover');
+
+  (JSON.parse(resOverdue.getContentText()).results || []).forEach(function(p) {
+    var name = p.properties.Task && p.properties.Task.title[0]
+      ? p.properties.Task.title[0].plain_text : "?";
+    var date = p.properties["Action Date"] && p.properties["Action Date"].date
+      ? p.properties["Action Date"].date.start : "";
+    tasks.push({
+      name: name,
+      priority: p.properties.Priority && p.properties.Priority.select
+        ? p.properties.Priority.select.name : "Low",
+      overdue: true,
+      overdueDate: date
+    });
   });
-  _ndDrag.ghost.remove();
-  if(_ndDrag.card)_ndDrag.card.classList.remove('nd-dragging-src');
-  if(targetVal&&targetVal!==_ndDrag.fromVal){
-    var id=_ndDrag.id;
-    var t=noDateTasks.find(function(x){return x.id===id;});
-    if(t){
-      if(ndViewMode==='category'){
-        t.category=targetVal;
-        renderNDColumnsFromCache();
-        showToast('✅ ย้ายไปหมวด '+(ND_CAT_LABELS[targetVal]||targetVal)+' แล้ว');
-        apiS({action:'setTaskCategory',id:id,category:targetVal});
-      } else {
-        t.priority=targetVal;
-        renderNDColumnsFromCache();
-        showToast('✅ เปลี่ยนเป็น '+targetVal+' แล้ว');
-        apiS({action:'editTask',id:id,priority:targetVal});
-      }
-    }
+
+  var done = (JSON.parse(resDone.getContentText()).results || []).map(function(p) {
+    return {
+      name: p.properties.Task && p.properties.Task.title[0]
+        ? p.properties.Task.title[0].plain_text : "?"
+    };
+  });
+
+  return { tasks: tasks, done: done };
+}
+
+function flexTodoList(tasks, done) {
+  tasks = tasks || [];  // ← เพิ่มบรรทัดนี้
+  done = done || [];    // ← เพิ่มบรรทัดนี้
+  var today = Utilities.formatDate(new Date(), "Asia/Bangkok", "dd/MM/yyyy");
+  var dayNames = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัส","ศุกร์","เสาร์"];
+  var dayThai = dayNames[new Date().getDay()];
+  var total = tasks.length + done.length;
+  var pct = total > 0 ? Math.round(done.length / total * 100) : 0;
+  var pending = tasks.filter(function(t){ return !t.done; });
+
+  // Header contents
+  var headerContents = [
+    {
+      type: "box", layout: "horizontal",
+      contents: [
+        {
+          type: "box", layout: "vertical", flex: 1,
+          contents: [
+            { type: "text", text: "วัน" + dayThai + " " + today,
+              size: "xs", color: "#FFFFFF73", margin: "none" },
+            { type: "text", text: "งานวันนี้",
+              size: "xl", weight: "bold", color: "#FFFFFF", margin: "sm" }
+          ]
+        },
+        {
+          type: "box", layout: "vertical", alignItems: "flex-end",
+          contents: [
+            { type: "text", text: pct + "%",
+              size: "xl", weight: "bold", color: "#BF5AF2" },
+            { type: "text", text: "เสร็จแล้ว",
+              size: "xxs", color: "#FFFFFF59" }
+          ]
+        }
+      ]
+    },
+    {
+  type: "box", layout: "vertical", margin: "md",
+  height: "3px", backgroundColor: "#FFFFFF14",
+  contents: pct > 0 ? [{
+    type: "box", layout: "vertical",
+    width: pct + "%", height: "3px",
+    backgroundColor: "#BF5AF2",
+    contents: []
+  }] : []
+}
+  ];
+
+  // Task rows
+var taskRows = [];
+
+  // แยกงานค้าง vs วันนี้
+  var overduePending = pending.filter(function(t){ return t.overdue; });
+  var todayPending   = pending.filter(function(t){ return !t.overdue; });
+
+  // ===== OVERDUE — จัดกลุ่มตามวัน =====
+  if (overduePending.length > 0) {
+    taskRows.push({
+      type: "box", layout: "vertical",
+      paddingStart: "16px", paddingEnd: "16px",
+      paddingTop: "10px", paddingBottom: "6px",
+      contents: [{
+        type: "text", text: "⚠️ ค้างอยู่ · " + overduePending.length + " งาน",
+        size: "xs", weight: "bold", color: "#FF3B30"
+      }]
+    });
+
+    // จัดกลุ่มตาม overdueDate
+    var groups = {};
+    var groupOrder = [];
+    overduePending.forEach(function(t) {
+      var d = t.overdueDate || "ไม่ระบุ";
+      if (!groups[d]) { groups[d] = []; groupOrder.push(d); }
+      groups[d].push(t);
+    });
+    groupOrder.sort(); // เรียงวันเก่า→ใหม่
+
+    groupOrder.forEach(function(date) {
+      // Date header pill
+      taskRows.push({
+        type: "box", layout: "vertical",
+        paddingStart: "16px", paddingEnd: "16px",
+        paddingTop: "6px", paddingBottom: "4px",
+        contents: [{
+          type: "box", layout: "horizontal",
+          contents: [{
+            type: "box", layout: "vertical",
+            backgroundColor: "#FFCDD2",
+            cornerRadius: "4px",
+            paddingStart: "8px", paddingEnd: "8px",
+            paddingTop: "2px", paddingBottom: "2px",
+            contents: [{
+              type: "text", text: date,
+              size: "xxs", color: "#e03e3e", weight: "bold"
+            }]
+          }, { type: "box", layout: "vertical", flex: 1, contents: [] }]
+        }]
+      });
+
+      // งานในกลุ่มนั้น
+      groups[date].forEach(function(t, i) {
+        var priColor = t.priority === "High" ? "#FF3B30" :
+                       t.priority === "Medium" ? "#FF9500" : "#34C759";
+        var isLast = i === groups[date].length - 1;
+        taskRows.push({
+          type: "box", layout: "horizontal",
+          paddingStart: "16px", paddingEnd: "16px",
+          paddingTop: "10px", paddingBottom: "10px",
+          spacing: "md",
+          borderWidth: isLast ? "0px" : "1px",
+          borderColor: "#00000010",
+          backgroundColor: "#FFF8F8",
+          contents: [
+            {
+              type: "box", layout: "vertical",
+              width: "3px", height: "32px",
+              backgroundColor: priColor,
+              contents: []
+            },
+            {
+              type: "box", layout: "vertical", flex: 1,
+              contents: [
+                { type: "text", text: t.name, size: "sm",
+                  color: "#111111", wrap: true },
+                { type: "text", text: t.priority, size: "xxs",
+                  color: priColor, margin: "xs", weight: "bold" }
+              ]
+            }
+          ]
+        });
+      });
+    });
   }
-  _ndDrag=null;
-}
-function doDoneND(id,name){
-  var row=document.getElementById('nd-row-'+id);
-  if(row){row.style.opacity='0';row.style.transition='opacity .15s';setTimeout(function(){if(row.parentNode)row.parentNode.removeChild(row);},150);}
-  noDateTasks=noDateTasks.filter(function(t){return t.id!==id;});
-  showToast('✅ เสร็จแล้ว: '+(name||''));
-  apiS({action:'updateTask',id:id,done:'true'});
-}
-function delNDFast(id){
-  var row=document.getElementById('nd-row-'+id);
-  if(row){row.style.opacity='0';row.style.transition='opacity .15s';setTimeout(function(){if(row.parentNode)row.parentNode.removeChild(row);},150);}
-  noDateTasks=noDateTasks.filter(function(t){return t.id!==id;});todayTasks=todayTasks.filter(function(t){return t.id!==id;});overdueTasks=overdueTasks.filter(function(t){return t.id!==id;});
-  showToast('🗑 ลบแล้ว');apiS({action:'deleteTask',id:id});
-}
-function assignDate(id,name){
-  window._asgnState={id:id,name:name,mo:TODAY.getMonth(),yr:TODAY.getFullYear(),selStart:'',selEnd:''};
-  showModal(asgnRender());
-}
-function asgnRender(){
-  var st=window._asgnState;
-  var thM=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  var mo=st.mo,yr=st.yr,selStart=st.selStart,selEnd=st.selEnd;
-  var dim=new Date(yr,mo+1,0).getDate();
-  var first=new Date(yr,mo,1).getDay();
-  var h='<div class="modal-title">เลือกช่วงเวลา "'+st.name+'" <button class="modal-x" onclick="closeModal()">×</button></div>';
-  // summary bar
-  h+='<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:8px">';
-  h+='<div style="flex:1"><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px">📅 เริ่ม</div>';
-  h+='<div style="font-size:14px;font-weight:700;color:'+(selStart?'#fff':'rgba(255,255,255,.3)')+';font-family:monospace">'+(selStart?fmtShort(selStart):'กดเลือก')+'</div></div>';
-  h+='<div style="font-size:16px;color:rgba(255,255,255,.25)">→</div>';
-  h+='<div style="flex:1"><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px">🏁 สิ้นสุด</div>';
-  h+='<div style="font-size:14px;font-weight:700;color:'+(selEnd?'#BF5AF2':'rgba(255,255,255,.3)')+';font-family:monospace">'+(selEnd?fmtShort(selEnd):'ไม่บังคับ')+'</div></div>';
-  if(selStart&&selEnd){
-    var d1=new Date(selStart),d2=new Date(selEnd),diff=Math.round((d2-d1)/86400000);
-    h+='<div style="background:rgba(255,255,255,.1);border-radius:6px;padding:4px 9px;text-align:center"><div style="font-size:14px;font-weight:700;color:#fff">'+diff+'</div><div style="font-size:9px;color:rgba(255,255,255,.5)">วัน</div></div>';
-  }
-  h+='</div>';
-  // calendar nav
-  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
-  h+='<button onclick="asgnNav(-1)" style="width:28px;height:28px;border-radius:6px;background:#f0eeea;border:none;cursor:pointer;font-size:13px">‹</button>';
-  h+='<div style="font-size:13px;font-weight:700;color:#111">'+thM[mo]+' '+(yr+543)+'</div>';
-  h+='<button onclick="asgnNav(1)" style="width:28px;height:28px;border-radius:6px;background:#f0eeea;border:none;cursor:pointer;font-size:13px">›</button></div>';
-  // grid
-  h+='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:12px">';
-  ['อา','จ','อ','พ','พฤ','ศ','ส'].forEach(function(d){h+='<div style="font-size:9px;font-weight:700;color:#bbb;text-align:center;padding:3px 0">'+d+'</div>';});
-  for(var i=0;i<first;i++)h+='<div></div>';
-  for(var d=1;d<=dim;d++){
-    var ds=yr+'-'+String(mo+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    var isPast=ds<TODAY_STR;
-    var isToday=ds===TODAY_STR;
-    var isSt=ds===selStart,isEn=ds===selEnd;
-    var inRange=selStart&&selEnd&&ds>selStart&&ds<selEnd;
-    var bg='transparent',col=isPast?'#ddd':'#444',fw='500';
-    if(isSt){bg='#111';col='#fff';fw='700';}
-    else if(isEn){bg='#534AB7';col='#fff';fw='700';}
-    else if(inRange){bg='#EEF4FF';col='#534AB7';}
-    else if(isToday){col='#534AB7';fw='800';}
-    h+='<div onclick="asgnPick(\''+ds+'\')" style="height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:'+col+';font-weight:'+fw+';background:'+bg+';cursor:'+(isPast?'default':'pointer')+'">'+d+'</div>';
-  }
-  h+='</div>';
-  h+='<div style="display:flex;gap:8px">';
-  h+='<button onclick="asgnClear()" style="flex:1;padding:9px;background:#f7f6f3;border:.5px solid #e9e7e2;border-radius:8px;font-size:12px;cursor:pointer;color:#888">ล้างค่า</button>';
-  h+='<button onclick="asgnConfirm()" style="flex:2;padding:9px;background:#111;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">✓ ยืนยัน</button>';
-  h+='</div>';
-  return h;
-}
-function asgnNav(dir){
-  var st=window._asgnState;if(!st)return;
-  st.mo+=dir;
-  if(st.mo>11){st.mo=0;st.yr++;}
-  if(st.mo<0){st.mo=11;st.yr--;}
-  var box=document.getElementById('modal-body');
-  if(box)box.innerHTML=asgnRender();
-}
-function asgnPick(ds){
-  var st=window._asgnState;if(!st)return;
-  if(ds<TODAY_STR)return;
-  if(!st.selStart||ds<st.selStart||(st.selStart&&st.selEnd)){
-    st.selStart=ds;st.selEnd='';
-  } else if(ds===st.selStart){
-    st.selStart='';st.selEnd='';
+
+  // ===== TODAY =====
+  taskRows.push({
+    type: "box", layout: "vertical",
+    paddingStart: "16px", paddingEnd: "16px",
+    paddingTop: "10px", paddingBottom: "6px",
+    backgroundColor: "#F0F7F0",
+    contents: [{
+      type: "text",
+      text: "📋 วันนี้" + (todayPending.length > 0 ? " · " + todayPending.length + " งาน" : " · ไม่มีงาน"),
+      size: "xs", weight: "bold", color: "#0f7b55"
+    }]
+  });
+
+  if (todayPending.length > 0) {
+    todayPending.forEach(function(t, i) {
+      var priColor = t.priority === "High" ? "#FF3B30" :
+                     t.priority === "Medium" ? "#FF9500" : "#34C759";
+      var isLast = i === todayPending.length - 1;
+      taskRows.push({
+        type: "box", layout: "horizontal",
+        paddingStart: "16px", paddingEnd: "16px",
+        paddingTop: "12px", paddingBottom: "12px",
+        spacing: "md",
+        borderWidth: isLast ? "0px" : "1px",
+        borderColor: "#00000014",
+        contents: [
+          {
+            type: "box", layout: "vertical",
+            width: "10px", height: "10px",
+            cornerRadius: "5px",
+            backgroundColor: priColor,
+            offsetTop: "4px",
+            contents: []
+          },
+          {
+            type: "box", layout: "vertical", flex: 1,
+            contents: [
+              { type: "text", text: t.name, size: "sm",
+                color: "#000000", wrap: true },
+              { type: "text", text: t.priority, size: "xxs",
+                color: priColor, margin: "xs", weight: "bold" }
+            ]
+          }
+        ]
+      });
+    });
   } else {
-    st.selEnd=ds;
-  }
-  var box=document.getElementById('modal-body');
-  if(box)box.innerHTML=asgnRender();
-}
-function asgnClear(){
-  var st=window._asgnState;if(!st)return;
-  st.selStart='';st.selEnd='';
-  var box=document.getElementById('modal-body');
-  if(box)box.innerHTML=asgnRender();
-}
-function asgnConfirm(){
-  var st=window._asgnState;if(!st||!st.selStart){showToast('⚠️ กรุณาเลือกวันเริ่ม');return;}
-  doAssign(st.id,st.selStart,st.selEnd||'');
-}
-function doAssign(id,date,endDate){
-  if(!date){showToast('⚠️ กรุณาเลือกวันเริ่ม');return;}
-  noDateTasks=noDateTasks.filter(function(t){return t.id!==id;});
-  var params={action:'setTaskDate',id:id,date:date};
-  if(endDate)params.endDate=endDate;
-  apiS(params);
-  var msg='📅 ลงวัน '+fmtThai(date);
-  if(endDate)msg+=' – '+fmtThai(endDate);
-  showToast(msg+' แล้ว');
-  closeModal();
-  renderNDTasks();
-}
-function doAssignDate(){var id=document.getElementById('as-id').value,d=document.getElementById('as-d').value;if(d)doAssign(id,d);}
-function renderHistory(){
-  api({action:'getCompletedTasks',days:30},function(data){
-    var tasks=data?data.tasks||[]:[]; 
-    historyTasksCache={};
-    tasks.forEach(function(t){historyTasksCache[t.id]=t;});
-    var byDate={};tasks.forEach(function(t){var d=t.completedDate||TODAY_STR;if(!byDate[d])byDate[d]=[];byDate[d].push(t);});
-    var dates=Object.keys(byDate).sort().reverse(),h='';
-    dates.forEach(function(date){
-      var list=byDate[date],d=new Date(date+'T00:00:00+07:00');
-      var thDF=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
-      var thM=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-      var isT=date===TODAY_STR;
-      h+='<div class="hist-card"><div class="hist-hdr"><div style="font-size:14px;font-weight:600;color:#111">วัน'+thDF[d.getDay()]+' '+d.getDate()+' '+thM[d.getMonth()]+'</div><span style="background:'+(isT?'#111':'#f7f6f3')+';color:'+(isT?'#fff':'#555')+';padding:3px 12px;border-radius:10px;font-size:11px;font-weight:600;border:.5px solid '+(isT?'#111':'var(--border)')+'">'+list.length+' งาน</span></div>';
-      list.forEach(function(t){h+='<div class="hist-row" data-hid="'+t.id+'" onclick="openHistoryDetail(this.dataset.hid)" style="cursor:pointer">' +
-        '<span style="color:#0f7b55;font-size:16px">✓</span>' +
-        '<div style="flex:1;font-size:13px;color:#888;text-decoration:line-through;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+t.name+'</div>' +
-        '<span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span>' +
-        '<span style="color:#ccc;font-size:12px;margin-left:4px">›</span></div>';});
-      h+='</div>';
+    taskRows.push({
+      type: "box", layout: "vertical",
+      paddingAll: "16px", alignItems: "center",
+      contents: [{
+        type: "text", text: "🎉 วันนี้ไม่มีงาน!",
+        size: "sm", color: "#34C759", weight: "bold"
+      }]
     });
-    if(!h)h='<div style="color:#bbb;text-align:center;padding:40px;font-size:13px">ยังไม่มีงานที่เสร็จ</div>';
-    document.getElementById('hist-list').innerHTML=h;
-    document.getElementById('hs-today').textContent=(byDate[TODAY_STR]||[]).length;
-    document.getElementById('hs-30').textContent=tasks.length;
-    var wkCut=addDays(TODAY_STR,-7),wkN=0;tasks.forEach(function(t){if((t.completedDate||'')>=wkCut)wkN++;});
-    document.getElementById('hs-week').textContent=wkN;
-    var ph=0,pm=0,pl=0;tasks.forEach(function(t){if(t.priority==='High')ph++;else if(t.priority==='Medium')pm++;else pl++;});
-    var tot=ph+pm+pl||1;
-    document.getElementById('hs-pribar').innerHTML='<div style="flex:'+ph+';background:#111;border-radius:4px 0 0 4px"></div><div style="flex:'+pm+';background:#c97575"></div><div style="flex:'+pl+';background:#f0d0d0;border-radius:0 4px 4px 0"></div>';
-    document.getElementById('hs-prileg').innerHTML=[{l:'High',c:'#111',n:ph,p:Math.round(ph/tot*100)},{l:'Medium',c:'#c97575',n:pm,p:Math.round(pm/tot*100)},{l:'Low',c:'#f0d0d0',n:pl,p:Math.round(pl/tot*100)}].map(function(x){return'<div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:'+x.c+'"></div><div style="flex:1;font-size:12px;color:#555">'+x.l+'</div><div style="font-size:12px;font-weight:600;color:#111">'+x.n+' งาน · '+x.p+'%</div></div>';}).join('');
-  });
-}
-function openHistoryDetail(id){
-  var t=historyTasksCache[id];
-  if(!t)return;
-  var dateLbl='';
-  if(t.actionDate){dateLbl=fmtShort(t.actionDate)+(t.endDate?' – '+fmtShort(t.endDate):'');}
-  var h='<div class="modal-title">'+t.name+' <button class="modal-x" onclick="closeModal()">×</button></div>';
-  h+='<div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;align-items:center">';
-  h+='<span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span>';
-  h+='<span class="badge b-on">✓ เสร็จ '+fmtShort(t.completedDate)+'</span>';
-  if(dateLbl)h+='<span style="font-size:11px;color:#aaa">📅 '+dateLbl+'</span>';
-  h+='</div>';
-  h+='<div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">📝 Note</div>';
-  h+='<div style="font-size:13px;color:#555;line-height:1.7;background:#f8f8fc;border-radius:8px;padding:10px 12px;margin-bottom:16px;white-space:pre-wrap">'+(t.note?t.note:'<span style="color:#ccc;font-style:italic">ไม่มี note</span>')+'</div>';
-  h+='<div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">✓ งานย่อย</div>';
-  h+='<div id="hist-subtasks-'+id+'" style="font-size:12px;color:#bbb">⏳ กำลังโหลด...</div>';
-  showModal(h);
-  api({action:'getSubtasks', id:id}, function(d){
-    var el=document.getElementById('hist-subtasks-'+id);
-    if(!el)return; // ปิด modal ไปแล้ว
-    var subs=d&&d.subtasks?d.subtasks:[];
-    if(!subs.length){el.innerHTML='<span style="color:#ccc;font-style:italic">ไม่มีงานย่อย</span>';return;}
-    el.innerHTML=subs.map(function(s){
-      return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px;'+(s.done?'color:#bbb;text-decoration:line-through':'color:#333')+'">'+(s.done?'✓':'○')+' '+s.name+'</div>';
-    }).join('');
-  });
-}
-function renderSummary(){
-  var doneT=todayTasks.filter(function(t){return t.done;}).length;
-  document.getElementById('sm-today').textContent=doneT;
-  api({action:'getWeeklyStats'},function(d){if(d){document.getElementById('sm-week').textContent=d.totalDone||0;document.getElementById('sm-streak').textContent=d.streak||0;document.getElementById('sm-streak-big').textContent='🔥 '+(d.streak||0);}});
-  api({action:'getCompletedTasks',days:30},function(data){
-    var tasks=data?data.tasks||[]:[]; 
-    document.getElementById('sm-month').textContent=tasks.length;
-    document.getElementById('sm-totaldone').textContent=tasks.length+' งานเสร็จใน 30 วัน';
-    var byDate={};tasks.forEach(function(t){var d=t.completedDate||'';if(!byDate[d])byDate[d]=0;byDate[d]++;});
-    var maxD=Math.max.apply(null,Object.values(byDate).concat([1]));
-    var hm='';for(var i=29;i>=0;i--){var d2=new Date(TODAY);d2.setDate(TODAY.getDate()-i);var ds=d2s(d2);var cnt=byDate[ds]||0;var r=cnt/maxD;var bg=r===0?'#f0f0f0':r<0.25?'#f5e6e6':r<0.5?'#c97575':r<0.75?'#a84040':'#8B2A2A';hm+='<div class="hm" style="background:'+bg+'" title="'+ds+': '+cnt+' งาน"></div>';}
-    document.getElementById('sm-hm').innerHTML=hm;
-    var thD7=['อา','จ','อ','พ','พฤ','ศ','ส'];
-    var v7=[],l7=[];for(var j=6;j>=0;j--){var d3=new Date(TODAY);d3.setDate(TODAY.getDate()-j);var ds3=d2s(d3);v7.push(byDate[ds3]||0);l7.push({l:thD7[d3.getDay()],isT:ds3===TODAY_STR});}
-    var mxV=Math.max.apply(null,v7.concat([1]));
-    var prev15=0,cur15=0;for(var k=0;k<v7.length;k++){if(k<Math.floor(v7.length/2))prev15+=v7[k];else cur15+=v7[k];}
-    var diff=cur15-prev15;
-    document.getElementById('sm-trlbl').textContent=diff>0?'↑ +'+(diff)+' vs ก่อนหน้า':diff<0?'↓ '+(Math.abs(diff))+' vs ก่อนหน้า':'ใกล้เคียงกัน';
-    document.getElementById('sm-trlbl').style.color=diff>0?'#0f7b55':diff<0?'#c62828':'#aaa';
-    var bh='';v7.forEach(function(v,i){var h2=Math.max(4,Math.round(v/mxV*100));var r=v/mxV;var bg=v===0?'#f0f0f0':r<0.25?'#f5e6e6':r<0.5?'#c97575':r<0.75?'#a84040':'#8B2A2A';bh+='<div style="flex:1;display:flex;flex-direction:column;align-items:center"><div class="bar" style="height:'+h2+'%;background:'+bg+';width:100%'+(l7[i].isT?';outline:2px solid #8B2A2A;outline-offset:2px':'')+'"></div><div class="bar-lbl">'+l7[i].l+'</div></div>';});
-    document.getElementById('sm-bars').innerHTML=bh;
-    var tW=[0,0,0,0,0,0,0],pW=[0,0,0,0,0,0,0];
-    tasks.forEach(function(t){if(!t.completedDate)return;var d=new Date(t.completedDate+'T00:00:00+07:00');var df=Math.round((TODAY-d)/864e5);var dw=d.getDay();if(df<=7)tW[dw]++;else if(df<=14)pW[dw]++;});
-    var dows=[1,2,3,4,5,6,0],thD2=['อา','จ','อ','พ','พฤ','ศ','ส'],todayDow=TODAY.getDay();
-    document.getElementById('sm-cmp').innerHTML=dows.map(function(dw){var cv=tW[dw],pv=pW[dw];var mx=Math.max(cv,pv,1);var pC=Math.round(cv/mx*100),pP=Math.round(pv/mx*100);var d3=cv-pv;var dc=d3>0?'#0f7b55':d3<0?'#c62828':'#aaa';var isT=dw===todayDow;return'<div style="display:flex;align-items:center;gap:8px"><div style="font-size:11px;color:'+(isT?'#111':'#aaa')+';font-weight:'+(isT?'700':'400')+';width:26px">'+thD2[dw]+'</div><div style="flex:1"><div style="height:4px;background:#f0f0f0;border-radius:2px;overflow:hidden;margin-bottom:2px"><div style="width:'+pC+'%;height:100%;background:#111;border-radius:2px"></div></div><div style="height:4px;background:#f0f0f0;border-radius:2px;overflow:hidden"><div style="width:'+pP+'%;height:100%;background:#ddd;border-radius:2px"></div></div></div><div style="font-size:10px;color:'+dc+';width:28px;text-align:right;font-weight:600">'+(d3>0?'+':'')+d3+'</div></div>';}).join('');
-    api({action:'askRudy',prompt:encodeURIComponent('วิเคราะห์งานที่คุณเดชทำเสร็จล่าสุด และแนะนำสัปดาห์หน้า:\n\n'+tasks.slice(0,10).map(function(t,i){return(i+1)+'. ['+t.priority+'] '+t.name;}).join('\n')+'\n\nตอบ 2-3 ประโยค ภาษาไทย สั้นกระชับ:')},function(d){var el=document.getElementById('sm-rudy');if(el&&d&&d.reply)el.textContent=d.reply;});
-  });
-}
-function loadMainNote(){
-  // ตั้งค่า header วันที่
-  var thMN=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  var thD=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
-  var dayEl=document.getElementById('nb-day');
-  var subEl=document.getElementById('nb-datesub');
-  if(dayEl)dayEl.textContent=TODAY.getDate();
-  if(subEl)subEl.textContent=thMN[TODAY.getMonth()]+' '+(TODAY.getFullYear()+543)+' · '+thD[TODAY.getDay()];
-  // โหลด note วันนี้
-  var editorEl=document.getElementById('main-note-editor');
-  if(editorEl){
-    var html='';
-    try{html=localStorage.getItem('cal_note_'+TODAY_STR)||'';}catch(e){}
-    editorEl.innerHTML=html;
-    setTimeout(nbCount,50);
   }
-  // โหลด timeline 7 วันย้อนหลัง
-  renderNoteTimeline();
+
+  return {
+    type: "bubble", size: "mega",
+    header: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#1C1C1E",
+      paddingAll: "18px",
+      contents: headerContents
+    },
+    body: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#F2F2F7",
+      paddingAll: "0px", spacing: "none",
+      contents: [
+        {
+  type: "box", layout: "vertical",
+  paddingStart: "14px", paddingEnd: "14px",
+  paddingTop: "14px", paddingBottom: "14px",
+  backgroundColor: "#F2F2F7",
+  contents: [{
+    type: "box", layout: "vertical",
+    backgroundColor: "#FFFFFF",
+    cornerRadius: "14px",
+    contents: taskRows
+  }]
 }
-var _nbSel=null;
-function nbCmd(btn){
-  var ed=document.getElementById('main-note-editor');
-  if(!ed)return;
-  if(_nbSel){try{var s=window.getSelection();s.removeAllRanges();s.addRange(_nbSel);}catch(e){}}
-  ed.focus();
-  document.execCommand(btn.dataset.cmd,false,null);
-  nbCount();
-}
-function nbColor(el){
-  var ed=document.getElementById('main-note-editor');
-  if(!ed)return;
-  if(_nbSel){try{var s=window.getSelection();s.removeAllRanges();s.addRange(_nbSel);}catch(e){}}
-  ed.focus();
-  document.execCommand('foreColor',false,el.dataset.col);
-  nbCount();
-}
-function nbCount(){
-  var ed=document.getElementById('main-note-editor');
-  var ct=document.getElementById('nb-charcount');
-  if(ed&&ct){
-    var n=(ed.innerText||ed.textContent||'').trim().length;
-    ct.textContent=n+' ตัวอักษร';
-    // save selection
-    var sel=window.getSelection();
-    if(sel&&sel.rangeCount>0&&ed.contains(sel.anchorNode)){_nbSel=sel.getRangeAt(0).cloneRange();}
-  }
-}
-function saveMainNote(){
-  var editorEl=document.getElementById('main-note-editor');
-  if(!editorEl)return;
-  var html=editorEl.innerHTML.trim();
-  try{localStorage.setItem('cal_note_'+TODAY_STR,html);}catch(e){}
-  showToast('📝 บันทึก Note แล้ว');
-  renderNoteTimeline();
-}
-function renderNoteTimeline(){
-  var thD7=['อา','จ','อ','พ','พฤ','ศ','ส'];
-  var thDFull=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
-  var thMN=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  var hist=document.getElementById('main-note-history');
-  if(!hist)return;
-  var h='';
-  for(var i=1;i<=7;i++){
-    var d=new Date(TODAY);
-    d.setDate(TODAY.getDate()-i);
-    var ds=d2s(d);
-    var note='';
-    try{note=localStorage.getItem('cal_note_'+ds)||'';}catch(e){}
-    var hasNote=note.trim().length>0;
-    // strip HTML สำหรับแสดงใน timeline
-    var noteTxt='';
-    if(hasNote){
-      var tmp=document.createElement('div');
-      tmp.innerHTML=note;
-      noteTxt=(tmp.innerText||tmp.textContent||'').trim().substring(0,120);
-      if((tmp.innerText||tmp.textContent||'').length>120)noteTxt+='...';
+      ]
+    },
+    footer: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#F2F2F7",
+      paddingAll: "14px",
+      contents: [{
+        type: "button",
+        style: "primary",
+        height: "md",
+        color: "#1C1C1E",
+        action: {
+          type: "uri",
+          label: "เปิด To Do List",
+          uri: "https://liff.line.me/2010213644-d72CVt0y?page=todo"
+        }
+      }]
     }
-    var dateLbl=thDFull[d.getDay()]+' '+d.getDate()+' '+thMN[d.getMonth()];
-    h+='<div class="tl-item">';
-    h+='<div class="tl-dot '+(hasNote?'has-note':'no-note')+'"></div>';
-    h+='<div class="tl-date'+(hasNote?'':' no-note')+'">'+dateLbl+'</div>';
-    if(hasNote){
-      h+='<div class="tl-txt">'+noteTxt+'</div>';
-    } else {
-      h+='<div class="tl-txt no-note">ไม่มี note</div>';
-    }
-    h+='</div>';
-  }
-  hist.innerHTML=h;
+  };
 }
-function editMainNote(){/* ไม่ใช้แล้ว — editor เปิดตลอด */}
-function init(){
-  var thDF=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
-  var thMF=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-  document.getElementById('ph-date').textContent='วัน'+thDF[TODAY.getDay()]+' '+TODAY.getDate()+' '+thMF[TODAY.getMonth()]+' '+(TODAY.getFullYear()+543);
-  document.getElementById('ph-stats').style.display='flex';
-  calCache.t[TODAY_STR]=[];calCache.e[TODAY_STR]=[];
-  var gotTasks=false,gotOverdue=false;
-  function tryRender(){if(gotTasks&&gotOverdue){updateStats();renderMain();}}
-  api({action:'getTasks',date:TODAY_STR},function(d){todayTasks=d?d.tasks||[]:[]; calCache.t[TODAY_STR]=todayTasks; gotTasks=true; tryRender();});
-  api({action:'getOverdueTasks'},function(d){overdueTasks=d?d.tasks||[]:[]; gotOverdue=true; tryRender();});
-  api({action:'getCalendarEvents',date:TODAY_STR},function(d){todayEvents=d?d.events||[]:[]; calCache.e[TODAY_STR]=todayEvents; renderEvents();});
-  // โหลด note วันนี้
-  loadMainNote();
-  setTimeout(function(){
-    api({action:'getCompletedTasks',days:7},function(data){
-      var tasks=data?data.tasks||[]:[]; 
-      if(!tasks.length){document.getElementById('main-rudy-text').textContent='ยังไม่มีงานเสร็จในสัปดาห์นี้ ไปลุยเลยครับ 💪';return;}
-      var tl=tasks.map(function(t,i){return(i+1)+'. ['+t.priority+'] '+t.name;}).join('\n');
-      api({action:'askRudy',prompt:encodeURIComponent('วิเคราะห์งานที่คุณเดชทำเสร็จในสัปดาห์นี้:\n\n'+tl+'\n\nตอบ 2-3 ประโยค ภาษาไทย สั้นกระชับ:')},function(d){var el=document.getElementById('main-rudy-text');if(el&&d&&d.reply)el.textContent=d.reply;});
+function getRoutineHtml() {
+  var dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  var thaiDays = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัส","ศุกร์","เสาร์"];
+  var now = new Date();
+  var today = dayNames[now.getDay()];
+  var todayThai = thaiDays[now.getDay()];
+  var webAppUrl = ScriptApp.getService().getUrl();
+
+  var routines = getRoutineByDay(today).filter(function(r) {
+    return r.name.toUpperCase().indexOf("ROUTING") === -1;
+  });
+
+  var items = routines.map(function(r, i) {
+    return { id: "r" + i, name: r.name, start: r.start, end: r.end, done: false };
+  });
+
+  var itemsJson = JSON.stringify(items);
+  var nowStr = Utilities.formatDate(now, "Asia/Bangkok", "HH:mm");
+
+  return '<!DOCTYPE html><html lang="th"><head>' +
+    '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">' +
+    '<title>Routine วันนี้</title>' +
+    '<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"><\/script>' +
+    '<style>' +
+    '*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}' +
+    'body{font-family:-apple-system,sans-serif;background:#f5f5f7;min-height:100vh;padding-bottom:80px}' +
+    '.header{background:#1a1a2e;color:#fff;padding:14px 20px;position:sticky;top:0;z-index:10}' +
+    '.header h1{font-size:16px;font-weight:600}' +
+    '.header p{font-size:12px;opacity:.75;margin-top:2px}' +
+    '.progress-wrap{background:#fff;padding:12px 20px;border-bottom:0.5px solid #e5e5ea}' +
+    '.prog-text{font-size:12px;color:#888;display:flex;justify-content:space-between;margin-bottom:6px}' +
+    '.prog-bar{height:6px;background:#eee;border-radius:3px}' +
+    '.prog-fill{height:100%;background:#534AB7;border-radius:3px;transition:width .4s}' +
+    '.list{padding:12px}' +
+    '.item{background:#fff;border-radius:12px;margin-bottom:8px;display:flex;align-items:center;' +
+    'gap:12px;padding:14px 16px;border:0.5px solid #e5e5ea;cursor:pointer;transition:all .2s}' +
+    '.item:active{transform:scale(0.98)}' +
+    '.item.done{opacity:.5}' +
+    '.item.done .name{text-decoration:line-through;color:#aaa}' +
+    '.chk{width:24px;height:24px;border-radius:50%;border:2px solid #534AB7;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;transition:all .2s}' +
+    '.chk.done{background:#534AB7;color:#fff}' +
+    '.item-right{flex:1}' +
+    '.name{font-size:14px;color:#333;font-weight:500}' +
+    '.time{font-size:12px;color:#888;margin-top:3px}' +
+    '.now-badge{font-size:10px;background:#EAF3DE;color:#27500A;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:6px}' +
+    '.empty{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}' +
+    '.footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #e5e5ea;padding:12px 16px;display:flex;gap:8px}' +
+    '.btn-primary{flex:1;padding:12px;background:#534AB7;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}' +
+    '.btn-secondary{flex:1;padding:12px;background:#f0f0f5;color:#534AB7;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}' +
+    '.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;z-index:99}' +
+    '.toast.show{opacity:1}' +
+    '<\/style></head><body>' +
+
+    '<div class="header">' +
+    '  <h1>🌙 Routine วัน' + todayThai + '</h1>' +
+    '  <p id="hdr-sub">กดติ๊กเมื่อทำเสร็จ · ' + items.length + ' รายการ</p>' +
+    '</div>' +
+    '<div class="progress-wrap">' +
+    '  <div class="prog-text"><span id="prog-lbl">0 / ' + items.length + ' รายการ</span><span id="prog-pct">0%</span></div>' +
+    '  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>' +
+    '</div>' +
+    '<div id="content"></div>' +
+
+    '<div class="footer">' +
+    '  <button class="btn-secondary" onclick="openTodo()">📋 งานวันนี้</button>' +
+    '  <button class="btn-primary" onclick="saveDone()">✅ บันทึกและปิด</button>' +
+    '</div>' +
+    '<div class="toast" id="toast"></div>' +
+
+    '<script>' +
+    'var WEB_APP_URL="' + webAppUrl + '";' +
+    'var items=' + itemsJson + ';' +
+    'var nowStr="' + nowStr + '";' +
+
+    'function getIcon(name){' +
+    '  var n=name.toUpperCase();' +
+    '  return n.indexOf("EXERCISE")!==-1?"💪":n.indexOf("STUDY")!==-1?"📚":' +
+    '    n.indexOf("ENGLISH")!==-1?"🇬🇧":n.indexOf("READ")!==-1?"📖":"📌";' +
+    '}' +
+
+    'function isNow(start,end){return nowStr>=start&&nowStr<=end;}' +
+
+    'function updateProgress(){' +
+    '  var d=items.filter(function(i){return i.done;}).length;' +
+    '  var t=items.length;' +
+    '  var p=t>0?Math.round(d/t*100):0;' +
+    '  document.getElementById("prog-lbl").textContent=d+"/"+t+" รายการ";' +
+    '  document.getElementById("prog-pct").textContent=p+"%";' +
+    '  document.getElementById("prog-fill").style.width=p+"%";' +
+    '  document.getElementById("hdr-sub").textContent=p===100?"🎉 ทำครบแล้วเยี่ยมมาก!":"กดติ๊กเมื่อทำเสร็จ";' +
+    '}' +
+
+    'function renderList(){' +
+    '  if(items.length===0){' +
+    '    document.getElementById("content").innerHTML=\'<div class="empty">ไม่มี routine วันนี้</div>\';' +
+    '    return;' +
+    '  }' +
+    '  var h=\'<div class="list">\';' +
+    '  items.forEach(function(item){' +
+    '    var isNowItem=isNow(item.start,item.end);' +
+    '    h+=\'<div class="item\'+(item.done?" done":"")+\'" onclick="toggle(\\\'"+item.id+"\\\')">\';' +
+    '    h+=\'<div class="chk\'+(item.done?" done":"")+(item.done?"">✓":">"+getIcon(item.name))+\'<\/div>\';' +
+    '    h+=\'<div class="item-right">\';' +
+    '    h+=\'<div class="name">\'+item.name+(isNowItem&&!item.done?\'<span class="now-badge">กำลังทำ<\/span>\':"")+\'<\/div>\';' +
+    '    h+=\'<div class="time">🕐 \'+item.start+" - "+item.end+\'<\/div>\';' +
+    '    h+=\'<\/div><\/div>\';' +
+    '  });' +
+    '  h+="<\/div>";' +
+    '  document.getElementById("content").innerHTML=h;' +
+    '}' +
+
+    'function toggle(id){' +
+    '  var item=items.find(function(i){return i.id===id;});' +
+    '  if(!item)return;' +
+    '  item.done=!item.done;' +
+    '  renderList();updateProgress();' +
+    '  showToast(item.done?"✅ "+item.name:"↩️ ยกเลิก: "+item.name);' +
+    '}' +
+
+    'function showToast(msg){' +
+    '  var t=document.getElementById("toast");' +
+    '  t.textContent=msg;t.classList.add("show");' +
+    '  setTimeout(function(){t.classList.remove("show");},2000);' +
+    '}' +
+
+    'function openTodo(){window.location.href=WEB_APP_URL+"?page=todo";}' +
+
+    'function saveDone(){' +
+    '  var d=items.filter(function(i){return i.done;}).length;' +
+    '  var t=items.length;' +
+    '  fetch(WEB_APP_URL+"?action=saveRoutine&done="+d+"&total="+t,{method:"get",mode:"no-cors"}).catch(function(){});' +
+    '  if(typeof liff!=="undefined"&&liff.isInClient()){liff.closeWindow();}' +
+    '  else{window.close();}' +
+    '}' +
+
+    'var rendered=false;' +
+    'function safeRender(){if(rendered)return;rendered=true;renderList();updateProgress();}' +
+    'setTimeout(function(){safeRender();},500);' +
+    'try{' +
+    '  liff.init({liffId:"2010213644-d72CVt0y"})' +
+    '    .then(function(){safeRender();})' +
+    '    .catch(function(){safeRender();});' +
+    '}catch(e){safeRender();}' +
+    '<\/script></body></html>';
+}
+
+function testTodoListData() {
+  var data = getTodoListData();
+  Logger.log("tasks: " + data.tasks.length);
+  Logger.log("done: " + data.done.length);
+  Logger.log(JSON.stringify(data));
+}
+
+function testFlexTodo() {
+  var data = getTodoListData();
+  pushFlex(flexTodoList(data.tasks, data.done));
+}
+function testFlexTodo2() {
+  var data = getTodoListData();
+  var flex = flexTodoList(data.tasks, data.done);
+  Logger.log(JSON.stringify(flex));  // ดูว่า flex สร้างได้ไหม
+  
+  // ส่งตรงๆ ไม่ผ่าน pushFlex
+  var url = "https://api.line.me/v2/bot/message/push";
+  var res = UrlFetchApp.fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + CONFIG.LINE_ACCESS_TOKEN
+    },
+    payload: JSON.stringify({
+      to: "Ucd49f8fddc5c718f77085042e8c53b66",
+      messages: [{ type: "flex", altText: "งานวันนี้", contents: flex }]
+    }),
+    muteHttpExceptions: true
+  });
+  Logger.log("Status: " + res.getResponseCode());
+  Logger.log("Response: " + res.getContentText());
+}
+
+function checkPendingUserId() {
+  var props = PropertiesService.getScriptProperties();
+  Logger.log("userId: " + props.getProperty("pending_userId"));
+}
+function testPushNew() {
+  var url = "https://api.line.me/v2/bot/message/push";
+  var res = UrlFetchApp.fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + CONFIG.LINE_ACCESS_TOKEN
+    },
+    payload: JSON.stringify({
+      to: "Ucd49f8fddc5c718f77085042e8c53b66",
+      messages: [{ type: "text", text: "test " + new Date().toLocaleTimeString() }]
+    }),
+    muteHttpExceptions: true
+  });
+  Logger.log("Status: " + res.getResponseCode());
+  Logger.log("Body: " + res.getContentText());
+}
+
+function testFlexDirect() {
+  var data = getTodoListData();
+  var flex = flexTodoList(data.tasks, data.done);
+  
+  var url = "https://api.line.me/v2/bot/message/push";
+  var res = UrlFetchApp.fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + CONFIG.LINE_ACCESS_TOKEN
+    },
+    payload: JSON.stringify({
+      to: "Ucd49f8fddc5c718f77085042e8c53b66",
+      messages: [{ type: "flex", altText: "งานวันนี้", contents: flex }]
+    }),
+    muteHttpExceptions: true
+  });
+  Logger.log("Status: " + res.getResponseCode());
+  Logger.log("Body: " + res.getContentText());
+}
+function flexIdeaCard(ideaText, expanded, date) {
+  return {
+    type: "bubble", size: "mega",
+    body: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#FFFFFF", paddingAll: "0px",
+      contents: [
+        {
+          type: "box", layout: "vertical",
+          paddingAll: "16px", paddingBottom: "12px",
+          borderWidth: "1px", borderColor: "#F5F5F5",
+          contents: [
+            {
+              type: "box", layout: "horizontal",
+              alignItems: "center", spacing: "sm",
+              contents: [
+                { type: "box", layout: "vertical",
+                  width: "6px", height: "6px",
+                  cornerRadius: "3px",
+                  backgroundColor: "#BF5AF2",
+                  contents: [] },
+                { type: "text", text: "Idea บันทึกแล้ว",
+                  size: "xxs", color: "#AAAAAA" }
+              ]
+            },
+            { type: "text", text: ideaText,
+              size: "md", weight: "bold", color: "#111111",
+              margin: "sm", wrap: true }
+          ]
+        },
+        {
+          type: "box", layout: "vertical",
+          paddingAll: "16px", paddingBottom: "10px",
+          borderWidth: "1px", borderColor: "#F5F5F5",
+          contents: [
+            { type: "text", text: "AI ขยาย",
+              size: "xxs", color: "#AAAAAA", weight: "bold" },
+            { type: "text", text: expanded,
+              size: "xs", color: "#555555",
+              margin: "sm", wrap: true, lineSpacing: "6px" }
+          ]
+        },
+        {
+          type: "box", layout: "horizontal",
+          paddingAll: "12px", spacing: "sm",
+          contents: [
+            {
+              type: "box", layout: "horizontal",
+              backgroundColor: "#F3E8FF",
+              cornerRadius: "10px",
+              paddingTop: "4px", paddingBottom: "4px",
+              paddingStart: "10px", paddingEnd: "10px",
+              contents: [{ type: "text", text: "Feature",
+                size: "xxs", color: "#7C3AED", weight: "bold" }]
+            },
+            {
+              type: "box", layout: "horizontal",
+              backgroundColor: "#F5F5F5",
+              cornerRadius: "10px",
+              paddingTop: "4px", paddingBottom: "4px",
+              paddingStart: "10px", paddingEnd: "10px",
+              contents: [{ type: "text", text: date,
+                size: "xxs", color: "#888888" }]
+            }
+          ]
+        }
+      ]
+    }
+  };
+}
+function pushFlex(flexContents) {
+  var url = "https://api.line.me/v2/bot/message/push";
+  UrlFetchApp.fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + CONFIG.LINE_ACCESS_TOKEN
+    },
+    payload: JSON.stringify({
+      to: "Ucd49f8fddc5c718f77085042e8c53b66",
+      messages: [{ type: "flex", altText: "Rudy Bot", contents: flexContents }]
+    }),
+    muteHttpExceptions: true
+  });
+}
+// เพิ่ม helper function นี้ที่ท้าย doGet
+function jsonpResponse(e, data) {
+  var result = JSON.stringify(data);
+  var callback = e.parameter.callback;
+  if (callback) {
+    return ContentService.createTextOutput(callback + '(' + result + ')')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return ContentService.createTextOutput(result)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+function checkMyUserId() {
+  var props = PropertiesService.getScriptProperties();
+  Logger.log("pending_userId: " + props.getProperty("pending_userId"));
+}
+function testNewFlex() {
+  var data = getTodoListData();
+  Logger.log("tasks: " + data.tasks.length + " done: " + data.done.length);
+  
+  var flex = flexTodoList(data.tasks, data.done);
+  
+  var url = "https://api.line.me/v2/bot/message/push";
+  var res = UrlFetchApp.fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + CONFIG.LINE_ACCESS_TOKEN
+    },
+    payload: JSON.stringify({
+      to: "Ucd49f8fddc5c718f77085042e8c53b66",
+      messages: [{ type: "flex", altText: "test", contents: flex }]
+    }),
+    muteHttpExceptions: true
+  });
+  
+  Logger.log("Status: " + res.getResponseCode());
+  Logger.log("Body: " + res.getContentText());  // ← ดู error จาก LINE API
+}
+function flexAddTask(taskName, date, priority) {
+  var priColor = priority === "High" ? "#FF3B30" :
+                 priority === "Medium" ? "#FF9500" : "#34C759";
+  var dateLabel = date ? date : "ยังไม่ระบุวัน";
+  return {
+    type: "bubble", size: "kilo",
+    body: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#FFFFFF", paddingAll: "0px",
+      contents: [
+        {
+          type: "box", layout: "vertical",
+          paddingAll: "16px", paddingBottom: "14px",
+          borderWidth: "1px", borderColor: "#F0F0F0",
+          contents: [
+            {
+              type: "box", layout: "horizontal",
+              alignItems: "center", spacing: "sm", margin: "none",
+              contents: [
+                { type: "box", layout: "vertical",
+                  width: "6px", height: "6px",
+                  cornerRadius: "3px", backgroundColor: "#34C759", contents: [] },
+                { type: "text", text: "Notion", size: "xxs", color: "#C7C7CC" }
+              ]
+            },
+            { type: "text", text: "เพิ่มงานแล้ว",
+              size: "md", weight: "bold", color: "#34C759",
+              margin: "sm" }
+          ]
+        },
+        {
+          type: "box", layout: "vertical",
+          paddingAll: "16px", spacing: "sm",
+          contents: [
+            { type: "text", text: taskName, size: "sm",
+              weight: "bold", color: "#000000", wrap: true },
+            {
+              type: "box", layout: "horizontal",
+              alignItems: "center", margin: "sm",
+              contents: [
+                { type: "text", text: dateLabel, size: "xs",
+                  color: "#8E8E93", flex: 1 },
+                {
+                  type: "box", layout: "horizontal",
+                  spacing: "xs", alignItems: "center",
+                  contents: [
+                    { type: "box", layout: "vertical",
+                      width: "6px", height: "6px",
+                      cornerRadius: "3px", backgroundColor: priColor, contents: [] },
+                    { type: "text", text: priority, size: "xxs",
+                      color: priColor, weight: "bold" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  };
+}
+function flexAddEvent(title, date, startTime, endTime, recurrence, reminder) {
+  var rows = [];
+  if (date) rows.push({ label: "วันที่", value: date });
+  if (startTime && endTime) rows.push({ label: "เวลา", value: startTime + " – " + endTime });
+  if (recurrence && recurrence !== "none") rows.push({ label: "ซ้ำ", value: recurrence });
+  if (reminder) rows.push({ label: "แจ้งเตือน", value: reminder + " นาทีก่อน" });
+
+  var rowContents = [];
+  rows.forEach(function(r, i) {
+    rowContents.push({
+      type: "box", layout: "horizontal", alignItems: "center",
+      contents: [
+        { type: "text", text: r.label, size: "xs", color: "#8E8E93", flex: 2 },
+        { type: "text", text: r.value, size: "xs", color: "#000000",
+          flex: 3, align: "end" }
+      ]
     });
-  },3000);
+    if (i < rows.length - 1) {
+      rowContents.push({ type: "separator", margin: "sm", color: "#F5F5F5" });
+    }
+  });
+
+  return {
+    type: "bubble", size: "kilo",
+    body: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#FFFFFF", paddingAll: "0px",
+      contents: [
+        {
+          type: "box", layout: "vertical",
+          paddingAll: "16px", paddingBottom: "14px",
+          borderWidth: "1px", borderColor: "#F0F0F0",
+          contents: [
+            {
+              type: "box", layout: "horizontal",
+              alignItems: "center", spacing: "sm",
+              contents: [
+                { type: "box", layout: "vertical",
+                  width: "6px", height: "6px",
+                  cornerRadius: "3px", backgroundColor: "#185FA5", contents: [] },
+                { type: "text", text: "Google Calendar", size: "xxs", color: "#C7C7CC" }
+              ]
+            },
+            { type: "text", text: "เพิ่มนัดหมายแล้ว",
+              size: "md", weight: "bold", color: "#185FA5", margin: "sm" }
+          ]
+        },
+        {
+          type: "box", layout: "vertical", paddingAll: "16px", spacing: "sm",
+          contents: [
+            { type: "text", text: title, size: "sm",
+              weight: "bold", color: "#000000", wrap: true, margin: "none" },
+            { type: "separator", margin: "md", color: "#F5F5F5" },
+            {
+              type: "box", layout: "vertical", margin: "md", spacing: "sm",
+              contents: rowContents
+            }
+          ]
+        }
+      ]
+    }
+  };
 }
-init();
-</script>
-</body>
-</html>
+function flexCompanyNote() {
+  var rows = [
+    { label: "บริษัท",   value: "บริษัท คุมโทน จำกัด" },
+    { label: "ที่อยู่",   value: "99/46 หมู่ 5 ซอยติวานนท์-ปากเกร็ด 16 ถนนติวานนท์ ตำบลปากเกร็ด อำเภอปากเกร็ด จังหวัดนนทบุรี 11120" },
+    { label: "เลขภาษี",  value: "0125568023041" },
+  ];
+
+  var bodyContents = rows.map(function(r, i) {
+    return {
+      type: "box", layout: "horizontal",
+      paddingAll: "10px", spacing: "md",
+      borderWidth: i < rows.length-1 ? "1px" : "0px",
+      borderColor: "#F5F5F5",
+      contents: [
+        { type: "text", text: r.label, size: "xs", color: "#AAAAAA", flex: 2, align: "start" },
+        { type: "text", text: r.value, size: "sm", color: "#333333", flex: 5, wrap: true }
+      ]
+    };
+  });
+
+  return {
+    type: "bubble", size: "mega",
+    header: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#FFFFFF",
+      paddingAll: "14px",
+      contents: [
+        { type: "text", text: "บริษัท คุมโทน จำกัด", size: "md", weight: "bold", color: "#111111" },
+        { type: "text", text: "ข้อมูลบริษัท", size: "xxs", color: "#AAAAAA", margin: "xs" }
+      ]
+    },
+    body: {
+      type: "box", layout: "vertical",
+      backgroundColor: "#FFFFFF",
+      paddingAll: "0px",
+      contents: bodyContents
+    }
+  };
+}
+function deleteEveningTriggers() {
+  ScriptApp.getProjectTriggers().forEach(function(t) {
+    if (t.getHandlerFunction() === "eveningRoutineCheck" ||
+        t.getHandlerFunction() === "eveningRoutine") {
+      ScriptApp.deleteTrigger(t);
+      Logger.log("Deleted: " + t.getHandlerFunction());
+    }
+  });
+}
+function deleteMorningReminderTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function(t) {
+    if (t.getHandlerFunction() === "morningReminder") {
+      ScriptApp.deleteTrigger(t);
+      Logger.log("Deleted: " + t.getHandlerFunction());
+    }
+  });
+}
+function deleteEveningAndReflectionTriggers() {
+  ScriptApp.getProjectTriggers().forEach(function(t) {
+    var fn = t.getHandlerFunction();
+    if (fn === "eveningSummary" || fn === "dailyReflection") {
+      ScriptApp.deleteTrigger(t);
+      Logger.log("Deleted: " + fn);
+    }
+  });
+}
+function debugNoteField() {
+  var url = "https://api.notion.com/v1/databases/" + CONFIG.NOTION_DATABASE_ID + "/query";
+  var res = UrlFetchApp.fetch(url, {
+    method: "post",
+    headers: {
+      Authorization: "Bearer " + CONFIG.NOTION_TOKEN,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    payload: JSON.stringify({ page_size: 1 }),
+    muteHttpExceptions: true
+  });
+  var data = JSON.parse(res.getContentText());
+  if (data.results && data.results[0]) {
+    Object.keys(data.results[0].properties).forEach(function(key) {
+      Logger.log(key + ' → ' + data.results[0].properties[key].type);
+    });
+  }
+}
