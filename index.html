@@ -673,15 +673,43 @@ function fmtShort(ds){if(!ds)return'วันนี้';var d=new Date(ds+'T00:0
 function nowS(){var n=new Date();return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');}
 function isNow(s,e){var n=nowS();return n>=s&&n<=e;}
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
-function api(p,cb){
+var _apiQueue=[];
+var _apiBusy=false;
+function _apiRunNext(){
+  if(_apiBusy||_apiQueue.length===0)return;
+  _apiBusy=true;
+  var job=_apiQueue.shift();
+  _apiExec(job.p,job.cb,job.retriesLeft);
+}
+function _apiExec(p,cb,retriesLeft){
   var n='cb_'+Date.now()+'_'+Math.floor(Math.random()*9999);
-  p.callback=n;
-  var url=GAS+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k]);}).join('&');
+  var p2={};for(var k in p)p2[k]=p[k]; // clone กันแก้ object เดิมของผู้เรียกซ้ำ
+  p2.callback=n;
+  var url=GAS+'?'+Object.keys(p2).map(function(k){return k+'='+encodeURIComponent(p2[k]);}).join('&');
   var s=document.createElement('script');
-  var to=setTimeout(function(){delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(null);},25000);
-  window[n]=function(d){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(d);};
-  s.onerror=function(){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb({ok:false,error:'โหลด script ไม่สำเร็จ (เครือข่าย/CSP บล็อก)'});};
+  var done=false,to;
+  function finish(d){
+    if(done)return; done=true;
+    clearTimeout(to);
+    delete window[n];
+    if(s.parentNode)s.parentNode.removeChild(s);
+    _apiBusy=false;
+    if(!d&&retriesLeft>0){
+      // โดนบล็อก/หมดเวลา — ลองใหม่อีกครั้งก่อนถือว่าพังจริง (มักเกิดจาก ORB บล็อกตอนยิงซ้อนกันถี่)
+      setTimeout(function(){_apiExec(p,cb,retriesLeft-1);},500);
+      return;
+    }
+    if(cb)cb(d);
+    _apiRunNext();
+  }
+  to=setTimeout(function(){finish(null);},25000);
+  window[n]=function(d){finish(d);};
+  s.onerror=function(){finish(null);};
   s.src=url;document.head.appendChild(s);
+}
+function api(p,cb){
+  _apiQueue.push({p:p,cb:cb,retriesLeft:2});
+  _apiRunNext();
 }
 function apiS(p){var url=GAS+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k]);}).join('&');var i=new Image();i.src=url;}
 // POST สำหรับข้อมูลยาว (note)
