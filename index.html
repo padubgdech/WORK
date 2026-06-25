@@ -343,7 +343,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <div class="topbar">
   <div class="brand">KHUMTONE</div>
   <div class="tabs">
-    <div class="tab active" onclick="goTab('main',this)">
+    <div class="tab active" data-tab="main" onclick="goTab('main',this)">
       <svg width="15" height="15" viewBox="0 0 24 24">
         <rect x="3" y="3" width="8" height="8" rx="1.5" fill="currentColor"/>
         <rect x="13" y="3" width="8" height="8" rx="1.5" fill="currentColor" opacity=".35"/>
@@ -352,7 +352,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       </svg>
       Main
     </div>
-    <div class="tab" onclick="goTab('cal',this)">
+    <div class="tab" data-tab="cal" onclick="goTab('cal',this)">
       <svg width="15" height="15" viewBox="0 0 24 24">
         <rect x="3" y="4" width="18" height="17" rx="2" fill="currentColor" opacity=".25"/>
         <rect x="3" y="4" width="18" height="6" rx="2" fill="currentColor" opacity=".5"/>
@@ -361,21 +361,21 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       </svg>
       Calendar
     </div>
-    <div class="tab" onclick="goTab('tasks',this)">
+    <div class="tab" data-tab="tasks" onclick="goTab('tasks',this)">
       <svg width="15" height="15" viewBox="0 0 24 24">
         <rect x="3" y="3" width="18" height="18" rx="2" fill="currentColor" opacity=".2"/>
         <polyline points="8 12 11 15 16 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       Tasks
     </div>
-    <div class="tab" onclick="goTab('history',this)">
+    <div class="tab" data-tab="history" onclick="goTab('history',this)">
       <svg width="15" height="15" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="9" fill="currentColor" opacity=".2"/>
         <polyline points="12 7 12 12 15 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
       History
     </div>
-    <div class="tab" onclick="goTab('summary',this)">
+    <div class="tab" data-tab="summary" onclick="goTab('summary',this)">
       <svg width="15" height="15" viewBox="0 0 24 24">
         <rect x="4" y="13" width="4" height="8" rx="1" fill="currentColor" opacity=".4"/>
         <rect x="10" y="8" width="4" height="13" rx="1" fill="currentColor" opacity=".4"/>
@@ -383,7 +383,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       </svg>
       Summary
     </div>
-    <div class="tab" onclick="goTab('mymap',this)">
+    <div class="tab" data-tab="mymap" onclick="goTab('mymap',this)">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/>
         <line x1="8.2" y1="7" x2="15.8" y2="7"/><line x1="7" y1="8.2" x2="10.5" y2="15.8"/><line x1="17" y1="8.2" x2="13.5" y2="15.8"/>
@@ -1400,6 +1400,14 @@ function goTab(p,btn){
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('show');});document.getElementById('page-'+p).classList.add('show');
   var m=tabMeta[p];document.getElementById('ph-title').textContent=m.title;document.getElementById('ph-stats').style.display=m.stats?'flex':'none';
   if(p==='tasks')renderNDTasks();if(p==='history')renderHistory();if(p==='summary')renderSummary();if(p==='cal')renderCal();if(p==='mymap')renderMyMap();
+  try{localStorage.setItem('rudyLastTab',p);}catch(err){}
+}
+function restoreLastTab(){
+  var last=null;
+  try{last=localStorage.getItem('rudyLastTab');}catch(err){}
+  if(!last||last==='main'||!tabMeta[last])return; // main คือหน้า default อยู่แล้ว ไม่ต้องทำอะไร
+  var btn=document.querySelector('.tab[data-tab="'+last+'"]');
+  if(btn)goTab(last,btn);
 }
 function calMove(dir){
   if(dir===0){calY=TODAY.getFullYear();calMo=TODAY.getMonth();calSel=TODAY_STR;}
@@ -2097,6 +2105,7 @@ function init(){
       api({action:'askRudy',prompt:encodeURIComponent('วิเคราะห์งานที่คุณเดชทำเสร็จในสัปดาห์นี้:\n\n'+tl+'\n\nตอบ 2-3 ประโยค ภาษาไทย สั้นกระชับ:')},function(d){var el=document.getElementById('main-rudy-text');if(el&&d&&d.reply)el.textContent=d.reply;});
     });
   },3000);
+  restoreLastTab(); // กลับไปหน้าที่เปิดอยู่ล่าสุดก่อน reload (ไม่ใช่ Main เสมอ)
 }
 /* ================= MY MAP — freeform canvas (nodes + connector lines), เก็บข้อมูลใน Notion ================= */
 var mmData={nodes:[],edges:[]};
