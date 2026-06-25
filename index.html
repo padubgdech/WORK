@@ -1688,9 +1688,15 @@ function pickCategory(taskId,newCat){
     t.category=newCat;
     renderNDColumnsFromCache();
   }
-  apiS({action:'setTaskCategory',id:taskId,category:newCat});
   closeModal();
-  showToast(newCat?'✅ เปลี่ยนหมวดแล้ว':'✅ ล้างหมวดแล้ว');
+  showToast('⏳ กำลังบันทึก...');
+  api({action:'setTaskCategory',id:taskId,category:newCat},function(d){
+    if(d&&d.ok){
+      showToast(newCat?'✅ เปลี่ยนหมวดแล้ว (ยืนยันจาก server)':'✅ ล้างหมวดแล้ว (ยืนยันจาก server)');
+    } else {
+      showToast('❌ บันทึกไม่สำเร็จ: '+(d&&d.error?d.error:'ไม่รู้สาเหตุ'));
+    }
+  });
 }
 /* ===== ลากการ์ดข้ามคอลัมน์ — เปลี่ยน priority หรือหมวดธุรกิจ ขึ้นอยู่กับบอร์ดที่กำลังดูอยู่ (รองรับมือถือด้วย Pointer Events) ===== */
 var _ndDrag=null;
@@ -1766,8 +1772,14 @@ function ndDragEnd(e){
       if(ndViewMode==='category'){
         t.category=targetVal;
         renderNDColumnsFromCache();
-        showToast(targetVal?('✅ ย้ายไปหมวด '+(ND_CAT_LABELS[targetVal]||targetVal)+' แล้ว'):'✅ ล้างหมวดแล้ว');
-        apiS({action:'setTaskCategory',id:id,category:targetVal});
+        showToast('⏳ กำลังบันทึก...');
+        api({action:'setTaskCategory',id:id,category:targetVal},function(d){
+          if(d&&d.ok){
+            showToast(targetVal?('✅ ย้ายไปหมวด '+(ND_CAT_LABELS[targetVal]||targetVal)+' แล้ว (server ยืนยัน)'):'✅ ล้างหมวดแล้ว (server ยืนยัน)');
+          } else {
+            showToast('❌ บันทึกไม่สำเร็จ: '+(d&&d.error?d.error:'ไม่รู้สาเหตุ'));
+          }
+        });
       } else {
         t.priority=targetVal;
         renderNDColumnsFromCache();
