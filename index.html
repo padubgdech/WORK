@@ -678,8 +678,9 @@ function api(p,cb){
   p.callback=n;
   var url=GAS+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k]);}).join('&');
   var s=document.createElement('script');
-  var to=setTimeout(function(){delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(null);},12000);
+  var to=setTimeout(function(){delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(null);},25000);
   window[n]=function(d){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(d);};
+  s.onerror=function(){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb({ok:false,error:'โหลด script ไม่สำเร็จ (เครือข่าย/CSP บล็อก)'});};
   s.src=url;document.head.appendChild(s);
 }
 function apiS(p){var url=GAS+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k]);}).join('&');var i=new Image();i.src=url;}
