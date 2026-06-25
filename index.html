@@ -37,6 +37,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 #page-main .grid2{grid-template-columns:1fr 250px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+.grid6{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
 .mymap-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .mymap-btn{padding:8px 14px;border-radius:8px;border:.5px solid var(--border);background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:#555}
 .mymap-btn:hover{background:#f7f6f3}
@@ -530,7 +531,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     </div>
   </div>
 
-  <div id="nd-board-category" class="grid4" style="display:none">
+  <div id="nd-board-category" class="grid6" style="display:none">
     <div>
       <div class="sec" style="color:#1D9E75;border-bottom-color:#EAF3DE">
         <span>💰 สร้างรายได้</span>
@@ -559,7 +560,22 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       </div>
       <div id="nd-brand"><div class="ld">⏳</div></div>
     </div>
+    <div>
+      <div class="sec" style="color:#8D6E63;border-bottom-color:#EFEBE9">
+        <span>🗂️ อื่นๆ</span>
+        <button onclick="openAddCat('other','อื่นๆ')" style="padding:5px 12px;background:#EFEBE9;border:none;color:#8D6E63;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+      </div>
+      <div id="nd-other"><div class="ld">⏳</div></div>
+    </div>
+    <div>
+      <div class="sec" style="color:#999;border-bottom-color:#eee">
+        <span>❓ ไม่มีหมวดหมู่</span>
+        <button onclick="openAddCat('','ไม่มีหมวดหมู่')" style="padding:5px 12px;background:#f0f0f0;border:none;color:#888;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+      </div>
+      <div id="nd-none"><div class="ld">⏳</div></div>
+    </div>
   </div>
+  <div style="font-size:11px;color:#bbb;margin:-8px 0 14px">ลากการ์ดมาวางที่ "❓ ไม่มีหมวดหมู่" เพื่อล้างหมวดของงานนั้น</div>
 </div>
 <div id="page-history" class="page">
   <div class="grid2-hist">
@@ -1564,9 +1580,9 @@ function ndCardHtml(t,col){
   // badge priority — โชว์เสมอ เพราะตอนนี้คอลัมน์อาจเป็นได้ทั้ง priority หรือหมวดธุรกิจ
   chips='<span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span>'+chips;
   // chip หมวดธุรกิจ — กดเพื่อเปลี่ยนหมวดได้ตรงนี้เลย ไม่ต้องลาก
-  var ndCatIcons={'revenue':'💰','ops':'🏢','cost':'📉','brand':'🎨'};
-  var ndCatNow=t.category||'ops';
-  chips+='<span class="nd-cat-chip" data-catid="'+t.id+'" data-catnow="'+ndCatNow+'" onclick="openCatPicker(this.dataset.catid,this.dataset.catnow)">'+(ndCatIcons[ndCatNow]||'🏢')+' ▾</span>';
+  var ndCatIcons={'revenue':'💰','ops':'🏢','cost':'📉','brand':'🎨','other':'🗂️'};
+  var ndCatNow=t.category||''; // ไม่มีหมวด ให้เป็นค่าว่างจริงๆ ไม่ดันเป็น ops
+  chips+='<span class="nd-cat-chip" data-catid="'+t.id+'" data-catnow="'+ndCatNow+'" onclick="openCatPicker(this.dataset.catid,this.dataset.catnow)">'+(ndCatNow?(ndCatIcons[ndCatNow]||'🗂️'):'❓')+' ▾</span>';
 
   var h='<div class="nd-c-item" id="nd-row-'+t.id+'" data-ndid="'+t.id+'" data-ndpri="'+t.priority+'" data-ndcat="'+ndCatNow+'" style="background:'+ndGradient(t.priority)+'">';
   h+='<div class="nd-c-top">';
@@ -1627,9 +1643,9 @@ function renderNDColumnsFromCache(){
     if(el)el.innerHTML=h;
   });
   // บอร์ดที่ 2: เรียงตามหมวดธุรกิจ
-  ['revenue','ops','cost','brand'].forEach(function(cat){
-    var id='nd-'+cat;
-    var list=noDateTasks.filter(function(t){return (t.category||'ops')===cat&&ndShouldShow(t);});
+  ['revenue','ops','cost','brand','other',''].forEach(function(cat){
+    var id=cat===''?'nd-none':'nd-'+cat;
+    var list=noDateTasks.filter(function(t){return (t.category||'')===cat&&ndShouldShow(t);});
     list.sort(function(a,b){
       var ad=a.actionDate||'9999-99-99', bd=b.actionDate||'9999-99-99';
       return ad<bd?-1:ad>bd?1:0;
@@ -1646,7 +1662,7 @@ function renderNDColumnsFromCache(){
   attachNDDragOnce();
 }
 function renderNDTasks(){
-  ['nd-high','nd-med','nd-low','nd-revenue','nd-ops','nd-cost','nd-brand'].forEach(function(eid){
+  ['nd-high','nd-med','nd-low','nd-revenue','nd-ops','nd-cost','nd-brand','nd-other','nd-none'].forEach(function(eid){
     var el=document.getElementById(eid);
     if(el)el.innerHTML='<div class="ld" style="padding:12px 0;font-size:12px">⏳</div>';
   });
@@ -1656,7 +1672,7 @@ function renderNDTasks(){
   });
 }
 function openCatPicker(taskId,currentCat){
-  var cats=[['revenue','💰 สร้างรายได้'],['ops','🏢 ระบบหลังบ้าน'],['cost','📉 ลดต้นทุน/Loss'],['brand','🎨 Brand & Marketing']];
+  var cats=[['revenue','💰 สร้างรายได้'],['ops','🏢 ระบบหลังบ้าน'],['cost','📉 ลดต้นทุน/Loss'],['brand','🎨 Brand & Marketing'],['other','🗂️ อื่นๆ'],['','❓ ไม่มีหมวดหมู่']];
   var h='<div class="modal-title">เปลี่ยนหมวดธุรกิจ <button class="modal-x" onclick="closeModal()">×</button></div>';
   h+='<div style="display:flex;flex-direction:column;gap:8px">';
   cats.forEach(function(c){
@@ -1674,13 +1690,13 @@ function pickCategory(taskId,newCat){
   }
   apiS({action:'setTaskCategory',id:taskId,category:newCat});
   closeModal();
-  showToast('✅ เปลี่ยนหมวดแล้ว');
+  showToast(newCat?'✅ เปลี่ยนหมวดแล้ว':'✅ ล้างหมวดแล้ว');
 }
 /* ===== ลากการ์ดข้ามคอลัมน์ — เปลี่ยน priority หรือหมวดธุรกิจ ขึ้นอยู่กับบอร์ดที่กำลังดูอยู่ (รองรับมือถือด้วย Pointer Events) ===== */
 var _ndDrag=null;
 var ND_PRI_COLS={'nd-high':'High','nd-med':'Medium','nd-low':'Low'};
-var ND_CAT_COLS={'nd-revenue':'revenue','nd-ops':'ops','nd-cost':'cost','nd-brand':'brand'};
-var ND_CAT_LABELS={'revenue':'สร้างรายได้','ops':'ระบบหลังบ้าน','cost':'ลดต้นทุน/Loss','brand':'Brand & Marketing'};
+var ND_CAT_COLS={'nd-revenue':'revenue','nd-ops':'ops','nd-cost':'cost','nd-brand':'brand','nd-other':'other','nd-none':''};
+var ND_CAT_LABELS={'revenue':'สร้างรายได้','ops':'ระบบหลังบ้าน','cost':'ลดต้นทุน/Loss','brand':'Brand & Marketing','other':'อื่นๆ','':'ไม่มีหมวดหมู่'};
 function ndActiveColMap(){return ndViewMode==='category'?ND_CAT_COLS:ND_PRI_COLS;}
 function attachNDDragOnce(){
   var pg=document.getElementById('page-tasks');
@@ -1730,26 +1746,27 @@ function ndDragEnd(e){
   document.removeEventListener('pointermove',ndDragMove);
   document.removeEventListener('pointerup',ndDragEnd);
   var map=ndActiveColMap();
-  var targetVal=null;
+  var targetVal=null, foundCol=false;
   Object.keys(map).forEach(function(colId){
     var colEl=document.getElementById(colId);
     if(!colEl)return;
     var r=colEl.getBoundingClientRect();
     if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
       targetVal=map[colId];
+      foundCol=true;
     }
     colEl.classList.remove('nd-col-dragover');
   });
   _ndDrag.ghost.remove();
   if(_ndDrag.card)_ndDrag.card.classList.remove('nd-dragging-src');
-  if(targetVal&&targetVal!==_ndDrag.fromVal){
+  if(foundCol&&targetVal!==_ndDrag.fromVal){
     var id=_ndDrag.id;
     var t=noDateTasks.find(function(x){return x.id===id;});
     if(t){
       if(ndViewMode==='category'){
         t.category=targetVal;
         renderNDColumnsFromCache();
-        showToast('✅ ย้ายไปหมวด '+(ND_CAT_LABELS[targetVal]||targetVal)+' แล้ว');
+        showToast(targetVal?('✅ ย้ายไปหมวด '+(ND_CAT_LABELS[targetVal]||targetVal)+' แล้ว'):'✅ ล้างหมวดแล้ว');
         apiS({action:'setTaskCategory',id:id,category:targetVal});
       } else {
         t.priority=targetVal;
