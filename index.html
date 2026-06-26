@@ -36,29 +36,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .grid2{display:grid;grid-template-columns:1fr 340px;gap:24px;min-width:0}
 #page-main .grid2{grid-template-columns:1fr 250px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
-.grid6{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
-.mymap-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.mymap-btn{padding:8px 14px;border-radius:8px;border:.5px solid var(--border);background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:#555}
-.mymap-btn:hover{background:#f7f6f3}
-.mymap-btn.primary{background:#111;color:#fff;border:none}
-.mymap-btn.on{background:#534AB7;color:#fff;border:none}
-.mymap-viewport{position:relative;width:100%;height:calc(100vh - 230px);min-height:420px;overflow:hidden;background:#fafaf9;border-radius:14px;border:.5px solid var(--border);touch-action:none}
-.mymap-world,.mymap-svg{position:absolute;top:0;left:0;width:4000px;height:3000px;transform-origin:0 0}
-.mymap-svg{pointer-events:none}
-.mymap-node{position:absolute;min-width:150px;background:#FFF8D6;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);box-shadow:0 2px 10px rgba(0,0,0,.1);padding:10px 12px 28px;cursor:grab;box-sizing:border-box}
-.mymap-node:active{cursor:grabbing}
-.mymap-node.mm-dragging{opacity:.85;box-shadow:0 8px 22px rgba(0,0,0,.22)}
-.mymap-node.mm-connect-src{box-shadow:0 0 0 3px #534AB7}
-.mymap-node-text{font-size:12.5px;color:#222;line-height:1.45;outline:none;white-space:pre-wrap;word-break:break-word;min-height:20px;height:100%;overflow-y:auto}
-.mymap-node-del{position:absolute;top:-9px;right:-9px;width:21px;height:21px;border-radius:50%;background:#FF3B30;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
-.mymap-node-pri{position:absolute;bottom:6px;left:12px;display:flex;gap:4px}
-.mymap-node-pri span{width:14px;height:14px;border-radius:50%;cursor:pointer;border:1.5px solid rgba(0,0,0,.15)}
-.mymap-node-resize{position:absolute;bottom:1px;right:1px;width:18px;height:18px;cursor:nwse-resize;color:rgba(0,0,0,.3);font-size:13px;display:flex;align-items:flex-end;justify-content:flex-end;line-height:1;padding:2px}
-.nd-viewtab{padding:8px 16px;border-radius:20px;border:none;background:#f0eeea;color:#888;font-size:12.5px;font-weight:700;cursor:pointer}
-.nd-viewtab-active{background:#1c1c1e;color:#fff}
-.nd-cat-chip{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:600;background:#f0f0f0;color:#666;cursor:pointer;white-space:nowrap}
-.nd-cat-chip:hover{background:#e3e1dc}
 .grid22{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 /* Compact 3-per-row task grid (Main page งานค้าง/กำลังดำเนินการ/etc) — same tcCard markup, just resized via cascade */
 .tc-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
@@ -383,13 +360,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       </svg>
       Summary
     </div>
-    <div class="tab" data-tab="mymap" onclick="goTab('mymap',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/>
-        <line x1="8.2" y1="7" x2="15.8" y2="7"/><line x1="7" y1="8.2" x2="10.5" y2="15.8"/><line x1="17" y1="8.2" x2="13.5" y2="15.8"/>
-      </svg>
-      My Map
-    </div>
   </div>
   <div class="topbar-r">
     <button class="btn-add" onclick="openAdd()">+ เพิ่มงาน</button>
@@ -502,12 +472,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 <div id="page-tasks" class="page">
-  <div style="display:flex;gap:8px;margin-bottom:18px">
-    <button id="nd-tab-priority" class="nd-viewtab nd-viewtab-active" onclick="ndShowView('priority')">📊 ตามความสำคัญ</button>
-    <button id="nd-tab-category" class="nd-viewtab" onclick="ndShowView('category')">🏷️ ตามหมวดหมู่</button>
-  </div>
-
-  <div id="nd-board-priority" class="grid3">
+  <div class="grid3">
     <div>
       <div class="sec" style="color:#FF3B30;border-bottom-color:#FFCDD2">
         <span>🔴 HIGH</span>
@@ -530,52 +495,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       <div id="nd-low"><div class="ld">⏳</div></div>
     </div>
   </div>
-
-  <div id="nd-board-category" class="grid6" style="display:none">
-    <div>
-      <div class="sec" style="color:#1D9E75;border-bottom-color:#EAF3DE">
-        <span>💰 สร้างรายได้</span>
-        <button onclick="openAddCat('revenue','สร้างรายได้')" style="padding:5px 12px;background:#EAF3DE;border:none;color:#1D9E75;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-revenue"><div class="ld">⏳</div></div>
-    </div>
-    <div>
-      <div class="sec" style="color:#1A73E8;border-bottom-color:#EEF4FF">
-        <span>🏢 ระบบหลังบ้าน</span>
-        <button onclick="openAddCat('ops','ระบบหลังบ้าน')" style="padding:5px 12px;background:#EEF4FF;border:none;color:#1A73E8;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-ops"><div class="ld">⏳</div></div>
-    </div>
-    <div>
-      <div class="sec" style="color:#BA7517;border-bottom-color:#FAEEDA">
-        <span>📉 ลดต้นทุน/Loss</span>
-        <button onclick="openAddCat('cost','ลดต้นทุน/Loss')" style="padding:5px 12px;background:#FAEEDA;border:none;color:#BA7517;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-cost"><div class="ld">⏳</div></div>
-    </div>
-    <div>
-      <div class="sec" style="color:#7C3AED;border-bottom-color:#F3E8FF">
-        <span>🎨 Brand & Marketing</span>
-        <button onclick="openAddCat('brand','Brand &amp; Marketing')" style="padding:5px 12px;background:#F3E8FF;border:none;color:#7C3AED;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-brand"><div class="ld">⏳</div></div>
-    </div>
-    <div>
-      <div class="sec" style="color:#8D6E63;border-bottom-color:#EFEBE9">
-        <span>🗂️ อื่นๆ</span>
-        <button onclick="openAddCat('other','อื่นๆ')" style="padding:5px 12px;background:#EFEBE9;border:none;color:#8D6E63;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-other"><div class="ld">⏳</div></div>
-    </div>
-    <div>
-      <div class="sec" style="color:#999;border-bottom-color:#eee">
-        <span>❓ ไม่มีหมวดหมู่</span>
-        <button onclick="openAddCat('','ไม่มีหมวดหมู่')" style="padding:5px 12px;background:#f0f0f0;border:none;color:#888;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
-      </div>
-      <div id="nd-none"><div class="ld">⏳</div></div>
-    </div>
-  </div>
-  <div style="font-size:11px;color:#bbb;margin:-8px 0 14px">ลากการ์ดมาวางที่ "❓ ไม่มีหมวดหมู่" เพื่อล้างหมวดของงานนั้น</div>
 </div>
 <div id="page-history" class="page">
   <div class="grid2-hist">
@@ -639,20 +558,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         <div id="sm-rudy" style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.7">⏳ กำลังวิเคราะห์...</div>
       </div>
     </div>
-  </div>
-</div>
-<div id="page-mymap" class="page">
-  <div class="mymap-toolbar">
-    <button class="mymap-btn primary" onclick="mmAddNode()">+ เพิ่มกล่อง</button>
-    <button class="mymap-btn" id="mm-connect-btn" onclick="mmToggleConnectMode()">🔗 เชื่อมเส้น</button>
-    <button class="mymap-btn" onclick="mmZoom(0.15)">+ ซูม</button>
-    <button class="mymap-btn" onclick="mmZoom(-0.15)">− ซูม</button>
-    <button class="mymap-btn" onclick="mmResetView()">รีเซ็ตมุมมอง</button>
-    <span id="mm-savestatus" style="font-size:11px;color:#bbb;margin-left:auto">บันทึกแล้ว</span>
-  </div>
-  <div class="mymap-viewport" id="mm-viewport">
-    <svg class="mymap-svg" id="mm-svg"></svg>
-    <div class="mymap-world" id="mm-world"></div>
   </div>
 </div>
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()"></div>
@@ -1355,35 +1260,6 @@ function openAdd(pri){
   setTimeout(function(){var el=document.getElementById('add-nm');if(el)el.focus();},80);
 }
 function selPri(el,p){_addPri=p;document.querySelectorAll('.pri-btn').forEach(function(b){b.className='pri-btn';});el.className='pri-btn active-'+p.toLowerCase()[0];}
-var _addCat='ops';
-function openAddCat(catKey,catLabel){
-  _addCat=catKey||'ops';
-  _addPri='Medium';
-  var h='<div class="modal-title">เพิ่มงาน ('+catLabel+') <button class="modal-x" onclick="closeModal()">×</button></div>';
-  h+='<div class="fld"><label>ชื่องาน</label><input type="text" id="addnd-nm" placeholder="ชื่องาน..."></div>';
-  h+='<div class="fld"><label>Priority</label><div class="pri-btns">';
-  [['High','🔴','#FCEBEB','#791F1F'],['Medium','🟡','#FAEEDA','#633806'],['Low','🟢','#EAF3DE','#27500A']].forEach(function(p){
-    var sel=p[0]==='Medium'?'active-'+p[0].toLowerCase()[0]:'';
-    h+='<div class="pri-btn '+sel+'" onclick="selPri(this,\''+p[0]+'\')" style="background:'+p[2]+';color:'+p[3]+'">'+p[1]+' '+p[0]+'</div>';
-  });
-  h+='</div></div>';
-  h+='<div class="fld"><label>Note (ไม่บังคับ)</label><textarea id="addnd-note" rows="3" placeholder="รายละเอียด..."></textarea></div>';
-  h+='<button class="btn-submit" onclick="submitAddCat()">+ บันทึกงาน</button>';
-  showModal(h);
-  setTimeout(function(){var el=document.getElementById('addnd-nm');if(el)el.focus();},80);
-}
-function submitAddCat(){
-  var name=(document.getElementById('addnd-nm')||{}).value||'';
-  var note=(document.getElementById('addnd-note')||{}).value||'';
-  if(!name.trim()){showToast('กรุณาใส่ชื่องาน');return;}
-  showToast('⏳ กำลังเพิ่มงาน...');closeModal();
-  var p={action:'addTask',name:encodeURIComponent(name.trim()),priority:_addPri,category:_addCat};
-  if(note.trim())p.note=encodeURIComponent(note.trim());
-  api(p,function(){
-    showToast('✅ เพิ่มงานแล้ว: '+name.trim());
-    renderNDTasks(); // รีเฟรชคอลัมน์หมวดธุรกิจให้เห็นทันที (ตั้ง category ตรงกับคอลัมน์ที่กดเพิ่ม ไม่ต้องรอ Gemini เดา)
-  });
-}
 function openAddND(pri){
   _addPri=pri||'Medium';
   var h='<div class="modal-title">เพิ่มงาน ('+pri+') <button class="modal-x" onclick="closeModal()">×</button></div>';
@@ -1402,7 +1278,7 @@ function submitAddND(){
   if(note.trim())p.note=encodeURIComponent(note.trim());
   api(p,function(){
     showToast('✅ เพิ่มงานแล้ว: '+name.trim());
-    renderNDTasks(); // รีเฟรชทั้ง 2 บอร์ด (หมวดธุรกิจจะรอ Gemini เดาให้ตอนโหลดรอบนี้)
+    renderNDTasks();
   });
 }
 function submitAdd(){
@@ -1423,12 +1299,12 @@ function submitAdd(){
 }
 function showModal(html){var ov=document.getElementById('overlay');ov.innerHTML='<div class="modal" onclick="event.stopPropagation()"><div id="modal-body">'+html+'</div></div>';ov.classList.add('open');}
 function closeModal(){var ov=document.getElementById('overlay');ov.classList.remove('open');ov.innerHTML='';}
-var tabMeta={main:{title:'งานวันนี้',stats:true},cal:{title:'Calendar',stats:false},tasks:{title:'Tasks',stats:false},history:{title:'ประวัติงาน',stats:false},summary:{title:'Summary',stats:false},mymap:{title:'My Map',stats:false}};
+var tabMeta={main:{title:'งานวันนี้',stats:true},cal:{title:'Calendar',stats:false},tasks:{title:'Tasks',stats:false},history:{title:'ประวัติงาน',stats:false},summary:{title:'Summary',stats:false}};
 function goTab(p,btn){
   document.querySelectorAll('.tab').forEach(function(b){b.className='tab';});btn.className='tab active';
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('show');});document.getElementById('page-'+p).classList.add('show');
   var m=tabMeta[p];document.getElementById('ph-title').textContent=m.title;document.getElementById('ph-stats').style.display=m.stats?'flex':'none';
-  if(p==='tasks')renderNDTasks();if(p==='history')renderHistory();if(p==='summary')renderSummary();if(p==='cal')renderCal();if(p==='mymap')renderMyMap();
+  if(p==='tasks')renderNDTasks();if(p==='history')renderHistory();if(p==='summary')renderSummary();if(p==='cal')renderCal();
   try{localStorage.setItem('rudyLastTab',p);}catch(err){}
 }
 function restoreLastTab(){
@@ -1614,16 +1490,10 @@ function ndCardHtml(t,col){
       chips=statusBadge(ndSt,t)+chips;
     }
   }
-  // badge priority — โชว์เสมอ เพราะตอนนี้คอลัมน์อาจเป็นได้ทั้ง priority หรือหมวดธุรกิจ
-  chips='<span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span>'+chips;
-  // chip หมวดธุรกิจ — กดเพื่อเปลี่ยนหมวดได้ตรงนี้เลย ไม่ต้องลาก
-  var ndCatIcons={'revenue':'💰','ops':'🏢','cost':'📉','brand':'🎨','other':'🗂️'};
-  var ndCatNow=t.category||''; // ไม่มีหมวด ให้เป็นค่าว่างจริงๆ ไม่ดันเป็น ops
-  chips+='<span class="nd-cat-chip" data-catid="'+t.id+'" data-catnow="'+ndCatNow+'" onclick="openCatPicker(this.dataset.catid,this.dataset.catnow)">'+(ndCatNow?(ndCatIcons[ndCatNow]||'🗂️'):'❓')+' ▾</span>';
 
-  var h='<div class="nd-c-item" id="nd-row-'+t.id+'" data-ndid="'+t.id+'" data-ndpri="'+t.priority+'" data-ndcat="'+ndCatNow+'" style="background:'+ndGradient(t.priority)+'">';
+  var h='<div class="nd-c-item" id="nd-row-'+t.id+'" data-ndid="'+t.id+'" data-ndpri="'+t.priority+'" style="background:'+ndGradient(t.priority)+'">';
   h+='<div class="nd-c-top">';
-  h+='<span class="nd-c-handle" title="ลากเพื่อเปลี่ยนคอลัมน์">⠿</span>';
+  h+='<span class="nd-c-handle" title="ลากเพื่อเปลี่ยน priority">⠿</span>';
   h+='<div class="nd-c-name">'+t.name+'</div>';
   h+='</div>';
   if(notePreview)h+='<div class="nd-c-note">'+notePreview+'</div>';
@@ -1653,16 +1523,7 @@ function ndShouldShow(t){
   // มีวันแล้ว -> โชว์เฉพาะที่ "ยังไม่ถึง" (upcoming) เท่านั้น เพราะ overdue/ongoing/วันนี้ ไปอยู่หน้า Main แล้ว ไม่ต้องซ้ำ
   return getStatus(t)==='upcoming';
 }
-var ndViewMode='priority'; // 'priority' หรือ 'category'
-function ndShowView(mode){
-  ndViewMode=mode;
-  document.getElementById('nd-board-priority').style.display=mode==='priority'?'grid':'none';
-  document.getElementById('nd-board-category').style.display=mode==='category'?'grid':'none';
-  document.getElementById('nd-tab-priority').classList.toggle('nd-viewtab-active',mode==='priority');
-  document.getElementById('nd-tab-category').classList.toggle('nd-viewtab-active',mode==='category');
-}
 function renderNDColumnsFromCache(){
-  // บอร์ดที่ 1: เรียงตามความสำคัญ
   ['High','Medium','Low'].forEach(function(pri){
     var id=pri==='High'?'nd-high':pri==='Medium'?'nd-med':'nd-low';
     var list=noDateTasks.filter(function(t){return t.priority===pri&&ndShouldShow(t);});
@@ -1670,28 +1531,11 @@ function renderNDColumnsFromCache(){
       var ad=a.actionDate||'9999-99-99', bd=b.actionDate||'9999-99-99';
       return ad<bd?-1:ad>bd?1:0;
     });
-    var h='';
+    var col=priCol(pri),h='';
     if(!list.length){
       h='<div style="color:#bbb;font-size:12px;padding:14px;text-align:center;border:.5px dashed #e0e0e0;border-radius:8px">ไม่มีงาน</div>';
     } else {
-      list.forEach(function(t){h+=ndCardHtml(t,priCol(pri));});
-    }
-    var el=document.getElementById(id);
-    if(el)el.innerHTML=h;
-  });
-  // บอร์ดที่ 2: เรียงตามหมวดธุรกิจ
-  ['revenue','ops','cost','brand','other',''].forEach(function(cat){
-    var id=cat===''?'nd-none':'nd-'+cat;
-    var list=noDateTasks.filter(function(t){return (t.category||'')===cat&&ndShouldShow(t);});
-    list.sort(function(a,b){
-      var ad=a.actionDate||'9999-99-99', bd=b.actionDate||'9999-99-99';
-      return ad<bd?-1:ad>bd?1:0;
-    });
-    var h='';
-    if(!list.length){
-      h='<div style="color:#bbb;font-size:12px;padding:14px;text-align:center;border:.5px dashed #e0e0e0;border-radius:8px">ไม่มีงาน</div>';
-    } else {
-      list.forEach(function(t){h+=ndCardHtml(t,priCol(t.priority));});
+      list.forEach(function(t){h+=ndCardHtml(t,col);});
     }
     var el=document.getElementById(id);
     if(el)el.innerHTML=h;
@@ -1699,7 +1543,7 @@ function renderNDColumnsFromCache(){
   attachNDDragOnce();
 }
 function renderNDTasks(){
-  ['nd-high','nd-med','nd-low','nd-revenue','nd-ops','nd-cost','nd-brand','nd-other','nd-none'].forEach(function(eid){
+  ['nd-high','nd-med','nd-low'].forEach(function(eid){
     var el=document.getElementById(eid);
     if(el)el.innerHTML='<div class="ld" style="padding:12px 0;font-size:12px">⏳</div>';
   });
@@ -1708,33 +1552,8 @@ function renderNDTasks(){
     renderNDColumnsFromCache();
   });
 }
-function openCatPicker(taskId,currentCat){
-  var cats=[['revenue','💰 สร้างรายได้'],['ops','🏢 ระบบหลังบ้าน'],['cost','📉 ลดต้นทุน/Loss'],['brand','🎨 Brand & Marketing'],['other','🗂️ อื่นๆ'],['','❓ ไม่มีหมวดหมู่']];
-  var h='<div class="modal-title">เปลี่ยนหมวดธุรกิจ <button class="modal-x" onclick="closeModal()">×</button></div>';
-  h+='<div style="display:flex;flex-direction:column;gap:8px">';
-  cats.forEach(function(c){
-    var isCur=c[0]===currentCat;
-    h+='<button onclick="pickCategory(\''+taskId+'\',\''+c[0]+'\')" style="text-align:left;padding:12px 14px;border-radius:10px;border:'+(isCur?'2px solid #111':'.5px solid #e9e7e2')+';background:'+(isCur?'#f7f6f3':'#fff')+';font-size:13px;font-weight:600;cursor:pointer">'+c[1]+(isCur?' &nbsp;✓':'')+'</button>';
-  });
-  h+='</div>';
-  showModal(h);
-}
-function pickCategory(taskId,newCat){
-  var t=noDateTasks.find(function(x){return x.id===taskId;});
-  if(t){
-    t.category=newCat;
-    renderNDColumnsFromCache();
-  }
-  closeModal();
-  showToast(newCat?'✅ เปลี่ยนหมวดแล้ว':'✅ ล้างหมวดแล้ว');
-  apiS({action:'setTaskCategory',id:taskId,category:newCat});
-}
-/* ===== ลากการ์ดข้ามคอลัมน์ — เปลี่ยน priority หรือหมวดธุรกิจ ขึ้นอยู่กับบอร์ดที่กำลังดูอยู่ (รองรับมือถือด้วย Pointer Events) ===== */
+/* ===== ลากการ์ดข้ามคอลัมน์เพื่อเปลี่ยน priority (รองรับมือถือ/ทัชสกรีนด้วย Pointer Events) ===== */
 var _ndDrag=null;
-var ND_PRI_COLS={'nd-high':'High','nd-med':'Medium','nd-low':'Low'};
-var ND_CAT_COLS={'nd-revenue':'revenue','nd-ops':'ops','nd-cost':'cost','nd-brand':'brand','nd-other':'other','nd-none':''};
-var ND_CAT_LABELS={'revenue':'สร้างรายได้','ops':'ระบบหลังบ้าน','cost':'ลดต้นทุน/Loss','brand':'Brand & Marketing','other':'อื่นๆ','':'ไม่มีหมวดหมู่'};
-function ndActiveColMap(){return ndViewMode==='category'?ND_CAT_COLS:ND_PRI_COLS;}
 function attachNDDragOnce(){
   var pg=document.getElementById('page-tasks');
   if(!pg||pg._ndDragAttached)return;
@@ -1756,7 +1575,7 @@ function attachNDDragOnce(){
     card.classList.add('nd-dragging-src');
     _ndDrag={
       id:card.dataset.ndid,
-      fromVal:ndViewMode==='category'?card.dataset.ndcat:card.dataset.ndpri,
+      fromPri:card.dataset.ndpri,
       ghost:ghost,
       card:card,
       offX:e.clientX-rect.left,
@@ -1770,7 +1589,7 @@ function ndDragMove(e){
   if(!_ndDrag)return;
   _ndDrag.ghost.style.left=(e.clientX-_ndDrag.offX)+'px';
   _ndDrag.ghost.style.top=(e.clientY-_ndDrag.offY)+'px';
-  Object.keys(ndActiveColMap()).forEach(function(colId){
+  ['nd-high','nd-med','nd-low'].forEach(function(colId){
     var colEl=document.getElementById(colId);
     if(!colEl)return;
     var r=colEl.getBoundingClientRect();
@@ -1782,35 +1601,27 @@ function ndDragEnd(e){
   if(!_ndDrag)return;
   document.removeEventListener('pointermove',ndDragMove);
   document.removeEventListener('pointerup',ndDragEnd);
-  var map=ndActiveColMap();
-  var targetVal=null, foundCol=false;
+  var map={'nd-high':'High','nd-med':'Medium','nd-low':'Low'};
+  var targetPri=null;
   Object.keys(map).forEach(function(colId){
     var colEl=document.getElementById(colId);
     if(!colEl)return;
     var r=colEl.getBoundingClientRect();
     if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
-      targetVal=map[colId];
-      foundCol=true;
+      targetPri=map[colId];
     }
     colEl.classList.remove('nd-col-dragover');
   });
   _ndDrag.ghost.remove();
   if(_ndDrag.card)_ndDrag.card.classList.remove('nd-dragging-src');
-  if(foundCol&&targetVal!==_ndDrag.fromVal){
+  if(targetPri&&targetPri!==_ndDrag.fromPri){
     var id=_ndDrag.id;
     var t=noDateTasks.find(function(x){return x.id===id;});
     if(t){
-      if(ndViewMode==='category'){
-        t.category=targetVal;
-        renderNDColumnsFromCache();
-        showToast(targetVal?('✅ ย้ายไปหมวด '+(ND_CAT_LABELS[targetVal]||targetVal)+' แล้ว'):'✅ ล้างหมวดแล้ว');
-        apiS({action:'setTaskCategory',id:id,category:targetVal});
-      } else {
-        t.priority=targetVal;
-        renderNDColumnsFromCache();
-        showToast('✅ เปลี่ยนเป็น '+targetVal+' แล้ว');
-        apiS({action:'editTask',id:id,priority:targetVal});
-      }
+      t.priority=targetPri;
+      renderNDColumnsFromCache();
+      showToast('✅ เปลี่ยนเป็น '+targetPri+' แล้ว');
+      apiS({action:'editTask',id:id,priority:targetPri});
     }
   }
   _ndDrag=null;
@@ -2124,229 +1935,6 @@ function init(){
   },3000);
   restoreLastTab(); // กลับไปหน้าที่เปิดอยู่ล่าสุดก่อน reload (ไม่ใช่ Main เสมอ)
 }
-/* ================= MY MAP — freeform canvas (nodes + connector lines), เก็บข้อมูลใน Notion ================= */
-var mmData={nodes:[],edges:[]};
-var mmLoaded=false;
-var mmScale=1, mmPanX=40, mmPanY=40;
-var mmConnectMode=false, mmConnectFrom=null;
-var mmSaveTimer=null;
-var mmNodeColors=['#FFF8D6','#FFE3E0','#E3F0FF','#E3F8E8','#F0E3FF'];
-
-function renderMyMap(){
-  if(mmLoaded){ mmAttachCanvasEvents(); return; }
-  var st=document.getElementById('mm-savestatus'); if(st)st.textContent='⏳ กำลังโหลด...';
-  api({action:'getMyMap'},function(d){
-    mmLoaded=true;
-    try{ mmData=(d&&d.json)?JSON.parse(d.json):{nodes:[],edges:[]}; }catch(err){ mmData={nodes:[],edges:[]}; }
-    if(!mmData.nodes)mmData.nodes=[];
-    if(!mmData.edges)mmData.edges=[];
-    mmRenderAll();
-    mmAttachCanvasEvents();
-    if(st)st.textContent='บันทึกแล้ว';
-  });
-}
-function mmApplyTransform(){
-  var t='translate('+mmPanX+'px,'+mmPanY+'px) scale('+mmScale+')';
-  var w=document.getElementById('mm-world'), s=document.getElementById('mm-svg');
-  if(w)w.style.transform=t; if(s)s.style.transform=t;
-}
-function mmZoom(delta){ mmScale=Math.max(.3,Math.min(2.2,mmScale+delta)); mmApplyTransform(); }
-function mmResetView(){ mmScale=1; mmPanX=40; mmPanY=40; mmApplyTransform(); }
-function mmRenderAll(){
-  var world=document.getElementById('mm-world'); if(!world)return;
-  var h='';
-  mmData.nodes.forEach(function(n){
-    h+='<div class="mymap-node" id="mm-node-'+n.id+'" data-nid="'+n.id+'" style="left:'+n.x+'px;top:'+n.y+'px;width:'+(n.w||170)+'px;'+(n.h?('height:'+n.h+'px;'):'')+'background:'+(n.color||'#FFF8D6')+'">';
-    h+='<div class="mymap-node-text" contenteditable="true" data-nid="'+n.id+'">'+(n.text||'')+'</div>';
-    h+='<div class="mymap-node-del" data-nid="'+n.id+'">×</div>';
-    h+='<div class="mymap-node-pri">';
-    mmNodeColors.forEach(function(c){ h+='<span style="background:'+c+'" data-nid="'+n.id+'" data-color="'+c+'"></span>'; });
-    h+='</div>';
-    h+='<div class="mymap-node-resize" data-nid="'+n.id+'">⌟</div>';
-    h+='</div>';
-  });
-  world.innerHTML=h;
-  mmRenderEdges();
-  mmApplyTransform();
-}
-function mmRenderEdges(){
-  var svg=document.getElementById('mm-svg'); if(!svg)return;
-  var h='<defs><marker id="mmArrow" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#a8a4ee"/></marker></defs>';
-  mmData.edges.forEach(function(ed){
-    var a=mmData.nodes.find(function(n){return n.id===ed.from;});
-    var b=mmData.nodes.find(function(n){return n.id===ed.to;});
-    if(!a||!b)return;
-    var ah=document.getElementById('mm-node-'+a.id), bh=document.getElementById('mm-node-'+b.id);
-    var aw=ah?ah.offsetWidth:(a.w||170), ahh=ah?ah.offsetHeight:70;
-    var bw=bh?bh.offsetWidth:(b.w||170), bhh=bh?bh.offsetHeight:70;
-    var ax=a.x+aw/2, ay=a.y+ahh/2, bx=b.x+bw/2, by=b.y+bhh/2;
-    h+='<line x1="'+ax+'" y1="'+ay+'" x2="'+bx+'" y2="'+by+'" stroke="#cfc9f5" stroke-width="3" marker-end="url(#mmArrow)" style="pointer-events:auto;cursor:pointer" data-edgeid="'+ed.id+'"/>';
-  });
-  svg.innerHTML=h;
-}
-function mmScheduleSave(){
-  var st=document.getElementById('mm-savestatus'); if(st)st.textContent='⏳ กำลังบันทึก...';
-  if(mmSaveTimer)clearTimeout(mmSaveTimer);
-  mmSaveTimer=setTimeout(mmSaveNow,900);
-}
-function mmSaveNow(){
-  var json=JSON.stringify(mmData);
-  var CHUNK=700;
-  var chunks=[]; for(var i=0;i<json.length;i+=CHUNK)chunks.push(json.substring(i,i+CHUNK));
-  if(chunks.length===0)chunks=[''];
-  chunks.forEach(function(c,idx){
-    var img=new Image();
-    img.src=GAS+'?action=saveMyMap&data='+encodeURIComponent(c)+'&chunkIdx='+idx+'&chunkTotal='+chunks.length;
-  });
-  var st=document.getElementById('mm-savestatus');
-  if(st)setTimeout(function(){st.textContent='บันทึกแล้ว';},600);
-}
-function mmAddNode(){
-  var vp=document.getElementById('mm-viewport');
-  var cx=(vp.clientWidth/2 - mmPanX)/mmScale - 85;
-  var cy=(vp.clientHeight/2 - mmPanY)/mmScale - 35;
-  var id='n'+Date.now()+Math.floor(Math.random()*999);
-  mmData.nodes.push({id:id,x:Math.max(10,cx),y:Math.max(10,cy),w:170,text:'',color:'#FFF8D6'});
-  mmRenderAll();
-  mmScheduleSave();
-  setTimeout(function(){
-    var el=document.querySelector('.mymap-node-text[data-nid="'+id+'"]');
-    if(el){el.focus();}
-  },60);
-}
-function mmDelNode(id){
-  mmData.nodes=mmData.nodes.filter(function(n){return n.id!==id;});
-  mmData.edges=mmData.edges.filter(function(ed){return ed.from!==id&&ed.to!==id;});
-  mmRenderAll();
-  mmScheduleSave();
-}
-function mmToggleConnectMode(){
-  mmConnectMode=!mmConnectMode;
-  mmConnectFrom=null;
-  document.getElementById('mm-connect-btn').classList.toggle('on',mmConnectMode);
-  document.querySelectorAll('.mymap-node').forEach(function(el){el.classList.remove('mm-connect-src');});
-  showToast(mmConnectMode?'🔗 แตะกล่อง 2 อันเพื่อเชื่อมเส้น':'ปิดโหมดเชื่อมเส้นแล้ว');
-}
-var _mmDrag=null, _mmPan=null, _mmResize=null;
-function mmAttachCanvasEvents(){
-  var vp=document.getElementById('mm-viewport');
-  if(!vp||vp._mmAttached)return;
-  vp._mmAttached=true;
-
-  vp.addEventListener('pointerdown',function(e){
-    var delBtn=e.target.closest('.mymap-node-del');
-    if(delBtn){ mmDelNode(delBtn.dataset.nid); return; }
-    var resizeHandle=e.target.closest('.mymap-node-resize');
-    if(resizeHandle){
-      var rnode=resizeHandle.closest('.mymap-node');
-      e.preventDefault();
-      var rrect=rnode.getBoundingClientRect();
-      _mmResize={id:resizeHandle.dataset.nid,node:rnode,startW:rrect.width/mmScale,startH:rrect.height/mmScale,startX:e.clientX,startY:e.clientY};
-      document.addEventListener('pointermove',mmResizeMove);
-      document.addEventListener('pointerup',mmResizeEnd);
-      return;
-    }
-    var swatch=e.target.closest('.mymap-node-pri span');
-    if(swatch){
-      var n=mmData.nodes.find(function(x){return x.id===swatch.dataset.nid;});
-      if(n){ n.color=swatch.dataset.color; mmRenderAll(); mmScheduleSave(); }
-      return;
-    }
-    var edgeLine=e.target.closest('line[data-edgeid]');
-    if(edgeLine){
-      mmData.edges=mmData.edges.filter(function(ed){return ed.id!==edgeLine.dataset.edgeid;});
-      mmRenderEdges(); mmScheduleSave();
-      return;
-    }
-    var node=e.target.closest('.mymap-node');
-    if(node){
-      var nid=node.dataset.nid;
-      if(mmConnectMode){
-        if(!mmConnectFrom){
-          mmConnectFrom=nid; node.classList.add('mm-connect-src');
-        } else if(mmConnectFrom!==nid){
-          var exists=mmData.edges.some(function(ed){return (ed.from===mmConnectFrom&&ed.to===nid)||(ed.from===nid&&ed.to===mmConnectFrom);});
-          if(!exists){ mmData.edges.push({id:'e'+Date.now(),from:mmConnectFrom,to:nid}); mmScheduleSave(); }
-          document.querySelectorAll('.mymap-node').forEach(function(el){el.classList.remove('mm-connect-src');});
-          mmConnectFrom=null;
-          mmRenderEdges();
-        }
-        return;
-      }
-      if(e.target.closest('.mymap-node-text'))return; // ปล่อยให้แก้ข้อความตามปกติ ไม่ลาก
-      e.preventDefault();
-      var rect=node.getBoundingClientRect();
-      node.classList.add('mm-dragging');
-      _mmDrag={id:nid,node:node,offX:(e.clientX-rect.left)/mmScale,offY:(e.clientY-rect.top)/mmScale};
-      document.addEventListener('pointermove',mmDragMove);
-      document.addEventListener('pointerup',mmDragEnd);
-      return;
-    }
-    // คลิกพื้นว่าง -> pan
-    if(e.target===vp||e.target.id==='mm-world'||e.target.id==='mm-svg'){
-      _mmPan={startX:e.clientX,startY:e.clientY,panX:mmPanX,panY:mmPanY};
-      document.addEventListener('pointermove',mmPanMove);
-      document.addEventListener('pointerup',mmPanEnd);
-    }
-  });
-
-  vp.addEventListener('focusout',function(e){
-    var t=e.target.closest('.mymap-node-text');
-    if(!t)return;
-    var n=mmData.nodes.find(function(x){return x.id===t.dataset.nid;});
-    if(n){ n.text=t.innerText; mmScheduleSave(); }
-  });
-}
-function mmDragMove(e){
-  if(!_mmDrag)return;
-  var vp=document.getElementById('mm-viewport');
-  var vpRect=vp.getBoundingClientRect();
-  var x=(e.clientX-vpRect.left-mmPanX)/mmScale-_mmDrag.offX;
-  var y=(e.clientY-vpRect.top-mmPanY)/mmScale-_mmDrag.offY;
-  var n=mmData.nodes.find(function(x){return x.id===_mmDrag.id;});
-  if(n){ n.x=Math.max(0,x); n.y=Math.max(0,y); _mmDrag.node.style.left=n.x+'px'; _mmDrag.node.style.top=n.y+'px'; mmRenderEdges(); }
-}
-function mmDragEnd(){
-  if(!_mmDrag)return;
-  _mmDrag.node.classList.remove('mm-dragging');
-  document.removeEventListener('pointermove',mmDragMove);
-  document.removeEventListener('pointerup',mmDragEnd);
-  _mmDrag=null;
-  mmScheduleSave();
-}
-function mmPanMove(e){
-  if(!_mmPan)return;
-  mmPanX=_mmPan.panX+(e.clientX-_mmPan.startX);
-  mmPanY=_mmPan.panY+(e.clientY-_mmPan.startY);
-  mmApplyTransform();
-}
-function mmPanEnd(){
-  document.removeEventListener('pointermove',mmPanMove);
-  document.removeEventListener('pointerup',mmPanEnd);
-  _mmPan=null;
-}
-function mmResizeMove(e){
-  if(!_mmResize)return;
-  var dx=(e.clientX-_mmResize.startX)/mmScale;
-  var dy=(e.clientY-_mmResize.startY)/mmScale;
-  var w=Math.max(110,_mmResize.startW+dx);
-  var h=Math.max(50,_mmResize.startH+dy);
-  var n=mmData.nodes.find(function(x){return x.id===_mmResize.id;});
-  if(n){
-    n.w=w; n.h=h;
-    _mmResize.node.style.width=w+'px';
-    _mmResize.node.style.height=h+'px';
-    mmRenderEdges();
-  }
-}
-function mmResizeEnd(){
-  if(!_mmResize)return;
-  document.removeEventListener('pointermove',mmResizeMove);
-  document.removeEventListener('pointerup',mmResizeEnd);
-  _mmResize=null;
-  mmScheduleSave();
-}
-
 init();
 </script>
 </body>
