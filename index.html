@@ -142,9 +142,18 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .bar{border-radius:3px 3px 0 0;flex:1;min-width:0}
 .bar-lbl{font-size:9px;color:#aaa;text-align:center;margin-top:4px}
 .nd-row{display:flex;align-items:center;gap:10px;padding:10px 13px;background:#fff;border-radius:8px;border:.5px solid var(--border);margin-bottom:6px}
-/* Tasks Kanban Style C */
-.nd-c-item{border-radius:14px;margin-bottom:9px;padding:10px 12px;box-shadow:0 3px 10px rgba(0,0,0,.05);transition:box-shadow .15s;touch-action:pan-y}
-.nd-c-item:hover{box-shadow:0 5px 14px rgba(0,0,0,.09)}
+/* Tasks Kanban Style 2 — Colorful Header Band */
+.tcol{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.05)}
+.tcol-band{padding:14px 16px;color:#fff}
+.tcol-band-row{display:flex;align-items:center;justify-content:space-between}
+.tcol-band-title{font-size:13px;font-weight:800;letter-spacing:.2px}
+.tcol-count{font-size:10.5px;color:rgba(255,255,255,.85);margin-top:3px}
+.tcol-add-btn{background:rgba(255,255,255,.18);border:none;color:#fff;font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:20px;cursor:pointer}
+.tcol-add-btn:hover{background:rgba(255,255,255,.3)}
+.tcol-body{padding:14px}
+.nd-c-item{background:#f9f9f7;border-radius:12px;margin-bottom:9px;padding:11px 12px;transition:background .15s;touch-action:pan-y}
+.nd-c-item:last-child{margin-bottom:0}
+.nd-c-item:hover{background:#f3f2ee}
 .nd-c-item.nd-dragging-src{opacity:.3}
 .nd-c-stripe{width:4px;flex-shrink:0}
 .nd-c-body{display:block}
@@ -154,15 +163,15 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .nd-c-name-wrap{display:contents}
 .nd-c-name{font-size:13px;font-weight:700;color:#222;flex:1;line-height:1.3}
 .nd-c-chips{display:flex;gap:4px;flex-wrap:wrap}
-.nd-c-note{font-size:11px;color:#888;line-height:1.5;margin-bottom:7px;padding:6px 8px;background:rgba(255,255,255,.65);border-radius:6px;border-left:2px solid rgba(0,0,0,.08);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nd-c-note{font-size:11px;color:#888;line-height:1.5;margin-bottom:7px;padding:6px 8px;background:#fff;border-radius:6px;border-left:2px solid rgba(0,0,0,.08);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .nd-c-bottom{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
 .nd-c-meta{font-size:10px;color:#ccc;display:flex;align-items:center;gap:4px}
 .nd-c-acts{display:flex;gap:5px;margin-left:auto;flex-shrink:0}
-.nd-c-btn-date{height:28px;padding:0 12px;border-radius:20px;background:#1c1c1e;color:#fff;border:none;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.nd-c-btn-date{height:26px;padding:0 11px;border-radius:20px;background:#1c1c1e;color:#fff;border:none;cursor:pointer;font-size:9.5px;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
 .nd-c-btn-date:hover{background:#333}
-.nd-c-btn-done{height:28px;padding:0 12px;border-radius:20px;background:#0f7b55;color:#fff;border:none;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.nd-c-btn-done{height:26px;padding:0 11px;border-radius:20px;background:#0f7b55;color:#fff;border:none;cursor:pointer;font-size:9.5px;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
 .nd-c-btn-done:hover{background:#0c6344}
-.nd-c-btn-del{width:28px;height:28px;border-radius:20px;background:#FCEAEA;color:#D6453D;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nd-c-btn-del{width:26px;height:26px;border-radius:20px;background:#FCEAEA;color:#D6453D;border:none;cursor:pointer;font-size:10.5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .nd-c-btn-del:hover{background:#FFCDD2}
 .nd-col-dragover{background:rgba(0,0,0,.035);border-radius:14px;outline:2px dashed #bbb;outline-offset:6px}
 .nd-drag-ghost{position:fixed;z-index:9999;pointer-events:none;opacity:.92;transform:scale(1.03) rotate(-1.5deg);box-shadow:0 14px 34px rgba(0,0,0,.22)}
@@ -473,26 +482,35 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 <div id="page-tasks" class="page">
   <div class="grid3">
-    <div>
-      <div class="sec" style="color:#FF3B30;border-bottom-color:#FFCDD2">
-        <span>🔴 HIGH</span>
-        <button onclick="openAddND('High')" style="padding:5px 12px;background:#FCEAEA;border:none;color:#D6453D;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+    <div class="tcol">
+      <div class="tcol-band" style="background:linear-gradient(135deg,#D6453D,#A8302A)">
+        <div class="tcol-band-row">
+          <div class="tcol-band-title">🔴 HIGH</div>
+          <button class="tcol-add-btn" onclick="openAddND('High')">+ เพิ่ม</button>
+        </div>
+        <div class="tcol-count" id="nd-count-high">กำลังโหลด...</div>
       </div>
-      <div id="nd-high"><div class="ld">⏳</div></div>
+      <div class="tcol-body" id="nd-high"><div class="ld">⏳</div></div>
     </div>
-    <div>
-      <div class="sec" style="color:#FF9500;border-bottom-color:#FAEEDA">
-        <span>🟡 MEDIUM</span>
-        <button onclick="openAddND('Medium')" style="padding:5px 12px;background:#FAEEDA;border:none;color:#BA7517;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+    <div class="tcol">
+      <div class="tcol-band" style="background:linear-gradient(135deg,#BA7517,#8A5710)">
+        <div class="tcol-band-row">
+          <div class="tcol-band-title">🟡 MEDIUM</div>
+          <button class="tcol-add-btn" onclick="openAddND('Medium')">+ เพิ่ม</button>
+        </div>
+        <div class="tcol-count" id="nd-count-med">กำลังโหลด...</div>
       </div>
-      <div id="nd-med"><div class="ld">⏳</div></div>
+      <div class="tcol-body" id="nd-med"><div class="ld">⏳</div></div>
     </div>
-    <div>
-      <div class="sec" style="color:#34C759;border-bottom-color:#EAF3DE">
-        <span>🟢 LOW</span>
-        <button onclick="openAddND('Low')" style="padding:5px 12px;background:#EAF3DE;border:none;color:#1D9E75;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer">+ เพิ่ม</button>
+    <div class="tcol">
+      <div class="tcol-band" style="background:linear-gradient(135deg,#1D9E75,#0f7b55)">
+        <div class="tcol-band-row">
+          <div class="tcol-band-title">🟢 LOW</div>
+          <button class="tcol-add-btn" onclick="openAddND('Low')">+ เพิ่ม</button>
+        </div>
+        <div class="tcol-count" id="nd-count-low">กำลังโหลด...</div>
       </div>
-      <div id="nd-low"><div class="ld">⏳</div></div>
+      <div class="tcol-body" id="nd-low"><div class="ld">⏳</div></div>
     </div>
   </div>
 </div>
@@ -578,43 +596,15 @@ function fmtShort(ds){if(!ds)return'วันนี้';var d=new Date(ds+'T00:0
 function nowS(){var n=new Date();return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');}
 function isNow(s,e){var n=nowS();return n>=s&&n<=e;}
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
-var _apiQueue=[];
-var _apiBusy=false;
-function _apiRunNext(){
-  if(_apiBusy||_apiQueue.length===0)return;
-  _apiBusy=true;
-  var job=_apiQueue.shift();
-  _apiExec(job.p,job.cb,job.retriesLeft);
-}
-function _apiExec(p,cb,retriesLeft){
-  var n='cb_'+Date.now()+'_'+Math.floor(Math.random()*9999);
-  var p2={};for(var k in p)p2[k]=p[k]; // clone กันแก้ object เดิมของผู้เรียกซ้ำ
-  p2.callback=n;
-  var url=GAS+'?'+Object.keys(p2).map(function(k){return k+'='+encodeURIComponent(p2[k]);}).join('&');
-  var s=document.createElement('script');
-  var done=false,to;
-  function finish(d){
-    if(done)return; done=true;
-    clearTimeout(to);
-    delete window[n];
-    if(s.parentNode)s.parentNode.removeChild(s);
-    _apiBusy=false;
-    if(!d&&retriesLeft>0){
-      // โดนบล็อก/หมดเวลา — ลองใหม่อีกครั้งก่อนถือว่าพังจริง (มักเกิดจาก ORB บล็อกตอนยิงซ้อนกันถี่)
-      setTimeout(function(){_apiExec(p,cb,retriesLeft-1);},500);
-      return;
-    }
-    if(cb)cb(d);
-    _apiRunNext();
-  }
-  to=setTimeout(function(){finish(null);},25000);
-  window[n]=function(d){finish(d);};
-  s.onerror=function(){finish(null);};
-  s.src=url;document.head.appendChild(s);
-}
 function api(p,cb){
-  _apiQueue.push({p:p,cb:cb,retriesLeft:2});
-  _apiRunNext();
+  var n='cb_'+Date.now()+'_'+Math.floor(Math.random()*9999);
+  p.callback=n;
+  var url=GAS+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k]);}).join('&');
+  var s=document.createElement('script');
+  var to=setTimeout(function(){delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(null);},15000);
+  window[n]=function(d){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(d);};
+  s.onerror=function(){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(null);};
+  s.src=url;document.head.appendChild(s);
 }
 function apiS(p){var url=GAS+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k]);}).join('&');var i=new Image();i.src=url;}
 // POST สำหรับข้อมูลยาว (note)
@@ -1491,7 +1481,7 @@ function ndCardHtml(t,col){
     }
   }
 
-  var h='<div class="nd-c-item" id="nd-row-'+t.id+'" data-ndid="'+t.id+'" data-ndpri="'+t.priority+'" style="background:'+ndGradient(t.priority)+'">';
+  var h='<div class="nd-c-item" id="nd-row-'+t.id+'" data-ndid="'+t.id+'" data-ndpri="'+t.priority+'">';
   h+='<div class="nd-c-top">';
   h+='<span class="nd-c-handle" title="ลากเพื่อเปลี่ยน priority">⠿</span>';
   h+='<div class="nd-c-name">'+t.name+'</div>';
@@ -1526,6 +1516,7 @@ function ndShouldShow(t){
 function renderNDColumnsFromCache(){
   ['High','Medium','Low'].forEach(function(pri){
     var id=pri==='High'?'nd-high':pri==='Medium'?'nd-med':'nd-low';
+    var countId=pri==='High'?'nd-count-high':pri==='Medium'?'nd-count-med':'nd-count-low';
     var list=noDateTasks.filter(function(t){return t.priority===pri&&ndShouldShow(t);});
     list.sort(function(a,b){
       var ad=a.actionDate||'9999-99-99', bd=b.actionDate||'9999-99-99';
@@ -1539,6 +1530,8 @@ function renderNDColumnsFromCache(){
     }
     var el=document.getElementById(id);
     if(el)el.innerHTML=h;
+    var ce=document.getElementById(countId);
+    if(ce)ce.textContent=list.length+' งาน';
   });
   attachNDDragOnce();
 }
