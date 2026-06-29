@@ -114,10 +114,9 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .rt-card.rt-now{border-color:#111;background:#fafaf9}
 .rt-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .cal-hdr-d{padding:8px;text-align:center;font-size:10px;color:#999;font-weight:700;letter-spacing:.3px}
-.cal-row{position:relative}
-.cal-row-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.cal-barlayer{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none}
-.cal-bar{position:absolute;height:13px;border-radius:6px;color:#fff;font-size:7.5px;font-weight:700;line-height:13px;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.cal-taskzone{display:flex;flex-direction:column;gap:3px;margin-top:3px}
+.cal-tbar{height:14px;border-radius:6px;color:#fff;font-size:7px;font-weight:700;line-height:14px;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.cal-tbridge{position:absolute;top:0;right:-12px;width:18px;height:14px;opacity:.55;z-index:2}
 .cal-cell{background:rgba(255,255,255,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:7px;min-height:88px;cursor:pointer;transition:background .15s;border:1px solid rgba(255,255,255,.7);border-radius:12px;vertical-align:top}
 .cal-cell:hover{background:rgba(255,255,255,.8)}
 .cal-cell.today-c{background:#fff;border:2px solid #1A73E8;box-shadow:0 0 0 3px rgba(26,115,232,.15)}
@@ -472,7 +471,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
           <div class="cal-hdr-d">จ</div><div class="cal-hdr-d">อ</div><div class="cal-hdr-d">พ</div>
           <div class="cal-hdr-d">พฤ</div><div class="cal-hdr-d">ศ</div><div class="cal-hdr-d">ส</div><div class="cal-hdr-d">อา</div>
         </div>
-        <div id="cal-grid" style="display:flex;flex-direction:column;gap:6px">
+        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
           <div class="ld" style="grid-column:1/-1">⏳ กำลังโหลด...</div>
         </div>
       </div>
@@ -1318,93 +1317,35 @@ function renderCal(){
   var first=new Date(calY,calMo,1).getDay();first=first===0?6:first-1;
   var cells=[];for(var i=0;i<first;i++)cells.push(null);for(var d=1;d<=dim;d++)cells.push(calY+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0'));
   while(cells.length%7!==0)cells.push(null);
-  var weeks=[];for(var w=0;w<cells.length;w+=7)weeks.push(cells.slice(w,w+7));
-  var gridFirstDate=new Date(calY,calMo,1-first);
   var h='';
-  weeks.forEach(function(week,wi){
-    h+='<div class="cal-row" id="cal-row-'+wi+'">';
-    h+='<div class="cal-row-cells" id="cal-row-cells-'+wi+'">';
-    week.forEach(function(ds){
-      if(!ds){h+='<div style="background:#fafaf9;border:.5px solid #f0f0f0;min-height:88px"></div>';return;}
-      var dn=parseInt(ds.split('-')[2]),isT=ds===TODAY_STR,isPast=ds<TODAY_STR,isSel=ds===calSel;
-      var cls='cal-cell'+(isT?' today-c':isPast?' past-c':'')+(isSel?' sel-c':'');
-      h+='<div class="'+cls+'" onclick="calSelect(\''+ds+'\')"><div class="cal-dn'+(isT?' today-n':'')+'">'+dn+'</div><div id="cc-'+ds+'" style="margin-top:2px">'+cellChips(ds)+'</div></div>';
-    });
-    h+='</div>';
-    h+='<div class="cal-barlayer" id="cal-barlayer-'+wi+'"></div>';
-    h+='</div>';
+  cells.forEach(function(ds){
+    if(!ds){h+='<div style="background:#fafaf9;border:.5px solid #f0f0f0;min-height:88px"></div>';return;}
+    var dn=parseInt(ds.split('-')[2]),isT=ds===TODAY_STR,isPast=ds<TODAY_STR,isSel=ds===calSel;
+    var cls='cal-cell'+(isT?' today-c':isPast?' past-c':'')+(isSel?' sel-c':'');
+    h+='<div class="'+cls+'" onclick="calSelect(\''+ds+'\')"><div class="cal-dn'+(isT?' today-n':'')+'">'+dn+'</div><div id="ct-'+ds+'">'+cellTaskZone(ds)+'</div><div id="cc-'+ds+'">'+cellChips(ds)+'</div></div>';
   });
   document.getElementById('cal-grid').innerHTML=h;
-  weeks.forEach(function(week,wi){
-    var rowStart=new Date(gridFirstDate.getFullYear(),gridFirstDate.getMonth(),gridFirstDate.getDate()+wi*7);
-    var rowEnd=new Date(rowStart.getFullYear(),rowStart.getMonth(),rowStart.getDate()+6);
-    var rowStartDs=rowStart.getFullYear()+'-'+String(rowStart.getMonth()+1).padStart(2,'0')+'-'+String(rowStart.getDate()).padStart(2,'0');
-    var rowEndDs=rowEnd.getFullYear()+'-'+String(rowEnd.getMonth()+1).padStart(2,'0')+'-'+String(rowEnd.getDate()).padStart(2,'0');
-    week.filter(Boolean).forEach(function(ds){loadCalDay(ds,wi,week,rowStartDs,rowEndDs);});
-  });
+  cells.filter(Boolean).forEach(function(ds){loadCalDay(ds);});
   renderCalDetail(calSel);
 }
-function loadCalDay(ds,weekIdx,week,rowStartDs,rowEndDs){
-  var needT=calCache.t[ds]===undefined,needE=calCache.e[ds]===undefined;
-  if(needT)api({action:'getTasks',date:ds},function(d){calCache.t[ds]=d?d.tasks||[]:[]; var el=document.getElementById('cc-'+ds);if(el)el.innerHTML=cellChips(ds);tryRenderRowBars(weekIdx,week,rowStartDs,rowEndDs);});
-  if(needE)api({action:'getCalendarEvents',date:ds},function(d){calCache.e[ds]=d?d.events||[]:[]; var el=document.getElementById('cc-'+ds);if(el)el.innerHTML=cellChips(ds);});
-  if(!needT)tryRenderRowBars(weekIdx,week,rowStartDs,rowEndDs);
+function loadCalDay(ds){
+  if(calCache.t[ds]===undefined)api({action:'getTasks',date:ds},function(d){calCache.t[ds]=d?d.tasks||[]:[]; var elT=document.getElementById('ct-'+ds);if(elT)elT.innerHTML=cellTaskZone(ds);});
+  if(calCache.e[ds]===undefined)api({action:'getCalendarEvents',date:ds},function(d){calCache.e[ds]=d?d.events||[]:[]; var elC=document.getElementById('cc-'+ds);if(elC)elC.innerHTML=cellChips(ds);});
 }
-/* ===== Gantt-style bar layer: คำนวณ+วาดแถบงานที่มีช่วงวันคร่อมหลายวันในแถวสัปดาห์เดียวกัน ===== */
-function calColWidthCalc(){return 'calc((100% - 36px)/7)';} // 6 ช่อง gap 6px = 36px
-function calBarLeft(col){return 'calc('+calColWidthCalc()+' * '+col+' + '+(col*6)+'px)';}
-function calBarWidth(c1,c2){var span=c2-c1+1;return 'calc('+calColWidthCalc()+' * '+span+' + '+((span-1)*6)+'px)';}
-function tryRenderRowBars(weekIdx,week,rowStartDs,rowEndDs){
-  if(!week)return;
-  // ต้องมี calCache.t ครบทุกวันที่ไม่ใช่ null ในแถวนี้ก่อนค่อยวาด
-  var ready=week.every(function(ds){return !ds||calCache.t[ds]!==undefined;});
-  if(!ready)return;
-  var taskCols={}; // taskId -> {task, cols:[colIdx,...]}
-  week.forEach(function(ds,col){
-    if(!ds)return;
-    (calCache.t[ds]||[]).forEach(function(t){
-      if(t.done)return; // งานเสร็จแล้วไม่ต้องโชว์เป็นแถบ
-      if(!t.actionDate&&!t.endDate)return; // ไม่มีวันเลย ไม่ต้องวาด (ไม่ควรเกิดเพราะ getTasks กรองมาแล้ว)
-      if(!taskCols[t.id])taskCols[t.id]={task:t,cols:[]};
-      taskCols[t.id].cols.push(col);
-    });
+/* ===== แถบงานต่อวัน + สะพานสีจางเชื่อมไปวันถัดไปถ้างานยังไม่จบ (Variant 3) ===== */
+function cellTaskZone(ds){
+  var tasks=(calCache.t[ds]||[]).filter(function(t){return !t.done&&(t.actionDate||t.endDate);});
+  if(!tasks.length)return '';
+  var h='<div class="cal-taskzone">';
+  tasks.forEach(function(t){
+    var col=priCol(t.priority);
+    var taskEnd=t.endDate||t.actionDate;
+    var continuesNext=taskEnd&&taskEnd>ds; // ยังไม่ถึงวันสุดท้ายของงาน -> พรุ่งนี้ก็ยังมีงานนี้อยู่
+    var sn=(t.name||'').replace(/'/g,"'");
+    h+='<div class="cal-tbar" data-tid="'+t.id+'" onclick="event.stopPropagation();calBarClick(this.dataset.tid)" style="background:'+col+'">'+t.name+(continuesNext?'<span class="cal-tbridge" style="background:'+col+'"></span>':'')+'</div>';
   });
-  var bars=Object.keys(taskCols).map(function(id){
-    var c=taskCols[id].cols;
-    return {task:taskCols[id].task,c1:Math.min.apply(null,c),c2:Math.max.apply(null,c)};
-  });
-  bars.sort(function(a,b){return a.c1-b.c1;});
-  var lanes=[]; // lanes[i] = c2 ของ bar ล่าสุดใน lane นั้น
-  bars.forEach(function(b){
-    var laneIdx=lanes.findIndex(function(lastC2){return lastC2<b.c1;});
-    if(laneIdx===-1){laneIdx=lanes.length;lanes.push(b.c2);}
-    else{lanes[laneIdx]=b.c2;}
-    b.lane=laneIdx;
-  });
-  var maxLane=lanes.length;
-  var BAR_ZONE_TOP=20,BAR_H=14;
-  var h='';
-  bars.forEach(function(b){
-    var col=priCol(b.task.priority);
-    var top=BAR_ZONE_TOP+b.lane*BAR_H;
-    var taskStart=b.task.actionDate||b.task.endDate, taskEnd=b.task.endDate||b.task.actionDate;
-    var leftCut=rowStartDs&&taskStart&&taskStart<rowStartDs;
-    var rightCut=rowEndDs&&taskEnd&&taskEnd>rowEndDs;
-    var br=(leftCut?'3px':'7px')+' '+(rightCut?'3px':'7px')+' '+(rightCut?'3px':'7px')+' '+(leftCut?'3px':'7px');
-    var label=(leftCut?'‹ ':'')+b.task.name+(rightCut?' ›':'');
-    h+='<div class="cal-bar" data-tid="'+b.task.id+'" onclick="event.stopPropagation();calBarClick(this.dataset.tid)" style="left:'+calBarLeft(b.c1)+';width:'+calBarWidth(b.c1,b.c2)+';top:'+top+'px;background:'+col+';border-radius:'+br+'">'+label+'</div>';
-  });
-  var bl=document.getElementById('cal-barlayer-'+weekIdx);
-  if(bl)bl.innerHTML=h;
-  // จองพื้นที่ "โซนแถบงาน" ไว้แน่นอนใต้เลขวันที่ ป้องกันบังนัดหมาย — เผื่อพื้นที่เท่ากันทั้งแถว
-  var zoneH=maxLane>0?(BAR_ZONE_TOP-2+maxLane*BAR_H):2;
-  week.forEach(function(ds){
-    if(!ds)return;
-    var cc=document.getElementById('cc-'+ds);
-    if(cc)cc.style.marginTop=zoneH+'px';
-  });
-  var rc=document.getElementById('cal-row-cells-'+weekIdx);
-  if(rc)rc.style.minHeight=maxLane>0?(74+zoneH)+'px':'88px';
+  h+='</div>';
+  return h;
 }
 function calBarClick(taskId){
   var t=null;
