@@ -114,16 +114,18 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .rt-card.rt-now{border-color:#111;background:#fafaf9}
 .rt-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .cal-hdr-d{padding:8px;text-align:center;font-size:10px;color:#999;font-weight:700;letter-spacing:.3px}
+.cal-row{position:relative}
+.cal-row-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-barlayer{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none}
+.cal-bar{position:absolute;height:13px;border-radius:6px;color:#fff;font-size:7.5px;font-weight:700;line-height:13px;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.18)}
 .cal-cell{background:rgba(255,255,255,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:7px;min-height:88px;cursor:pointer;transition:background .15s;border:1px solid rgba(255,255,255,.7);border-radius:12px;vertical-align:top}
 .cal-cell:hover{background:rgba(255,255,255,.8)}
-.cal-cell.today-c{background:rgba(28,28,30,.88);border-color:transparent}
+.cal-cell.today-c{background:#fff;border:2px solid #1A73E8;box-shadow:0 0 0 3px rgba(26,115,232,.15)}
 .cal-cell.past-c{background:rgba(255,255,255,.3)}
 .cal-cell.sel-c{box-shadow:0 0 0 2px #1c1c1e}
 .cal-dn{font-size:11px;font-weight:600;color:#888;margin-bottom:3px}
-.cal-cell.today-c .cal-dn{color:rgba(255,255,255,.5)}
-.cal-dn.today-n{background:#fff;color:#1c1c1e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;line-height:1}
+.cal-dn.today-n{background:#1A73E8;color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;line-height:1}
 .chip{font-size:7px;padding:2px 4px;border-radius:4px;margin-bottom:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.4;display:block;background:rgba(57,73,171,.14)!important;color:#3949AB!important}
-.cal-cell.today-c .chip{background:rgba(255,255,255,.18)!important;color:#fff!important}
 .cal-btn{padding:6px 14px;background:rgba(255,255,255,.6);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.7);border-radius:20px;cursor:pointer;font-size:12px;color:#555;font-weight:600}
 .cal-btn:hover{background:rgba(255,255,255,.85)}
 .cal-btn-today{padding:6px 14px;background:rgba(28,28,30,.9);backdrop-filter:blur(6px);border:none;border-radius:20px;cursor:pointer;font-size:12px;color:#fff;font-weight:700}
@@ -470,7 +472,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
           <div class="cal-hdr-d">จ</div><div class="cal-hdr-d">อ</div><div class="cal-hdr-d">พ</div>
           <div class="cal-hdr-d">พฤ</div><div class="cal-hdr-d">ศ</div><div class="cal-hdr-d">ส</div><div class="cal-hdr-d">อา</div>
         </div>
-        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+        <div id="cal-grid" style="display:flex;flex-direction:column;gap:6px">
           <div class="ld" style="grid-column:1/-1">⏳ กำลังโหลด...</div>
         </div>
       </div>
@@ -1316,30 +1318,85 @@ function renderCal(){
   var first=new Date(calY,calMo,1).getDay();first=first===0?6:first-1;
   var cells=[];for(var i=0;i<first;i++)cells.push(null);for(var d=1;d<=dim;d++)cells.push(calY+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0'));
   while(cells.length%7!==0)cells.push(null);
+  var weeks=[];for(var w=0;w<cells.length;w+=7)weeks.push(cells.slice(w,w+7));
   var h='';
-  cells.forEach(function(ds){
-    if(!ds){h+='<div style="background:#fafaf9;border:.5px solid #f0f0f0;min-height:88px"></div>';return;}
-    var dn=parseInt(ds.split('-')[2]),isT=ds===TODAY_STR,isPast=ds<TODAY_STR,isSel=ds===calSel;
-    var cls='cal-cell'+(isT?' today-c':isPast?' past-c':'')+(isSel?' sel-c':'');
-    h+='<div class="'+cls+'" onclick="calSelect(\''+ds+'\')"><div class="cal-dn'+(isT?' today-n':'')+'">'+dn+'</div><div id="cc-'+ds+'">'+cellChips(ds)+'</div></div>';
+  weeks.forEach(function(week,wi){
+    h+='<div class="cal-row" id="cal-row-'+wi+'">';
+    h+='<div class="cal-row-cells" id="cal-row-cells-'+wi+'">';
+    week.forEach(function(ds){
+      if(!ds){h+='<div style="background:#fafaf9;border:.5px solid #f0f0f0;min-height:88px"></div>';return;}
+      var dn=parseInt(ds.split('-')[2]),isT=ds===TODAY_STR,isPast=ds<TODAY_STR,isSel=ds===calSel;
+      var cls='cal-cell'+(isT?' today-c':isPast?' past-c':'')+(isSel?' sel-c':'');
+      h+='<div class="'+cls+'" onclick="calSelect(\''+ds+'\')"><div class="cal-dn'+(isT?' today-n':'')+'">'+dn+'</div><div id="cc-'+ds+'">'+cellChips(ds)+'</div></div>';
+    });
+    h+='</div>';
+    h+='<div class="cal-barlayer" id="cal-barlayer-'+wi+'"></div>';
+    h+='</div>';
   });
   document.getElementById('cal-grid').innerHTML=h;
-  cells.filter(Boolean).forEach(function(ds){loadCalDay(ds);});
+  weeks.forEach(function(week,wi){week.filter(Boolean).forEach(function(ds){loadCalDay(ds,wi,week);});});
   renderCalDetail(calSel);
 }
-function loadCalDay(ds){
-  if(calCache.t[ds]!==undefined&&calCache.e[ds]!==undefined)return;
-  if(calCache.t[ds]===undefined)api({action:'getTasks',date:ds},function(d){calCache.t[ds]=d?d.tasks||[]:[]; var el=document.getElementById('cc-'+ds);if(el)el.innerHTML=cellChips(ds);});
-  if(calCache.e[ds]===undefined)api({action:'getCalendarEvents',date:ds},function(d){calCache.e[ds]=d?d.events||[]:[]; var el=document.getElementById('cc-'+ds);if(el)el.innerHTML=cellChips(ds);});
+function loadCalDay(ds,weekIdx,week){
+  var needT=calCache.t[ds]===undefined,needE=calCache.e[ds]===undefined;
+  if(needT)api({action:'getTasks',date:ds},function(d){calCache.t[ds]=d?d.tasks||[]:[]; var el=document.getElementById('cc-'+ds);if(el)el.innerHTML=cellChips(ds);tryRenderRowBars(weekIdx,week);});
+  if(needE)api({action:'getCalendarEvents',date:ds},function(d){calCache.e[ds]=d?d.events||[]:[]; var el=document.getElementById('cc-'+ds);if(el)el.innerHTML=cellChips(ds);});
+  if(!needT)tryRenderRowBars(weekIdx,week);
+}
+/* ===== Gantt-style bar layer: คำนวณ+วาดแถบงานที่มีช่วงวันคร่อมหลายวันในแถวสัปดาห์เดียวกัน ===== */
+function calColWidthCalc(){return 'calc((100% - 36px)/7)';} // 6 ช่อง gap 6px = 36px
+function calBarLeft(col){return 'calc('+calColWidthCalc()+' * '+col+' + '+(col*6)+'px)';}
+function calBarWidth(c1,c2){var span=c2-c1+1;return 'calc('+calColWidthCalc()+' * '+span+' + '+((span-1)*6)+'px)';}
+function tryRenderRowBars(weekIdx,week){
+  if(!week)return;
+  // ต้องมี calCache.t ครบทุกวันที่ไม่ใช่ null ในแถวนี้ก่อนค่อยวาด
+  var ready=week.every(function(ds){return !ds||calCache.t[ds]!==undefined;});
+  if(!ready)return;
+  var taskCols={}; // taskId -> {task, cols:[colIdx,...]}
+  week.forEach(function(ds,col){
+    if(!ds)return;
+    (calCache.t[ds]||[]).forEach(function(t){
+      if(t.done)return; // งานเสร็จแล้วไม่ต้องโชว์เป็นแถบ
+      if(!t.actionDate&&!t.endDate)return; // ไม่มีวันเลย ไม่ต้องวาด (ไม่ควรเกิดเพราะ getTasks กรองมาแล้ว)
+      if(!taskCols[t.id])taskCols[t.id]={task:t,cols:[]};
+      taskCols[t.id].cols.push(col);
+    });
+  });
+  var bars=Object.keys(taskCols).map(function(id){
+    var c=taskCols[id].cols;
+    return {task:taskCols[id].task,c1:Math.min.apply(null,c),c2:Math.max.apply(null,c)};
+  });
+  bars.sort(function(a,b){return a.c1-b.c1;});
+  var lanes=[]; // lanes[i] = c2 ของ bar ล่าสุดใน lane นั้น
+  bars.forEach(function(b){
+    var laneIdx=lanes.findIndex(function(lastC2){return lastC2<b.c1;});
+    if(laneIdx===-1){laneIdx=lanes.length;lanes.push(b.c2);}
+    else{lanes[laneIdx]=b.c2;}
+    b.lane=laneIdx;
+  });
+  var maxLane=lanes.length;
+  var h='';
+  bars.forEach(function(b){
+    var col=priCol(b.task.priority);
+    var top=24+b.lane*15;
+    h+='<div class="cal-bar" data-tid="'+b.task.id+'" onclick="event.stopPropagation();calBarClick(this.dataset.tid)" style="left:'+calBarLeft(b.c1)+';width:'+calBarWidth(b.c1,b.c2)+';top:'+top+'px;background:'+col+'">'+b.task.name+'</div>';
+  });
+  var bl=document.getElementById('cal-barlayer-'+weekIdx);
+  if(bl)bl.innerHTML=h;
+  var rc=document.getElementById('cal-row-cells-'+weekIdx);
+  if(rc&&maxLane>1)rc.style.minHeight=(88+(maxLane-1)*15)+'px';
+}
+function calBarClick(taskId){
+  var t=null;
+  Object.keys(calCache.t).forEach(function(ds){(calCache.t[ds]||[]).forEach(function(x){if(x.id===taskId)t=x;});});
+  if(t)showToast((t.name||'')+(t.actionDate?' · '+fmtShort(t.actionDate)+(t.endDate?' – '+fmtShort(t.endDate):''):''));
 }
 function cellChips(ds){
   var events=calCache.e[ds]||[],h='';
-  // แสดงแค่ events — งานไม่แสดงใน cell
   events.slice(0,3).forEach(function(ev){
     h+='<span class="chip" style="background:#dbeafe;color:#1d4ed8">'+ev.start+' '+ev.title+'</span>';
   });
   if(events.length>3)h+='<span style="font-size:7px;color:#aaa">+' +(events.length-3)+'</span>';
-  // แสดง note indicator ถ้ามี
   var hasNote=false;
   try{hasNote=!!localStorage.getItem('cal_note_'+ds);}catch(e){}
   if(hasNote)h+='<span class="chip" style="background:#FFF8EE;color:#854F0B">📝</span>';
