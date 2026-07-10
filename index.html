@@ -1090,7 +1090,11 @@ function tcCard2(t){
 function renderMain(){
   updateStats();
   var od=overdueTasks.filter(function(t){return!t.done;});
-  var todayOnly=todayTasks.filter(function(t){return!t.done&&(getStatus(t)==='today'||(!t.actionDate&&!t.endDate));});
+  var todayOnly=todayTasks.filter(function(t){
+    if(t.done)return false;
+    var st=getStatus(t);
+    return st==='today'||st==='ongoing'||(!t.actionDate&&!t.endDate);
+  });
   var odEl=document.getElementById('main-od');
   var odCombined=od.concat(todayOnly); // รวมงานค้าง+วันนี้ ให้อยู่กริดเดียวกันต่อแถวกันเลย ไม่เสียพื้นที่
   if(odCombined.length){
@@ -1101,7 +1105,7 @@ function renderMain(){
     odEl.innerHTML=h;
   }
   else odEl.innerHTML='';
-  var ongoing=todayTasks.filter(function(t){return!t.done&&getStatus(t)==='ongoing';});
+  var ongoing=todayTasks.filter(function(t){return!t.done&&getStatus(t)==='ongoing'&&(t.actionDate>TODAY_STR);});
   var upcoming=todayTasks.filter(function(t){return!t.done&&getStatus(t)==='upcoming';});
   var done=todayTasks.filter(function(t){return t.done;});
   var h2='';
