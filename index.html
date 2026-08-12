@@ -662,6 +662,8 @@ function rangeBar(t){
   var stBg=status==='overdue'?'#fbe4e4':status==='ongoing'?'#EAF3DE':'#E8EAF6';
   var stCol=status==='overdue'?'#c62828':status==='ongoing'?'#27500A':'#283593';
   var col=status==='overdue'?'#FF3B30':status==='ongoing'?'#34C759':'#5C6BC0';
+  var sn=(t.name||'').replace(/'/g,"'");
+  var editBtn=''; // ปุ่มแก้ไขวันย้ายไปอยู่แถวหัวการ์ดแล้ว ไม่ใช้ใน rangeBar อีกต่อไป
   if(!t.endDate){
     var ad=t.actionDate||TODAY_STR;
     var dAd=new Date(ad+'T00:00:00+07:00');
@@ -1052,9 +1054,13 @@ function tcCard(t,opts){
   var st=getStatus(t),col=priCol(t.priority);
   var sn=(t.name||'').replace(/'/g,"'");
   var isDone=t.done;
+  var hasDates=t.actionDate||t.endDate;
+  var editBtn=(!isDone&&hasDates)?
+    ' <button onclick="editDates(\''+t.id+'\',\''+sn+'\',\''+(t.actionDate||'')+'\',\''+(t.endDate||'')+'\')" '
+    +'style="background:transparent;color:#aaa;font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:5px;border:1px solid #e5e3de;cursor:pointer;white-space:nowrap">✏️ วัน</button>':'';
   var h='<div class="tc" id="tc-'+t.id+'" style="border-left-color:'+col+(isDone?';opacity:.7':'')+'">'+
     '<div class="tc-hdr"><div class="tc-name'+(isDone?' done-name':'')+'">'+t.name+'</div>'+
-    '<div class="tc-acts">'+statusBadge(st,t)+' <span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span></div></div>'+rangeBar(t);
+    '<div class="tc-acts" style="gap:5px">'+editBtn+statusBadge(st,t)+' <span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span></div></div>'+rangeBar(t);
   if(!isDone){
     h+=noteBlock(t);
   } else if(t.note){
@@ -1658,6 +1664,13 @@ function assignDate(id,name){
   window._asgnState={id:id,name:name,mo:TODAY.getMonth(),yr:TODAY.getFullYear(),selStart:'',selEnd:''};
   showModal(asgnRender());
 }
+function editDates(id,name,curStart,curEnd){
+  // เปิด date picker เดิม แต่ pre-fill วันที่ปัจจุบันของงาน
+  var selMo=TODAY.getMonth(),selYr=TODAY.getFullYear();
+  if(curStart){var d=new Date(curStart+'T00:00:00+07:00');selMo=d.getMonth();selYr=d.getFullYear();}
+  window._asgnState={id:id,name:name,mo:selMo,yr:selYr,selStart:curStart||'',selEnd:curEnd||''};
+  showModal(asgnRender());
+}
 function asgnRender(){
   var st=window._asgnState;
   var thM=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
@@ -1739,7 +1752,13 @@ function asgnConfirm(){
 }
 function doAssign(id,date,endDate){
   if(!date){showToast('⚠️ กรุณาเลือกวันเริ่ม');return;}
-  noDateTasks=noDateTasks.filter(function(t){return t.id!==id;});
+  // อัปเดต local cache ทันทีทั้ง todayTasks, overdueTasks, noDateTasks
+  [todayTasks,overdueTasks,noDateTasks].forEach(function(arr){
+    arr.forEach(function(t){
+      if(t.id===id){t.actionDate=date;t.endDate=endDate||'';}
+    });
+  });
+  noDateTasks=noDateTasks.filter(function(t){return t.id!==id;}); // ถ้าเพิ่งใส่วัน ถอดออกจาก no-date list
   var params={action:'setTaskDate',id:id,date:date};
   if(endDate)params.endDate=endDate;
   apiS(params);
@@ -1747,6 +1766,7 @@ function doAssign(id,date,endDate){
   if(endDate)msg+=' – '+fmtThai(endDate);
   showToast(msg+' แล้ว');
   closeModal();
+  renderMain();
   renderNDTasks();
 }
 function doAssignDate(){var id=document.getElementById('as-id').value,d=document.getElementById('as-d').value;if(d)doAssign(id,d);}
