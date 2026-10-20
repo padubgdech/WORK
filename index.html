@@ -87,6 +87,9 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .tc-grid3 .rudy-chip{padding:2px 8px;font-size:8.5px}
 @media(max-width:1100px){.tc-grid3{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.tc-grid3{grid-template-columns:1fr}}
+.timed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
+@media(max-width:1100px){.timed-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.timed-grid{grid-template-columns:1fr}}
 .grid2-hist{display:grid;grid-template-columns:1fr 280px;gap:24px}
 .sec{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#aaa;padding-bottom:8px;margin-top:22px;border-bottom:.5px solid var(--border);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
 .sec:first-child{margin-top:0}
@@ -1272,6 +1275,7 @@ function renderMonthUpcoming(){
   var priLabel={High:'High',Medium:'Medium',Low:'Low'};
   var h='<div class="timed-section">';
   h+='<div class="sec" style="color:#7c3aed;border-bottom-color:#ede9fe"><span>📅 งานกำลังจะเริ่มเดือนนี้ · '+upcoming.length+' งาน</span></div>';
+  h+='<div class="timed-grid">';
   upcoming.forEach(function(t){
     var daysLeft=diffD(TODAY_STR,t.actionDate);
     var badgeTxt=daysLeft===1?'พรุ่งนี้':daysLeft<=7?'อีก '+daysLeft+' วัน':fmtShort(t.actionDate);
@@ -1288,6 +1292,7 @@ function renderMonthUpcoming(){
     h+='</div>';
     h+='</div>';
   });
+  h+='</div>';
   h+='</div>';
   el.innerHTML=h;
 }
