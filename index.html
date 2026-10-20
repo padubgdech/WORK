@@ -294,25 +294,21 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .d-tl-ev-cancel{font-size:10px;padding:3px 8px;background:#fbe4e4;color:#e03e3e;border:.5px solid #facccc;border-radius:5px;cursor:pointer;flex-shrink:0;white-space:nowrap;border:none}
 .ld{text-align:center;padding:32px;color:#bbb;font-size:13px}
 .ev-card{background:#f0f5ff;border-radius:10px;border-left:3px solid #2383e2;padding:12px 14px;margin-bottom:8px}
-/* Timed upcoming section */
+/* Timed upcoming section — Style D: Layered Tag */
 .timed-section{margin-top:18px;margin-bottom:8px}
-.timed-card{display:flex;align-items:center;gap:12px;background:#fff;border-radius:12px;border:.5px solid var(--border);padding:12px 14px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,.05);position:relative;overflow:hidden}
-.timed-card.now-card{border-color:#2383e2;background:#f0f5ff}
-.timed-card.soon-card{border-color:#f59e0b;background:#fffbf0}
-.timed-card.later-card{border-color:#e5e7eb;background:#fafaf9}
-.timed-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.timed-icon.now{background:linear-gradient(135deg,#1A73E8,#4fa3f7)}
-.timed-icon.soon{background:linear-gradient(135deg,#f59e0b,#fbbf24)}
-.timed-icon.later{background:linear-gradient(135deg,#9ca3af,#d1d5db)}
-.timed-body{flex:1;min-width:0}
-.timed-title{font-size:13px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.timed-time{font-size:11px;color:#6b7280;margin-top:2px}
-.timed-badge{flex-shrink:0;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.4px}
-.timed-badge.now{background:#1A73E8;color:#fff}
-.timed-badge.soon{background:#f59e0b;color:#fff}
-.timed-badge.later{background:#e5e7eb;color:#6b7280}
-.timed-pulse{position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#2383e2;animation:tpulse 1.5s ease-in-out infinite}
-@keyframes tpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.timed-card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:8px;overflow:hidden;border:.5px solid var(--border)}
+.timed-stripe{height:3px}
+.timed-inner{padding:10px 13px 11px}
+.timed-tags{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.timed-pri-tag{font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-radius:4px;padding:2px 7px}
+.timed-pri-tag.t-high{background:#fef2f2;color:#dc2626}
+.timed-pri-tag.t-med{background:#fffbeb;color:#d97706}
+.timed-pri-tag.t-low{background:#f0fdf4;color:#059669}
+.timed-days-tag{font-size:9.5px;font-weight:600;color:#6b7280;background:#f3f4f6;border:.5px solid #e5e7eb;border-radius:4px;padding:2px 7px}
+.timed-title{font-size:13.5px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:7px}
+.timed-footer{display:flex;align-items:center;gap:4px;padding-top:7px;border-top:.5px solid var(--border)}
+.timed-date-txt{font-size:11px;color:#6b7280;flex:1}
+.timed-arrow{color:#d1d5db;font-size:14px;margin-left:auto}
 /* NOTE INLINE — Style C: Dark Header */
 .note-section{border-radius:10px;overflow:hidden;margin-bottom:8px;background:#fff;border:.5px solid #e9e7e2;box-shadow:0 4px 16px rgba(0,0,0,.06)}
 .note-lbl-row{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)}
@@ -1271,22 +1267,25 @@ function renderMonthUpcoming(){
   // sort by actionDate
   upcoming.sort(function(a,b){return (a.actionDate||'').localeCompare(b.actionDate||'');});
   if(!upcoming.length){el.innerHTML='';return;}
-  var priCol={High:'#e03e3e',Medium:'#f59e0b',Low:'#0f7b55'};
+  var priStripe={High:'#dc2626',Medium:'#d97706',Low:'#059669'};
+  var priCls={High:'t-high',Medium:'t-med',Low:'t-low'};
+  var priLabel={High:'High',Medium:'Medium',Low:'Low'};
   var h='<div class="timed-section">';
   h+='<div class="sec" style="color:#7c3aed;border-bottom-color:#ede9fe"><span>📅 งานกำลังจะเริ่มเดือนนี้ · '+upcoming.length+' งาน</span></div>';
   upcoming.forEach(function(t){
     var daysLeft=diffD(TODAY_STR,t.actionDate);
-    var col=priCol[t.priority]||'#888';
-    var urgCls=daysLeft<=3?'soon-card':'later-card';
     var badgeTxt=daysLeft===1?'พรุ่งนี้':daysLeft<=7?'อีก '+daysLeft+' วัน':fmtShort(t.actionDate);
-    var badgeCls=daysLeft<=3?'soon':'later';
-    var priLabel=t.priority==='High'?'🔴':t.priority==='Medium'?'🟡':'🟢';
-    h+='<div class="timed-card '+urgCls+'" style="border-left:3px solid '+col+'">';
-    h+='<div class="timed-body">';
-    h+='<div class="timed-title">'+priLabel+' '+t.name+'</div>';
-    h+='<div class="timed-time">📅 เริ่ม '+fmtThai(t.actionDate)+(t.endDate?' → '+fmtShort(t.endDate):'')+'</div>';
+    var pri=t.priority||'Low';
+    var stripeColor=priStripe[pri]||'#9ca3af';
+    var tagCls=priCls[pri]||'t-low';
+    var tagLbl=priLabel[pri]||pri;
+    h+='<div class="timed-card">';
+    h+='<div class="timed-stripe" style="background:'+stripeColor+'"></div>';
+    h+='<div class="timed-inner">';
+    h+='<div class="timed-tags"><span class="timed-pri-tag '+tagCls+'">'+tagLbl+'</span><span class="timed-days-tag">⏰ '+badgeTxt+'</span></div>';
+    h+='<div class="timed-title">'+t.name+'</div>';
+    h+='<div class="timed-footer"><span style="font-size:11px">📅</span><span class="timed-date-txt">เริ่ม '+fmtThai(t.actionDate)+(t.endDate?' → '+fmtShort(t.endDate):'')+'</span><span class="timed-arrow">›</span></div>';
     h+='</div>';
-    h+='<div class="timed-badge '+badgeCls+'">'+badgeTxt+'</div>';
     h+='</div>';
   });
   h+='</div>';
