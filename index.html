@@ -2141,11 +2141,13 @@ function init(){
   document.getElementById('ph-date').textContent='วัน'+thDF[TODAY.getDay()]+' '+TODAY.getDate()+' '+thMF[TODAY.getMonth()]+' '+(TODAY.getFullYear()+543);
   document.getElementById('ph-stats').style.display='flex';
   calCache.t[TODAY_STR]=[];calCache.e[TODAY_STR]=[];
-  // รวม getTasks+getOverdueTasks → getMainData (1 request แทน 2 ลดเวลาโหลดครึ่งนึง)
-  api({action:'getMainData'},function(d){
-    todayTasks=d?d.todayTasks||[]:[]; 
-    overdueTasks=d?d.overdueTasks||[]:[];
+  api({action:'getTasks',date:TODAY_STR},function(d){
+    todayTasks=d?d.tasks||[]:[];
     calCache.t[TODAY_STR]=todayTasks;
+    updateStats();renderMain();
+  });
+  api({action:'getOverdueTasks'},function(d){
+    overdueTasks=d?d.tasks||[]:[];
     updateStats();renderMain();
   });
   api({action:'getCalendarEvents',date:TODAY_STR},function(d){todayEvents=d?d.events||[]:[]; calCache.e[TODAY_STR]=todayEvents; renderEvents();});
