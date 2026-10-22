@@ -1057,6 +1057,29 @@ function nc(cmd,tid){restoreSel(tid);document.execCommand(cmd,false,null);}
 function ncolor(color,tid){restoreSel(tid);document.execCommand('foreColor',false,color);}
 function nfsize(sz,tid){restoreSel(tid);document.execCommand('fontSize',false,parseInt(sz));}
 // รูปภาพ — upload ขึ้น Google Drive ผ่าน GAS
+// ย่อรูปด้วย canvas → JPEG data URL (รูปมือถือ 4MB เหลือราว 150–300KB)
+function shrinkImage(dataUrl,maxW,quality,cb){
+  var im=new Image();
+  im.onload=function(){
+    try{
+      var w=im.naturalWidth,h=im.naturalHeight,sc=Math.min(1,maxW/Math.max(w,1));
+      var c=document.createElement('canvas');c.width=Math.round(w*sc);c.height=Math.round(h*sc);
+      var g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);
+      cb(c.toDataURL('image/jpeg',quality));
+    }catch(e){cb(dataUrl);}
+  };
+  im.onerror=function(){cb(dataUrl);};
+  im.src=dataUrl;
+}
+// ส่งรูปแบบ POST (body ไม่จำกัดความยาวเหมือน URL) · GAS doPost แยกจาก webhook LINE ด้วย ?action=uploadImage
+function uploadImagePost(dataUrl,fileName,cb){
+  var done=false;function fin(d){if(done)return;done=true;cb(d);}
+  setTimeout(function(){fin(null);},60000);
+  try{
+    fetch(GAS+'?action=uploadImage',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({imageData:dataUrl,fileName:fileName})})
+      .then(function(r){return r.json();}).then(fin).catch(function(){fin(null);});
+  }catch(e){fin(null);}
+}
 function nimgUpload(tid){
   var inp=document.createElement('input');
   inp.type='file';inp.accept='image/*';
@@ -1068,9 +1091,9 @@ function nimgUpload(tid){
     document.execCommand('insertHTML',false,'<span id="'+placeholderId+'" style="background:#f0f0ff;padding:2px 8px;border-radius:4px;font-size:11px;color:#534AB7">⏳ กำลังอัพโหลดรูป...</span>');
     var reader=new FileReader();
     reader.onload=function(ev){
-      var base64=ev.target.result;
-      // ส่ง base64 ไป GAS อัพขึ้น Drive
-      api({action:'uploadImage',imageData:encodeURIComponent(base64),fileName:encodeURIComponent(file.name||'image.jpg')},function(d){
+      // ย่อรูปก่อน (กว้างสุด 1280px, JPEG) แล้วส่งแบบ POST — เดิมส่งทาง URL ซึ่งรูปถ่ายจริงยาวเกินจนส่งไม่ได้
+      shrinkImage(ev.target.result,1280,0.82,function(base64){
+      uploadImagePost(base64,file.name||'image.jpg',function(d){
         var ph=document.getElementById(placeholderId);
         if(d&&d.ok&&d.url){
           // แทน placeholder ด้วยรูปจริง
@@ -1088,8 +1111,9 @@ function nimgUpload(tid){
             img2.style.cssText='max-width:100%;border-radius:6px;margin:4px 0;display:block';
             ph.parentNode.replaceChild(img2,ph);
           }
-          showToast('⚠️ ใช้รูปแบบ local (ไม่ถาวร)');
+          showToast('⚠️ อัพรูปขึ้น Drive ไม่สำเร็จ — เก็บไว้ในเครื่องนี้ก่อน');
         }
+      });
       });
     };
     reader.readAsDataURL(file);
