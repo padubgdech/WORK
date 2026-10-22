@@ -746,11 +746,9 @@ function rangeBar(t){
 /* NOTE BLOCK — RICH TEXT + RUDY */
 function subtaskBlock(t){
   var tid=t.id;
-  // Lazy load — ไม่ auto-fetch ตอน render เพื่อลด API (เดิมยิง ~28 calls พร้อมกัน)
+  // undefined = ยังไม่โหลด → แสดง spinner (queue จะ fetch ให้อัตโนมัติ)
   if (t._subtasks === undefined) {
-    return '<div class="st-wrap"><div class="st-body" style="padding:8px;text-align:center">'
-      +'<button class="st-add-btn" style="font-size:11px;padding:5px 14px" data-stid="'+tid+'" onclick="loadSubtasksBtn(this.dataset.stid)">⊕ ดูงานย่อย</button>'
-      +'</div></div>';
+    return '<div class="st-wrap"><div class="st-body" style="padding:14px;text-align:center;color:#7FAE8E;font-size:11px">⏳ กำลังโหลดงานย่อย...</div></div>';
   }
   if (t._subtasks === null) {
     return '<div class="st-wrap"><div class="st-body" style="padding:14px;text-align:center;color:#7FAE8E;font-size:11px">⏳ กำลังโหลดงานย่อย...</div></div>';
@@ -809,13 +807,23 @@ function fetchSubtasks(tid){
     rerenderTaskCard(tid);
   });
 }
-function loadSubtasksBtn(tid){
-  // เรียกจากปุ่ม "ดูงานย่อย" — lazy fetch เฉพาะเมื่อ user กด
+var _stQueue=[],_stRunning=false;
+function _drainStQueue(){
+  if(!_stQueue.length){_stRunning=false;return;}
+  var tid=_stQueue.shift();
   var t=getTask(tid);
-  if(!t){return;}
-  t._subtasks=null; // แสดง loading spinner
-  rerenderTaskCard(tid);
+  if(!t||t._subtasks!==undefined){_drainStQueue();return;} // ข้ามถ้าโหลดแล้ว
   fetchSubtasks(tid);
+  setTimeout(_drainStQueue,120); // 120ms ต่อ call — กัน GAS rate-limit
+}
+function queueSubtasks(tids){
+  // เพิ่ม task IDs ที่ยังไม่โหลดเข้า queue
+  tids.forEach(function(id){if(_stQueue.indexOf(id)===-1)_stQueue.push(id);});
+  if(!_stRunning){_stRunning=true;setTimeout(_drainStQueue,200);}
+}
+function loadSubtasksBtn(tid){
+  var t=getTask(tid);if(!t)return;
+  t._subtasks=null;rerenderTaskCard(tid);fetchSubtasks(tid);
 }
 function rerenderTaskCard(tid){
   var el=document.getElementById('tc-'+tid);
@@ -1202,6 +1210,9 @@ function renderMain(){
   attachEv('page-main');
   // โหลด note HTML จาก localStorage (มีรูปด้วย)
   setTimeout(loadLocalNotes, 80);
+  // auto-fetch subtasks แบบ queue (120ms ต่อ call กัน spam API)
+  var needSt=odCombined.concat(ongoing,upcoming).filter(function(t){return t._subtasks===undefined;}).map(function(t){return t.id;});
+  if(needSt.length)queueSubtasks(needSt);
 }
 function loadLocalNotes(){
   try{
