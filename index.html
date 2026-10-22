@@ -1581,7 +1581,17 @@ function openMove(id,name){
     +'</div><div class="fld"><label>หรือระบุวันเอง</label><input type="date" id="mv-d" value="'+addDays(TODAY_STR,1)+'"></div>'
     +'<input type="hidden" id="mv-id" value="'+id+'"><button class="btn-submit" onclick="doMoveDate()">✓ ยืนยัน</button>');
 }
-function doMove(id,date){todayTasks=todayTasks.filter(function(t){return t.id!==id;});overdueTasks=overdueTasks.filter(function(t){return t.id!==id;});allActiveTasks=allActiveTasks.filter(function(t){return t.id!==id;});showToast('📅 เลื่อนไป '+fmtThai(date));apiS({action:'moveTask',id:id,date:date});closeModal();renderMain();renderMonthUpcoming();}
+// คำนวณ End Date ใหม่ตอนเลื่อนงาน — รักษาจำนวนวันเท่าเดิม (เดิมเลื่อนแค่วันเริ่ม End Date ค้างวันเก่า จนวันจบอยู่ก่อนวันเริ่ม)
+function shiftedEndDate(t,newStart){
+  if(!t||!t.endDate)return '';                       // ไม่มีช่วงวัน → ไม่ต้องแตะ
+  if(!t.actionDate||t.endDate<t.actionDate)return 'none'; // ข้อมูลเพี้ยนอยู่แล้ว → ล้าง End Date
+  return addDays(newStart,diffD(t.actionDate,t.endDate));
+}
+function findAnyTask(id){
+  var f=null;[todayTasks,overdueTasks,allActiveTasks,noDateTasks].forEach(function(arr){arr.forEach(function(t){if(!f&&t.id===id)f=t;});});
+  return f;
+}
+function doMove(id,date){var newEnd=shiftedEndDate(findAnyTask(id),date);var mp={action:'moveTask',id:id,date:date};if(newEnd)mp.endDate=newEnd;todayTasks=todayTasks.filter(function(t){return t.id!==id;});overdueTasks=overdueTasks.filter(function(t){return t.id!==id;});allActiveTasks=allActiveTasks.filter(function(t){return t.id!==id;});showToast('📅 เลื่อนไป '+fmtThai(date));apiS(mp);closeModal();renderMain();renderMonthUpcoming();}
 function doMoveDate(){var id=document.getElementById('mv-id').value,d=document.getElementById('mv-d').value;if(d)doMove(id,d);}
 function openAdd(pri){
   _addPri=pri||'Medium';
@@ -2186,6 +2196,7 @@ function asgnConfirm(){
 }
 function doAssign(id,date,endDate){
   if(!date){showToast('⚠️ กรุณาเลือกวันเริ่ม');return;}
+  var hadEnd=(findAnyTask(id)||{}).endDate; // เก็บไว้ก่อนแก้ cache — ถ้าเลือกวันเดียว ต้องล้าง End Date เก่าทิ้ง
   // อัปเดต local cache ทันทีทั้ง todayTasks, overdueTasks, noDateTasks
   [todayTasks,overdueTasks,noDateTasks].forEach(function(arr){
     arr.forEach(function(t){
@@ -2195,6 +2206,7 @@ function doAssign(id,date,endDate){
   noDateTasks=noDateTasks.filter(function(t){return t.id!==id;}); // ถ้าเพิ่งใส่วัน ถอดออกจาก no-date list
   var params={action:'setTaskDate',id:id,date:date};
   if(endDate)params.endDate=endDate;
+  else if(hadEnd)params.endDate='none';
   apiS(params);
   var msg='📅 ลงวัน '+fmtThai(date);
   if(endDate)msg+=' – '+fmtThai(endDate);

@@ -38,3 +38,13 @@ return { ok: true, id: file.getId(), url: 'https://lh3.googleusercontent.com/d/'
 function setupDashboardUpload() {
 Logger.log('พร้อมใช้งาน — โฟลเดอร์: ' + dashboardImageFolder_().getUrl());
 }
+
+// ใช้กับ moveTask / setTaskDate — อัปเดต End Date ไปพร้อม Action Date (เดิมค้างวันเก่า ทำให้วันจบอยู่ก่อนวันเริ่ม)
+// endDate: ไม่ส่ง = ไม่แตะ End Date · 'none' = ล้าง End Date · 'yyyy-MM-dd' = ตั้งค่าใหม่
+// ใน รหัส.gs ทั้ง moveTask และ setTaskDate ใช้: properties: dashboardDateProps_(newDate, e.parameter.endDate)
+function dashboardDateProps_(start, endDate) {
+var p = { "Action Date": { date: { start: start } } };
+if (endDate === 'none') p["End Date"] = { date: null };
+else if (endDate) p["End Date"] = { date: { start: endDate } };
+return p;
+}
