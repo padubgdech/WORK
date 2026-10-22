@@ -659,7 +659,89 @@ function api(p,cb){
   s.onerror=function(){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(null);};
   s.src=url;document.head.appendChild(s);
 }
-function apiS(p){var url=GAS+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k]);}).join('&');var i=new Image();i.src=url;}
+/* ===== WRITE QUEUE — กันข้อมูลหายเมื่อเน็ตหลุด / GAS error =====
+   apiS เดิมยิงแบบไม่รอผล → ถ้าส่งไม่ถึง งานจะกลับมาเหมือนไม่เคยกด
+   ตอนนี้: ส่งแล้วรอผล · ถ้าไม่สำเร็จเก็บลง localStorage แล้วลองส่งใหม่อัตโนมัติ */
+var PQ_KEY='khum_pending_v1', PQ_MAX_TRY=6, _pqBusy=false, _pqTimer=null;
+var PQ_NON_IDEMPOTENT={addSubtask:1}; // ส่งซ้ำแล้วจะได้ของซ้ำ → ไม่ retry เมื่อ timeout
+var PQ_LABEL={updateTask:'อัปเดตงาน',deleteTask:'ลบงาน',moveTask:'เลื่อนงาน',editTask:'แก้ไขงาน',setTaskDate:'ลงวันที่',addSubtask:'เพิ่มงานย่อย',toggleSubtask:'ติ๊กงานย่อย',deleteSubtask:'ลบงานย่อย',deleteCalendarEvent:'ยกเลิกนัด',saveNote:'บันทึก note'};
+function pqLoad(){try{return JSON.parse(localStorage.getItem(PQ_KEY)||'[]');}catch(e){return [];}}
+function pqSave(q){try{localStorage.setItem(PQ_KEY,JSON.stringify(q));}catch(e){}pqPill(q.length);}
+// ส่ง 1 คำขอแล้วบอกผล: 'ok' | 'fail' | 'unknown' (timeout — ไม่รู้ว่าถึงหรือยัง)
+function jsonpSend(p,done){
+  var n='cbw_'+Date.now()+'_'+Math.floor(Math.random()*99999), fin=false;
+  var q={};Object.keys(p).forEach(function(k){q[k]=p[k];});q.callback=n;
+  var url=GAS+'?'+Object.keys(q).map(function(k){return k+'='+encodeURIComponent(q[k]);}).join('&');
+  var s=document.createElement('script');
+  function end(st,d){if(fin)return;fin=true;clearTimeout(to);window[n]=function(){};if(s.parentNode)s.parentNode.removeChild(s);done(st,d);}
+  var to=setTimeout(function(){end('unknown');},25000);
+  window[n]=function(d){end(d&&(d.error||d.ok===false)?'fail':'ok',d);};
+  // script โหลดเสร็จแต่ GAS ไม่เรียก callback = คำขอถึง server แล้ว → นับว่าสำเร็จ
+  s.onload=function(){setTimeout(function(){end('ok');},0);};
+  s.onerror=function(){end('fail');};
+  s.src=url;document.head.appendChild(s);
+}
+function apiS(p){
+  var op={p:p,tries:0,at:Date.now()};
+  var q=pqLoad();
+  // ถ้ามีของค้างอยู่ → ต่อคิว เพื่อรักษาลำดับ (เช่น Done แล้ว Undo)
+  if(q.length||navigator.onLine===false){q.push(op);pqSave(q);pqFlush();return;}
+  jsonpSend(p,function(st){pqHandle(op,st,true);});
+}
+function pqHandle(op,st,fresh){
+  var act=op.p.action, lbl=PQ_LABEL[act]||act;
+  if(st==='ok')return true;
+  if(st==='unknown'&&PQ_NON_IDEMPOTENT[act]){
+    showToast('⚠️ ยังไม่แน่ใจว่า'+lbl+'สำเร็จ — รีเฟรชเพื่อตรวจสอบ');return true; // ไม่ส่งซ้ำ กันของซ้ำ
+  }
+  op.tries=(op.tries||0)+1;
+  if(op.tries>=PQ_MAX_TRY){showToast('❌ '+lbl+'ไม่สำเร็จ (ลองแล้ว '+op.tries+' ครั้ง)');return true;}
+  if(fresh){var q=pqLoad();q.push(op);pqSave(q);showToast('⚠️ '+lbl+'ยังไม่ถึง server — จะส่งใหม่อัตโนมัติ');pqSchedule();}
+  return false;
+}
+function pqSchedule(ms){clearTimeout(_pqTimer);_pqTimer=setTimeout(pqFlush,ms||20000);}
+function pqFlush(){
+  if(_pqBusy)return;
+  var q=pqLoad();
+  if(!q.length){pqPill(0);return;}
+  if(navigator.onLine===false){pqSchedule();return;}
+  _pqBusy=true;
+  var op=q[0];
+  jsonpSend(op.p,function(st){
+    var q2=pqLoad();
+    var drop=pqHandle(op,st,false);
+    if(drop){q2.shift();}else{q2[0]=op;}
+    pqSave(q2);_pqBusy=false;
+    if(!drop){pqSchedule();return;}         // ยังส่งไม่ได้ → รอแล้วลองใหม่
+    if(q2.length)setTimeout(pqFlush,150);   // ส่งตัวถัดไป
+    else showToast('✅ ส่งข้อมูลที่ค้างครบแล้ว');
+  });
+}
+// ป้ายเล็กมุมจอ บอกว่ามีของค้างส่ง — แตะเพื่อส่งใหม่ทันที
+function pqPill(n){
+  var el=document.getElementById('pq-pill');
+  if(!el){
+    if(!n)return;
+    el=document.createElement('button');el.id='pq-pill';
+    el.style.cssText='position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#c62828;color:#fff;border:none;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.2);cursor:pointer';
+    el.onclick=function(){showToast('⏳ กำลังส่งใหม่...');clearTimeout(_pqTimer);pqFlush();};
+    document.body.appendChild(el);
+  }
+  el.hidden=!n;el.textContent='⏳ ค้างส่ง '+n+' รายการ · แตะเพื่อส่ง';
+}
+// ข้อมูลที่โหลดจาก server ยังไม่รู้เรื่องที่ค้างส่ง → ทับด้วยสิ่งที่ผู้ใช้กดไว้แล้ว
+function pqApply(arr,dropMoved,dropDone){
+  var q=pqLoad();if(!q.length||!arr)return arr;
+  q.forEach(function(op){
+    var p=op.p,id=p.id;if(!id)return;
+    var isDone=p.action==='updateTask'&&String(p.done)==='true';
+    if(p.action==='deleteTask'||(dropMoved&&p.action==='moveTask')||(dropDone&&isDone))arr=arr.filter(function(t){return t.id!==id;});
+    else if(p.action==='updateTask'&&p.done!==undefined)arr.forEach(function(t){if(t.id===id)t.done=isDone;});
+  });
+  return arr;
+}
+window.addEventListener('online',function(){pqFlush();});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')pqFlush();});
 // POST สำหรับข้อมูลยาว (note)
 function apiPost(p,cb){
   var n='cb_'+Date.now()+'_'+Math.floor(Math.random()*9999);
@@ -1037,22 +1119,14 @@ function saveNoteInline(tid){
   document.getElementById('ne-'+tid).style.display='none';
   document.getElementById('nv-'+tid).style.display='block';
   [todayTasks,overdueTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid){t.note=noteHtml;t._noteSaved=true;}});});
-  // ส่ง plain text ไป GAS (GAS จะแบ่ง chunk เอง)
-  // ส่ง note ผ่าน JSONP (api) แบ่ง chunk ละ 600 chars รอ callback ก่อนส่งต่อ
-  var noteChunks=[];
-  var chSz=600;
-  for(var ci=0;ci<noteTxt.length;ci+=chSz) noteChunks.push(noteTxt.substring(ci,ci+chSz));
-  if(!noteChunks.length) noteChunks=[''];
-  var totalChunks=noteChunks.length;
-  function sendNoteChunk(idx){
-    if(idx>=totalChunks) return;
-    var p={action:'saveNote',id:tid,note:noteChunks[idx],chunkIdx:idx,chunkTotal:totalChunks};
-    api(p,function(d){
-      if(idx+1<totalChunks) setTimeout(function(){sendNoteChunk(idx+1);},100);
-    });
-  }
-  sendNoteChunk(0);
-  showToast('&#128221; บันทึก Note แล้ว');
+  // เก็บเวลาแก้ไข + ทำเครื่องหมายว่ายังไม่ได้ส่ง → pushNote ส่งทั้ง text (Notion) และ HTML (sync ข้ามเครื่อง)
+  try{
+    localStorage.setItem('note_ts_'+tid,String(Date.now()));
+    localStorage.setItem('note_txt_'+tid,noteTxt);
+    localStorage.setItem('note_dirty_'+tid,'1');
+  }catch(e){}
+  pushNote(tid);
+  showToast('📝 บันทึก Note แล้ว');
   // หลังบันทึก note ใหม่ → ล้าง Rudy cache แล้ววิเคราะห์ใหม่
   try{localStorage.removeItem('rudy_'+tid);}catch(e){}
   var t2=null;
@@ -1060,6 +1134,90 @@ function saveNoteInline(tid){
   if(t2)t2._rudyHtml=null;
   setTimeout(function(){runRudyInline(tid,false);},500);
 }
+/* ===== NOTE SYNC — เก็บ note (มี format + รูปจาก Drive) ไว้ที่ server ให้เปิดเครื่องไหนก็เห็น =====
+   ต้องเพิ่มโค้ด GAS (saveNoteHtml / getNoteHtml) ก่อน — ถ้า GAS ยังไม่อัปเดต จะทำงานแบบเดิม (เก็บในเครื่อง) */
+var _noteSync={avail:null,busy:{}};
+function _ls(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function _chunks(s,n){var a=[];for(var i=0;i<s.length;i+=n)a.push(s.substring(i,i+n));return a.length?a:[''];}
+// ส่ง chunks ทีละอัน รอผลก่อนส่งตัวถัดไป · done(status, lastData)
+function _sendChunks(list,done){
+  var i=0;
+  (function next(){
+    if(i>=list.length){done('ok',null);return;}
+    jsonpSend(list[i],function(st,d){
+      // GAS ตอบกลับมาแล้วแต่ไม่มีเครื่องหมาย noteHtml = GAS เวอร์ชันเก่า ยังไม่รองรับ
+      if(list[i].action==='saveNoteHtml'&&(st==='ok'||(st==='fail'&&d))&&(!d||d.noteHtml!==true)){done('unsupported',d);return;}
+      if(st!=='ok'){done(st,d);return;}
+      if(d&&d.noteHtml===true&&d.ok===false){done('fail',d);return;}
+      i++;setTimeout(next,80);
+    });
+  })();
+}
+function pushNote(tid){
+  if(_noteSync.busy[tid])return;
+  var html=_ls('note_html_'+tid), txt=_ls('note_txt_'+tid);
+  if(html===null)return;
+  if(txt===null){var tmp=document.createElement('div');tmp.innerHTML=html;txt=(tmp.innerText||tmp.textContent||'').trim();}
+  var ts=_ls('note_ts_'+tid)||String(Date.now());
+  _noteSync.busy[tid]=true;
+  // 1) plain text → Notion (ให้ Rudy/LINE bot อ่านได้เหมือนเดิม)
+  var tc=_chunks(txt,600);
+  var textReq=tc.map(function(c,i){return {action:'saveNote',id:tid,note:c,chunkIdx:i,chunkTotal:tc.length};});
+  _sendChunks(textReq,function(st){
+    if(st!=='ok'){_noteSync.busy[tid]=false;_noteRetryLater();return;}
+    if(_noteSync.avail===false){_noteDone(tid);return;}
+    // 2) HTML → server (ตัดรูป base64 ออก เพราะใหญ่เกินส่งผ่าน URL — รูปที่อัปขึ้น Drive แล้วยังอยู่ครบ)
+    var serverHtml=html.replace(/<img[^>]+src=["']data:[^"']*["'][^>]*>/gi,'');
+    var token=ts+'_'+Math.floor(Math.random()*1e6);
+    var hc=_chunks(serverHtml,700);
+    var htmlReq=hc.map(function(c,i){return {action:'saveNoteHtml',id:tid,html:c,chunkIdx:i,chunkTotal:hc.length,ts:ts,token:token};});
+    _sendChunks(htmlReq,function(st2){
+      if(st2==='unsupported'){_noteSync.avail=false;_noteDone(tid);return;} // GAS ยังไม่มี action นี้ → พอแค่ text
+      if(st2!=='ok'){_noteSync.busy[tid]=false;_noteRetryLater();return;}
+      _noteSync.avail=true;_noteDone(tid);
+    });
+  });
+}
+function _noteDone(tid){_noteSync.busy[tid]=false;try{localStorage.removeItem('note_dirty_'+tid);}catch(e){}}
+var _noteRetryT=null;
+function _noteRetryLater(){
+  clearTimeout(_noteRetryT);
+  showToast('⚠️ Note ยังส่งไม่ถึง server — จะลองใหม่อัตโนมัติ');
+  _noteRetryT=setTimeout(flushDirtyNotes,20000);
+}
+function flushDirtyNotes(){
+  try{
+    Object.keys(localStorage).forEach(function(k){if(k.indexOf('note_dirty_')===0)pushNote(k.slice(11));});
+  }catch(e){}
+}
+// ดึง note ล่าสุดจาก server · ถ้าของ server ใหม่กว่าในเครื่อง → ใช้ของ server
+function syncNotesFromServer(){
+  flushDirtyNotes();
+  if(_noteSync.avail===false)return;
+  var ids=todayTasks.concat(overdueTasks).map(function(t){return t.id;});
+  if(!ids.length)return;
+  for(var b=0;b<ids.length;b+=30){
+    (function(batch){
+      jsonpSend({action:'getNoteHtml',ids:batch.join(',')},function(st,d){
+        if((st==='ok'||(st==='fail'&&d))&&(!d||d.noteHtml!==true)){_noteSync.avail=false;return;}
+        if(st!=='ok')return;
+        _noteSync.avail=true;
+        var notes=d.notes||{};
+        Object.keys(notes).forEach(function(tid){
+          var n=notes[tid];if(!n||typeof n.html!=='string')return;
+          if(_ls('note_dirty_'+tid))return;                   // ในเครื่องมีของยังไม่ส่ง → ไม่ทับ
+          if((+n.ts||0)<=(+(_ls('note_ts_'+tid)||0)))return;  // ในเครื่องใหม่กว่าหรือเท่ากัน
+          try{localStorage.setItem('note_html_'+tid,n.html);localStorage.setItem('note_ts_'+tid,String(n.ts));}catch(e){}
+          [todayTasks,overdueTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid)t.note=n.html;});});
+          var vb=document.getElementById('nvb-'+tid);
+          var ed=document.getElementById('ne-'+tid);
+          if(vb&&!(ed&&ed.style.display==='block'))vb.innerHTML=n.html; // ไม่ทับตอนกำลังพิมพ์อยู่
+        });
+      });
+    })(ids.slice(b,b+30));
+  }
+}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')syncNotesFromServer();});
 function runRudyInline(tid,autoMode){
   var rtEl=document.getElementById('rt-'+tid);
   var rsEl=document.getElementById('rs-'+tid);
@@ -1266,7 +1424,7 @@ function renderEvents(){
 var allActiveTasks=[];
 function loadMonthTasks(){
   api({action:'getAllActiveTasks'},function(d){
-    allActiveTasks=d?d.tasks||[]:[]; renderMonthUpcoming();
+    allActiveTasks=pqApply(d?d.tasks||[]:[],false,true); renderMonthUpcoming();
   });
 }
 function renderMonthUpcoming(){
@@ -1430,7 +1588,7 @@ function submitAdd(){
   if(ed)p.endDate=ed;if(note.trim())p.note=encodeURIComponent(note.trim());
   api(p,function(){
     showToast('✅ เพิ่มงานแล้ว: '+name.trim());
-    api({action:'getTasks',date:TODAY_STR},function(d){todayTasks=d?d.tasks||[]:[]; calCache.t[TODAY_STR]=todayTasks; renderMain();});
+    api({action:'getTasks',date:TODAY_STR},function(d){todayTasks=pqApply(d?d.tasks||[]:[],true,false); calCache.t[TODAY_STR]=todayTasks; renderMain();});
     if(sd!==TODAY_STR)renderNDTasks();
   });
 }
@@ -1796,7 +1954,7 @@ function renderNDTasks(){
   else{['nd-high','nd-med','nd-low'].forEach(function(eid){var el=document.getElementById(eid);if(el)el.innerHTML='<div class="ld" style="padding:12px 0;font-size:12px">⏳</div>';});}
   // refresh ในพื้นหลังเพื่อให้ข้อมูลเป็นปัจจุบัน
   api({action:'getAllActiveTasks'},function(data){
-    if(data){noDateTasks=data.tasks||[];allActiveTasks=data.tasks||[];renderNDColumnsFromCache();}
+    if(data){var at=pqApply(data.tasks||[],false,true);noDateTasks=at;allActiveTasks=at;renderNDColumnsFromCache();}
   });
 }
 /* ===== ลากการ์ดข้ามคอลัมน์เพื่อเปลี่ยน priority (รองรับมือถือ/ทัชสกรีนด้วย Pointer Events) ===== */
@@ -2202,14 +2360,18 @@ function init(){
   document.getElementById('ph-stats').style.display='flex';
   calCache.t[TODAY_STR]=[];calCache.e[TODAY_STR]=[];
   api({action:'getTasks',date:TODAY_STR},function(d){
-    todayTasks=d?d.tasks||[]:[];
+    todayTasks=pqApply(d?d.tasks||[]:[],true,false);
     calCache.t[TODAY_STR]=todayTasks;
     updateStats();renderMain();
+    setTimeout(syncNotesFromServer,300); // ดึง note จาก server (sync ข้ามเครื่อง)
   });
   api({action:'getOverdueTasks'},function(d){
-    overdueTasks=d?d.tasks||[]:[];
+    overdueTasks=pqApply(d?d.tasks||[]:[],true,true);
     updateStats();renderMain();
+    setTimeout(syncNotesFromServer,300);
   });
+  pqPill(pqLoad().length);
+  setTimeout(pqFlush,1000); // ส่งของที่ค้างจากรอบก่อน
   api({action:'getCalendarEvents',date:TODAY_STR},function(d){todayEvents=d?d.events||[]:[]; calCache.e[TODAY_STR]=todayEvents; renderEvents();});
   setTimeout(loadMonthTasks,1500); // โหลดงานกำลังจะเริ่มเดือนนี้ (delay เล็กน้อยเพื่อไม่ชนกับ request หลัก)
   loadMainNote();
