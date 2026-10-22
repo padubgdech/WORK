@@ -91,6 +91,31 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 @media(max-width:1100px){.timed-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.timed-grid{grid-template-columns:1fr}}
 .grid2-hist{display:grid;grid-template-columns:1fr 280px;gap:24px}
+/* ===== MOBILE (LINE บนมือถือ) — คอลัมน์ข้างเดียว + แถบเมนูล่าง ===== */
+@media(max-width:760px){
+  .topbar{padding:0 max(16px,env(safe-area-inset-left,0px));height:52px}
+  .brand{font-size:12px;letter-spacing:2px}
+  .btn-add{padding:7px 14px}
+  .avatar{display:none}
+  /* แท็บย้ายไปเป็นแถบล่าง กดด้วยนิ้วโป้งง่ายกว่า และไม่ล้นจอ */
+  .tabs{position:fixed;top:auto;bottom:0;left:0;right:0;transform:none;border-radius:0;background:#fff;border-top:1px solid var(--border);padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px));justify-content:space-around;z-index:300;box-shadow:0 -4px 16px rgba(0,0,0,.05)}
+  .tab{flex:1;flex-direction:column;gap:2px;padding:6px 2px;font-size:10px;border-radius:10px;min-width:0}
+  .tab.active{box-shadow:none;background:#f0eeea}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+  #pq-pill{bottom:calc(72px + env(safe-area-inset-bottom,0px))!important}
+  .phdr{padding:14px max(16px,env(safe-area-inset-left,0px)) 0}
+  .phdr-row{flex-wrap:wrap;gap:12px;align-items:flex-start}
+  .phdr-title{font-size:22px}
+  .stat-row{width:100%}
+  .stat-item{min-width:0;padding:8px 6px}
+  .stat-n{font-size:18px}
+  .hdr-prog{margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)))}
+  .page{padding:16px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));min-height:0}
+  .grid2,#page-main .grid2,.grid2-hist,.grid3,#page-note>div{grid-template-columns:minmax(0,1fr)!important;gap:16px}
+  .scroll-y{max-height:none;overflow:visible}
+  .note-detail-card{position:static}
+  .grid2>*,.grid2-hist>*,.grid3>*{min-width:0}
+}
 .sec{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#aaa;padding-bottom:8px;margin-top:22px;border-bottom:.5px solid var(--border);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
 .sec:first-child{margin-top:0}
 .tc{background:#fff;border-radius:12px;border:.5px solid var(--border);border-left:3px solid;padding:16px 18px;margin-bottom:10px;max-width:100%;overflow:hidden}
