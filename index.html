@@ -2441,7 +2441,9 @@ function renderNoteTimeline(){
 function editMainNote(){/* ไม่ใช้แล้ว — editor เปิดตลอด */}
 // เปิดแอป: ขอทุกอย่างในคำขอเดียว (งานวันนี้ + งานค้าง + นัดหมาย + งานย่อย)
 // ถ้า GAS ยังไม่มี getMainData → ใช้วิธีเดิม 3 คำขอ
+var USE_MAIN_DATA=false; // เปิดเป็น true หลัง deploy getMainData ใน GAS แล้ว (ก่อนหน้านั้นใช้วิธีเดิม ไม่ต้องรอ fallback 6 วิ)
 function loadMainData(){
+  if(!USE_MAIN_DATA){loadMainDataLegacy();return;}
   var t0=Date.now(),settled=false;
   // ถ้ารอเกิน 6 วิ (เช่น GAS เวอร์ชันเก่าไม่ตอบ action นี้) → ไปวิธีเดิมเลย ไม่ต้องรอ 25 วิ
   var fb=setTimeout(function(){if(!settled){settled=true;loadMainDataLegacy();}},6000);
