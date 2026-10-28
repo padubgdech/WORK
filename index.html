@@ -195,6 +195,10 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .tcol-band.p-med{--c1:#D7AE64;--c2:#F1DEB2;--soft:#F8EFDD;--ink:#6E4D12;--dot:#B8862F}
 .tcol-band.p-low{--c1:#86B79A;--c2:#CFE3D5;--soft:#E7F1EA;--ink:#2F5B44;--dot:#4E8B6A}
 .tcol-band-row{display:flex;align-items:center;justify-content:space-between}
+.rep-btns{display:flex;flex-wrap:wrap;gap:6px}
+.rep-btn{padding:6px 12px;border-radius:16px;border:1px solid var(--border);background:#f7f6f3;color:#666;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.rep-btn.on{background:#111;color:#fff;border-color:#111}
+.rep-hint{font-size:10.5px;color:#aaa;margin-top:6px}
 .tcol-band-title{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;letter-spacing:1.4px}
 .tcol-dot{width:9px;height:9px;border-radius:50%;background:var(--dot);box-shadow:0 0 0 3px rgba(255,255,255,.55),0 0 10px var(--dot)}
 .tcol-count{font-size:10.5px;color:var(--ink);opacity:.7;margin-top:4px;padding-left:17px}
@@ -1621,11 +1625,17 @@ function openAdd(pri){
   h+='<div class="date-arrow">→</div>';
   h+='<div><label style="font-size:10px;color:#aaa;font-weight:400;margin-bottom:3px;display:block">วันสิ้นสุด (ถ้ามี)</label><input type="date" id="add-ed"></div>';
   h+='</div></div>';
+  h+='<div class="fld"><label>🔁 ทำซ้ำ</label><div class="rep-btns" id="add-rep">';
+  [['','ไม่ซ้ำ'],['Daily','ทุกวัน'],['Weekly','ทุกสัปดาห์'],['Monthly','ทุกเดือน']].forEach(function(r,i){
+    h+='<button type="button" class="rep-btn'+(i===0?' on':'')+'" data-rep="'+r[0]+'" onclick="selRep(this)">'+r[1]+'</button>';
+  });
+  h+='</div><div class="rep-hint">กด Done แล้วจะสร้างงานรอบถัดไปให้อัตโนมัติ (พร้อมงานย่อย)</div></div>';
   h+='<div class="fld"><label>Note</label><textarea id="add-note" rows="3" placeholder="รายละเอียด..."></textarea></div>';
   h+='<button class="btn-submit" onclick="submitAdd()">+ บันทึกงาน</button>';
   showModal(h);
   setTimeout(function(){var el=document.getElementById('add-nm');if(el)el.focus();},80);
 }
+function selRep(el){document.querySelectorAll('#add-rep .rep-btn').forEach(function(b){b.classList.remove('on');});el.classList.add('on');}
 function selPri(el,p){_addPri=p;document.querySelectorAll('.pri-btn').forEach(function(b){b.className='pri-btn';});el.className='pri-btn active-'+p.toLowerCase()[0];}
 function openAddND(pri){
   _addPri=pri||'Medium';
@@ -1653,13 +1663,15 @@ function submitAdd(){
   var sd=(document.getElementById('add-sd')||{}).value||TODAY_STR;
   var ed=(document.getElementById('add-ed')||{}).value||'';
   var note=(document.getElementById('add-note')||{}).value||'';
+  var repEl=document.querySelector('#add-rep .rep-btn.on');var rep=repEl?repEl.getAttribute('data-rep'):''; // อ่านก่อน closeModal
   if(!name.trim()){showToast('กรุณาใส่ชื่องาน');return;}
   if(ed&&ed<sd){showToast('⚠️ วันสิ้นสุดต้องหลังวันเริ่ม');return;}
   showToast('⏳ กำลังเพิ่มงาน...');closeModal();
   var p={action:'addTask',name:encodeURIComponent(name.trim()),date:sd,priority:_addPri};
   if(ed)p.endDate=ed;if(note.trim())p.note=encodeURIComponent(note.trim());
+  if(rep)p.repeat=rep;
   api(p,function(){
-    showToast('✅ เพิ่มงานแล้ว: '+name.trim());
+    showToast('✅ เพิ่มงานแล้ว: '+name.trim()+(rep?' · 🔁 '+({Daily:'ทุกวัน',Weekly:'ทุกสัปดาห์',Monthly:'ทุกเดือน'})[rep]:''));
     api({action:'getTasks',date:TODAY_STR},function(d){todayTasks=pqApply(d?d.tasks||[]:[],true,false); calCache.t[TODAY_STR]=todayTasks; renderMain();});
     if(sd!==TODAY_STR)renderNDTasks();
   });
@@ -2427,26 +2439,52 @@ function renderNoteTimeline(){
   hist.innerHTML=h;
 }
 function editMainNote(){/* ไม่ใช้แล้ว — editor เปิดตลอด */}
-function init(){
-  var thDF=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
-  var thMF=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-  document.getElementById('ph-date').textContent='วัน'+thDF[TODAY.getDay()]+' '+TODAY.getDate()+' '+thMF[TODAY.getMonth()]+' '+(TODAY.getFullYear()+543);
-  document.getElementById('ph-stats').style.display='flex';
-  calCache.t[TODAY_STR]=[];calCache.e[TODAY_STR]=[];
+// เปิดแอป: ขอทุกอย่างในคำขอเดียว (งานวันนี้ + งานค้าง + นัดหมาย + งานย่อย)
+// ถ้า GAS ยังไม่มี getMainData → ใช้วิธีเดิม 3 คำขอ
+function loadMainData(){
+  var t0=Date.now(),settled=false;
+  // ถ้ารอเกิน 6 วิ (เช่น GAS เวอร์ชันเก่าไม่ตอบ action นี้) → ไปวิธีเดิมเลย ไม่ต้องรอ 25 วิ
+  var fb=setTimeout(function(){if(!settled){settled=true;loadMainDataLegacy();}},6000);
+  api({action:'getMainData',date:TODAY_STR},function(d){
+    if(settled)return;settled=true;clearTimeout(fb);
+    if(d&&d.mainData){
+      var st=d.subtasks||{};
+      todayTasks=pqApply(d.tasks||[],true,false);
+      overdueTasks=pqApply(d.overdue||[],true,true);
+      todayTasks.concat(overdueTasks).forEach(function(t){if(st[t.id])t._subtasks=st[t.id];});
+      calCache.t[TODAY_STR]=todayTasks;
+      todayEvents=d.events||[];calCache.e[TODAY_STR]=todayEvents;
+      updateStats();renderMain();renderEvents();
+      setTimeout(syncNotesFromServer,300);
+      try{console.log('[mainData] '+(Date.now()-t0)+'ms');}catch(e){}
+      return;
+    }
+    loadMainDataLegacy();
+  });
+}
+function loadMainDataLegacy(){
   api({action:'getTasks',date:TODAY_STR},function(d){
     todayTasks=pqApply(d?d.tasks||[]:[],true,false);
     calCache.t[TODAY_STR]=todayTasks;
     updateStats();renderMain();
-    setTimeout(syncNotesFromServer,300); // ดึง note จาก server (sync ข้ามเครื่อง)
+    setTimeout(syncNotesFromServer,300);
   });
   api({action:'getOverdueTasks'},function(d){
     overdueTasks=pqApply(d?d.tasks||[]:[],true,true);
     updateStats();renderMain();
     setTimeout(syncNotesFromServer,300);
   });
+  api({action:'getCalendarEvents',date:TODAY_STR},function(d){todayEvents=d?d.events||[]:[]; calCache.e[TODAY_STR]=todayEvents; renderEvents();});
+}
+function init(){
+  var thDF=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
+  var thMF=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  document.getElementById('ph-date').textContent='วัน'+thDF[TODAY.getDay()]+' '+TODAY.getDate()+' '+thMF[TODAY.getMonth()]+' '+(TODAY.getFullYear()+543);
+  document.getElementById('ph-stats').style.display='flex';
+  calCache.t[TODAY_STR]=[];calCache.e[TODAY_STR]=[];
+  loadMainData();
   pqPill(pqLoad().length);
   setTimeout(pqFlush,1000); // ส่งของที่ค้างจากรอบก่อน
-  api({action:'getCalendarEvents',date:TODAY_STR},function(d){todayEvents=d?d.events||[]:[]; calCache.e[TODAY_STR]=todayEvents; renderEvents();});
   setTimeout(loadMonthTasks,1500); // โหลดงานกำลังจะเริ่มเดือนนี้ (delay เล็กน้อยเพื่อไม่ชนกับ request หลัก)
   loadMainNote();
   setTimeout(function(){
