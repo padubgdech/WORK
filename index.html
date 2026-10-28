@@ -182,12 +182,25 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .nd-row{display:flex;align-items:center;gap:10px;padding:10px 13px;background:#fff;border-radius:8px;border:.5px solid var(--border);margin-bottom:6px}
 /* Tasks Kanban Style 2 — Colorful Header Band */
 .tcol{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.05)}
-.tcol-band{padding:14px 16px;color:#fff}
+/* หัวคอลัมน์ Tasks — กระจกฝ้า (frosted glass) โทนหม่น คุมโทน KHUMTONE */
+.tcol-band{position:relative;overflow:hidden;isolation:isolate;padding:16px 16px 14px;color:var(--ink);background:var(--soft)}
+.tcol-band::before{content:"";position:absolute;inset:-45%;z-index:-2;pointer-events:none;
+  background:radial-gradient(circle at 18% 35%,var(--c1) 0,transparent 42%),radial-gradient(circle at 88% 15%,var(--c2) 0,transparent 38%),radial-gradient(circle at 62% 115%,var(--c1) 0,transparent 48%);
+  filter:blur(26px);opacity:.8}
+.tcol-band::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,.14));
+  -webkit-backdrop-filter:blur(10px) saturate(140%);backdrop-filter:blur(10px) saturate(140%);
+  border-bottom:1px solid rgba(255,255,255,.6)}
+.tcol-band.p-high{--c1:#D9826F;--c2:#F2C4B5;--soft:#F7E6E0;--ink:#7A2E21;--dot:#C2553F}
+.tcol-band.p-med{--c1:#D7AE64;--c2:#F1DEB2;--soft:#F8EFDD;--ink:#6E4D12;--dot:#B8862F}
+.tcol-band.p-low{--c1:#86B79A;--c2:#CFE3D5;--soft:#E7F1EA;--ink:#2F5B44;--dot:#4E8B6A}
 .tcol-band-row{display:flex;align-items:center;justify-content:space-between}
-.tcol-band-title{font-size:13px;font-weight:800;letter-spacing:.2px}
-.tcol-count{font-size:10.5px;color:rgba(255,255,255,.85);margin-top:3px}
-.tcol-add-btn{background:rgba(255,255,255,.18);border:none;color:#fff;font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:20px;cursor:pointer}
-.tcol-add-btn:hover{background:rgba(255,255,255,.3)}
+.tcol-band-title{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;letter-spacing:1.4px}
+.tcol-dot{width:9px;height:9px;border-radius:50%;background:var(--dot);box-shadow:0 0 0 3px rgba(255,255,255,.55),0 0 10px var(--dot)}
+.tcol-count{font-size:10.5px;color:var(--ink);opacity:.7;margin-top:4px;padding-left:17px}
+.tcol-add-btn{background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.75);color:var(--ink);font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:20px;cursor:pointer;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 2px 8px rgba(0,0,0,.05);transition:background .15s,transform .15s}
+.tcol-add-btn:hover{background:rgba(255,255,255,.8);transform:translateY(-1px)}
 .tcol-body{padding:14px}
 .nd-c-item{background:#f9f9f7;border-radius:12px;margin-bottom:9px;padding:11px 12px;transition:background .15s;touch-action:pan-y}
 .nd-c-item:last-child{margin-bottom:0}
@@ -546,9 +559,9 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <div id="page-tasks" class="page">
   <div class="grid3">
     <div class="tcol">
-      <div class="tcol-band" style="background:linear-gradient(135deg,#D6453D,#A8302A)">
+      <div class="tcol-band p-high">
         <div class="tcol-band-row">
-          <div class="tcol-band-title">🔴 HIGH</div>
+          <div class="tcol-band-title"><span class="tcol-dot"></span>HIGH</div>
           <button class="tcol-add-btn" onclick="openAddND('High')">+ เพิ่ม</button>
         </div>
         <div class="tcol-count" id="nd-count-high">กำลังโหลด...</div>
@@ -556,9 +569,9 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       <div class="tcol-body" id="nd-high"><div class="ld">⏳</div></div>
     </div>
     <div class="tcol">
-      <div class="tcol-band" style="background:linear-gradient(135deg,#BA7517,#8A5710)">
+      <div class="tcol-band p-med">
         <div class="tcol-band-row">
-          <div class="tcol-band-title">🟡 MEDIUM</div>
+          <div class="tcol-band-title"><span class="tcol-dot"></span>MEDIUM</div>
           <button class="tcol-add-btn" onclick="openAddND('Medium')">+ เพิ่ม</button>
         </div>
         <div class="tcol-count" id="nd-count-med">กำลังโหลด...</div>
@@ -566,9 +579,9 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       <div class="tcol-body" id="nd-med"><div class="ld">⏳</div></div>
     </div>
     <div class="tcol">
-      <div class="tcol-band" style="background:linear-gradient(135deg,#1D9E75,#0f7b55)">
+      <div class="tcol-band p-low">
         <div class="tcol-band-row">
-          <div class="tcol-band-title">🟢 LOW</div>
+          <div class="tcol-band-title"><span class="tcol-dot"></span>LOW</div>
           <button class="tcol-add-btn" onclick="openAddND('Low')">+ เพิ่ม</button>
         </div>
         <div class="tcol-count" id="nd-count-low">กำลังโหลด...</div>
