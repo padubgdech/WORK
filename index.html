@@ -41,15 +41,18 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .grid2{display:grid;grid-template-columns:1fr 340px;gap:24px;min-width:0}
 #page-main .grid2{grid-template-columns:1fr 250px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.note-card{border-radius:14px;padding:14px;margin-bottom:10px;break-inside:avoid;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:box-shadow .15s}
-.note-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12)}
-.note-tag{display:inline-flex;align-items:center;gap:4px;font-size:8px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(255,255,255,.55);margin-bottom:8px;letter-spacing:.2px}
-.note-card-title{font-size:13px;font-weight:700;color:#222;margin-bottom:5px}
-.note-card-preview{font-size:11px;color:rgba(0,0,0,.45);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.note-detail-card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 4px 16px rgba(0,0,0,.06);position:sticky;top:16px}
-.note-detail-title{font-size:20px;font-weight:800;margin-bottom:4px;outline:none;border:none;width:100%;background:transparent}
-.note-detail-meta{font-size:10px;color:#bbb;margin-bottom:12px}
-.note-detail-body{font-size:13px;color:#444;line-height:1.8;min-height:120px;outline:none;border:none;width:100%;resize:none;background:transparent;font-family:inherit}
+.note-card{display:block;width:100%;text-align:left;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','IBM Plex Sans Thai',sans-serif;border-radius:22px;padding:16px 18px;margin-bottom:14px;break-inside:avoid;cursor:pointer;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(0,0,0,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06);transition:box-shadow .15s,transform .15s}
+.note-card:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 2px 4px rgba(0,0,0,.05),0 12px 30px rgba(0,0,0,.09);transform:translateY(-1px)}
+.note-card.sel{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 0 2px #0071e3,0 8px 24px rgba(0,0,0,.06)}
+.note-card-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.note-tag{font-size:11px;font-weight:600;color:#6e6e73}
+.note-card-date{font-size:11px;color:#6e6e73;flex-shrink:0}
+.note-card-title{font-size:16px;font-weight:700;color:#1d1d1f;line-height:1.35;margin-bottom:6px}
+.note-card-preview{font-size:13px;color:#3a3a3c;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.note-detail-card{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','IBM Plex Sans Thai',sans-serif;background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(0,0,0,.08);border-radius:22px;padding:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(0,0,0,.04),0 12px 32px rgba(0,0,0,.08);position:sticky;top:16px}
+.note-detail-title{font-size:22px;font-weight:700;color:#1d1d1f;margin-bottom:4px;outline:none;border:none;width:100%;background:transparent;font-family:inherit}
+.note-detail-meta{font-size:11px;color:#6e6e73;margin-bottom:12px}
+.note-detail-body{font-size:14px;color:#1d1d1f;line-height:1.8;min-height:120px;outline:none;border:none;width:100%;resize:none;background:transparent;font-family:inherit}
 .grid22{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 /* Compact 3-per-row task grid (Main page งานค้าง/กำลังดำเนินการ/etc) — same tcCard markup, just resized via cascade */
 .tc-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
@@ -621,7 +624,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px">หน้ารวม</div>
         <button onclick="noteNew()" style="background:#1c1c1e;color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer">+ เพิ่มโน้ต</button>
       </div>
-      <div id="note-grid" style="columns:2;gap:10px"></div>
+      <div id="note-grid" style="columns:2;gap:14px"></div>
     </div>
     <div id="note-detail-wrap" style="display:none">
       <div id="note-detail"></div>
@@ -1726,37 +1729,37 @@ function renderNotes(){
   var h='';
   notes.forEach(function(n){
     var tag=NOTE_TAGS.find(function(t){return t.label===n.tag;})||NOTE_TAGS[5];
-    h+='<div class="note-card" style="background:'+(n.color||NOTE_COLORS[0])+'" onclick="noteOpen(\''+n.id+'\')">'
-      +'<div class="note-tag" style="color:'+tag.color+'">'+tag.label+'</div>'
+    h+='<button type="button" class="note-card'+(n.id===_noteActive?' sel':'')+'" onclick="noteOpen(\''+n.id+'\')">'
+      +'<div class="note-card-hd"><span class="note-tag">'+tag.label+'</span><span class="note-card-date">'+noteShortDate(n.updatedAt||n.createdAt)+'</span></div>'
       +'<div class="note-card-title">'+escH(n.title||'โน้ตใหม่')+'</div>'
       +'<div class="note-card-preview">'+escH(n.body||'')+'</div>'
-      +'</div>';
+      +'</button>';
   });
   grid.innerHTML=h;
 }
+function noteShortDate(iso){if(!iso)return'';var d=new Date(iso);if(isNaN(d))return'';var m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return d.getDate()+' '+m[d.getMonth()];}
 function noteOpen(id){
   var notes=notesLoad();
   var n=notes.find(function(x){return x.id===id;});
   if(!n)return;
   _noteActive=id;
-  renderNoteDetail(n);
+  renderNoteDetail(n);renderNotes();
   var wrap=document.getElementById('note-detail-wrap');
   if(wrap)wrap.style.display='block';
 }
 function renderNoteDetail(n){
   var tagOpts=NOTE_TAGS.map(function(t){return '<option value="'+t.label+'"'+(n.tag===t.label?' selected':'')+'>'+t.label+'</option>';}).join('');
   var colorOpts=NOTE_COLORS.map(function(c){return '<span onclick="noteSetColor(\''+c+'\')" style="display:inline-block;width:20px;height:20px;border-radius:50%;background:'+c+';cursor:pointer;border:2px solid '+(n.color===c?'#534AB7':'transparent')+'"></span>';}).join('');
-  var h='<div class="note-detail-card" style="background:'+(n.color||NOTE_COLORS[0])+'">'
+  var h='<div class="note-detail-card">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
-    +'<button onclick="noteClose()" style="font-size:11px;color:#888;background:rgba(255,255,255,.5);border:none;border-radius:14px;padding:4px 10px;cursor:pointer">← กลับ</button>'
-    +'<div style="display:flex;gap:5px">'+colorOpts+'</div></div>'
-    +'<select id="nd-tag" onchange="noteSetTag(this.value)" style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:rgba(255,255,255,.55);border:none;margin-bottom:8px;cursor:pointer">'+tagOpts+'</select>'
+    +'<button onclick="noteClose()" style="font-size:13px;font-weight:500;color:#0066cc;background:none;border:none;padding:6px 2px;cursor:pointer;font-family:inherit">‹ กลับ</button>'
+    +'<select id="nd-tag" onchange="noteSetTag(this.value)" aria-label="หมวดหมู่" style="font-size:12px;font-weight:600;color:#3a3a3c;padding:5px 10px;border-radius:10px;background:rgba(0,0,0,.05);border:none;cursor:pointer;font-family:inherit">'+tagOpts+'</select></div>'
     +'<input id="nd-title" class="note-detail-title" value="'+escH(n.title||'')+'" placeholder="หัวข้อ...">'
     +'<div class="note-detail-meta">'+fmtThaiDateTime(n.updatedAt||n.createdAt)+'</div>'
     +'<textarea id="nd-body" class="note-detail-body" rows="8" placeholder="จดบันทึก...">'+escH(n.body||'')+'</textarea>'
     +'<div style="display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:.5px solid rgba(0,0,0,.1)">'
-    +'<button onclick="noteSave()" style="background:#1c1c1e;color:#fff;border:none;border-radius:20px;padding:7px 16px;font-size:11px;font-weight:700;cursor:pointer;flex:1">💾 บันทึก</button>'
-    +'<button onclick="noteDelete(\''+n.id+'\')" style="background:rgba(214,69,61,.12);color:#D6453D;border:none;border-radius:20px;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer">ลบ</button>'
+    +'<button onclick="noteSave()" style="background:#1d1d1f;color:#fff;border:none;border-radius:12px;padding:11px 16px;font-size:13px;font-weight:700;cursor:pointer;flex:1;font-family:inherit">บันทึก</button>'
+    +'<button onclick="noteDelete(\''+n.id+'\')" style="background:rgba(215,0,21,.08);color:#c4001a;border:none;border-radius:12px;padding:11px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">ลบ</button>'
     +'</div></div>';
   document.getElementById('note-detail').innerHTML=h;
 }
@@ -1783,7 +1786,7 @@ function noteDelete(id){
   notesSave(notes);noteClose();renderNotes();showToast('🗑 ลบแล้ว');
 }
 function noteClose(){
-  _noteActive=null;
+  _noteActive=null;renderNotes();
   var wrap=document.getElementById('note-detail-wrap');
   if(wrap)wrap.style.display='none';
 }

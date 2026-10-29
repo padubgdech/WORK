@@ -33,6 +33,8 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Each pinned card has a note row (`pinNoteText`: localStorage `note_html_<id>` or t.note) → `openPinNote` opens the popup
   with the note editor already open (same `saveNoteInline` path; it now also updates `allActiveTasks` and re-renders the band). Note: 21 of 25 active tasks had no date (Tasks backlog) — that's why pinning is an explicit checkbox,
   not "no date". Main sidebar NOTE notebook was removed (29 Oct) at Dech's request.
+- Note tab (`renderNotes`, localStorage `rudy_notes`): cards + detail panel restyled to Apple frosted single colour (design "การ์ด 5" on the canvas,
+  29 Oct). Per-note colour picker removed from the panel (n.color still stored, just unused). Selected card = blue ring (`.note-card.sel`).
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 ## Pending
