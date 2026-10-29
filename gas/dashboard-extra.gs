@@ -1,13 +1,17 @@
 // KHUMTONE dashboard — เปิดแอปคำขอเดียว (getMainData) + งานที่ทำซ้ำ (Repeat)
 // doGet เรียก handleDashboardExtra_(e) ต่อจาก handleNoteHtml_(e)
 // ใช้ Notion property "Repeat" (select: Daily / Weekly / Monthly) — setupRepeatProperty() สร้างให้ถ้ายังไม่มี
+// ใช้ Notion property "Pinned" (checkbox) = งานปักหมุดหน้า Main — setupPinnedProperty() สร้างให้ถ้ายังไม่มี
 function handleDashboardExtra_(e) {
 var p = (e && e.parameter) || {};
 var a = p.action;
 if (a === 'getMainData') return jsonpResponse(e, getMainData_(p));
 if (a === 'setupRepeat') return jsonpResponse(e, setupRepeatProperty());
+if (a === 'setupPinned') return jsonpResponse(e, setupPinnedProperty());
+if (a === 'getPinned') { var pl = pinnedList_(); return jsonpResponse(e, { pinned: pl, subtasks: subtasksBatch_(pl.map(function (x) { return x.id; })) }); }
+if (a === 'setPinned') return jsonpResponse(e, setPinned_(p.id, String(p.pinned) === 'true'));
 if (a === 'updateTask' && String(p.done) === 'true') { try { createNextRepeat_(p.id); } catch (err) { Logger.log('repeat error: ' + err); } return null; }
-if (a === 'addTask' && p.repeat && !p._noRepeat) return addTaskWithRepeat_(e);
+if (a === 'addTask' && (p.repeat || p.pin) && !p._noRepeat) return addTaskWithRepeat_(e);
 return null;
 }
 
@@ -23,8 +27,31 @@ var today = callAction_({ action: 'getTasks', date: date }) || {};
 var overdue = callAction_({ action: 'getOverdueTasks' }) || {};
 var events = callAction_({ action: 'getCalendarEvents', date: date }) || {};
 var tasks = today.tasks || [], od = overdue.tasks || [];
-var ids = tasks.concat(od).filter(function (t) { return !t.done; }).map(function (t) { return t.id; });
-return { mainData: true, tasks: tasks, overdue: od, events: events.events || [], subtasks: subtasksBatch_(ids) };
+var pinned = pinnedList_();
+var ids = tasks.concat(od).filter(function (t) { return !t.done; }).map(function (t) { return t.id; }).concat(pinned.map(function (x) { return x.id; }));
+return { mainData: true, tasks: tasks, overdue: od, events: events.events || [], pinned: pinned, subtasks: subtasksBatch_(ids) };
+}
+
+// ---------- งานปักหมุด ----------
+function pinnedList_() {
+try {
+var q = notionReq_('databases/' + CONFIG.NOTION_DATABASE_ID + '/query', 'post', { filter: { property: 'Pinned', checkbox: { equals: true } }, page_size: 100 });
+return (q.results || []).map(function (pg) { return { id: pg.id, created: String(pg.created_time || '').slice(0, 10) }; });
+} catch (err) { return []; }
+}
+
+function setPinned_(id, on) {
+if (!id) return { ok: false };
+var r = notionReq_('pages/' + id, 'patch', { properties: { Pinned: { checkbox: !!on } } });
+return { ok: r.object !== 'error', pinned: !!on };
+}
+
+function setupPinnedProperty() {
+var db = notionReq_('databases/' + CONFIG.NOTION_DATABASE_ID, 'get');
+if (db.properties && db.properties.Pinned) return { ok: true, existed: true };
+var r = notionReq_('databases/' + CONFIG.NOTION_DATABASE_ID, 'patch', { properties: { Pinned: { checkbox: {} } } });
+Logger.log(r.object === 'error' ? 'ERROR ' + r.message : 'สร้าง property Pinned แล้ว');
+return { ok: r.object !== 'error', created: true };
 }
 
 // ดึงงานย่อยของหลายงานพร้อมกัน (ขนานกัน) แทนการยิงทีละการ์ด
@@ -105,17 +132,20 @@ props.setProperty(key, created.id);
 return created.id;
 }
 
-// เพิ่มงานพร้อมตั้ง Repeat — ให้ addTask เดิมสร้างงาน แล้วหางานที่เพิ่งสร้างมาใส่ Repeat
+// เพิ่มงานพร้อมตั้ง Repeat / Pinned — ให้ addTask เดิมสร้างงาน แล้วหางานที่เพิ่งสร้างมาใส่ property
 function addTaskWithRepeat_(e) {
 var p = {}; Object.keys(e.parameter).forEach(function (k) { p[k] = e.parameter[k]; });
-var rule = p.repeat; delete p.repeat; p._noRepeat = '1';
+var rule = p.repeat, pin = p.pin === '1'; delete p.repeat; delete p.pin; p._noRepeat = '1';
 var out = doGet({ parameter: p });
-if (['Daily', 'Weekly', 'Monthly'].indexOf(rule) === -1) return out;
+var props = {};
+if (['Daily', 'Weekly', 'Monthly'].indexOf(rule) !== -1) props.Repeat = { select: { name: rule } };
+if (pin) props.Pinned = { checkbox: true };
+if (!Object.keys(props).length) return out;
 try {
 var name = decodeURIComponent(p.name || '');
 var q = notionReq_('databases/' + CONFIG.NOTION_DATABASE_ID + '/query', 'post', { filter: { property: 'Task', title: { equals: name } }, sorts: [{ timestamp: 'created_time', direction: 'descending' }], page_size: 1 });
 var pg = q.results && q.results[0];
-if (pg) notionReq_('pages/' + pg.id, 'patch', { properties: { Repeat: { select: { name: rule } } } });
+if (pg) notionReq_('pages/' + pg.id, 'patch', { properties: props });
 } catch (err) { Logger.log('addTaskWithRepeat error: ' + err); }
 return out;
 }
