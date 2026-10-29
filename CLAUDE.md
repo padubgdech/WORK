@@ -16,22 +16,22 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
 ## GAS files added by Claude (already installed)
 - `note-html-sync.gs` — note HTML sync to a Google Sheet (`saveNoteHtml`/`getNoteHtml`). Hook: first lines of `doGet`.
 - `dashboard-upload.gs` — note images → Drive folder "KHUMTONE Dashboard Images" (POST `?action=uploadImage`, hook first lines of `doPost`) + `dashboardDateProps_` used by `moveTask`/`setTaskDate` to update End Date.
+- `dashboard-extra.gs` — `getMainData` (one request: today + overdue + events + subtasks via `fetchAll`) and recurring tasks
+  (Notion "Repeat" select Daily/Weekly/Monthly; marking a repeat task Done creates the next one; dedupe via Script Properties `rep_<id>_<date>`).
+  Hook: `doGet` line after `if (nh) return nh;` → `var ex = handleDashboardExtra_(e); if (ex) return ex;`.
+  Installed 29 Oct 2026, `setupRepeatProperty` run (property created), dashboard deployment = version 192. `USE_MAIN_DATA=true` in index.html.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 ## Pending
-1. **Install `gas/dashboard-extra.gs`** (getMainData single-request load + recurring tasks):
-   add as new GAS file; in `doGet` after `if (nh) return nh;` add `var ex = handleDashboardExtra_(e); if (ex) return ex;`;
-   run `setupRepeatProperty` once (creates Notion "Repeat" select); deploy new version to the dashboard deployment;
-   verify `?action=getMainData` returns `mainData:true`; then set `USE_MAIN_DATA=true` in index.html and push.
-   Until then the 🔁 repeat buttons in the add-task modal are visible but do nothing.
-2. Security (not started): GAS web app is ANYONE_ANONYMOUS and its URL is public → anyone can edit/delete tasks. Plan: verify LIFF ID token / userId in GAS. Tokens (LINE/Notion/Gemini) are hard-coded in `รหัส.gs` CONFIG → rotate and move to Script Properties.
-3. Separate HR/employee app: profile "แก้ไขข้อมูล" opens the first-login modal (only "ออกจากระบบ", no ✕, save button stuck on "กำลังบันทึก..."). Location of that code unknown — ask Dech.
+1. Security (not started): GAS web app is ANYONE_ANONYMOUS and its URL is public → anyone can edit/delete tasks. Plan: verify LIFF ID token / userId in GAS. Tokens (LINE/Notion/Gemini) are hard-coded in `รหัส.gs` CONFIG → rotate and move to Script Properties.
+2. Separate HR/employee app: profile "แก้ไขข้อมูล" opens the first-login modal (only "ออกจากระบบ", no ✕, save button stuck on "กำลังบันทึก..."). Location of that code unknown — ask Dech.
 
 ## Working notes (learned the hard way)
 - Dech's machine is a **Mac**: in the Apps Script editor use `cmd+…` (cmd+a, cmd+z, cmd+f, cmd+s). Ctrl shortcuts get typed as text.
 - Typing into the Monaco editor: write code with **no leading indentation** and **no `/* */` block comments** (auto-indent/doc-comment completion corrupt it). Keys like `Page_Down` may get typed literally — scroll with the mouse or jump with cmd+f instead.
 - Always screenshot after creating a file/clicking a menu before select-all+delete — once the "new file" menu hadn't opened and cmd+a wiped `รหัส.gs` (undone before save).
 - GAS project has a 200-version limit; old versions were pruned on 22 Oct 2026. Deleting versions = user does it (permanent delete).
+- Easiest way to put code into the editor: Claude in Chrome `javascript_tool` → `monaco.editor.getModels()` (uri `file_N.js`) → `model.pushEditOperations(...)`, then cmd+s. No typing/indent problems. Reading code back through the tool gets blocked ("Cookie/query string data") — return booleans/line numbers instead.
 - OAuth consent opens in a popup Claude can't control → ask Dech to click Allow.
 - Frontend tests: headless Playwright with a mocked GAS (`script.google.com` route returning JSONP). Check phone width 390px (single column + bottom tab bar below 760px).
 - Frontend architecture: JSONP `api()` for reads; `apiS()` = write queue with retry (localStorage `khum_pending_v1`); note sync; subtasks auto-load queue; `loadMainData()` (flag `USE_MAIN_DATA`).
