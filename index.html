@@ -487,49 +487,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       <!-- นัดหมายวันนี้ -->
       <div class="sec"><span>นัดหมายวันนี้</span></div>
       <div id="main-events"><div class="ld">⏳</div></div>
-      <!-- NOTEBOOK NOTE -->
-      <div style="margin-top:16px">
-        <div class="notebook" id="main-notebook">
-          <div class="nb-wrap">
-            <div class="nb-spine"><div class="nb-spine-txt">NOTE</div></div>
-            <div class="nb-body">
-              <div class="nb-hdr">
-                <div>
-                  <div class="nb-date-big" id="nb-day"></div>
-                  <div class="nb-date-sub" id="nb-datesub"></div>
-                </div>
-                <span class="nb-today-badge">วันนี้</span>
-              </div>
-              <div class="nb-editor-wrap">
-                <div class="nb-toolbar">
-                  <button class="nb-tb-btn" data-cmd="bold" onclick="nbCmd(this)"><b>B</b></button>
-                  <button class="nb-tb-btn" data-cmd="italic" onclick="nbCmd(this)"><i style="font-style:italic">I</i></button>
-                  <button class="nb-tb-btn" data-cmd="underline" onclick="nbCmd(this)"><u>U</u></button>
-                  <span class="nb-tb-sep"></span>
-                  <button class="nb-tb-btn" data-cmd="insertUnorderedList" onclick="nbCmd(this)">•</button>
-                  <button class="nb-tb-btn" data-cmd="insertOrderedList" onclick="nbCmd(this)" style="font-size:10px">1.</button>
-                  <span class="nb-tb-sep"></span>
-                  <span style="font-size:10px;color:#A09DC8;margin-right:2px">สี</span>
-                  <span class="nb-tb-swatch" style="background:#2d2060" data-col="#2d2060" onclick="nbColor(this)"></span>
-                  <span class="nb-tb-swatch" style="background:#c62828" data-col="#c62828" onclick="nbColor(this)"></span>
-                  <span class="nb-tb-swatch" style="background:#0f7b55" data-col="#0f7b55" onclick="nbColor(this)"></span>
-                  <span class="nb-tb-swatch" style="background:#854F0B" data-col="#854F0B" onclick="nbColor(this)"></span>
-                  <span class="nb-tb-swatch" style="background:#534AB7" data-col="#534AB7" onclick="nbColor(this)"></span>
-                </div>
-                <div id="main-note-editor" class="nb-editor" contenteditable="true"
-                  onkeyup="nbCount()" onmouseup="nbCount()"></div>
-                <div class="nb-footer">
-                  <span class="nb-charcount" id="nb-charcount">0 ตัวอักษร</span>
-                  <button onclick="saveMainNote()" class="nb-save">💾 บันทึก</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Timeline History -->
-        <div class="hist-lbl">7 วันย้อนหลัง</div>
-        <div class="timeline" id="main-note-history"><div class="ld" style="padding:12px 0;font-size:12px">⏳</div></div>
-      </div>
       <!-- RUDY บอก -->
       <div class="sec" style="margin-top:18px"><span>RUDY บอก</span></div>
       <div id="main-rudy" style="background:#111;border-radius:12px;padding:16px">
