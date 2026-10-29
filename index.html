@@ -215,7 +215,12 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .pin-band.collapsed .pin-grid{display:none}
 .pin-card{background:#fff;border:.5px solid #ECDCB8;border-top:3px solid;border-radius:8px;padding:7px 8px 7px 10px;display:flex;flex-direction:column;gap:5px;min-width:0}
 .pin-row{display:flex;align-items:center;gap:6px;min-width:0}
-.pin-name{font-size:12.5px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.pin-name{font-size:12.5px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;background:none;border:none;padding:0;text-align:left;cursor:pointer;font-family:inherit}
+.pin-name:hover{text-decoration:underline}
+.pin-card{cursor:pointer;transition:box-shadow .15s}.pin-card:hover{box-shadow:0 2px 10px rgba(110,77,18,.12)}
+.tc.pin-flash{box-shadow:0 0 0 3px #E2C98F;transition:box-shadow .3s}
+.pin-detail-ft{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px;font-size:11px;color:#8a7a5a}
+.pin-detail-ft button{background:#FDF8EE;color:#6E4D12;border:.5px solid #F1DEB2;border-radius:7px;font-size:12px;font-weight:600;padding:7px 12px;cursor:pointer;font-family:inherit}
 .pin-pri{font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;flex-shrink:0}
 .pin-age{font-size:10.5px;font-weight:600;padding:1px 6px;border-radius:8px}
 .pin-age.a0{background:#EEF3EF;color:#2F5B44}.pin-age.a1{background:#F8EFDD;color:#6E4D12}.pin-age.a2{background:#FDE7E3;color:#8C2F1F}
@@ -914,6 +919,7 @@ function subtaskBlock(t){
 function getTask(tid){
   var found=null;
   [todayTasks,overdueTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid)found=t;});});
+  if(!found)allActiveTasks.forEach(function(t){if(!found&&t.id===tid)found=t;}); // งานปักหมุดที่เปิดดูใน popup
   return found;
 }
 function fetchSubtasks(tid){
@@ -1346,7 +1352,7 @@ function tcCard(t,opts){
     +'style="background:transparent;color:#aaa;font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:5px;border:1px solid #e5e3de;cursor:pointer;white-space:nowrap">✏️ วัน</button>':'';
   var h='<div class="tc" id="tc-'+t.id+'" style="border-left-color:'+col+(isDone?';opacity:.7':'')+'">'+
     '<div class="tc-hdr"><div class="tc-name'+(isDone?' done-name':'')+'">'+t.name+'</div>'+
-    '<div class="tc-acts" style="gap:5px">'+editBtn+statusBadge(st,t)+' <span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span></div></div>'+rangeBar(t);
+    '<div class="tc-acts" style="gap:5px">'+editBtn+statusBadge(st,t)+' <span class="'+priCls(t.priority)+'">'+t.priority.toUpperCase()+'</span></div></div>'+((t._pinBox&&!t.actionDate&&!t.endDate)?pinDateBox(t):rangeBar(t));
   if(!isDone){
     h+=noteBlock(t);
   } else if(t.note){
@@ -2499,8 +2505,8 @@ function renderPinned(){
     var st=pinnedSubs[pinKey(t.id)], stTxt='';
     if(st&&st.length){var dn=st.filter(function(x){return x.done;}).length;stTxt='<span class="pin-st">'+dn+'/'+st.length+'</span>';}
     var nm=String(t.name||'').replace(/"/g,'&quot;');
-    h+='<div class="pin-card" style="border-top-color:'+ps[3]+'">';
-    h+='<div class="pin-row"><div class="pin-name" title="'+nm+'">'+t.name+'</div><span class="pin-pri" style="background:'+ps[1]+';color:'+ps[2]+'">'+ps[0]+'</span></div>';
+    h+='<div class="pin-card" style="border-top-color:'+ps[3]+'" data-id="'+t.id+'" onclick="if(!event.target.closest(\'.pin-acts\'))openPinDetail(this.dataset.id)">';
+    h+='<div class="pin-row"><button type="button" class="pin-name" title="ดูรายละเอียด: '+nm+'">'+t.name+'</button><span class="pin-pri" style="background:'+ps[1]+';color:'+ps[2]+'">'+ps[0]+'</span></div>';
     var ad=t.actionDate||'',badge;
     if(ad){var late=ad<TODAY_STR;badge='<span class="pin-age dt'+(late?' late':'')+'">'+(ad===TODAY_STR?'เริ่มวันนี้':(late?'เริ่มแล้ว ':'เริ่ม ')+fmtShort(ad))+'</span>';}
     else badge='<span class="pin-age '+ac+'" title="ปักไว้ '+age+' วัน">'+(age?age+' วัน':'ใหม่')+'</span>';
@@ -2516,6 +2522,39 @@ function renderPinned(){
 }
 function togglePinBand(){_pinCollapsed=!_pinCollapsed;try{localStorage.setItem('khum_pin_collapsed',_pinCollapsed?'1':'0');}catch(e){}renderPinned();}
 function pinToday(id){doAssign(id,TODAY_STR,'');}
+// กดการ์ดหมุด → ดูรายละเอียด (การ์ดงานเต็ม: note, งานย่อย, Done/เลื่อน/ลบ)
+function pinDateBox(t){
+  var nmq=String(t.name||'').replace(/"/g,'&quot;');
+  return '<div style="border:1px dashed #D7AE64;background:#FDF8EE;border-radius:8px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">'
+    +'<span style="font-size:12px;color:#6E4D12;font-weight:600">📅 ยังไม่กำหนดวัน</span><span style="display:flex;gap:6px">'
+    +'<button type="button" class="pin-btn" style="padding:7px 12px;font-size:12px" data-id="'+t.id+'" onclick="pinToday(this.dataset.id)">เริ่มวันนี้</button>'
+    +'<button type="button" class="act act-move" style="padding:7px 12px" data-id="'+t.id+'" data-name="'+nmq+'" onclick="assignDate(this.dataset.id,this.dataset.name)">เลือกวัน</button></span></div>';
+}
+function openPinDetail(id){
+  var t=null;getPinnedTasks().forEach(function(x){if(!t&&x.id===id)t=x;});
+  if(!t)return;
+  var onPage=null;document.querySelectorAll('#page-main .tc').forEach(function(el){if(el.id==='tc-'+id)onPage=el;});
+  if(onPage){ // อยู่ในรายการงานวันนี้/ค้างอยู่แล้ว → เลื่อนไปที่การ์ดนั้น
+    onPage.scrollIntoView({behavior:'smooth',block:'center'});onPage.classList.add('pin-flash');
+    setTimeout(function(){onPage.classList.remove('pin-flash');},1600);return;
+  }
+  if(t._subtasks===undefined){var ps=pinnedSubs[pinKey(id)];if(ps)t._subtasks=ps;}
+  var age=pinAgeDays(id);
+  var h='<div class="modal-title">รายละเอียดงาน <button class="modal-x" onclick="closeModal()">×</button></div>';
+  t._pinBox=true; // tcCard จะแสดงกล่อง "ยังไม่กำหนดวัน" แทนแถบวันที่ (คงไว้แม้การ์ด re-render ตอนโหลดงานย่อย)
+  h+=tcCard(t,{move:true});
+  h+='<div class="pin-detail-ft"><span>📌 ปักหมุดไว้'+(age?' '+age+' วัน':'วันนี้')+'</span><button type="button" data-id="'+t.id+'" onclick="togglePin(this.dataset.id);closeModal()">ถอดหมุด</button></div>';
+  showModal(h);
+  var mb=document.getElementById('modal-body');
+  if(mb)mb.addEventListener('click',function(e){
+    var b;
+    if((b=e.target.closest('[data-doneid]'))){doDone(b.getAttribute('data-doneid'));closeModal();renderPinned();return;}
+    if((b=e.target.closest('[data-delid]'))){openDel(b.getAttribute('data-delid'),b.getAttribute('data-delname'));return;}
+    if((b=e.target.closest('[data-moveid]'))){openMove(b.getAttribute('data-moveid'),b.getAttribute('data-movename'));return;}
+  });
+  setTimeout(loadLocalNotes,50);
+  if(t._subtasks===undefined)fetchSubtasks(id);
+}
 function pinPickDate(b){
   var id=b.dataset.id,sd=b.dataset.sd||'',ed=b.dataset.ed||'';
   if(!sd){assignDate(id,b.dataset.name);return;}

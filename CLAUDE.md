@@ -26,7 +26,10 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
 - Frontend pinned band (design "D compact", canvas artifact "ปักหมุดงาน — 4 แบบ"): `#main-pinned` above the Main grid.
   Shows every Pinned task that is still active (`allActiveTasks`+today+overdue; done ones drop out) — dated or not (Dech: "ปักได้ทุกงาน").
   Undated: age badge (days since Notion created_time) + "วันนี้"; setting a date auto-unpins. Dated: "เริ่ม <date>" badge, stays pinned
-  until × (unpin). Pin toggle on every Tasks-page card and in the add-task modal. Note: 21 of 25 active tasks had no date (Tasks backlog) — that's why pinning is an explicit checkbox,
+  until × (unpin). Pin toggle on every Tasks-page card and in the add-task modal.
+  Click a pinned card → `openPinDetail` popup = full `tcCard` (note, subtasks, Done/เลื่อน/ลบ) + ถอดหมุด; undated tasks show
+  `pinDateBox` (flag `t._pinBox`) instead of the date bar. If the task is already in the Main lists it scrolls/highlights that card instead.
+  `getTask()` also falls back to `allActiveTasks` so subtask/note actions work in the popup. Note: 21 of 25 active tasks had no date (Tasks backlog) — that's why pinning is an explicit checkbox,
   not "no date". Main sidebar NOTE notebook was removed (29 Oct) at Dech's request.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
