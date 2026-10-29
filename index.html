@@ -220,10 +220,13 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .pin-age{font-size:10.5px;font-weight:600;padding:1px 6px;border-radius:8px}
 .pin-age.a0{background:#EEF3EF;color:#2F5B44}.pin-age.a1{background:#F8EFDD;color:#6E4D12}.pin-age.a2{background:#FDE7E3;color:#8C2F1F}
 .pin-st{font-size:10.5px;color:#555;font-family:var(--mono)}
+.pin-age.dt{background:#E8EAF6;color:#283593}.pin-age.dt.late{background:#FDE7E3;color:#8C2F1F}
+.pin-x{background:none;border:none;color:#9a8a6a;padding:3px 4px;display:flex;align-items:center;cursor:pointer;border-radius:6px}
+.pin-x:hover{background:#f7f6f3;color:#6E4D12}
 .pin-acts{margin-left:auto;display:flex;gap:4px}
 .pin-btn{background:#111;color:#fff;border:none;border-radius:6px;font-size:10.5px;font-weight:600;padding:4px 8px;cursor:pointer;font-family:inherit}
 .pin-cal{background:#f7f6f3;color:#555;border:.5px solid var(--border);border-radius:6px;padding:3px 6px;display:flex;align-items:center;cursor:pointer}
-@media(max-width:760px){.pin-band{padding:8px 10px 10px}.pin-btn{padding:8px 12px;font-size:12px}.pin-cal{padding:7px 9px}.pin-hd-btn{padding:8px 10px}}
+@media(max-width:760px){.pin-band{padding:8px 10px 10px}.pin-btn{padding:8px 12px;font-size:12px}.pin-cal{padding:7px 9px}.pin-x{padding:7px 8px}.pin-hd-btn{padding:8px 10px}}
 .add-pin-tg{display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;border:1px dashed #E2C98F;background:#FDF8EE;color:#6E4D12;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:8px;text-align:left}
 .add-pin-tg.on{background:#FBF3E4;border-style:solid;border-color:#D7AE64}
 .add-pin-tg .box{width:16px;height:16px;border-radius:4px;border:1.5px solid #B8862F;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:#fff}
@@ -2008,7 +2011,7 @@ function ndCardHtml(t,col){
   h+='<div class="nd-c-chips">'+(chips||'')+'</div>';
   h+='<div class="nd-c-acts">';
   h+='<button class="nd-c-btn-done" data-doneid="'+t.id+'" data-donename="'+sn+'" onclick="doDoneND(this.dataset.doneid,this.dataset.donename)">✓ Done</button>';
-  if(!t.actionDate){var pOn=isPinned(t.id);h+='<button class="nd-c-btn-pin'+(pOn?' on':'')+'" data-pid="'+t.id+'" onclick="togglePin(this.dataset.pid)" title="'+(pOn?'ถอดหมุดออกจากหน้า Main':'ปักหมุดไว้หน้า Main')+'">📌'+(pOn?' ถอด':' ปัก')+'</button>';}
+  {var pOn=isPinned(t.id);h+='<button class="nd-c-btn-pin'+(pOn?' on':'')+'" data-pid="'+t.id+'" onclick="togglePin(this.dataset.pid)" title="'+(pOn?'ถอดหมุดออกจากหน้า Main':'ปักหมุดไว้หน้า Main')+'">📌'+(pOn?' ถอด':' ปัก')+'</button>';}
   h+='<button class="nd-c-btn-date" data-nid="'+t.id+'" data-nname="'+sn+'" onclick="assignDate(this.dataset.nid,this.dataset.nname)">📅 +วัน</button>';
   h+='<button class="nd-c-btn-del" data-delid="'+t.id+'" onclick="delNDFast(this.dataset.delid)">🗑</button>';
   h+='</div></div>';
@@ -2233,13 +2236,13 @@ function doAssign(id,date,endDate){
   if(!date){showToast('⚠️ กรุณาเลือกวันเริ่ม');return;}
   var hadEnd=(findAnyTask(id)||{}).endDate; // เก็บไว้ก่อนแก้ cache — ถ้าเลือกวันเดียว ต้องล้าง End Date เก่าทิ้ง
   // อัปเดต local cache ทันทีทั้ง todayTasks, overdueTasks, noDateTasks
-  var src=findAnyTask(id);
+  var src=findAnyTask(id),wasUndated=!(src&&src.actionDate);
   [todayTasks,overdueTasks,noDateTasks,allActiveTasks].forEach(function(arr){
     arr.forEach(function(t){
       if(t.id===id){t.actionDate=date;t.endDate=endDate||'';}
     });
   });
-  if(isPinned(id)){delete pinnedMeta[pinKey(id)];apiS({action:'setPinned',id:id,pinned:'false'});} // ลงวันแล้ว = ถอดหมุดอัตโนมัติ
+  if(isPinned(id)&&wasUndated){delete pinnedMeta[pinKey(id)];apiS({action:'setPinned',id:id,pinned:'false'});} // งานไม่มีวันที่ปักไว้ ลงวันแล้ว = ถอดหมุดอัตโนมัติ (งานที่มีวันอยู่แล้วคงหมุดไว้)
   if(date===TODAY_STR&&src&&!todayTasks.some(function(t){return t.id===id;})){
     var c={};Object.keys(src).forEach(function(k){c[k]=src[k];});c.actionDate=date;c.endDate=endDate||'';
     var ps=pinnedSubs[pinKey(id)];if(ps&&c._subtasks===undefined)c._subtasks=ps;
@@ -2456,7 +2459,7 @@ function renderNoteTimeline(){
   hist.innerHTML=h;
 }
 function editMainNote(){/* ไม่ใช้แล้ว — editor เปิดตลอด */}
-/* ===== งานปักหมุด — Notion checkbox "Pinned" + ยังไม่มี Action Date =====
+/* ===== งานปักหมุด — Notion checkbox "Pinned" (ปักได้ทุกงาน มีวันหรือไม่มีก็ได้) =====
    GAS ส่ง pinned:[{id,created}] มากับ getMainData (หรือ action=getPinned)
    ตัวงาน (ชื่อ/priority/สถานะ) ใช้จาก allActiveTasks — งานที่ Done แล้วจะหลุดเอง */
 var pinnedMeta={}, pinnedSubs={}, _pinCollapsed=false;
@@ -2473,8 +2476,9 @@ function setPinnedData(list,subs){
 function loadPinned(){api({action:'getPinned'},function(d){if(d&&d.pinned)setPinnedData(d.pinned,d.subtasks);});}
 function getPinnedTasks(){
   var pr={High:0,Medium:1,Low:2};
-  return allActiveTasks.filter(function(t){return !t.done&&!t.actionDate&&isPinned(t.id);})
-    .sort(function(a,b){var d=(pr[a.priority]||1)-(pr[b.priority]||1);if(d)return d;var ca=pinnedMeta[pinKey(a.id)]||'',cb=pinnedMeta[pinKey(b.id)]||'';return ca<cb?-1:ca>cb?1:0;});
+  var seen={},src=allActiveTasks.concat(todayTasks,overdueTasks);
+  return src.filter(function(t){var k=pinKey(t.id);if(seen[k]||t.done||!isPinned(t.id))return false;seen[k]=1;return true;})
+    .sort(function(a,b){var pa=a.priority in pr?pr[a.priority]:1,pb=b.priority in pr?pr[b.priority]:1,d=pa-pb;if(d)return d;var ca=pinnedMeta[pinKey(a.id)]||'',cb=pinnedMeta[pinKey(b.id)]||'';return ca<cb?-1:ca>cb?1:0;});
 }
 function pinAgeDays(id){var c=pinnedMeta[pinKey(id)];if(!c)return 0;return Math.max(0,Math.round((new Date(TODAY_STR+'T00:00:00')-new Date(c+'T00:00:00'))/864e5));}
 function renderPinned(){
@@ -2482,10 +2486,11 @@ function renderPinned(){
   var list=getPinnedTasks();
   if(!list.length){el.innerHTML='';return;}
   var priS={High:['HIGH','#111','#fff','#C2553F'],Medium:['MED','#ECEAE5','#444','#B8862F'],Low:['LOW','#E7F1EA','#2F5B44','#4E8B6A']};
+  var xSvg='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>';
   var calSvg='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>';
   var pinSvg='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5"></path><path d="M9 10.76V6h6v4.76a2 2 0 0 0 1.11 1.79l1.78.9A2 2 0 0 1 19 15.24V17H5v-1.76a2 2 0 0 1 1.11-1.79l1.78-.9A2 2 0 0 0 9 10.76z"></path><path d="M8 2h8"></path></svg>';
   var h='<section class="pin-band'+(_pinCollapsed?' collapsed':'')+'" aria-label="งานปักหมุด">';
-  h+='<div class="pin-hd"><div class="pin-ttl">'+pinSvg+'<span>ปักหมุด '+list.length+'</span><small>· รอเลือกวันเริ่ม</small></div>';
+  h+='<div class="pin-hd"><div class="pin-ttl">'+pinSvg+'<span>ปักหมุด '+list.length+'</span></div>';
   h+='<div style="display:flex;gap:2px"><button type="button" class="pin-hd-btn" onclick="openAdd(\'Medium\',true)">+ ปักหมุด</button>';
   h+='<button type="button" class="pin-hd-btn" aria-expanded="'+(!_pinCollapsed)+'" onclick="togglePinBand()">'+(_pinCollapsed?'ขยาย':'ย่อ')+'</button></div></div>';
   h+='<div class="pin-grid">';
@@ -2496,9 +2501,14 @@ function renderPinned(){
     var nm=String(t.name||'').replace(/"/g,'&quot;');
     h+='<div class="pin-card" style="border-top-color:'+ps[3]+'">';
     h+='<div class="pin-row"><div class="pin-name" title="'+nm+'">'+t.name+'</div><span class="pin-pri" style="background:'+ps[1]+';color:'+ps[2]+'">'+ps[0]+'</span></div>';
-    h+='<div class="pin-row"><span class="pin-age '+ac+'" title="ปักไว้ '+age+' วัน">'+(age?age+' วัน':'ใหม่')+'</span>'+stTxt;
-    h+='<div class="pin-acts"><button type="button" class="pin-btn" data-id="'+t.id+'" onclick="pinToday(this.dataset.id)">วันนี้</button>';
-    h+='<button type="button" class="pin-cal" aria-label="เลือกวันเริ่ม" data-id="'+t.id+'" data-name="'+nm+'" onclick="assignDate(this.dataset.id,this.dataset.name)">'+calSvg+'</button></div></div>';
+    var ad=t.actionDate||'',badge;
+    if(ad){var late=ad<TODAY_STR;badge='<span class="pin-age dt'+(late?' late':'')+'">'+(ad===TODAY_STR?'เริ่มวันนี้':(late?'เริ่มแล้ว ':'เริ่ม ')+fmtShort(ad))+'</span>';}
+    else badge='<span class="pin-age '+ac+'" title="ปักไว้ '+age+' วัน">'+(age?age+' วัน':'ใหม่')+'</span>';
+    h+='<div class="pin-row">'+badge+stTxt;
+    h+='<div class="pin-acts">';
+    if(!ad)h+='<button type="button" class="pin-btn" data-id="'+t.id+'" onclick="pinToday(this.dataset.id)">วันนี้</button>';
+    h+='<button type="button" class="pin-cal" aria-label="'+(ad?'เปลี่ยนวัน':'เลือกวันเริ่ม')+'" title="'+(ad?'เปลี่ยนวัน':'เลือกวันเริ่ม')+'" data-id="'+t.id+'" data-name="'+nm+'" data-sd="'+ad+'" data-ed="'+(t.endDate||'')+'" onclick="pinPickDate(this)">'+calSvg+'</button>';
+    h+='<button type="button" class="pin-x" aria-label="ถอดหมุด" title="ถอดหมุด" data-id="'+t.id+'" onclick="togglePin(this.dataset.id)">'+xSvg+'</button></div></div>';
     h+='</div>';
   });
   h+='</div></section>';
@@ -2506,6 +2516,13 @@ function renderPinned(){
 }
 function togglePinBand(){_pinCollapsed=!_pinCollapsed;try{localStorage.setItem('khum_pin_collapsed',_pinCollapsed?'1':'0');}catch(e){}renderPinned();}
 function pinToday(id){doAssign(id,TODAY_STR,'');}
+function pinPickDate(b){
+  var id=b.dataset.id,sd=b.dataset.sd||'',ed=b.dataset.ed||'';
+  if(!sd){assignDate(id,b.dataset.name);return;}
+  var d=new Date(sd+'T00:00:00+07:00');
+  window._asgnState={id:id,name:b.dataset.name,mo:d.getMonth(),yr:d.getFullYear(),selStart:sd,selEnd:ed};
+  showModal(asgnRender());
+}
 function togglePin(id){
   var k=pinKey(id),on=!pinnedMeta[k];
   if(on)pinnedMeta[k]=TODAY_STR;else delete pinnedMeta[k];
