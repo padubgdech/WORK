@@ -43,6 +43,21 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 .note-card{display:block;width:100%;text-align:left;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','IBM Plex Sans Thai',sans-serif;border-radius:22px;padding:16px 18px;margin-bottom:14px;break-inside:avoid;cursor:pointer;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(0,0,0,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06);transition:box-shadow .15s,transform .15s}
 .note-card:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 2px 4px rgba(0,0,0,.05),0 12px 30px rgba(0,0,0,.09);transform:translateY(-1px)}
+.note-grid{columns:2;column-gap:16px}
+@media(max-width:760px){.note-grid{columns:1}}
+div.note-card{cursor:text}div.note-card:hover{transform:none}
+.note-card:focus-within{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 0 2px #0071e3,0 10px 28px rgba(0,0,0,.08)}
+.note-tagsel{font-size:11px;font-weight:600;color:#6e6e73;background:transparent;border:none;padding:2px 0;cursor:pointer;font-family:inherit;max-width:60%}
+.note-tagsel:hover{color:#1d1d1f}
+.note-del{background:none;border:none;color:#a1a1a6;padding:4px;border-radius:8px;cursor:pointer;display:flex;align-items:center;opacity:0;transition:opacity .15s}
+.note-card:hover .note-del,.note-card:focus-within .note-del{opacity:1}.note-del:hover{color:#d70015;background:rgba(215,0,21,.07)}
+@media(hover:none){.note-del{opacity:1}}
+.note-ttl{display:block;width:100%;border:none;outline:none;background:transparent;font-family:inherit;font-size:17px;font-weight:700;color:#1d1d1f;line-height:1.35;padding:0;margin:0 0 6px}
+.note-ttl::placeholder{color:#a1a1a6}
+.note-card .nrt-bar{display:none;margin:2px 0 8px}
+.note-card:focus-within .nrt-bar{display:flex}
+.note-card .nrt-ed{min-height:24px;max-height:none;font-size:14px;line-height:1.7}
+.note-st{font-size:10.5px;color:#a1a1a6;height:14px;margin-top:6px;text-align:right}
 .note-card.sel{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 0 2px #0071e3,0 8px 24px rgba(0,0,0,.06)}
 .note-card-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .note-tag{font-size:11px;font-weight:600;color:#6e6e73}
@@ -631,13 +646,13 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 <div id="page-note" class="page">
-  <div style="display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start">
+  <div style="display:grid;grid-template-columns:minmax(0,1fr);gap:20px;align-items:start">
     <div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
         <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px">หน้ารวม</div>
-        <button onclick="noteNew()" style="background:#1c1c1e;color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer">+ เพิ่มโน้ต</button>
+        <button onclick="noteNew()" style="background:#1c1c1e;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer">+ เพิ่มโน้ต</button>
       </div>
-      <div id="note-grid" style="columns:2;gap:14px"></div>
+      <div id="note-grid" class="note-grid"></div>
     </div>
     <div id="note-detail-wrap" style="display:none">
       <div id="note-detail"></div>
@@ -1731,87 +1746,71 @@ var NOTE_TAGS=[{label:'💡 ไอเดีย',color:'#BA7517'},{label:'👤 �
 var _noteActive=null;
 function notesLoad(){try{return JSON.parse(localStorage.getItem('rudy_notes')||'[]');}catch(e){return [];}}
 function notesSave(arr){try{localStorage.setItem('rudy_notes',JSON.stringify(arr));}catch(e){}}
-function renderNotes(){
+function renderNotes(focusId){
   var notes=notesLoad();
   var grid=document.getElementById('note-grid');
   if(!grid)return;
+  var wrap=document.getElementById('note-detail-wrap');if(wrap)wrap.style.display='none';
   if(!notes.length){
-    grid.innerHTML='<div style="color:#bbb;text-align:center;padding:40px;font-size:13px">ยังไม่มีโน้ต<br>กด "+ เพิ่มโน้ต" เพื่อเริ่มต้น</div>';
+    grid.innerHTML='<div style="color:#8a8a8e;text-align:center;padding:40px;font-size:13px">ยังไม่มีโน้ต<br>กด "+ เพิ่มโน้ต" เพื่อเริ่มต้น</div>';
     return;
   }
+  var trash='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"></path></svg>';
   var h='';
   notes.forEach(function(n){
-    var tag=NOTE_TAGS.find(function(t){return t.label===n.tag;})||NOTE_TAGS[5];
-    h+='<button type="button" class="note-card'+(n.id===_noteActive?' sel':'')+'" onclick="noteOpen(\''+n.id+'\')">'
-      +'<div class="note-card-hd"><span class="note-tag">'+tag.label+'</span><span class="note-card-date">'+noteShortDate(n.updatedAt||n.createdAt)+'</span></div>'
-      +'<div class="note-card-title">'+escH(n.title||'โน้ตใหม่')+'</div>'
-      +'<div class="note-card-preview">'+noteHtmlOf(n)+'</div>'
-      +'</button>';
+    var opts=NOTE_TAGS.map(function(t){return '<option value="'+t.label+'"'+(n.tag===t.label?' selected':'')+'>'+t.label+'</option>';}).join('');
+    h+='<div class="note-card" id="ncard-'+n.id+'" data-nid="'+n.id+'">'
+      +'<div class="note-card-hd"><select class="note-tagsel" aria-label="หมวดหมู่" onchange="noteSetTagOf(\''+n.id+'\',this.value)">'+opts+'</select>'
+      +'<span style="display:flex;align-items:center;gap:6px"><span class="note-card-date" id="ndate-'+n.id+'">'+noteShortDate(n.updatedAt||n.createdAt)+'</span>'
+      +'<button type="button" class="note-del" aria-label="ลบโน้ต" title="ลบโน้ต" onclick="noteDelete(\''+n.id+'\')">'+trash+'</button></span></div>'
+      +'<input class="note-ttl" id="nttl-'+n.id+'" value="'+escH(n.title||'')+'" placeholder="หัวข้อ" aria-label="หัวข้อโน้ต" oninput="noteAutoSave(\''+n.id+'\')" onblur="noteFlush(\''+n.id+'\')" onkeydown="if(event.key===\'Enter\'){event.preventDefault();document.getElementById(\'nbody-'+n.id+'\').focus();}">'
+      +noteToolbar()
+      +'<div class="nrt-ed" id="nbody-'+n.id+'" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหาโน้ต" data-ph="จดบันทึก..." oninput="noteAutoSave(\''+n.id+'\')" onfocus="_nrtLast=this" onkeyup="nrtState()" onmouseup="nrtState()" onpaste="nrtPaste(event)" onblur="noteFlush(\''+n.id+'\')">'+noteHtmlOf(n)+'</div>'
+      +'<div class="note-st" id="nst-'+n.id+'" aria-live="polite"></div>'
+      +'</div>';
   });
   grid.innerHTML=h;
+  if(focusId){var t=document.getElementById('nttl-'+focusId);if(t){t.focus();t.scrollIntoView({block:'center',behavior:'smooth'});}}
 }
 function noteShortDate(iso){if(!iso)return'';var d=new Date(iso);if(isNaN(d))return'';var m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return d.getDate()+' '+m[d.getMonth()];}
-function noteOpen(id){
-  var notes=notesLoad();
-  var n=notes.find(function(x){return x.id===id;});
-  if(!n)return;
-  _noteActive=id;
-  renderNoteDetail(n);renderNotes();
-  var wrap=document.getElementById('note-detail-wrap');
-  if(wrap)wrap.style.display='block';
+// แก้ในการ์ดได้เลย — บันทึกอัตโนมัติ (ไม่ต้องกดบันทึก)
+var _noteTimers={};
+function noteAutoSave(id){
+  var st=document.getElementById('nst-'+id);if(st)st.textContent='กำลังพิมพ์...';
+  clearTimeout(_noteTimers[id]);_noteTimers[id]=setTimeout(function(){noteFlush(id);},600);
 }
-function renderNoteDetail(n){
-  var tagOpts=NOTE_TAGS.map(function(t){return '<option value="'+t.label+'"'+(n.tag===t.label?' selected':'')+'>'+t.label+'</option>';}).join('');
-  var colorOpts=NOTE_COLORS.map(function(c){return '<span onclick="noteSetColor(\''+c+'\')" style="display:inline-block;width:20px;height:20px;border-radius:50%;background:'+c+';cursor:pointer;border:2px solid '+(n.color===c?'#534AB7':'transparent')+'"></span>';}).join('');
-  var h='<div class="note-detail-card">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
-    +'<button onclick="noteClose()" style="font-size:13px;font-weight:500;color:#0066cc;background:none;border:none;padding:6px 2px;cursor:pointer;font-family:inherit">‹ กลับ</button>'
-    +'<select id="nd-tag" onchange="noteSetTag(this.value)" aria-label="หมวดหมู่" style="font-size:12px;font-weight:600;color:#3a3a3c;padding:5px 10px;border-radius:10px;background:rgba(0,0,0,.05);border:none;cursor:pointer;font-family:inherit">'+tagOpts+'</select></div>'
-    +'<input id="nd-title" class="note-detail-title" value="'+escH(n.title||'')+'" placeholder="หัวข้อ...">'
-    +'<div class="note-detail-meta">'+fmtThaiDateTime(n.updatedAt||n.createdAt)+'</div>'
-    +noteToolbar()
-    +'<div id="nd-body" class="nrt-ed" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหาโน้ต" data-ph="จดบันทึก... (Enter = ขึ้นบรรทัดใหม่ · ⌘B ตัวหนา)" onkeyup="nrtState()" onmouseup="nrtState()" onpaste="nrtPaste(event)">'+noteHtmlOf(n)+'</div>'
-    +'<div style="display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:.5px solid rgba(0,0,0,.1)">'
-    +'<button onclick="noteSave()" style="background:#1d1d1f;color:#fff;border:none;border-radius:12px;padding:11px 16px;font-size:13px;font-weight:700;cursor:pointer;flex:1;font-family:inherit">บันทึก</button>'
-    +'<button onclick="noteDelete(\''+n.id+'\')" style="background:rgba(215,0,21,.08);color:#c4001a;border:none;border-radius:12px;padding:11px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">ลบ</button>'
-    +'</div></div>';
-  document.getElementById('note-detail').innerHTML=h;
-}
-function noteSetColor(c){
-  var notes=notesLoad(),n=notes.find(function(x){return x.id===_noteActive;});
+function noteFlush(id){
+  clearTimeout(_noteTimers[id]);delete _noteTimers[id];
+  var notes=notesLoad(),n=notes.find(function(x){return x.id===id;});
   if(!n)return;
-  n.color=c;notesSave(notes);renderNoteDetail(n);renderNotes();
-}
-function noteSetTag(v){
-  var notes=notesLoad(),n=notes.find(function(x){return x.id===_noteActive;});
-  if(!n)return;
-  n.tag=v;notesSave(notes);renderNotes();
-}
-function noteSave(){
-  var notes=notesLoad(),n=notes.find(function(x){return x.id===_noteActive;});
-  if(!n)return;
-  var t=document.getElementById('nd-title'),b=document.getElementById('nd-body');
-  n.title=t?t.value:'';
-  if(b){n.html=noteSanitize(b.innerHTML);n.body=(b.innerText||'').replace(/\n{3,}/g,'\n\n').trim();}
+  var t=document.getElementById('nttl-'+id),b=document.getElementById('nbody-'+id);
+  if(!t||!b)return;
+  var html=noteSanitize(b.innerHTML),title=t.value;
+  if(html===(n.html||noteHtmlOf(n))&&title===(n.title||''))return; // ไม่มีอะไรเปลี่ยน
+  n.title=title;n.html=html;n.body=(b.innerText||'').replace(/\n{3,}/g,'\n\n').trim();
   n.updatedAt=new Date().toISOString();
-  notesSave(notes);renderNotes();showToast('✅ บันทึกโน้ตแล้ว');
+  notesSave(notes);
+  var st=document.getElementById('nst-'+id);if(st)st.textContent='✓ บันทึกแล้ว';
+  var dt=document.getElementById('ndate-'+id);if(dt)dt.textContent=noteShortDate(n.updatedAt);
 }
+function noteSetTagOf(id,v){var notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n)return;n.tag=v;notesSave(notes);}
+function noteOpen(id){var t=document.getElementById('nbody-'+id);if(t)t.focus();}
+function noteSave(){Object.keys(_noteTimers).forEach(noteFlush);}
 function noteDelete(id){
   if(!confirm('ลบโน้ตนี้?'))return;
+  clearTimeout(_noteTimers[id]);delete _noteTimers[id];
   var notes=notesLoad().filter(function(x){return x.id!==id;});
-  notesSave(notes);noteClose();renderNotes();showToast('🗑 ลบแล้ว');
+  notesSave(notes);renderNotes();showToast('🗑 ลบแล้ว');
 }
-function noteClose(){
-  _noteActive=null;renderNotes();
-  var wrap=document.getElementById('note-detail-wrap');
-  if(wrap)wrap.style.display='none';
-}
+function noteClose(){}
 function noteNew(){
+  noteSave();
   var notes=notesLoad();
-  var col=NOTE_COLORS[notes.length%NOTE_COLORS.length];
-  var n={id:'n'+Date.now(),title:'',body:'',tag:NOTE_TAGS[5].label,color:col,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
-  notes.unshift(n);notesSave(notes);renderNotes();noteOpen(n.id);
+  var n={id:'n'+Date.now(),title:'',body:'',html:'',tag:NOTE_TAGS[5].label,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+  notes.unshift(n);notesSave(notes);renderNotes(n.id);
 }
+window.addEventListener('beforeunload',function(){try{noteSave();}catch(e){}});
+document.addEventListener('visibilitychange',function(){if(document.hidden){try{noteSave();}catch(e){}}});
 function fmtThaiDateTime(iso){
   if(!iso)return'';
   var d=new Date(iso);
@@ -1863,11 +1862,13 @@ function noteToolbar(){
   h+='<button type="button" class="nrt-b" aria-label="ล้างรูปแบบ" title="ล้างรูปแบบ" onclick="nrt(\'removeFormat\')" style="font-size:12px;color:#6e6e73">Tx</button>';
   return h+'</div>';
 }
-function nrtEd(){var e=document.getElementById('nd-body');if(e&&document.activeElement!==e)e.focus();return e;}
-function nrt(cmd){if(!nrtEd())return;document.execCommand(cmd,false,null);nrtState();}
-function nrtColor(c){if(!nrtEd())return;document.execCommand('styleWithCSS',false,true);document.execCommand('foreColor',false,c);nrtState();}
-function nrtHilite(){if(!nrtEd())return;document.execCommand('styleWithCSS',false,true);var on=false;try{on=/255,\s*243,\s*166/.test(document.queryCommandValue('hiliteColor')||'');}catch(e){}document.execCommand('hiliteColor',false,on?'transparent':'#fff3a6');nrtState();}
-function nrtHeading(){if(!nrtEd())return;var cur='';try{cur=String(document.queryCommandValue('formatBlock')||'').toLowerCase();}catch(e){}document.execCommand('formatBlock',false,cur==='h3'?'div':'h3');nrtState();}
+var _nrtLast=null;
+function nrtEd(){var e=_nrtLast&&document.body.contains(_nrtLast)?_nrtLast:document.getElementById('nd-body');if(e&&document.activeElement!==e)e.focus();return e;}
+function nrt(cmd){if(!nrtEd())return;document.execCommand(cmd,false,null);nrtState();nrtChanged();}
+function nrtColor(c){if(!nrtEd())return;document.execCommand('styleWithCSS',false,true);document.execCommand('foreColor',false,c);nrtState();nrtChanged();}
+function nrtHilite(){if(!nrtEd())return;document.execCommand('styleWithCSS',false,true);var on=false;try{on=/255,\s*243,\s*166/.test(document.queryCommandValue('hiliteColor')||'');}catch(e){}document.execCommand('hiliteColor',false,on?'transparent':'#fff3a6');nrtState();nrtChanged();}
+function nrtHeading(){if(!nrtEd())return;var cur='';try{cur=String(document.queryCommandValue('formatBlock')||'').toLowerCase();}catch(e){}document.execCommand('formatBlock',false,cur==='h3'?'div':'h3');nrtState();nrtChanged();}
+function nrtChanged(){var e=_nrtLast;if(e&&e.id&&e.id.indexOf('nbody-')===0)noteAutoSave(e.id.slice(6));}
 function nrtState(){document.querySelectorAll('.nrt-b[data-c]').forEach(function(b){var on=false;try{on=document.queryCommandState(b.dataset.c);}catch(e){}b.classList.toggle('on',!!on);b.setAttribute('aria-pressed',on?'true':'false');});}
 function nrtPaste(e){ // วางข้อความจากที่อื่น: เก็บการขึ้นบรรทัด ตัดสไตล์แปลกๆ ทิ้ง
   var cd=e.clipboardData||window.clipboardData;if(!cd)return;

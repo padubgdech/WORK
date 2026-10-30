@@ -37,7 +37,10 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   29 Oct). Per-note colour picker removed from the panel (n.color still stored, just unused). Selected card = blue ring (`.note-card.sel`).
   Rich text (30 Oct): `#nd-body` is a contenteditable + `noteToolbar()` (B I U S H, lists, 6 colours, ไฮไลต์, Tx). Saves `n.html`
   (via `noteSanitize` allow-list: b/i/u/s/br/div/p/ul/ol/li/span/h3, only color/background/bold styles) + plain `n.body`.
-  Old notes without `html` render body with `\n`→`<br>` (`noteHtmlOf`). Card preview renders the sanitized HTML.
+  Old notes without `html` render body with `\n`→`<br>` (`noteHtmlOf`).
+  Inline editing (30 Oct, Dech: "แก้ใน NOTE ได้เลย แสดงแบบเต็ม"): no side panel any more — every card shows the full note and is
+  editable in place (title `#nttl-<id>`, body `#nbody-<id>`, toolbar only on the focused card). Autosave 600 ms after typing +
+  on blur/tab hide/unload (`noteAutoSave`/`noteFlush`). Delete = trash icon in card header. `renderNotes(focusId)`.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 ## Pending
