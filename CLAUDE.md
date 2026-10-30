@@ -41,6 +41,7 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Inline editing (30 Oct, Dech: "แก้ใน NOTE ได้เลย แสดงแบบเต็ม"): no side panel any more — every card shows the full note and is
   editable in place (title `#nttl-<id>`, body `#nbody-<id>`, toolbar only on the focused card). Autosave 600 ms after typing +
   on blur/tab hide/unload (`noteAutoSave`/`noteFlush`). Delete = trash icon in card header. `renderNotes(focusId)`.
+  Compact cards (30 Oct): `.note-grid` uses `column-width:240px` (≈4 columns at 1280px, 1 on phone), smaller padding/fonts/toolbar.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 ## Pending
