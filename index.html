@@ -48,7 +48,20 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .note-tag{font-size:11px;font-weight:600;color:#6e6e73}
 .note-card-date{font-size:11px;color:#6e6e73;flex-shrink:0}
 .note-card-title{font-size:16px;font-weight:700;color:#1d1d1f;line-height:1.35;margin-bottom:6px}
-.note-card-preview{font-size:13px;color:#3a3a3c;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.note-card-preview{font-size:13px;color:#3a3a3c;line-height:1.6;max-height:6.4em;overflow:hidden;white-space:pre-line;position:relative;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
+.note-card-preview div,.note-card-preview p{margin:0}.note-card-preview ul,.note-card-preview ol{margin:0;padding-left:18px}
+.note-card-preview h3{font-size:14px;margin:0}
+.nrt-bar{display:flex;flex-wrap:wrap;align-items:center;gap:2px;padding:5px;border-radius:12px;background:rgba(0,0,0,.04);margin-bottom:10px}
+.nrt-b{min-width:32px;height:32px;padding:0 6px;border:none;border-radius:8px;background:transparent;color:#1d1d1f;font-size:14px;cursor:pointer;font-family:inherit}
+.nrt-b:hover{background:rgba(0,0,0,.06)}.nrt-b.on{background:#1d1d1f;color:#fff}
+.nrt-sep{width:1px;height:18px;background:rgba(0,0,0,.12);margin:0 4px}
+.nrt-c{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12);margin:0 2px;cursor:pointer;padding:0}
+.nrt-hl{height:26px;padding:0 8px;border:none;border-radius:8px;background:#fff3a6;color:#5a4a00;font-size:11px;font-weight:700;cursor:pointer;margin-left:2px;font-family:inherit}
+.nrt-ed{min-height:220px;max-height:60vh;overflow:auto;outline:none;font-size:15px;line-height:1.75;color:#1d1d1f;word-break:break-word}
+.nrt-ed:empty:before{content:attr(data-ph);color:#a1a1a6}
+.nrt-ed h3{font-size:18px;font-weight:700;margin:6px 0 2px}.nrt-ed ul,.nrt-ed ol{margin:2px 0;padding-left:22px}
+.nrt-ed div,.nrt-ed p{margin:0}
+@media(max-width:760px){.nrt-b{min-width:38px;height:38px}.nrt-c{width:26px;height:26px}}
 .note-detail-card{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','IBM Plex Sans Thai',sans-serif;background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(0,0,0,.08);border-radius:22px;padding:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(0,0,0,.04),0 12px 32px rgba(0,0,0,.08);position:sticky;top:16px}
 .note-detail-title{font-size:22px;font-weight:700;color:#1d1d1f;margin-bottom:4px;outline:none;border:none;width:100%;background:transparent;font-family:inherit}
 .note-detail-meta{font-size:11px;color:#6e6e73;margin-bottom:12px}
@@ -1732,7 +1745,7 @@ function renderNotes(){
     h+='<button type="button" class="note-card'+(n.id===_noteActive?' sel':'')+'" onclick="noteOpen(\''+n.id+'\')">'
       +'<div class="note-card-hd"><span class="note-tag">'+tag.label+'</span><span class="note-card-date">'+noteShortDate(n.updatedAt||n.createdAt)+'</span></div>'
       +'<div class="note-card-title">'+escH(n.title||'โน้ตใหม่')+'</div>'
-      +'<div class="note-card-preview">'+escH(n.body||'')+'</div>'
+      +'<div class="note-card-preview">'+noteHtmlOf(n)+'</div>'
       +'</button>';
   });
   grid.innerHTML=h;
@@ -1756,7 +1769,8 @@ function renderNoteDetail(n){
     +'<select id="nd-tag" onchange="noteSetTag(this.value)" aria-label="หมวดหมู่" style="font-size:12px;font-weight:600;color:#3a3a3c;padding:5px 10px;border-radius:10px;background:rgba(0,0,0,.05);border:none;cursor:pointer;font-family:inherit">'+tagOpts+'</select></div>'
     +'<input id="nd-title" class="note-detail-title" value="'+escH(n.title||'')+'" placeholder="หัวข้อ...">'
     +'<div class="note-detail-meta">'+fmtThaiDateTime(n.updatedAt||n.createdAt)+'</div>'
-    +'<textarea id="nd-body" class="note-detail-body" rows="8" placeholder="จดบันทึก...">'+escH(n.body||'')+'</textarea>'
+    +noteToolbar()
+    +'<div id="nd-body" class="nrt-ed" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหาโน้ต" data-ph="จดบันทึก... (Enter = ขึ้นบรรทัดใหม่ · ⌘B ตัวหนา)" onkeyup="nrtState()" onmouseup="nrtState()" onpaste="nrtPaste(event)">'+noteHtmlOf(n)+'</div>'
     +'<div style="display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:.5px solid rgba(0,0,0,.1)">'
     +'<button onclick="noteSave()" style="background:#1d1d1f;color:#fff;border:none;border-radius:12px;padding:11px 16px;font-size:13px;font-weight:700;cursor:pointer;flex:1;font-family:inherit">บันทึก</button>'
     +'<button onclick="noteDelete(\''+n.id+'\')" style="background:rgba(215,0,21,.08);color:#c4001a;border:none;border-radius:12px;padding:11px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">ลบ</button>'
@@ -1777,7 +1791,9 @@ function noteSave(){
   var notes=notesLoad(),n=notes.find(function(x){return x.id===_noteActive;});
   if(!n)return;
   var t=document.getElementById('nd-title'),b=document.getElementById('nd-body');
-  n.title=t?t.value:'';n.body=b?b.value:'';n.updatedAt=new Date().toISOString();
+  n.title=t?t.value:'';
+  if(b){n.html=noteSanitize(b.innerHTML);n.body=(b.innerText||'').replace(/\n{3,}/g,'\n\n').trim();}
+  n.updatedAt=new Date().toISOString();
   notesSave(notes);renderNotes();showToast('✅ บันทึกโน้ตแล้ว');
 }
 function noteDelete(id){
@@ -1801,6 +1817,63 @@ function fmtThaiDateTime(iso){
   var d=new Date(iso);
   var th=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
   return d.getDate()+' '+th[d.getMonth()]+' '+(d.getFullYear()+543)+' · '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+/* ===== Note rich text: ขึ้นบรรทัด / ตัวหนา / สีตัวอักษร / ไฮไลต์ ===== */
+var NRT_COLORS=[['#1d1d1f','ดำ'],['#d70015','แดง'],['#c93400','ส้ม'],['#248a3d','เขียว'],['#0066cc','น้ำเงิน'],['#8944ab','ม่วง']];
+function noteHtmlOf(n){
+  if(n.html)return noteSanitize(n.html);
+  return escH(n.body||'').replace(/\n/g,'<br>'); // โน้ตเก่า (ข้อความธรรมดา) — คงการขึ้นบรรทัดไว้
+}
+function noteSanitize(html){
+  var box=document.createElement('div');box.innerHTML=html||'';
+  var OK={B:1,STRONG:1,I:1,EM:1,U:1,S:1,STRIKE:1,BR:1,DIV:1,P:1,UL:1,OL:1,LI:1,SPAN:1,FONT:1,H3:1,MARK:1};
+  (function walk(el){
+    Array.prototype.slice.call(el.childNodes).forEach(function(c){
+      if(c.nodeType===3)return;
+      if(c.nodeType!==1||!OK[c.tagName]){
+        if(c.nodeType===1&&!/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|IMG|SVG|LINK|META)$/.test(c.tagName)){walk(c);while(c.firstChild)el.insertBefore(c.firstChild,c);}
+        el.removeChild(c);return;
+      }
+      var col=c.style?c.style.color:'',bg=c.style?c.style.backgroundColor:'',fw=c.style?c.style.fontWeight:'',fc=c.getAttribute('color');
+      Array.prototype.slice.call(c.attributes).forEach(function(a){c.removeAttribute(a.name);});
+      var st='';
+      if(fc&&/^#?[0-9a-z]+$/i.test(fc))st+='color:'+fc+';';
+      if(col&&/^(#|rgb|[a-z]+$)/.test(col))st+='color:'+col+';';
+      if(bg&&/^(#|rgb)/.test(bg)&&!/rgba?\(\s*0,\s*0,\s*0,\s*0\)/.test(bg))st+='background-color:'+bg+';';
+      if(fw&&/^(bold|[6-9]00)$/.test(fw))st+='font-weight:700;';
+      if(st)c.setAttribute('style',st);
+      walk(c);
+    });
+  })(box);
+  return box.innerHTML;
+}
+function noteToolbar(){
+  var h='<div class="nrt-bar" role="toolbar" aria-label="จัดรูปแบบข้อความ" onmousedown="if(event.target.closest(\'button\'))event.preventDefault()">';
+  h+='<button type="button" class="nrt-b" data-c="bold" aria-label="ตัวหนา (⌘B)" title="ตัวหนา ⌘B" onclick="nrt(\'bold\')" style="font-weight:800">B</button>';
+  h+='<button type="button" class="nrt-b" data-c="italic" aria-label="ตัวเอียง (⌘I)" title="ตัวเอียง ⌘I" onclick="nrt(\'italic\')" style="font-style:italic">I</button>';
+  h+='<button type="button" class="nrt-b" data-c="underline" aria-label="ขีดเส้นใต้ (⌘U)" title="ขีดเส้นใต้ ⌘U" onclick="nrt(\'underline\')" style="text-decoration:underline">U</button>';
+  h+='<button type="button" class="nrt-b" data-c="strikeThrough" aria-label="ขีดฆ่า" title="ขีดฆ่า" onclick="nrt(\'strikeThrough\')" style="text-decoration:line-through">S</button>';
+  h+='<button type="button" class="nrt-b" aria-label="หัวข้อ" title="หัวข้อ" onclick="nrtHeading()" style="font-weight:700;font-size:13px">H</button>';
+  h+='<span class="nrt-sep" aria-hidden="true"></span>';
+  h+='<button type="button" class="nrt-b" data-c="insertUnorderedList" aria-label="รายการจุด" title="รายการจุด" onclick="nrt(\'insertUnorderedList\')">•</button>';
+  h+='<button type="button" class="nrt-b" data-c="insertOrderedList" aria-label="รายการตัวเลข" title="รายการตัวเลข" onclick="nrt(\'insertOrderedList\')" style="font-size:12px;font-weight:600">1.</button>';
+  h+='<span class="nrt-sep" aria-hidden="true"></span>';
+  NRT_COLORS.forEach(function(c){h+='<button type="button" class="nrt-c" aria-label="สี'+c[1]+'" title="สี'+c[1]+'" style="background:'+c[0]+'" onclick="nrtColor(\''+c[0]+'\')"></button>';});
+  h+='<button type="button" class="nrt-hl" aria-label="ไฮไลต์" title="ไฮไลต์" onclick="nrtHilite()">ไฮไลต์</button>';
+  h+='<button type="button" class="nrt-b" aria-label="ล้างรูปแบบ" title="ล้างรูปแบบ" onclick="nrt(\'removeFormat\')" style="font-size:12px;color:#6e6e73">Tx</button>';
+  return h+'</div>';
+}
+function nrtEd(){var e=document.getElementById('nd-body');if(e&&document.activeElement!==e)e.focus();return e;}
+function nrt(cmd){if(!nrtEd())return;document.execCommand(cmd,false,null);nrtState();}
+function nrtColor(c){if(!nrtEd())return;document.execCommand('styleWithCSS',false,true);document.execCommand('foreColor',false,c);nrtState();}
+function nrtHilite(){if(!nrtEd())return;document.execCommand('styleWithCSS',false,true);var on=false;try{on=/255,\s*243,\s*166/.test(document.queryCommandValue('hiliteColor')||'');}catch(e){}document.execCommand('hiliteColor',false,on?'transparent':'#fff3a6');nrtState();}
+function nrtHeading(){if(!nrtEd())return;var cur='';try{cur=String(document.queryCommandValue('formatBlock')||'').toLowerCase();}catch(e){}document.execCommand('formatBlock',false,cur==='h3'?'div':'h3');nrtState();}
+function nrtState(){document.querySelectorAll('.nrt-b[data-c]').forEach(function(b){var on=false;try{on=document.queryCommandState(b.dataset.c);}catch(e){}b.classList.toggle('on',!!on);b.setAttribute('aria-pressed',on?'true':'false');});}
+function nrtPaste(e){ // วางข้อความจากที่อื่น: เก็บการขึ้นบรรทัด ตัดสไตล์แปลกๆ ทิ้ง
+  var cd=e.clipboardData||window.clipboardData;if(!cd)return;
+  var html=cd.getData('text/html'),txt=cd.getData('text/plain');
+  e.preventDefault();
+  document.execCommand('insertHTML',false,html?noteSanitize(html):escH(txt).replace(/\n/g,'<br>'));
 }
 function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 

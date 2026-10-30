@@ -35,6 +35,9 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   not "no date". Main sidebar NOTE notebook was removed (29 Oct) at Dech's request.
 - Note tab (`renderNotes`, localStorage `rudy_notes`): cards + detail panel restyled to Apple frosted single colour (design "การ์ด 5" on the canvas,
   29 Oct). Per-note colour picker removed from the panel (n.color still stored, just unused). Selected card = blue ring (`.note-card.sel`).
+  Rich text (30 Oct): `#nd-body` is a contenteditable + `noteToolbar()` (B I U S H, lists, 6 colours, ไฮไลต์, Tx). Saves `n.html`
+  (via `noteSanitize` allow-list: b/i/u/s/br/div/p/ul/ol/li/span/h3, only color/background/bold styles) + plain `n.body`.
+  Old notes without `html` render body with `\n`→`<br>` (`noteHtmlOf`). Card preview renders the sanitized HTML.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 ## Pending
