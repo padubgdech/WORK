@@ -43,10 +43,16 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 .note-card{display:block;width:100%;text-align:left;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','IBM Plex Sans Thai',sans-serif;border-radius:22px;padding:16px 18px;margin-bottom:14px;break-inside:avoid;cursor:pointer;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(0,0,0,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06);transition:box-shadow .15s,transform .15s}
 .note-card:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 2px 4px rgba(0,0,0,.05),0 12px 30px rgba(0,0,0,.09);transform:translateY(-1px)}
-.note-grid{column-width:240px;column-gap:12px}
-@media(max-width:760px){.note-grid{column-width:auto;columns:1}}
+.note-grid{display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px}
+.note-grid .note-card{position:relative;display:flex;flex-direction:column;box-sizing:border-box;max-width:100%;min-width:180px;min-height:110px}
+.note-grid .note-card .nrt-ed{flex:1 1 auto;overflow:auto}
+.note-grid .note-card.fixh .nrt-ed{min-height:0}
+.note-grip{position:absolute;right:3px;bottom:3px;width:22px;height:22px;border:none;background:transparent;color:#b0b0b5;cursor:nwse-resize;padding:0;display:flex;align-items:flex-end;justify-content:flex-end;border-radius:6px;touch-action:none;opacity:.6;transition:opacity .15s}
+.note-card:hover .note-grip,.note-card:focus-within .note-grip,.note-grip:focus-visible{opacity:1}.note-grip:hover{color:#0071e3}
+.note-card.resizing{user-select:none;transition:none}
+@media(max-width:760px){.note-grid .note-card{width:100%!important}.note-grip{cursor:ns-resize;width:30px;height:30px;opacity:1}}
 /* การ์ดโน้ตขนาดกะทัดรัด — เห็นหลายใบพร้อมกัน */
-.note-grid .note-card{padding:11px 13px 9px;margin-bottom:12px;border-radius:16px}
+.note-grid .note-card{padding:11px 13px 9px;margin-bottom:0;border-radius:16px}
 .note-grid .note-card-hd{margin-bottom:4px}
 .note-grid .note-tagsel,.note-grid .note-card-date{font-size:10.5px}
 .note-grid .note-ttl{font-size:14.5px;margin-bottom:3px}
@@ -1773,7 +1779,8 @@ function renderNotes(focusId){
   var h='';
   notes.forEach(function(n){
     var opts=NOTE_TAGS.map(function(t){return '<option value="'+t.label+'"'+(n.tag===t.label?' selected':'')+'>'+t.label+'</option>';}).join('');
-    h+='<div class="note-card" id="ncard-'+n.id+'" data-nid="'+n.id+'">'
+    var sz='width:'+(n.w||240)+'px;'+(n.h?'height:'+n.h+'px;':'');
+    h+='<div class="note-card'+(n.h?' fixh':'')+'" id="ncard-'+n.id+'" data-nid="'+n.id+'" style="'+sz+'">'
       +'<div class="note-card-hd"><select class="note-tagsel" aria-label="หมวดหมู่" onchange="noteSetTagOf(\''+n.id+'\',this.value)">'+opts+'</select>'
       +'<span style="display:flex;align-items:center;gap:6px"><span class="note-card-date" id="ndate-'+n.id+'">'+noteShortDate(n.updatedAt||n.createdAt)+'</span>'
       +'<button type="button" class="note-del" aria-label="ลบโน้ต" title="ลบโน้ต" onclick="noteDelete(\''+n.id+'\')">'+trash+'</button></span></div>'
@@ -1781,6 +1788,7 @@ function renderNotes(focusId){
       +noteToolbar()
       +'<div class="nrt-ed" id="nbody-'+n.id+'" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหาโน้ต" data-ph="จดบันทึก..." oninput="noteAutoSave(\''+n.id+'\')" onfocus="_nrtLast=this" onkeyup="nrtState()" onmouseup="nrtState()" onpaste="nrtPaste(event)" onblur="noteFlush(\''+n.id+'\')">'+noteHtmlOf(n)+'</div>'
       +'<div class="note-st" id="nst-'+n.id+'" aria-live="polite"></div>'
+      +'<button type="button" class="note-grip" aria-label="ปรับขนาดกระดาษ (ลาก หรือใช้ลูกศร · ดับเบิลคลิก = ขนาดเดิม)" title="ลากเพื่อปรับขนาด · ดับเบิลคลิกเพื่อคืนขนาดเดิม" onpointerdown="noteResizeStart(event,\''+n.id+'\')" ondblclick="noteResizeReset(\''+n.id+'\')" onkeydown="noteResizeKey(event,\''+n.id+'\')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M11 4L4 11M11 8l-3 3"></path></svg></button>'
       +'</div>';
   });
   grid.innerHTML=h;
@@ -1806,6 +1814,53 @@ function noteFlush(id){
   notesSave(notes);
   var st=document.getElementById('nst-'+id);if(st)st.textContent='✓ บันทึกแล้ว';
   var dt=document.getElementById('ndate-'+id);if(dt)dt.textContent=noteShortDate(n.updatedAt);
+}
+/* ===== ปรับขนาดกระดาษโน้ต (ลากมุมขวาล่าง) — บันทึกขนาดอัตโนมัติ n.w / n.h ===== */
+var _nrs=null;
+function noteIsPhone(){return window.matchMedia&&window.matchMedia('(max-width:760px)').matches;}
+function noteResizeStart(e,id){
+  var c=document.getElementById('ncard-'+id);if(!c)return;
+  e.preventDefault();
+  var r=c.getBoundingClientRect(),g=document.getElementById('note-grid');
+  _nrs={id:id,c:c,x:e.clientX,y:e.clientY,w:r.width,h:r.height,maxW:g?g.clientWidth:9999,moved:false};
+  c.classList.add('resizing');
+  document.addEventListener('pointermove',noteResizeMove);document.addEventListener('pointerup',noteResizeEnd);document.addEventListener('pointercancel',noteResizeEnd);
+}
+function noteResizeMove(e){
+  if(!_nrs)return;
+  var dx=e.clientX-_nrs.x,dy=e.clientY-_nrs.y;
+  if(Math.abs(dx)+Math.abs(dy)>2)_nrs.moved=true;
+  if(!noteIsPhone())_nrs.c.style.width=Math.round(Math.max(180,Math.min(_nrs.maxW,_nrs.w+dx)))+'px';
+  _nrs.c.style.height=Math.round(Math.max(110,_nrs.h+dy))+'px';_nrs.c.classList.add('fixh');
+}
+function noteResizeEnd(){
+  document.removeEventListener('pointermove',noteResizeMove);document.removeEventListener('pointerup',noteResizeEnd);document.removeEventListener('pointercancel',noteResizeEnd);
+  if(!_nrs)return;var s=_nrs;_nrs=null;s.c.classList.remove('resizing');
+  if(s.moved)noteSaveSize(s.id);
+}
+function noteSaveSize(id){
+  var c=document.getElementById('ncard-'+id);if(!c)return;
+  var notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n)return;
+  if(!noteIsPhone())n.w=Math.round(parseFloat(c.style.width)||c.getBoundingClientRect().width);
+  n.h=c.style.height?Math.round(parseFloat(c.style.height)):0;
+  notesSave(notes);
+  var st=document.getElementById('nst-'+id);if(st){st.textContent='✓ บันทึกขนาดแล้ว';clearTimeout(st._t);st._t=setTimeout(function(){st.textContent='';},1800);}
+}
+function noteResizeReset(id){
+  var c=document.getElementById('ncard-'+id);if(!c)return;
+  c.style.width='240px';c.style.height='';c.classList.remove('fixh');
+  var notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n)return;
+  delete n.w;delete n.h;notesSave(notes);
+  var st=document.getElementById('nst-'+id);if(st)st.textContent='✓ คืนขนาดเดิมแล้ว';
+}
+function noteResizeKey(e,id){
+  var k=e.key,step=e.shiftKey?60:20;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].indexOf(k)===-1)return;
+  e.preventDefault();var c=document.getElementById('ncard-'+id);if(!c)return;var r=c.getBoundingClientRect();
+  if(k==='ArrowRight'&&!noteIsPhone())c.style.width=Math.round(r.width+step)+'px';
+  if(k==='ArrowLeft'&&!noteIsPhone())c.style.width=Math.round(Math.max(180,r.width-step))+'px';
+  if(k==='ArrowDown'){c.style.height=Math.round(r.height+step)+'px';c.classList.add('fixh');}
+  if(k==='ArrowUp'){c.style.height=Math.round(Math.max(110,r.height-step))+'px';c.classList.add('fixh');}
+  noteSaveSize(id);
 }
 function noteSetTagOf(id,v){var notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n)return;n.tag=v;notesSave(notes);}
 function noteOpen(id){var t=document.getElementById('nbody-'+id);if(t)t.focus();}
