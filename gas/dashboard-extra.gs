@@ -11,6 +11,7 @@ if (a === 'setupPinned') return jsonpResponse(e, setupPinnedProperty());
 if (a === 'getPinned') { var pl = pinnedList_(); return jsonpResponse(e, { pinned: pl, subtasks: subtasksBatch_(pl.map(function (x) { return x.id; })) }); }
 if (a === 'setPinned') return jsonpResponse(e, setPinned_(p.id, String(p.pinned) === 'true'));
 if (a === 'addAllDayEvent') return jsonpResponse(e, addAllDayEvent_(p));
+if (a === 'getRangeEvents') return jsonpResponse(e, getRangeEvents_(p));
 if (a === 'updateTask' && String(p.done) === 'true') { try { createNextRepeat_(p.id); } catch (err) { Logger.log('repeat error: ' + err); } return null; }
 if (a === 'addTask' && (p.repeat || p.pin) && !p._noRepeat) return addTaskWithRepeat_(e);
 return null;
@@ -163,4 +164,22 @@ var s = toD(p.date), last = toD(end), after = new Date(last.getFullYear(), last.
 var cal = CalendarApp.getDefaultCalendar();
 var ev = (end === p.date) ? cal.createAllDayEvent(title, s) : cal.createAllDayEvent(title, s, after);
 return { ok: true, id: ev.getId() };
+}
+
+// ---------- นัดหมายทั้งช่วง (ปฏิทินทั้งเดือนในคำขอเดียว) ----------
+// from, to = YYYY-MM-DD (รวมวัน to) → events: [{id,title,allDay,date,endDate,startTime,endTime,location}]
+function getRangeEvents_(p) {
+var re = /^\d{4}-\d{2}-\d{2}$/;
+if (!re.test(p.from || '') || !re.test(p.to || '')) return { ok: false, error: 'bad range' };
+var toD = function (s) { var a = s.split('-'); return new Date(+a[0], +a[1] - 1, +a[2]); };
+var tz = 'Asia/Bangkok', f = function (d, fmt) { return Utilities.formatDate(d, tz, fmt); };
+var start = toD(p.from), endX = toD(p.to); endX.setDate(endX.getDate() + 1);
+var evs = CalendarApp.getDefaultCalendar().getEvents(start, endX);
+return { ok: true, events: evs.map(function (ev) {
+var all = ev.isAllDayEvent(), s = ev.getStartTime(), e = ev.getEndTime();
+var last = new Date(e.getTime() - (all ? 86400000 : 60000));
+if (last < s) last = s;
+return { id: ev.getId(), title: ev.getTitle(), allDay: all, date: f(s, 'yyyy-MM-dd'), endDate: f(last, 'yyyy-MM-dd'),
+startTime: all ? '' : f(s, 'HH:mm'), endTime: all ? '' : f(e, 'HH:mm'), location: ev.getLocation() || '' };
+}) };
 }
