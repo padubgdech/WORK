@@ -612,6 +612,13 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .rudy-loading{display:flex;gap:4px;padding:6px 0}
 .rudy-dot{width:7px;height:7px;border-radius:50%;background:#534AB7;animation:rudypulse 1s infinite}
 @keyframes rudypulse{0%,100%{opacity:.2}50%{opacity:1}}
+#auth-lock{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(242,242,247,.72);-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4)}
+#auth-lock[hidden]{display:none}
+#auth-lock .al-box{width:100%;max-width:340px;background:rgba(255,255,255,.86);border:1px solid rgba(0,0,0,.06);border-radius:22px;padding:28px 22px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.12);font-family:inherit}
+#auth-lock .al-ic{font-size:34px;margin-bottom:6px}
+#auth-lock .al-t{font-size:17px;font-weight:800;letter-spacing:.3px;color:#1c1c1e;margin-bottom:8px}
+#auth-lock .al-m{font-size:14px;line-height:1.6;color:#3a3a3c;min-height:22px}
+#auth-lock .al-b{margin-top:16px;width:100%;border:0;border-radius:12px;padding:12px;font-size:15px;font-weight:700;color:#fff;background:#06C755;cursor:pointer;font-family:inherit}
 </style>
 </head>
 <body>
@@ -847,6 +854,85 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 <script>
 var GAS="https://script.google.com/macros/s/AKfycbzUocf5fXk59buzOHC7vOYPfuXJC2x5vxozg6AfC9VpA3mlFRxV53aJ_8jnrvFc4eHA/exec";
 var TODAY=new Date(), TODAY_STR=d2s(TODAY);
+
+/* ===== ยืนยันตัวตนด้วย LINE — ครั้งเดียวต่อเครื่อง แล้ว GAS ให้กุญแจ session 30 วัน (ต่ออายุเองเมื่อใช้งาน) =====
+   LIFF_ID ว่าง = ปิดระบบนี้ (ทำงานเหมือนเดิม) · GAS ฝั่ง: gas/dashboard-auth.gs */
+var LIFF_ID='';
+var AUTH_KEY='khum_sess_v1',_authBusy=false,_authWait=[];
+// ขอ token ใหม่จาก LINE ได้ 1 ครั้งต่อ 2 นาที (การ login ทำให้โหลดหน้าใหม่ จึงจำไว้ใน sessionStorage กันวนไม่จบ)
+function authReloginOk(){try{var t=Number(sessionStorage.getItem('khum_relogin')||0);if(Date.now()-t<120000)return false;sessionStorage.setItem('khum_relogin',String(Date.now()));}catch(e){}return true;}
+function authSess(){try{var s=JSON.parse(localStorage.getItem(AUTH_KEY)||'null');if(s&&s.key&&(!s.exp||s.exp>Date.now()))return s.key;}catch(e){}return '';}
+function authSave(d){try{localStorage.setItem(AUTH_KEY,JSON.stringify({key:d.session,exp:d.exp||0,name:d.name||''}));}catch(e){}}
+function authClear(){try{localStorage.removeItem(AUTH_KEY);}catch(e){}}
+function authDev(){var u=navigator.userAgent||'';return (/Line\//.test(u)?'LINE ':'')+((u.match(/iPhone|iPad|Android|Macintosh|Windows/)||['เครื่องอื่น'])[0]);}
+function authSdk(cb){
+  if(window.liff){cb(true);return;}
+  var s=document.createElement('script');s.src='https://static.line-scdn.net/liff/edge/2/sdk.js';
+  s.onload=function(){cb(!!window.liff);};s.onerror=function(){cb(false);};document.head.appendChild(s);
+}
+function authLock(msg,btn){
+  var el=document.getElementById('auth-lock');
+  if(!el){
+    el=document.createElement('div');el.id='auth-lock';
+    el.innerHTML='<div class="al-box"><div class="al-ic">🔒</div><div class="al-t">KHUMTONE WORK</div><div class="al-m" id="al-m"></div><button class="al-b" id="al-b" hidden></button></div>';
+    document.body.appendChild(el);
+  }
+  el.hidden=false;document.getElementById('al-m').textContent=msg;
+  var b=document.getElementById('al-b');
+  if(btn){b.hidden=false;b.textContent=btn.label;b.onclick=btn.fn;}else b.hidden=true;
+}
+function authUnlock(){var el=document.getElementById('auth-lock');if(el)el.hidden=true;}
+function authBoot(cb){
+  if(!LIFF_ID||authSess()){cb();return;}
+  authLogin(cb);
+}
+// session หาย/หมดอายุระหว่างใช้งาน → ล็อกอินใหม่แล้วทำคำขอนั้นต่อ
+function authLost(cb,used){
+  if(used!==undefined&&authSess()&&authSess()!==used){if(cb)cb();return;} // ล็อกอินใหม่ไปแล้วจากคำขออื่น
+  authClear();authLogin(cb);
+}
+function authLogin(cb){
+  if(cb)_authWait.push(cb);
+  if(_authBusy)return;_authBusy=true;
+  authLock('⏳ กำลังยืนยันตัวตนกับ LINE...');
+  authSdk(function(ok){
+    if(!ok){authFail('โหลด LINE ไม่สำเร็จ — ตรวจอินเทอร์เน็ตแล้วลองใหม่');return;}
+    liff.init({liffId:LIFF_ID}).then(function(){
+      authCleanUrl();
+      if(!liff.isLoggedIn()){authLock('↪ กำลังไปหน้าเข้าสู่ระบบ LINE...');liff.login({redirectUri:location.href.split('#')[0]});return;}
+      var tok=liff.getIDToken();
+      if(!tok){authFail('LINE ไม่ส่งข้อมูลยืนยันตัวตนมา (ต้องเปิด scope openid ใน LIFF)');return;}
+      api({action:'authLine',idToken:tok,dev:authDev()},function(d){
+        if(d&&d.ok&&d.session){
+          authSave(d);_authBusy=false;try{sessionStorage.removeItem('khum_relogin');}catch(e){}authUnlock();
+          var w=_authWait;_authWait=[];w.forEach(function(f){try{f();}catch(e){console.error(e);}});
+          return;
+        }
+        if(d&&d.denied){
+          authFail('บัญชี LINE "'+(d.name||'')+'" ไม่มีสิทธิ์ใช้แดชบอร์ดนี้',{label:'สลับบัญชี LINE',fn:function(){liff.logout();liff.login({redirectUri:location.href.split('#')[0]});}});
+          return;
+        }
+        // token ใน LIFF เก่าเกินไป → ขอใหม่จาก LINE ครั้งเดียว
+        if(d&&/expired/i.test(d.error||'')&&authReloginOk()){liff.logout();liff.login({redirectUri:location.href.split('#')[0]});return;}
+        authFail(d?'ยืนยันตัวตนไม่ผ่าน: '+(d.error||'ไม่ทราบสาเหตุ'):'ติดต่อ server ไม่ได้ — ลองใหม่อีกครั้ง');
+      });
+    }).catch(function(err){authFail('เริ่ม LINE ไม่สำเร็จ: '+((err&&err.message)||err));});
+  });
+}
+function authFail(msg,btn){
+  _authBusy=false;
+  authLock(msg,btn||{label:'ลองใหม่',fn:function(){authLogin();}});
+}
+function authCleanUrl(){
+  try{var u=new URL(location.href),ch=false;['code','state','liffClientId','liffRedirectUri','error','error_description'].forEach(function(k){if(u.searchParams.has(k)){u.searchParams.delete(k);ch=true;}});
+  if(ch)history.replaceState(null,'',u.pathname+(u.search||'')+u.hash);}catch(e){}
+}
+function authLogout(){
+  var k=authSess();if(k)api({action:'authLogout',_s:k},function(){});
+  authClear();
+  try{if(window.liff&&liff.isLoggedIn())liff.logout();}catch(e){}
+  authLock('ออกจากระบบแล้ว',{label:'เข้าสู่ระบบด้วย LINE',fn:function(){location.reload();}});
+}
 var todayTasks=[], overdueTasks=[], todayEvents=[], routineItems=[], noDateTasks=[];
 var historyTasksCache={};
 var _historyCache=null; // session cache for history tab — ล้างเมื่อ task เสร็จ
@@ -864,10 +950,13 @@ function showToast(msg){var t=document.getElementById('toast');t.textContent=msg
 function api(p,cb){
   var n='cb_'+Date.now()+'_'+Math.floor(Math.random()*9999);
   p.callback=n;
+  var sk=authSess();if(sk&&p.action!=='authLine')p._s=sk;
   var url=GAS+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k]);}).join('&');
   var s=document.createElement('script');
   var to=setTimeout(function(){window[n]=function(){};if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(null);},25000);
-  window[n]=function(d){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(d);};
+  window[n]=function(d){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);
+    if(d&&d.auth===false&&LIFF_ID&&p.action!=='authLine'&&p.action!=='authLogout'){authLost(function(){api(p,cb);},sk||'');return;}
+    if(cb)cb(d);};
   s.onerror=function(){clearTimeout(to);delete window[n];if(s.parentNode)s.parentNode.removeChild(s);if(cb)cb(null);};
   s.src=url;document.head.appendChild(s);
 }
@@ -883,11 +972,12 @@ function pqSave(q){try{localStorage.setItem(PQ_KEY,JSON.stringify(q));}catch(e){
 function jsonpSend(p,done){
   var n='cbw_'+Date.now()+'_'+Math.floor(Math.random()*99999), fin=false;
   var q={};Object.keys(p).forEach(function(k){q[k]=p[k];});q.callback=n;
+  var sk=authSess();if(sk)q._s=sk;
   var url=GAS+'?'+Object.keys(q).map(function(k){return k+'='+encodeURIComponent(q[k]);}).join('&');
   var s=document.createElement('script');
-  function end(st,d){if(fin)return;fin=true;clearTimeout(to);window[n]=function(){};if(s.parentNode)s.parentNode.removeChild(s);done(st,d);}
+  function end(st,d){if(fin)return;fin=true;clearTimeout(to);window[n]=function(){};if(s.parentNode)s.parentNode.removeChild(s);done(st,d,sk);}
   var to=setTimeout(function(){end('unknown');},25000);
-  window[n]=function(d){end(d&&(d.error||d.ok===false)?'fail':'ok',d);};
+  window[n]=function(d){end(d&&d.auth===false&&LIFF_ID?'auth':d&&(d.error||d.ok===false)?'fail':'ok',d);};
   // script โหลดเสร็จแต่ GAS ไม่เรียก callback = คำขอถึง server แล้ว → นับว่าสำเร็จ
   s.onload=function(){setTimeout(function(){end('ok');},0);};
   s.onerror=function(){end('fail');};
@@ -898,11 +988,15 @@ function apiS(p){
   var q=pqLoad();
   // ถ้ามีของค้างอยู่ → ต่อคิว เพื่อรักษาลำดับ (เช่น Done แล้ว Undo)
   if(q.length||navigator.onLine===false){q.push(op);pqSave(q);pqFlush();return;}
-  jsonpSend(p,function(st){pqHandle(op,st,true);});
+  jsonpSend(p,function(st,d,sk){op._k=sk;pqHandle(op,st,true);});
 }
 function pqHandle(op,st,fresh){
   var act=op.p.action, lbl=PQ_LABEL[act]||act;
   if(st==='ok')return true;
+  if(st==='auth'){ // ยังไม่ได้ยืนยันตัวตน → เก็บไว้ในคิว (ไม่นับครั้ง) แล้วส่งใหม่หลังล็อกอิน
+    if(fresh){var q0=pqLoad();q0.push(op);pqSave(q0);}
+    authLost(function(){pqSchedule(300);},op._k||'');return false;
+  }
   if(st==='unknown'&&PQ_NON_IDEMPOTENT[act]){
     showToast('⚠️ ยังไม่แน่ใจว่า'+lbl+'สำเร็จ — รีเฟรชเพื่อตรวจสอบ');return true; // ไม่ส่งซ้ำ กันของซ้ำ
   }
@@ -919,7 +1013,8 @@ function pqFlush(){
   if(navigator.onLine===false){pqSchedule();return;}
   _pqBusy=true;
   var op=q[0];
-  jsonpSend(op.p,function(st){
+  jsonpSend(op.p,function(st,d,sk){
+    op._k=sk;
     var q2=pqLoad();
     var drop=pqHandle(op,st,false);
     if(drop){q2.shift();}else{q2[0]=op;}
@@ -1264,8 +1359,8 @@ function uploadImagePost(dataUrl,fileName,cb){
   var done=false;function fin(d){if(done)return;done=true;cb(d);}
   setTimeout(function(){fin(null);},60000);
   try{
-    fetch(GAS+'?action=uploadImage',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({imageData:dataUrl,fileName:fileName})})
-      .then(function(r){return r.json();}).then(fin).catch(function(){fin(null);});
+    fetch(GAS+'?action=uploadImage'+(authSess()?'&_s='+authSess():''),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({imageData:dataUrl,fileName:fileName})})
+      .then(function(r){return r.json();}).then(function(d){if(d&&d.auth===false&&LIFF_ID){authLost(function(){});fin(null);return;}fin(d);}).catch(function(){fin(null);});
   }catch(e){fin(null);}
 }
 function nimgUpload(tid){
@@ -3360,7 +3455,7 @@ function init(){
   restoreLastTab(); // กลับไปหน้าที่เปิดอยู่ล่าสุดก่อน reload (ไม่ใช่ Main เสมอ)
   rcInit(); // ปุ่มแชท Rudy มุมขวาล่าง
 }
-init();
+authBoot(init);
 </script>
 </body>
 </html>

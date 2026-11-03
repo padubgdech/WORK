@@ -63,8 +63,22 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   day → day popup (+ งาน / + นัดหมาย → Rudy chat in event mode). Old per-day functions (loadCalDay, cellChips…) are now unused.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
+- LINE login (3 Nov, code written, NOT yet installed): `gas/dashboard-auth.gs` + frontend `authBoot/authLogin/authLost` (index.html, top of script).
+  Once per device: LIFF ID token → `?action=authLine` → GAS verifies at api.line.me/oauth2/v2.1/verify (client_id = Script Property
+  `AUTH_LIFF_CHANNEL`), sub must be in `AUTH_OWNER_SUBS` → session key (64 chars, stored hashed as Script Property `ses_<sha256>`,
+  30 days, auto-renewed when <7 days left, CacheService 10 min) → localStorage `khum_sess_v1` → every request sends `_s`.
+  Guard = `authGuard_(e)` first line of doGet; uploadImage guarded inside `handleDashboardPost_`; webhook POST (no ?action) untouched.
+  `AUTH_ENFORCE`=1 enforces; 0/missing = open (rollout + emergency unlock). Editor functions: `authStartSetup` (15-min window: first LINE
+  login becomes owner), `authEnable`, `authDisable`, `authLogoutAll`, `authInfo`. Frontend: `LIFF_ID=''` = auth off (legacy).
+  On `{auth:false}` reads re-login then retry; writes stay in the queue (state 'auth', tries not counted). Relogin on expired ID token
+  max once per 2 min (sessionStorage `khum_relogin`) — avoids redirect loop. Lock screen `#auth-lock`. Test: scratchpad test_auth.py / gas_auth_sim.js.
+  Rollout: (1) LIFF app (endpoint https://padubgdech.github.io/WORK/, scope openid) → (2) install file + doGet hook + set AUTH_LIFF_CHANNEL
+  → deploy new version → (3) set LIFF_ID in index.html, push → (4) run authStartSetup, Dech logs in → (5) authEnable.
+  NOTE: once enforced, anything else calling the dashboard deployment's doGet without a session breaks (only the dashboard is known to).
+
 ## Pending
-1. Security (not started): GAS web app is ANYONE_ANONYMOUS and its URL is public → anyone can edit/delete tasks. Plan: verify LIFF ID token / userId in GAS. Tokens (LINE/Notion/Gemini) are hard-coded in `รหัส.gs` CONFIG → rotate and move to Script Properties.
+1. Security: login step above (in progress). Tokens (LINE/Notion/Gemini) are hard-coded in `รหัส.gs` CONFIG → move to Script Properties;
+   rotating them also needs the LINE-bot webhook deployment updated (it runs an old pinned version with the old tokens).
 2. Separate HR/employee app: profile "แก้ไขข้อมูล" opens the first-login modal (only "ออกจากระบบ", no ✕, save button stuck on "กำลังบันทึก..."). Location of that code unknown — ask Dech.
 
 ## Working notes (learned the hard way)

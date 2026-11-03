@@ -5,6 +5,7 @@
 function handleDashboardPost_(e) {
 var action = e && e.parameter && e.parameter.action;
 if (action !== 'uploadImage') return null;
+if (typeof authGuard_ === 'function') { var ag = authGuard_(e, true); if (ag) return ag; }
 var out;
 try {
 var body = JSON.parse((e.postData && e.postData.contents) || '{}');
