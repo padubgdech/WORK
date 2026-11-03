@@ -206,6 +206,88 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .rt-card{background:#fff;border-radius:10px;border:.5px solid var(--border);padding:11px 14px;display:flex;align-items:center;gap:12px;margin-bottom:7px}
 .rt-card.rt-now{border-color:#111;background:#fafaf9}
 .rt-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cv{max-width:1240px;margin:0 auto;font-family:'IBM Plex Sans Thai',sans-serif;color:#1c1917}
+.cv-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.cv-nav{display:flex;align-items:center;gap:10px}
+.cv-title{margin:0;font-size:24px;font-weight:700;min-width:190px;letter-spacing:-.3px}
+.cv-ib{width:44px;height:44px;border-radius:12px;border:1px solid #e7e5e0;background:#fff;color:#1c1917;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.cv-today{height:44px;padding:0 16px;border-radius:12px;border:1px solid #e7e5e0;background:#fff;font:600 13px 'IBM Plex Sans Thai',sans-serif;color:#1c1917;cursor:pointer}
+.cv-seg{display:flex;gap:2px;padding:4px;border-radius:14px;background:#ebe9e4}
+.cv-seg button{height:40px;padding:0 18px;border:0;border-radius:10px;background:transparent;color:#57534e;font:600 13px 'IBM Plex Sans Thai',sans-serif;cursor:pointer}
+.cv-seg button.on{background:#fff;color:#1c1917;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.cv-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#57534e;margin-bottom:12px}
+.cv-legend span{display:flex;align-items:center;gap:6px}.cv-legend i{width:18px;height:7px;border-radius:4px;display:inline-block}.cv-legend i.dot{width:8px;height:8px;border-radius:50%}
+.cv-card{background:#fff;border:1px solid #e9e7e2;border-radius:18px;overflow:hidden}
+.cv-dow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid #eeece8}
+.cv-dow div{padding:10px 0;text-align:center;font-size:11px;color:#57534e;font-weight:600}
+.cv-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:auto;min-height:132px;border-bottom:1px solid #eeece8;position:relative}
+.cv-week:last-child{border-bottom:0}
+.cv-day{grid-row:1/-1;border-right:1px solid #eeece8;cursor:pointer;background:#fff;min-width:0}
+.cv-day.last{border-right:0}.cv-day.out{background:#faf9f7}.cv-day:hover{background:#fcfbf8}
+.cv-dn{grid-row:1;padding:8px 10px 2px;font-size:13px;font-weight:600;color:#1c1917;pointer-events:none;z-index:1}
+.cv-dn.out{color:#a8a29e;font-weight:500}
+.cv-dn.today span{display:inline-flex;width:26px;height:26px;margin:-4px 0 -4px -4px;border-radius:50%;background:#1c1917;color:#fff;align-items:center;justify-content:center}
+.cv-bar{z-index:2;height:21px;margin:2px 0;padding:0 8px;border:0;color:#fff;font:600 11.5px 'IBM Plex Sans Thai',sans-serif;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border-radius:6px;min-width:0}
+.cv-bar.cl{border-top-left-radius:0;border-bottom-left-radius:0}.cv-bar.cr{border-top-right-radius:0;border-bottom-right-radius:0}
+.cv-bar:not(.cl){margin-left:6px}.cv-bar:not(.cr){margin-right:6px}
+.cv-bar small{font-weight:400;opacity:.85;margin-left:4px}
+.cv-dots{z-index:2;padding:6px 8px 8px;display:flex;flex-direction:column;gap:3px;min-width:0;pointer-events:none}
+.cv-dot{display:flex;gap:5px;align-items:flex-start;font-size:11.5px;line-height:1.35;color:#1c1917;pointer-events:auto;cursor:pointer;background:none;border:0;padding:0;text-align:left;font-family:inherit;min-width:0}
+.cv-dot i{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.cv-dot b{font-weight:500;color:#44403c;flex-shrink:0}
+.cv-dot span{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.cv-more{font-size:11px;color:#57534e;padding-left:12px;pointer-events:auto}
+@media(max-width:760px){.cv-ag-side{max-width:none}.cv-ag-main{padding:4px 16px 8px}.cv-title{font-size:20px;min-width:0}.cv-week{min-height:96px}.cv-dn{padding:6px 4px 0;font-size:12px}.cv-bar{font-size:10px;padding:0 4px;height:18px}.cv-bar small{display:none}.cv-bar:not(.cl){margin-left:2px}.cv-bar:not(.cr){margin-right:2px}.cv-dot span,.cv-dot b{display:none}.cv-dots{flex-direction:row;flex-wrap:wrap;padding:4px}.cv-seg button{padding:0 12px}}
+/* รายการ */
+.cv-ag{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.cv-ag-side{flex:1 1 300px;max-width:340px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.cv-ag-main{flex:999 1 520px;min-width:0;padding:6px 22px 10px}
+.cv-mini{padding:16px 16px 10px}
+.cv-mini-g{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));row-gap:4px;text-align:center}
+.cv-mini-g .h{font-size:11px;color:#57534e;font-weight:600;padding-bottom:4px}
+.cv-md{position:relative;height:42px;border:0;background:none;font:500 13px 'IBM Plex Sans Thai',sans-serif;color:#1c1917;cursor:pointer;padding:0}
+.cv-md.out{color:#c4c0ba}.cv-md .n{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;border-radius:50%}
+.cv-md.today .n{background:#1c1917;color:#fff;font-weight:700}
+.cv-md .ul{position:absolute;left:0;right:0;height:3px;bottom:6px}.cv-md .ul.u2{bottom:2px}
+.cv-md .dt{position:absolute;left:50%;bottom:4px;width:5px;height:5px;border-radius:50%;transform:translateX(-50%)}
+.cv-rng{padding:16px}
+.cv-rng h3{margin:0 0 12px;font-size:13px;font-weight:700;color:#44403c}
+.cv-rng-i{margin-bottom:14px;cursor:pointer}.cv-rng-i:last-child{margin-bottom:0}
+.cv-rng-t{display:flex;justify-content:space-between;gap:8px;font-size:14px;font-weight:600}
+.cv-rng-t b{font-size:13px;white-space:nowrap}
+.cv-pb{height:7px;border-radius:4px;margin:8px 0 6px;overflow:hidden}.cv-pb i{display:block;height:100%;border-radius:4px}
+.cv-rng-s{font-size:11.5px;color:#57534e}
+.cv-ag-hd{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #eeece8}
+.cv-ag-hd h3{margin:0;font-size:17px;font-weight:700}
+.cv-add{height:44px;padding:0 18px;border-radius:12px;border:0;background:#1c1917;color:#fff;font:700 13px 'IBM Plex Sans Thai',sans-serif;cursor:pointer}
+.cv-row{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid #eeece8}.cv-row:last-child{border-bottom:0}
+.cv-row-d{width:64px;flex-shrink:0}.cv-row-d b{display:block;font-size:20px;font-weight:700;line-height:1.1}.cv-row-d span{font-size:11px;color:#57534e}
+.cv-row-l{flex:1;display:flex;flex-direction:column;gap:9px;min-width:0}
+.cv-it{display:flex;align-items:center;gap:10px;font-size:14px;min-width:0;cursor:pointer;background:none;border:0;padding:0;text-align:left;font-family:inherit;color:#1c1917}
+.cv-it .tm{width:58px;flex-shrink:0;font-size:12.5px;color:#44403c;font-weight:500}
+.cv-it i{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cv-it .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv-badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;flex-shrink:0}
+.cv-trip{border-radius:14px;padding:12px 16px;display:flex;flex-direction:column;gap:8px;cursor:pointer}
+.cv-trip .tt{font-weight:700;font-size:15px}
+.cv-trip .ti{display:flex;gap:16px;font-size:13px}.cv-trip .ti b{width:48px;flex-shrink:0;font-weight:600;font-size:12px;line-height:1.3}
+/* ไทม์ไลน์ */
+.cv-tl-wrap{overflow-x:auto}
+.cv-tl{position:relative;min-width:980px}
+.cv-tl-row{display:grid;border-bottom:1px solid #eeece8;position:relative}.cv-tl-row:last-child{border-bottom:0}
+.cv-tl-lab{grid-column:1;display:flex;align-items:center;gap:8px;padding:0 16px;font-size:13px;font-weight:600;color:#44403c;position:sticky;left:0;background:#fff;z-index:3}
+.cv-tl-lab i{width:9px;height:9px;border-radius:3px}
+.cv-tl-hd{font-size:11px;text-align:center;padding:10px 0 8px;color:#57534e}.cv-tl-hd b{display:block;font-size:13px;color:#1c1917}
+.cv-tl-hd.today b{display:inline-flex;width:24px;height:24px;border-radius:50%;background:#1c1917;color:#fff;align-items:center;justify-content:center}
+.cv-tl-we{background:#f6f5f2}
+.cv-tl-bar{height:30px;margin:6px 2px;border-radius:9px;border:0;color:#fff;display:flex;align-items:center;gap:6px;padding:0 10px;font:700 13px 'IBM Plex Sans Thai',sans-serif;white-space:nowrap;overflow:hidden;cursor:pointer;z-index:2;min-width:0}
+.cv-tl-bar em{font-style:normal;font-weight:600;font-size:10.5px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.22)}
+.cv-tl-pt{align-self:center;justify-self:center;z-index:2;border:2px solid #fff;border-radius:50%;width:14px;height:14px;padding:0;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.cv-tl-pt.n{width:auto;min-width:22px;height:18px;border-radius:9px;color:#fff;font-size:10px;font-weight:700;font-family:inherit}
+.cv-tl-now{position:absolute;top:0;bottom:0;width:2px;background:#1c1917;z-index:4;pointer-events:none}
+.cv-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:18px}
+.cv-sum>div{background:#fff;border:1px solid #e9e7e2;border-radius:16px;padding:16px;cursor:pointer}
+.cv-sum .k{font-size:11.5px;font-weight:700;margin-bottom:6px}.cv-sum .t{font-size:16px;font-weight:700}.cv-sum .s{font-size:12.5px;color:#57534e;margin-top:4px}
 .cal-hdr-d{padding:8px;text-align:center;font-size:10px;color:#999;font-weight:700;letter-spacing:.3px}
 .cal-taskzone{display:flex;flex-direction:column;gap:3px;margin-top:3px}
 .cal-tbar{height:14px;border-radius:6px;color:#fff;font-size:7px;font-weight:700;line-height:14px;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)}
@@ -629,30 +711,23 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
     </div>
   </div>
 </div>
-<div id="page-cal" class="page" style="background:linear-gradient(135deg,#fdf2f2 0%,#f2f7fd 50%,#f2fdf6 100%);margin-top:-1px">
-  <div class="grid2">
-    <div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div id="cal-title" style="font-size:18px;font-weight:800;color:#111"></div>
-        <div style="display:flex;gap:6px">
-          <button class="cal-btn" onclick="calMove(-1)">‹</button>
-          <button class="cal-btn-today" onclick="calMove(0)">วันนี้</button>
-          <button class="cal-btn" onclick="calMove(1)">›</button>
-        </div>
+<div id="page-cal" class="page">
+  <div class="cv">
+    <div class="cv-head">
+      <div class="cv-nav">
+        <button type="button" class="cv-ib" aria-label="เดือนก่อน" onclick="calMove(-1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg></button>
+        <h2 id="cal-title" class="cv-title"></h2>
+        <button type="button" class="cv-ib" aria-label="เดือนถัดไป" onclick="calMove(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg></button>
+        <button type="button" class="cv-today" onclick="calMove(0)">วันนี้</button>
       </div>
-      <div>
-        <div style="display:grid;grid-template-columns:repeat(7,1fr)">
-          <div class="cal-hdr-d">จ</div><div class="cal-hdr-d">อ</div><div class="cal-hdr-d">พ</div>
-          <div class="cal-hdr-d">พฤ</div><div class="cal-hdr-d">ศ</div><div class="cal-hdr-d">ส</div><div class="cal-hdr-d">อา</div>
-        </div>
-        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
-          <div class="ld" style="grid-column:1/-1">⏳ กำลังโหลด...</div>
-        </div>
+      <div class="cv-seg" role="tablist" aria-label="มุมมองปฏิทิน">
+        <button type="button" role="tab" data-v="month" onclick="calSetView('month')">เดือน</button>
+        <button type="button" role="tab" data-v="agenda" onclick="calSetView('agenda')">รายการ</button>
+        <button type="button" role="tab" data-v="timeline" onclick="calSetView('timeline')">ไทม์ไลน์</button>
       </div>
     </div>
-    <div class="scroll-y" id="cal-detail">
-      <div style="color:#bbb;font-size:13px;padding:24px 0;text-align:center">กดวันในปฏิทินเพื่อดูรายละเอียด</div>
-    </div>
+    <div class="cv-legend" id="cv-legend"></div>
+    <div id="cv-body"><div class="ld">⏳ กำลังโหลด...</div></div>
   </div>
 </div>
 <div id="page-tasks" class="page">
@@ -2109,7 +2184,7 @@ function rcConfirm(i){
     var nm=encodeURIComponent(rcEvName(c));
     api({action:'addAllDayEvent',name:nm,date:c.date||TODAY_STR,endDate:c.endDate||c.date||TODAY_STR},function(d){
       var ok=!!(d&&d.ok);done(ok);if(!ok)return;showToast('📅 ลงปฏิทินแล้ว');
-      calCache.e={};var s1=c.date||TODAY_STR,e1=c.endDate||s1;
+      calCache.e={};var s1=c.date||TODAY_STR,e1=c.endDate||s1;calInvalidate();if(document.getElementById('page-cal').classList.contains('show'))renderCal();
       if(s1<=TODAY_STR&&TODAY_STR<=e1)api({action:'getCalendarEvents',date:TODAY_STR},function(r){todayEvents=r?r.events||[]:[];calCache.e[TODAY_STR]=todayEvents;renderEvents();});
     });
     return;
@@ -2118,7 +2193,7 @@ function rcConfirm(i){
     var st=c.startTime||'09:00',et=c.endTime||rcPlusHour(st);
     api({action:'addCalendarEvent',name:encodeURIComponent(rcEvName(c)),date:c.date||TODAY_STR,startTime:st,endTime:et},function(d){
       done(!!d);if(!d)return;showToast('📅 ลงปฏิทินแล้ว');
-      var ds=c.date||TODAY_STR;delete calCache.e[ds];
+      var ds=c.date||TODAY_STR;delete calCache.e[ds];calInvalidate();if(document.getElementById('page-cal').classList.contains('show'))renderCal();
       if(ds===TODAY_STR)api({action:'getCalendarEvents',date:TODAY_STR},function(r){todayEvents=r?r.events||[]:[];calCache.e[TODAY_STR]=todayEvents;renderEvents();});
     });
     return;
@@ -2198,28 +2273,274 @@ function restoreLastTab(){
   var btn=document.querySelector('.tab[data-tab="'+last+'"]');
   if(btn)goTab(last,btn);
 }
+/* ===== Calendar ใหม่ — เดือน / รายการ / ไทม์ไลน์ (ตาม mockup "Rudy Calendar Multi-day") =====
+   นัดหมายทั้งเดือนโหลดคำขอเดียว (GAS getRangeEvents) · งานจาก allActiveTasks (actionDate–endDate) */
+var CV_C={High:'#C8363D',Medium:'#B85C0F',Low:'#2E7D4F',trip:'#2457C5',appt:'#7C3AED'};
+var CV_SOFT={High:'#FBE9EA',Medium:'#FBEFE3',Low:'#E6F2EA',trip:'#E8EEFB',appt:'#F1EAFE'};
+var CV_TH_M=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+var CV_TH_MS=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+var CV_TH_D=['อา','จ','อ','พ','พฤ','ศ','ส'];
+var calView='month',calMonthCache={},_calReq=0;
+try{calView=localStorage.getItem('cal_view')||'month';}catch(e){}
+function calInvalidate(){calMonthCache={};}
+function cvD(ds){var a=ds.split('-');return new Date(+a[0],+a[1]-1,+a[2]);}
+function cvS(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function cvAdd(ds,n){var d=cvD(ds);d.setDate(d.getDate()+n);return cvS(d);}
+function cvDiff(a,b){return Math.round((cvD(b)-cvD(a))/864e5);}
+function cvShort(ds){var d=cvD(ds);return d.getDate()+' '+CV_TH_MS[d.getMonth()];}
+function cvRange(s,e){var a=cvD(s),b=cvD(e);if(s===e)return cvShort(s);return a.getMonth()===b.getMonth()?a.getDate()+'–'+b.getDate()+' '+CV_TH_MS[b.getMonth()]:cvShort(s)+' – '+cvShort(e);}
+function cvWd(ds){return CV_TH_D[cvD(ds).getDay()]+'.';}
 function calMove(dir){
-  if(dir===0){calY=TODAY.getFullYear();calMo=TODAY.getMonth();calSel=TODAY_STR;}
+  if(dir===0){calY=TODAY.getFullYear();calMo=TODAY.getMonth();}
   else{calMo+=dir;if(calMo<0){calMo=11;calY--;}if(calMo>11){calMo=0;calY++;}}
   renderCal();
 }
+function calSetView(v){calView=v;try{localStorage.setItem('cal_view',v);}catch(e){}renderCal();}
+function cvMonthBounds(){
+  var first=new Date(calY,calMo,1),last=new Date(calY,calMo+1,0);
+  var gs=new Date(first);gs.setDate(1-((first.getDay()+6)%7));
+  var ge=new Date(last);ge.setDate(last.getDate()+(6-(last.getDay()+6)%7));
+  return {ms:cvS(first),me:cvS(last),gs:cvS(gs),ge:cvS(ge),dim:last.getDate()};
+}
 function renderCal(){
-  var thMF=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-  document.getElementById('cal-title').textContent=thMF[calMo]+' '+(calY+543);
-  var mo=calMo+1,dim=new Date(calY,mo,0).getDate();
-  var first=new Date(calY,calMo,1).getDay();first=first===0?6:first-1;
-  var cells=[];for(var i=0;i<first;i++)cells.push(null);for(var d=1;d<=dim;d++)cells.push(calY+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0'));
-  while(cells.length%7!==0)cells.push(null);
-  var h='';
-  cells.forEach(function(ds){
-    if(!ds){h+='<div style="background:#fafaf9;border:.5px solid #f0f0f0;min-height:88px"></div>';return;}
-    var dn=parseInt(ds.split('-')[2]),isT=ds===TODAY_STR,isPast=ds<TODAY_STR,isSel=ds===calSel;
-    var cls='cal-cell'+(isT?' today-c':isPast?' past-c':'')+(isSel?' sel-c':'');
-    h+='<div class="'+cls+'" onclick="calSelect(\''+ds+'\')"><div class="cal-dn'+(isT?' today-n':'')+'">'+dn+'</div><div id="ct-'+ds+'">'+cellTaskZone(ds)+'</div><div id="cc-'+ds+'">'+cellChips(ds)+'</div></div>';
+  var title=document.getElementById('cal-title');if(!title)return;
+  title.textContent=CV_TH_M[calMo]+' '+(calY+543);
+  document.querySelectorAll('.cv-seg button').forEach(function(b){var on=b.dataset.v===calView;b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false');});
+  document.getElementById('cv-legend').innerHTML=[['งานด่วน',CV_C.High],['งาน',CV_C.Medium],['งานไม่ด่วน',CV_C.Low],['ทริป / หลายวัน',CV_C.trip],['นัดหมาย',CV_C.appt,1]]
+    .map(function(x){return '<span><i'+(x[2]?' class="dot"':'')+' style="background:'+x[1]+'"></i>'+x[0]+'</span>';}).join('');
+  var B=cvMonthBounds(),key=B.gs+'_'+B.ge,body=document.getElementById('cv-body');
+  if(!allActiveTasks.length&&!renderCal._askedTasks){renderCal._askedTasks=true;api({action:'getAllActiveTasks'},function(d){if(d){allActiveTasks=pqApply(d.tasks||[],false,true);renderCal();}});}
+  var cached=calMonthCache[key];
+  if(!cached){
+    body.innerHTML='<div class="ld" style="padding:40px 0">⏳ กำลังโหลด...</div>';
+    var rq=++_calReq;
+    api({action:'getRangeEvents',from:B.gs,to:B.ge},function(d){
+      if(rq!==_calReq)return;
+      calMonthCache[key]=(d&&d.ok)?d.events||[]:[];
+      if(!(d&&d.ok))showToast('⚠️ โหลดนัดหมายไม่สำเร็จ');
+      renderCal();
+    });
+    return;
+  }
+  var data=cvBuild(cached,B);
+  if(calView==='agenda')body.innerHTML=cvAgenda(data,B);
+  else if(calView==='timeline'){body.innerHTML=cvTimeline(data,B);cvTlNow(B);}
+  else body.innerHTML=cvMonth(data,B);
+}
+// รวมข้อมูล: spans = แถบ (งานทุกงานที่มีวัน + นัดทั้งวัน) · dots = นัดมีเวลา
+function cvBuild(events,B){
+  var spans=[],dots=[];
+  allActiveTasks.forEach(function(t){
+    if(t.done||!t.actionDate)return;
+    var s=t.actionDate.slice(0,10),e=(t.endDate&&t.endDate>=t.actionDate?t.endDate:t.actionDate).slice(0,10);
+    if(e<B.gs||s>B.ge)return;
+    var pr=CV_C[t.priority]?t.priority:'Medium';
+    spans.push({kind:'task',id:t.id,title:t.name||'',s:s,e:e,color:CV_C[pr],soft:CV_SOFT[pr],cat:'task'});
   });
-  document.getElementById('cal-grid').innerHTML=h;
-  cells.filter(Boolean).forEach(function(ds){loadCalDay(ds);});
-  renderCalDetail(calSel);
+  events.forEach(function(ev){
+    if(ev.allDay)spans.push({kind:'event',id:ev.id,title:ev.title||'',s:ev.date,e:ev.endDate||ev.date,color:CV_C.trip,soft:CV_SOFT.trip,cat:'trip',loc:ev.location});
+    else dots.push({kind:'event',id:ev.id,title:ev.title||'',date:ev.date,time:ev.startTime,end:ev.endTime,color:CV_C.appt,loc:ev.location});
+  });
+  spans.sort(function(a,b){return a.s<b.s?-1:a.s>b.s?1:(cvDiff(b.s,b.e)-cvDiff(a.s,a.e));});
+  dots.sort(function(a,b){return (a.date+a.time)<(b.date+b.time)?-1:1;});
+  window._cvData={spans:spans,dots:dots};
+  return {spans:spans,dots:dots};
+}
+function cvLanes(items,lo,hi){ // จัดเลน: ไม่ให้แถบทับกัน
+  var lanes=[];
+  items.forEach(function(it){
+    var s=it.s<lo?lo:it.s,e=it.e>hi?hi:it.e;if(e<lo||s>hi)return;
+    for(var L=0;L<lanes.length;L++){if(lanes[L]<s){lanes[L]=e;it._lane=L;return;}}
+    lanes.push(e);it._lane=lanes.length-1;
+  });
+  return lanes.length;
+}
+function cvBarLabel(sp,segS,segE){
+  var n=cvDiff(sp.s,sp.e)+1,h=escH(sp.title);
+  if(n===1)return h;
+  var inSpan=TODAY_STR>=sp.s&&TODAY_STR<=sp.e,todaySeg=inSpan&&TODAY_STR>=segS&&TODAY_STR<=segE;
+  if(todaySeg||(!inSpan&&segS===sp.s))
+    return h+'<small>· '+cvRange(sp.s,sp.e)+(sp.cat==='trip'?' · '+n+' วัน':'')+(inSpan?' · วันที่ '+(cvDiff(sp.s,TODAY_STR)+1)+'/'+n:'')+'</small>';
+  if(segS===sp.s)return h;
+  var a=cvDiff(sp.s,segS)+1,b2=cvDiff(sp.s,segE)+1;
+  return h+'<small>· ต่อ · วันที่ '+(a===b2?a:a+'–'+b2)+'</small>';
+}
+function cvMonth(data,B){
+  var mob=window.matchMedia&&window.matchMedia('(max-width:760px)').matches,MAXL=mob?3:4;
+  var h='<div class="cv-card"><div class="cv-dow">'+['จ','อ','พ','พฤ','ศ','ส','อา'].map(function(d){return '<div>'+d+'</div>';}).join('')+'</div>';
+  for(var ws=B.gs;ws<=B.ge;ws=cvAdd(ws,7)){
+    var we=cvAdd(ws,6),sp=data.spans.filter(function(x){return x.e>=ws&&x.s<=we;}).map(function(x){return {o:x,s:x.s,e:x.e};});
+    var L=Math.min(cvLanes(sp,ws,we),MAXL);
+    var hidden={};sp.forEach(function(x){if(x._lane>=MAXL){for(var d=(x.s<ws?ws:x.s);d<=(x.e>we?we:x.e);d=cvAdd(d,1))hidden[d]=(hidden[d]||0)+1;}});
+    h+='<div class="cv-week" style="grid-template-rows:34px repeat('+L+',25px) 1fr">';
+    for(var i=0;i<7;i++){
+      var ds=cvAdd(ws,i),out=ds<B.ms||ds>B.me;
+      h+='<div class="cv-day'+(out?' out':'')+(i===6?' last':'')+'" style="grid-column:'+(i+1)+'" role="button" tabindex="0" aria-label="'+cvShort(ds)+'" onclick="cvOpenDay(\''+ds+'\')" onkeydown="if(event.key===\'Enter\')cvOpenDay(\''+ds+'\')"></div>';
+      h+='<div class="cv-dn'+(out?' out':'')+(ds===TODAY_STR?' today':'')+'" style="grid-column:'+(i+1)+'"><span>'+cvD(ds).getDate()+'</span></div>';
+    }
+    sp.forEach(function(x){
+      if(x._lane>=MAXL)return;
+      var s=x.s<ws?ws:x.s,e=x.e>we?we:x.e,c1=cvDiff(ws,s)+1,c2=cvDiff(ws,e)+2;
+      h+='<button type="button" class="cv-bar'+(x.s<ws?' cl':'')+(x.e>we?' cr':'')+'" style="grid-column:'+c1+'/'+c2+';grid-row:'+(x._lane+2)+';background:'+x.o.color+'" title="'+escH(x.o.title)+' · '+cvRange(x.o.s,x.o.e)+'" onclick="cvOpenItem(\''+x.o.kind+'\',\''+escH(x.o.id)+'\')">'+cvBarLabel(x.o,s,e)+'</button>';
+    });
+    for(var j=0;j<7;j++){
+      var d2=cvAdd(ws,j),dd=data.dots.filter(function(x){return x.date===d2;}),more=(hidden[d2]||0)+Math.max(0,dd.length-3);
+      if(!dd.length&&!more)continue;
+      h+='<div class="cv-dots" style="grid-column:'+(j+1)+';grid-row:'+(L+2)+'">';
+      dd.slice(0,3).forEach(function(x){h+='<button type="button" class="cv-dot" onclick="cvOpenItem(\'event\',\''+escH(x.id)+'\',\''+d2+'\')"><i style="background:'+x.color+'"></i><b>'+escH(x.time)+'</b><span>'+escH(x.title)+'</span></button>';});
+      if(more)h+='<span class="cv-more">+'+more+' รายการ</span>';
+      h+='</div>';
+    }
+    h+='</div>';
+  }
+  return h+'</div>';
+}
+function cvAgenda(data,B){
+  // ซ้าย: ปฏิทินเล็ก
+  var h='<div class="cv-ag"><div class="cv-ag-side"><div class="cv-card cv-mini"><div class="cv-mini-g">'+['จ','อ','พ','พฤ','ศ','ส','อา'].map(function(d){return '<div class="h">'+d+'</div>';}).join('');
+  for(var ds=B.gs;ds<=B.ge;ds=cvAdd(ds,1)){
+    var cov=data.spans.filter(function(x){return x.s<=ds&&x.e>=ds&&x.e>x.s;}).slice(0,2),hasDot=data.dots.some(function(x){return x.date===ds;});
+    var out=ds<B.ms||ds>B.me;
+    h+='<button type="button" class="cv-md'+(out?' out':'')+(ds===TODAY_STR?' today':'')+'" onclick="cvAgJump(\''+ds+'\')" aria-label="'+cvShort(ds)+'"><span class="n">'+cvD(ds).getDate()+'</span>';
+    cov.forEach(function(x,k){var st=x.s===ds||(cvD(ds).getDay()===1),en=x.e===ds||(cvD(ds).getDay()===0);h+='<i class="ul'+(k?' u2':'')+'" style="background:'+x.color+';left:'+(st?'8px':'0')+';right:'+(en?'8px':'0')+';border-radius:'+(st?'2px':'0')+' '+(en?'2px':'0')+' '+(en?'2px':'0')+' '+(st?'2px':'0')+'"></i>';});
+    if(hasDot&&!cov.length)h+='<i class="dt" style="background:'+CV_C.appt+'"></i>';
+    h+='</button>';
+  }
+  h+='</div></div>';
+  // ซ้าย: ช่วงยาวเดือนนี้
+  var longs=data.spans.filter(function(x){return x.e>x.s&&x.e>=B.ms&&x.s<=B.me;});
+  h+='<div class="cv-card cv-rng"><h3>ช่วงยาวเดือนนี้</h3>';
+  if(!longs.length)h+='<div class="cv-rng-s">ไม่มีงานหรือทริปหลายวันในเดือนนี้</div>';
+  longs.forEach(function(x){
+    var n=cvDiff(x.s,x.e)+1,lbl,pct,sub;
+    if(TODAY_STR<x.s){var k=cvDiff(TODAY_STR,x.s);lbl='อีก '+k+' วัน';pct=0;sub=cvRange(x.s,x.e)+' · '+n+' วัน';}
+    else if(TODAY_STR>x.e){lbl='จบแล้ว';pct=100;sub=cvRange(x.s,x.e)+' · '+n+' วัน';}
+    else{var a=cvDiff(x.s,TODAY_STR)+1;lbl='วันที่ '+a+' / '+n;pct=Math.round(a/n*100);sub=cvRange(x.s,x.e)+' · เหลือ '+(n-a)+' วัน';}
+    h+='<div class="cv-rng-i" role="button" tabindex="0" onclick="cvOpenItem(\''+x.kind+'\',\''+escH(x.id)+'\')"><div class="cv-rng-t"><span>'+escH(x.title)+'</span><b style="color:'+x.color+'">'+lbl+'</b></div>'
+      +'<div class="cv-pb" style="background:'+x.soft+'"><i style="width:'+pct+'%;background:'+x.color+'"></i></div><div class="cv-rng-s">'+sub+'</div></div>';
+  });
+  h+='</div></div>';
+  // ขวา: กำหนดการ
+  var from=(B.ms<=TODAY_STR&&TODAY_STR<=B.me)?TODAY_STR:B.ms,rows='',used={};
+  var trips=data.spans.filter(function(x){return x.cat==='trip'&&x.e>x.s;});
+  for(var d=from;d<=B.me;d=cvAdd(d,1)){
+    var items='',isRowTrip=null;
+    trips.forEach(function(x){if(!used[x.id]&&(x.s===d||(d===from&&x.s<from&&x.e>=from))){isRowTrip=x;used[x.id]=1;}});
+    if(isRowTrip){
+      var x=isRowTrip,inner=data.dots.filter(function(o){return o.date>=x.s&&o.date<=x.e;});inner.forEach(function(o){o._inTrip=1;});
+      var n=cvDiff(x.s,x.e)+1;
+      rows+='<div class="cv-row" id="cvr-'+d+'"><div class="cv-row-d"><b>'+cvD(x.s).getDate()+'–'+cvD(x.e).getDate()+'</b><span>'+n+' วัน</span></div><div class="cv-row-l">'
+        +'<div class="cv-trip" style="background:'+x.soft+'" role="button" tabindex="0" onclick="cvOpenItem(\'event\',\''+escH(x.id)+'\')"><div class="tt" style="color:'+x.color+'">✈︎ '+escH(x.title)+'</div>'
+        +inner.map(function(o){return '<div class="ti"><b>'+cvD(o.date).getDate()+(o.time?' ·<br>'+escH(o.time):'')+'</b><span>'+escH(o.title)+'</span></div>';}).join('')+'</div></div></div>';
+    }
+    data.spans.forEach(function(x){
+      if(x.cat==='trip'&&x.e>x.s)return;
+      var multi=x.e>x.s,show=false,badge='';
+      if(!multi)show=x.s===d;
+      else if(x.s===d){show=true;badge=TODAY_STR===d?'วันที่ 1/'+(cvDiff(x.s,x.e)+1):'เริ่ม';}
+      else if(d===TODAY_STR&&x.s<d&&x.e>d){show=true;badge='วันที่ '+(cvDiff(x.s,d)+1)+'/'+(cvDiff(x.s,x.e)+1);}
+      else if(x.e===d){show=true;badge='วันสุดท้าย';}
+      else if(d===from&&x.s<from&&x.e>from&&from!==TODAY_STR){show=true;badge='ต่อ';}
+      if(!show)return;
+      items+='<button type="button" class="cv-it" onclick="cvOpenItem(\''+x.kind+'\',\''+escH(x.id)+'\')"><span class="tm">ทั้งวัน</span>'+(badge?'<span class="cv-badge" style="background:'+x.soft+';color:'+x.color+'">'+badge+'</span>':'<i style="background:'+x.color+'"></i>')+'<span class="nm">'+escH(x.title)+'</span></button>';
+    });
+    data.dots.forEach(function(o){if(o.date!==d||o._inTrip)return;items+='<button type="button" class="cv-it" onclick="cvOpenItem(\'event\',\''+escH(o.id)+'\',\''+d+'\')"><span class="tm">'+escH(o.time)+'</span><i style="background:'+o.color+'"></i><span class="nm">'+escH(o.title)+'</span></button>';});
+    if(items)rows+='<div class="cv-row" id="cvr-'+d+'"><div class="cv-row-d"><b>'+cvD(d).getDate()+'</b><span>'+cvWd(d)+(d===TODAY_STR?' · วันนี้':'')+'</span></div><div class="cv-row-l">'+items+'</div></div>';
+  }
+  data.dots.forEach(function(o){delete o._inTrip;});
+  h+='<div class="cv-card cv-ag-main"><div class="cv-ag-hd"><h3>กำหนดการ</h3><button type="button" class="cv-add" onclick="cvAddEvent()">+ นัดหมาย</button></div>'
+    +(rows||'<div style="padding:30px 0;text-align:center;color:#78716c;font-size:13px">ไม่มีกำหนดการในเดือนนี้</div>')+'</div></div>';
+  return h;
+}
+function cvAgJump(ds){var el=document.getElementById('cvr-'+ds);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.background='#fbfaf6';setTimeout(function(){el.style.background='';},1200);}else cvOpenDay(ds);}
+function cvTimeline(data,B){
+  var dim=B.dim,cols='150px repeat('+dim+',minmax(30px,1fr))',ms=B.ms,me=B.me;
+  var colOf=function(ds){return cvDiff(ms,ds)+2;};
+  var we=function(i){var g=cvD(cvAdd(ms,i)).getDay();return g===0||g===6;};
+  var bg='';for(var i=0;i<dim;i++)if(we(i))bg+='<div class="cv-tl-we" style="grid-column:'+(i+2)+';grid-row:1/-1"></div>';
+  var h='<div class="cv-card"><div class="cv-tl-wrap"><div class="cv-tl" id="cv-tl">';
+  h+='<div class="cv-tl-row" style="grid-template-columns:'+cols+'">'+bg+'<div class="cv-tl-lab" style="grid-row:1;font-weight:500;color:#57534e">วันที่</div>';
+  for(var k=0;k<dim;k++){var ds=cvAdd(ms,k);h+='<div class="cv-tl-hd'+(ds===TODAY_STR?' today':'')+'" style="grid-column:'+(k+2)+';grid-row:1"><b>'+(k+1)+'</b>'+(ds===TODAY_STR?'วันนี้':CV_TH_D[cvD(ds).getDay()])+'</div>';}
+  h+='</div>';
+  var rowSpans=function(label,color,list){
+    var items=list.map(function(x){return {o:x,s:x.s,e:x.e};}),L=Math.max(1,cvLanes(items,ms,me));
+    var r='<div class="cv-tl-row" style="grid-template-columns:'+cols+';grid-template-rows:repeat('+L+',42px)">'+bg.replace(/grid-row:1\/-1/g,'grid-row:1/-1')+'<div class="cv-tl-lab" style="grid-row:1/-1"><i style="background:'+color+'"></i>'+label+'</div>';
+    items.forEach(function(x){
+      if(x._lane===undefined)return;
+      var s=x.s<ms?ms:x.s,e=x.e>me?me:x.e,inner='';
+      if(x.o.cat==='trip')inner=data.dots.filter(function(o){return o.date>=x.o.s&&o.date<=x.o.e;}).slice(0,3).map(function(o){return '<em>'+cvD(o.date).getDate()+(o.time?' · '+escH(o.time):'')+' '+escH(o.title)+'</em>';}).join('');
+      else if(x.e>x.s)inner='<em>'+cvRange(x.o.s,x.o.e)+'</em>';
+      r+='<button type="button" class="cv-tl-bar" style="grid-column:'+colOf(s)+'/'+(colOf(e)+1)+';grid-row:'+(x._lane+1)+';background:'+x.o.color+'" title="'+escH(x.o.title)+' · '+cvRange(x.o.s,x.o.e)+'" onclick="cvOpenItem(\''+x.o.kind+'\',\''+escH(x.o.id)+'\')">'+(x.o.cat==='trip'?'✈︎ ':'')+escH(x.o.title)+inner+'</button>';
+    });
+    return r+'</div>';
+  };
+  h+=rowSpans('งาน',CV_C.High,data.spans.filter(function(x){return x.cat==='task';}));
+  h+=rowSpans('ทริป / หลายวัน',CV_C.trip,data.spans.filter(function(x){return x.cat==='trip';}));
+  h+='<div class="cv-tl-row" style="grid-template-columns:'+cols+';grid-template-rows:42px">'+bg+'<div class="cv-tl-lab" style="grid-row:1"><i style="background:'+CV_C.appt+';border-radius:50%"></i>นัดหมาย</div>';
+  for(var q=0;q<dim;q++){
+    var d3=cvAdd(ms,q),dd=data.dots.filter(function(o){return o.date===d3;});
+    if(!dd.length)continue;
+    h+='<button type="button" class="cv-tl-pt'+(dd.length>1?' n':'')+'" style="grid-column:'+(q+2)+';grid-row:1;background:'+CV_C.appt+'" title="'+escH(dd.map(function(o){return o.time+' '+o.title;}).join('\n'))+'" aria-label="นัดหมาย '+dd.length+' รายการ วันที่ '+(q+1)+'" onclick="cvOpenDay(\''+d3+'\')">'+(dd.length>1?dd.length:'')+'</button>';
+  }
+  h+='</div></div></div></div>';
+  // การ์ดสรุป 3 ใบ
+  var cur=data.spans.filter(function(x){return x.s<=TODAY_STR&&x.e>=TODAY_STR&&x.e>x.s;})[0];
+  var now=nowS(),next=data.dots.filter(function(o){return o.date>TODAY_STR||(o.date===TODAY_STR&&o.time>=now);})[0];
+  var trip=data.spans.filter(function(x){return x.cat==='trip'&&x.s>TODAY_STR;})[0];
+  var card=function(k,col,t,sub,onc){return '<div role="button" tabindex="0" onclick="'+(onc||'')+'"><div class="k" style="color:'+col+'">'+k+'</div><div class="t">'+t+'</div><div class="s">'+sub+'</div></div>';};
+  h+='<div class="cv-sum">'
+    +(cur?card('กำลังดำเนินอยู่',cur.color,escH(cur.title),'วันที่ '+(cvDiff(cur.s,TODAY_STR)+1)+' จาก '+(cvDiff(cur.s,cur.e)+1)+' · จบ '+cvWd(cur.e)+' '+cvShort(cur.e),"cvOpenItem('"+cur.kind+"','"+escH(cur.id)+"')"):card('กำลังดำเนินอยู่','#57534e','—','ไม่มีงานหลายวันที่กำลังทำ'))
+    +(next?card('ถัดไป',CV_C.appt,escH(next.time)+' '+escH(next.title),cvWd(next.date)+' '+cvShort(next.date)+' · '+(next.date===TODAY_STR?'วันนี้':'อีก '+cvDiff(TODAY_STR,next.date)+' วัน'),"cvOpenItem('event','"+escH(next.id)+"','"+next.date+"')"):card('ถัดไป','#57534e','—','ไม่มีนัดหมายถัดไปในเดือนนี้'))
+    +(trip?card('ทริปถัดไป',CV_C.trip,escH(trip.title)+' · '+(cvDiff(trip.s,trip.e)+1)+' วัน','เริ่ม '+cvWd(trip.s)+' '+cvShort(trip.s)+' · อีก '+cvDiff(TODAY_STR,trip.s)+' วัน',"cvOpenItem('event','"+escH(trip.id)+"')"):card('ทริปถัดไป','#57534e','—','ยังไม่มีทริปหลายวัน'))
+    +'</div>';
+  return h;
+}
+function cvTlNow(B){
+  if(TODAY_STR<B.ms||TODAY_STR>B.me)return;
+  var tl=document.getElementById('cv-tl');if(!tl)return;
+  var hd=tl.querySelector('.cv-tl-hd.today');if(!hd)return;
+  var r=hd.getBoundingClientRect(),r0=tl.getBoundingClientRect();
+  var ln=document.createElement('div');ln.className='cv-tl-now';ln.style.left=(r.left-r0.left+r.width/2-1)+'px';ln.style.top=(r.bottom-r0.top-4)+'px';tl.appendChild(ln);
+}
+function cvFindEvent(id,ds){var evs=[];Object.keys(calMonthCache).forEach(function(k){evs=evs.concat(calMonthCache[k]);});var f=null;evs.forEach(function(e){if(!f&&e.id===id&&(!ds||e.allDay||e.date===ds))f=e;});return f;}
+function cvOpenItem(kind,id,ds){
+  if(kind==='task'){
+    var t=null;allActiveTasks.concat(todayTasks,overdueTasks).forEach(function(x){if(!t&&x.id===id)t=x;});if(!t)return;
+    showModal('<div class="modal-title">รายละเอียดงาน <button class="modal-x" onclick="closeModal()">×</button></div>'+tcCard(t,{move:true}));
+    var mb=document.getElementById('modal-body');
+    if(mb)mb.addEventListener('click',function(e){var b;
+      if((b=e.target.closest('[data-doneid]'))){doDone(b.getAttribute('data-doneid'));allActiveTasks=allActiveTasks.filter(function(x){return x.id!==id;});closeModal();renderCal();return;}
+      if((b=e.target.closest('[data-delid]'))){openDel(b.getAttribute('data-delid'),b.getAttribute('data-delname'));return;}
+      if((b=e.target.closest('[data-moveid]'))){openMove(b.getAttribute('data-moveid'),b.getAttribute('data-movename'));return;}});
+    if(t._subtasks===undefined)fetchSubtasks(id);setTimeout(loadLocalNotes,50);
+    return;
+  }
+  var ev=cvFindEvent(id,ds);if(!ev)return;
+  var when=ev.allDay?'ทั้งวัน · '+cvWd(ev.date)+' '+(ev.endDate>ev.date?cvRange(ev.date,ev.endDate)+' ('+(cvDiff(ev.date,ev.endDate)+1)+' วัน)':cvShort(ev.date)):cvWd(ev.date)+' '+cvShort(ev.date)+' · '+ev.startTime+'–'+ev.endTime;
+  showModal('<div class="modal-title">'+escH(ev.title)+' <button class="modal-x" onclick="closeModal()">×</button></div>'
+    +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:#44403c;margin-bottom:16px"><div>🗓 '+when+'</div>'+(ev.location?'<div>📍 '+escH(ev.location)+'</div>':'')+'</div>'
+    +'<button type="button" class="act act-del" style="width:100%;padding:12px" data-evid="'+escH(ev.id)+'" data-evt="'+escH(ev.title)+'" onclick="cvDelEvent(this.dataset.evid,this.dataset.evt)">ยกเลิกนัดหมายนี้</button>');
+}
+function cvDelEvent(id,title){
+  if(!confirm('ยกเลิก "'+title+'" ?'))return;
+  apiS({action:'deleteCalendarEvent',id:id});
+  Object.keys(calMonthCache).forEach(function(k){calMonthCache[k]=calMonthCache[k].filter(function(e){return e.id!==id;});});
+  calCache.e={};closeModal();showToast('✅ ยกเลิกนัดหมายแล้ว');renderCal();
+}
+function cvOpenDay(ds){
+  var D=window._cvData||{spans:[],dots:[]};
+  var sp=D.spans.filter(function(x){return x.s<=ds&&x.e>=ds;}),dd=D.dots.filter(function(x){return x.date===ds;});
+  var h='<div class="modal-title">'+cvWd(ds)+' '+cvD(ds).getDate()+' '+CV_TH_M[cvD(ds).getMonth()]+(ds===TODAY_STR?' · วันนี้':'')+' <button class="modal-x" onclick="closeModal()">×</button></div><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">';
+  if(!sp.length&&!dd.length)h+='<div style="color:#78716c;font-size:13px">ยังไม่มีงานหรือนัดหมาย</div>';
+  sp.forEach(function(x){var n=cvDiff(x.s,x.e)+1;h+='<button type="button" class="cv-it" onclick="cvOpenItem(\''+x.kind+'\',\''+escH(x.id)+'\')"><span class="tm">ทั้งวัน</span><i style="background:'+x.color+'"></i><span class="nm">'+escH(x.title)+(n>1?' <span style="color:#78716c;font-size:12px">· วันที่ '+(cvDiff(x.s,ds)+1)+'/'+n+'</span>':'')+'</span></button>';});
+  dd.forEach(function(o){h+='<button type="button" class="cv-it" onclick="cvOpenItem(\'event\',\''+escH(o.id)+'\',\''+ds+'\')"><span class="tm">'+escH(o.time)+'</span><i style="background:'+o.color+'"></i><span class="nm">'+escH(o.title)+'</span></button>';});
+  h+='</div><div style="display:flex;gap:8px"><button type="button" class="act act-move" style="flex:1;padding:12px" onclick="cvAddTaskOn(\''+ds+'\')">+ งานวันนี้</button><button type="button" class="act act-done" style="flex:1;padding:12px" onclick="closeModal();cvAddEvent(\''+ds+'\')">+ นัดหมาย</button></div>';
+  showModal(h);
+}
+function cvAddTaskOn(ds){closeModal();openAdd();setTimeout(function(){var e=document.getElementById('add-sd');if(e)e.value=ds;},30);}
+function cvAddEvent(ds){ // ใช้แชท Rudy: พิมพ์บอกนัดได้เลย
+  rcOpen();var b=document.querySelector('.rc-chip[data-m="event"]');if(b&&_rcMode!=='event')rcChip(b);
+  var i=document.getElementById('rc-input');if(i&&ds){i.value='วันที่ '+cvD(ds).getDate()+' '+CV_TH_MS[cvD(ds).getMonth()]+' ';i.focus();}
 }
 function loadCalDay(ds){
   if(calCache.t[ds]===undefined)api({action:'getTasks',date:ds},function(d){calCache.t[ds]=d?d.tasks||[]:[]; var elT=document.getElementById('ct-'+ds);if(elT)elT.innerHTML=cellTaskZone(ds);});
@@ -2263,7 +2584,7 @@ function calSelect(ds){
   loadCalDay(ds);renderCalDetail(ds);
 }
 function renderCalDetail(ds){
-  var detail=document.getElementById('cal-detail');
+  var detail=document.getElementById('cal-detail');if(!detail)return;
   if(!ds){detail.innerHTML='<div style="color:#bbb;font-size:13px;padding:24px 0;text-align:center">กดวันในปฏิทินเพื่อดูรายละเอียด</div>';return;}
   var thD=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
   var thM=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];

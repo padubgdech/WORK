@@ -22,7 +22,7 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Installed 29 Oct 2026, `setupRepeatProperty` run (property created). `USE_MAIN_DATA=true` in index.html.
   Pinned tasks (same file): Notion checkbox "Pinned" (`setupPinnedProperty` run). `getMainData` returns `pinned:[{id,created}]`
   (+ their subtasks); actions `getPinned`, `setPinned` (id, pinned=true|false); `addTask` with `pin=1` → pins the new task.
-  Dashboard deployment = **version 194** (3 Nov 2026: + addAllDayEvent).
+  Dashboard deployment = **version 195** (3 Nov 2026: + addAllDayEvent, getRangeEvents).
 - Frontend pinned band (design "D compact", canvas artifact "ปักหมุดงาน — 4 แบบ"): `#main-pinned` above the Main grid.
   Shows every Pinned task that is still active (`allActiveTasks`+today+overdue; done ones drop out) — dated or not (Dech: "ปักได้ทุกงาน").
   Undated: age badge (days since Notion created_time) + "วันนี้"; setting a date auto-unpins. Dated: "เริ่ม <date>" badge, stays pinned
@@ -53,6 +53,14 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   All-day / multi-day events (3 Nov): Gemini returns `allDay` + `endDate`; card shows range; confirm → new GAS action
   `addAllDayEvent` (dashboard-extra.gs: name, date, endDate inclusive → CalendarApp.getDefaultCalendar().createAllDayEvent).
   Events without a clock time are all-day. Greeting is computed live in `rcRender` (not stored).
+- Calendar tab rebuilt (3 Nov, from Dech's mockup "Rudy Calendar — Multi-day Mockups", A+C+D): views เดือน / รายการ / ไทม์ไลน์
+  (`calView`, localStorage `cal_view`). Data: one call `getRangeEvents` (dashboard-extra.gs: from,to → events {id,title,allDay,date,
+  endDate inclusive,startTime,endTime,location}) cached per grid range in `calMonthCache` (`calInvalidate()`), plus tasks from
+  `allActiveTasks` (actionDate–endDate, colour by priority). Spans = tasks + all-day events (bars, lanes via `cvLanes`); dots = timed
+  events. Month: Mon-first weeks, bar label full on today's segment ("· 1–7 พ.ย. · วันที่ 3/7"), "ต่อ · วันที่ a–b" otherwise.
+  Agenda: mini calendar + "ช่วงยาวเดือนนี้" progress + list (multi-day all-day events = block with inner timed events).
+  Timeline: rows งาน / ทริป / นัดหมาย, today line, 3 summary cards. Clicks: bar → task popup (tcCard) / event popup (cancel);
+  day → day popup (+ งาน / + นัดหมาย → Rudy chat in event mode). Old per-day functions (loadCalDay, cellChips…) are now unused.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 ## Pending
