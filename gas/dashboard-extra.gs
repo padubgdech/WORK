@@ -10,6 +10,7 @@ if (a === 'setupRepeat') return jsonpResponse(e, setupRepeatProperty());
 if (a === 'setupPinned') return jsonpResponse(e, setupPinnedProperty());
 if (a === 'getPinned') { var pl = pinnedList_(); return jsonpResponse(e, { pinned: pl, subtasks: subtasksBatch_(pl.map(function (x) { return x.id; })) }); }
 if (a === 'setPinned') return jsonpResponse(e, setPinned_(p.id, String(p.pinned) === 'true'));
+if (a === 'addAllDayEvent') return jsonpResponse(e, addAllDayEvent_(p));
 if (a === 'updateTask' && String(p.done) === 'true') { try { createNextRepeat_(p.id); } catch (err) { Logger.log('repeat error: ' + err); } return null; }
 if (a === 'addTask' && (p.repeat || p.pin) && !p._noRepeat) return addTaskWithRepeat_(e);
 return null;
@@ -148,4 +149,18 @@ var pg = q.results && q.results[0];
 if (pg) notionReq_('pages/' + pg.id, 'patch', { properties: props });
 } catch (err) { Logger.log('addTaskWithRepeat error: ' + err); }
 return out;
+}
+
+// ---------- นัดหมายทั้งวัน / หลายวัน (เช่น ไปเที่ยว 13–23) — ใช้จากแชท Rudy ----------
+// date, endDate = YYYY-MM-DD (endDate = วันสุดท้าย รวมวันนั้นด้วย) · name เข้ารหัส URL มาแล้ว
+function addAllDayEvent_(p) {
+var re = /^\d{4}-\d{2}-\d{2}$/;
+if (!re.test(p.date || '')) return { ok: false, error: 'bad date' };
+var end = re.test(p.endDate || '') && p.endDate >= p.date ? p.endDate : p.date;
+var title = decodeURIComponent(p.name || 'นัดหมาย');
+var toD = function (s) { var a = s.split('-'); return new Date(+a[0], +a[1] - 1, +a[2]); };
+var s = toD(p.date), last = toD(end), after = new Date(last.getFullYear(), last.getMonth(), last.getDate() + 1);
+var cal = CalendarApp.getDefaultCalendar();
+var ev = (end === p.date) ? cal.createAllDayEvent(title, s) : cal.createAllDayEvent(title, s, after);
+return { ok: true, id: ev.getId() };
 }
