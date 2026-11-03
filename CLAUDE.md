@@ -22,7 +22,7 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Installed 29 Oct 2026, `setupRepeatProperty` run (property created). `USE_MAIN_DATA=true` in index.html.
   Pinned tasks (same file): Notion checkbox "Pinned" (`setupPinnedProperty` run). `getMainData` returns `pinned:[{id,created}]`
   (+ their subtasks); actions `getPinned`, `setPinned` (id, pinned=true|false); `addTask` with `pin=1` → pins the new task.
-  Dashboard deployment = **version 193** (29 Oct 2026).
+  Dashboard deployment = **version 194** (3 Nov 2026: + addAllDayEvent).
 - Frontend pinned band (design "D compact", canvas artifact "ปักหมุดงาน — 4 แบบ"): `#main-pinned` above the Main grid.
   Shows every Pinned task that is still active (`allActiveTasks`+today+overdue; done ones drop out) — dated or not (Dech: "ปักได้ทุกงาน").
   Undated: age badge (days since Notion created_time) + "วันนี้"; setting a date auto-unpins. Dated: "เริ่ม <date>" badge, stays pinned
@@ -50,6 +50,9 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   (name/date/endDate/priority/note) or `addCalendarEvent` (name[+ " @ location"], date, startTime, endTime). Notes go to `rudy_notes`
   locally (📝 chip skips AI). Queries are answered from dashboard data (`rcSummary`), not Gemini. Prompt is English to keep the
   GET URL short (prompt is double-encoded). History in localStorage `rudy_chat_v1` (last 60).
+  All-day / multi-day events (3 Nov): Gemini returns `allDay` + `endDate`; card shows range; confirm → new GAS action
+  `addAllDayEvent` (dashboard-extra.gs: name, date, endDate inclusive → CalendarApp.getDefaultCalendar().createAllDayEvent).
+  Events without a clock time are all-day. Greeting is computed live in `rcRender` (not stored).
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 ## Pending
