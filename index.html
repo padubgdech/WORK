@@ -2143,7 +2143,7 @@ function rcHandle(js,text){
       priority:['High','Medium','Low'].indexOf(js.priority)>=0?js.priority:'Medium',location:String(js.location||'').slice(0,80),note:String(js.note||'').slice(0,1000)};
     if(t==='event'&&!c.date)c.date=TODAY_STR;
     if(t==='note'&&!c.note)c.note=text;
-    if(js.reply)rcPush({who:'bot',text:String(js.reply).slice(0,300)});
+    rcPush({who:'bot',text:'ตรวจดูก่อนนะครับ ถูกต้องกด “ยืนยัน” ได้เลย'}); // ไม่ใช้ reply ของ AI — มันมักบอกว่า "บันทึกแล้ว" ทั้งที่ยังไม่ได้กดยืนยัน
     rcPush({who:'bot',card:c});return;
   }
   if(t==='query'){rcSummary(rcValidDate(js.queryDate)||TODAY_STR);return;}
