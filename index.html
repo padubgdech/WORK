@@ -381,6 +381,48 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .date-arrow{color:#ccc;font-size:16px;padding-bottom:2px;flex-shrink:0;align-self:flex-end}
 .btn-submit{width:100%;padding:13px;background:#111;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px}
 .btn-submit:hover{background:#333}
+/* ===== แชท Rudy (ปุ่มลอยมุมขวา) ===== */
+#rudy-fab{position:fixed;right:24px;bottom:24px;z-index:400;height:52px;padding:0 18px 0 6px;border-radius:999px;border:none;background:#111;color:#fff;display:flex;align-items:center;gap:9px;box-shadow:0 10px 28px rgba(0,0,0,.25);font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+#rudy-fab .av{width:40px;height:40px;border-radius:50%;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+#rudy-fab.open{display:none}
+#rudy-chat{position:fixed;right:24px;bottom:24px;z-index:401;width:380px;max-width:calc(100vw - 32px);height:min(600px,calc(100vh - 110px));display:none;flex-direction:column;border-radius:22px;overflow:hidden;background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);border:.5px solid rgba(0,0,0,.1);box-shadow:0 24px 60px rgba(0,0,0,.2);font-family:'IBM Plex Sans Thai',sans-serif}
+#rudy-chat.open{display:flex}
+.rc-hd{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:.5px solid rgba(0,0,0,.08)}
+.rc-av{width:34px;height:34px;border-radius:50%;background:#111;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rc-x{width:34px;height:34px;border-radius:50%;border:none;background:rgba(0,0,0,.05);color:#555;font-size:14px;cursor:pointer}
+.rc-log{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.6}
+.rc-m{max-width:84%;padding:9px 12px;white-space:pre-line;word-break:break-word}
+.rc-bot{align-self:flex-start;background:#f2f1ee;color:#111;border-radius:16px 16px 16px 4px}
+.rc-me{align-self:flex-end;background:#111;color:#fff;border-radius:16px 16px 4px 16px}
+.rc-card{align-self:flex-start;width:88%;background:#fff;border:.5px solid #e2e0da;border-radius:16px 16px 16px 4px;padding:11px 12px;display:flex;flex-direction:column;gap:7px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.rc-k{font-size:11px;font-weight:700}
+.rc-t{font-size:14px;font-weight:700;word-break:break-word}
+.rc-d{font-size:12px;color:#444;white-space:pre-line}
+.rc-btns{display:flex;gap:6px}
+.rc-ok{flex:1;padding:9px;border-radius:10px;border:none;background:#111;color:#fff;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.rc-ed{flex:1;padding:9px;border-radius:10px;border:.5px solid #ddd;background:#fff;color:#333;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.rc-done{font-size:12px;font-weight:700;color:#1a7f37}
+.rc-f{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.rc-f label{display:flex;flex-direction:column;gap:2px;font-size:10.5px;color:#666}
+.rc-f input,.rc-f select{font-family:inherit;font-size:12.5px;padding:6px 8px;border:.5px solid #d9d6cf;border-radius:8px;background:#fff;color:#111;min-width:0}
+.rc-f .full{grid-column:1/-1}
+.rc-typing{align-self:flex-start;background:#f2f1ee;border-radius:16px;padding:10px 14px;display:flex;gap:4px}
+.rc-typing i{width:6px;height:6px;border-radius:50%;background:#999;animation:rcb 1s infinite}
+.rc-typing i:nth-child(2){animation-delay:.15s}.rc-typing i:nth-child(3){animation-delay:.3s}
+@keyframes rcb{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.rc-chips{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px 0}
+.rc-chip{padding:6px 11px;border-radius:999px;border:.5px solid #d9d6cf;background:#fff;font-size:12px;color:#333;cursor:pointer;font-family:inherit}
+.rc-chip.on{background:#111;color:#fff;border-color:#111}
+.rc-in{display:flex;gap:8px;padding:10px 12px 12px}
+.rc-in input{flex:1;border:.5px solid #d9d6cf;border-radius:999px;padding:10px 14px;font-size:13px;background:#fff;outline:none;font-family:inherit;min-width:0}
+.rc-in input:focus{border-color:#111}
+.rc-send{width:40px;height:40px;border-radius:50%;border:none;background:#111;color:#fff;font-size:15px;cursor:pointer;flex-shrink:0}
+@media(max-width:760px){
+  #rudy-fab{right:14px;bottom:calc(70px + env(safe-area-inset-bottom,0px));padding:0 6px;height:52px}
+  #rudy-fab .lbl{display:none}
+  #rudy-chat{right:0;left:0;bottom:0;width:100%;max-width:100%;height:82vh;border-radius:22px 22px 0 0;z-index:500}
+  .rc-chip{padding:8px 12px}.rc-ok,.rc-ed{padding:11px}
+}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 22px;border-radius:22px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:999;white-space:nowrap;letter-spacing:.2px}
 .toast.show{opacity:1}
 .scroll-y{overflow-y:auto;max-height:calc(100vh - 180px);min-width:0;overflow-x:hidden}
@@ -1945,6 +1987,186 @@ function nrtPaste(e){ // วางข้อความจากที่อื�
   e.preventDefault();
   document.execCommand('insertHTML',false,html?noteSanitize(html):escH(txt).replace(/\n/g,'<br>'));
 }
+/* ===== แชท Rudy — เพิ่มงาน / นัดหมาย / Note / ถามงาน ด้วยภาษาพูด (เหมือนในไลน์) =====
+   ใช้ GAS เดิม: askRudy (Gemini แยกประเภท+ดึงข้อมูล) → addTask / addCalendarEvent · Note เก็บใน rudy_notes */
+var RC_KEY='rudy_chat_v1',_rcMode='',_rcCards={},_rcBusy=false;
+var RC_TH_D=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
+function rcLoad(){try{return JSON.parse(localStorage.getItem(RC_KEY)||'[]');}catch(e){return [];}}
+function rcSave(log){try{localStorage.setItem(RC_KEY,JSON.stringify(log.slice(-60)));}catch(e){}}
+function rcInit(){
+  if(document.getElementById('rudy-fab'))return;
+  var fab=document.createElement('button');fab.id='rudy-fab';fab.type='button';fab.setAttribute('aria-label','คุยกับ Rudy');
+  fab.innerHTML='<span class="av" aria-hidden="true">R</span><span class="lbl">คุยกับ Rudy</span>';fab.onclick=rcOpen;
+  var p=document.createElement('section');p.id='rudy-chat';p.setAttribute('aria-label','แชทกับ Rudy');
+  p.innerHTML='<div class="rc-hd"><span class="rc-av" aria-hidden="true">R</span><div style="flex:1"><div style="font-size:14px;font-weight:700">Rudy</div><div style="font-size:11px;color:#1a7f37">● พร้อมช่วย</div></div>'
+    +'<button type="button" class="rc-x" aria-label="ล้างแชท" title="ล้างแชท" onclick="rcClear()" style="font-size:12px">🗑</button>'
+    +'<button type="button" class="rc-x" aria-label="ปิดแชท" onclick="rcClose()">✕</button></div>'
+    +'<div class="rc-log" id="rc-log" aria-live="polite"></div>'
+    +'<div class="rc-chips" role="group" aria-label="คำสั่งลัด">'
+    +'<button type="button" class="rc-chip" data-m="task" onclick="rcChip(this)">+ งาน</button>'
+    +'<button type="button" class="rc-chip" data-m="event" onclick="rcChip(this)">📅 นัดหมาย</button>'
+    +'<button type="button" class="rc-chip" data-m="note" onclick="rcChip(this)">📝 จด Note</button>'
+    +'<button type="button" class="rc-chip" onclick="rcSummary(TODAY_STR)">สรุปวันนี้</button>'
+    +'<button type="button" class="rc-chip" onclick="rcSummary(addDays(TODAY_STR,1))">พรุ่งนี้</button></div>'
+    +'<form class="rc-in" onsubmit="rcSend();return false"><label for="rc-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">พิมพ์ข้อความถึง Rudy</label>'
+    +'<input id="rc-input" type="text" autocomplete="off" placeholder="เช่น “นัดคุยโรงงานพรุ่งนี้บ่ายสอง”">'
+    +'<button type="submit" class="rc-send" aria-label="ส่ง">↑</button></form>';
+  document.body.appendChild(fab);document.body.appendChild(p);
+  p.addEventListener('keydown',function(e){if(e.key==='Escape')rcClose();});
+}
+function rcOpen(){
+  rcInit();document.getElementById('rudy-chat').classList.add('open');document.getElementById('rudy-fab').classList.add('open');
+  rcRender();
+  if(!rcLoad().length){
+    var od=overdueTasks.filter(function(t){return!t.done;}).length,td=todayTasks.filter(function(t){return!t.done;}).length;
+    rcPush({who:'bot',text:'สวัสดีครับ วันนี้มีงานค้าง '+od+' งาน · งานวันนี้ '+td+' งาน\nพิมพ์บอกได้เลย เช่น “เพิ่มงานโพสต์ TikTok พรุ่งนี้” “นัดคุยโรงงานพุธบ่ายสอง” “จด note ไอเดียแคมเปญ”'});
+  }
+  setTimeout(function(){var i=document.getElementById('rc-input');if(i)i.focus();},60);
+}
+function rcClose(){var p=document.getElementById('rudy-chat');if(p)p.classList.remove('open');var f=document.getElementById('rudy-fab');if(f){f.classList.remove('open');f.focus();}}
+function rcClear(){rcSave([]);_rcCards={};rcRender();rcOpen();}
+function rcPush(m){var log=rcLoad();m.ts=Date.now();log.push(m);rcSave(log);rcRender();return log.length-1;}
+function rcUpdate(i,m){var log=rcLoad();if(log[i]){for(var k in m)log[i][k]=m[k];rcSave(log);rcRender();}}
+function rcChip(b){
+  var m=b.dataset.m;_rcMode=(_rcMode===m)?'':m;
+  document.querySelectorAll('.rc-chip[data-m]').forEach(function(x){x.classList.toggle('on',x.dataset.m===_rcMode);});
+  var ph={task:'ชื่องาน + วัน เช่น “ส่งเอกสาร VAT ศุกร์นี้ ด่วน”',event:'นัดอะไร วันไหน กี่โมง ที่ไหน',note:'พิมพ์สิ่งที่อยากจด'};
+  var i=document.getElementById('rc-input');i.placeholder=ph[_rcMode]||'เช่น “นัดคุยโรงงานพรุ่งนี้บ่ายสอง”';i.focus();
+}
+function rcFmtDate(ds){if(!ds)return'ไม่กำหนดวัน';if(ds===TODAY_STR)return'วันนี้';if(ds===addDays(TODAY_STR,1))return'พรุ่งนี้';var d=new Date(ds+'T00:00:00+07:00');return RC_TH_D[d.getDay()]+' '+fmtShort(ds);}
+function rcRender(){
+  var el=document.getElementById('rc-log');if(!el)return;
+  var log=rcLoad(),h='';
+  log.forEach(function(m,i){
+    if(m.who==='me'){h+='<div class="rc-m rc-me">'+escH(m.text)+'</div>';return;}
+    if(m.card){h+=rcCardHtml(m.card,i);return;}
+    h+='<div class="rc-m rc-bot">'+escH(m.text)+'</div>';
+  });
+  if(_rcBusy)h+='<div class="rc-typing" aria-label="Rudy กำลังพิมพ์"><i></i><i></i><i></i></div>';
+  el.innerHTML=h;el.scrollTop=el.scrollHeight;
+}
+function rcCardHtml(c,i){
+  var K={task:['✅ งานใหม่','#c62828'],event:['📅 นัดหมายใหม่','#0b63ce'],note:['📝 Note ใหม่','#6e4d12']}[c.type]||['','#333'];
+  var h='<div class="rc-card"><div class="rc-k" style="color:'+K[1]+'">'+K[0]+'</div>';
+  if(c.editing){
+    h+='<div class="rc-f">';
+    h+='<label class="full">'+(c.type==='note'?'หัวข้อ':'ชื่อ')+'<input id="rcf-name-'+i+'" value="'+escH(c.name)+'"></label>';
+    if(c.type!=='note'){
+      h+='<label>วัน<input type="date" id="rcf-date-'+i+'" value="'+escH(c.date||'')+'"></label>';
+      if(c.type==='event')h+='<label>เวลา<input type="time" id="rcf-st-'+i+'" value="'+escH(c.startTime||'')+'"></label><label>ถึง<input type="time" id="rcf-et-'+i+'" value="'+escH(c.endTime||'')+'"></label><label>สถานที่<input id="rcf-loc-'+i+'" value="'+escH(c.location||'')+'"></label>';
+      else h+='<label>ความสำคัญ<select id="rcf-pri-'+i+'">'+['High','Medium','Low'].map(function(p){return'<option'+(c.priority===p?' selected':'')+'>'+p+'</option>';}).join('')+'</select></label>';
+    }
+    h+='<label class="full">'+(c.type==='note'?'เนื้อหา':'รายละเอียด')+'<input id="rcf-note-'+i+'" value="'+escH(c.note||'')+'"></label></div>';
+    h+='<div class="rc-btns"><button type="button" class="rc-ok" onclick="rcEditSave('+i+')">ใช้ค่านี้</button><button type="button" class="rc-ed" onclick="rcCancel('+i+')">ยกเลิก</button></div></div>';
+    return h;
+  }
+  h+='<div class="rc-t">'+escH(c.name||'(ไม่มีชื่อ)')+'</div>';
+  var d='';
+  if(c.type==='task')d=rcFmtDate(c.date)+(c.endDate?' – '+fmtShort(c.endDate):'')+' · '+escH(c.priority||'Medium').toUpperCase();
+  if(c.type==='event')d=rcFmtDate(c.date)+' · '+(c.startTime||'09:00')+'–'+(c.endTime||rcPlusHour(c.startTime||'09:00'))+(c.location?'\n📍 '+escH(c.location):'');
+  if(c.note)d+=(d?'\n':'')+escH(c.note);
+  if(d)h+='<div class="rc-d">'+d+'</div>';
+  if(c.status==='done')h+='<div class="rc-done">✓ '+(c.type==='note'?'บันทึกลงหน้า Note แล้ว':c.type==='event'?'ลงปฏิทินแล้ว':'เพิ่มงานแล้ว')+'</div>';
+  else if(c.status==='cancel')h+='<div style="font-size:12px;color:#888">ยกเลิกแล้ว</div>';
+  else if(c.status==='saving')h+='<div style="font-size:12px;color:#888">⏳ กำลังบันทึก...</div>';
+  else h+='<div class="rc-btns"><button type="button" class="rc-ok" onclick="rcConfirm('+i+')">ยืนยัน</button><button type="button" class="rc-ed" onclick="rcEdit('+i+')">แก้ไข</button></div>';
+  return h+'</div>';
+}
+function rcPlusHour(t){var p=String(t).split(':'),h=(parseInt(p[0],10)||9)+1;return String(Math.min(h,23)).padStart(2,'0')+':'+(p[1]||'00');}
+function rcCard(i){var l=rcLoad();return l[i]&&l[i].card;}
+function rcEdit(i){var c=rcCard(i);if(!c)return;c.editing=true;rcUpdate(i,{card:c});var n=document.getElementById('rcf-name-'+i);if(n)n.focus();}
+function rcCancel(i){var c=rcCard(i);if(!c)return;if(c.editing){c.editing=false;}else c.status='cancel';rcUpdate(i,{card:c});}
+function rcEditSave(i){
+  var c=rcCard(i);if(!c)return;var g=function(k){var e=document.getElementById('rcf-'+k+'-'+i);return e?e.value.trim():undefined;};
+  c.name=g('name')||c.name;['date','note'].forEach(function(k){var v=g(k);if(v!==undefined)c[k]=v;});
+  if(c.type==='event'){c.startTime=g('st')||'';c.endTime=g('et')||'';c.location=g('loc')||'';}
+  if(c.type==='task')c.priority=g('pri')||c.priority;
+  c.editing=false;rcUpdate(i,{card:c});
+}
+function rcConfirm(i){
+  var c=rcCard(i);if(!c||c.status)return;
+  c.status='saving';rcUpdate(i,{card:c});
+  var done=function(ok){var c2=rcCard(i);if(!c2)return;c2.status=ok?'done':'';rcUpdate(i,{card:c2});if(!ok)showToast('⚠️ บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง');};
+  if(c.type==='note'){
+    var notes=notesLoad(),body=c.note||'';
+    notes.unshift({id:'n'+Date.now(),title:c.name||'',body:body,html:escH(body).replace(/\n/g,'<br>'),tag:NOTE_TAGS[5].label,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
+    notesSave(notes);if(document.getElementById('page-note').classList.contains('show'))renderNotes();
+    showToast('📝 บันทึก Note แล้ว');done(true);return;
+  }
+  if(c.type==='event'){
+    var st=c.startTime||'09:00',et=c.endTime||rcPlusHour(st);
+    api({action:'addCalendarEvent',name:encodeURIComponent((c.name||'นัดหมาย')+(c.location?' @ '+c.location:'')),date:c.date||TODAY_STR,startTime:st,endTime:et},function(d){
+      done(!!d);if(!d)return;showToast('📅 ลงปฏิทินแล้ว');
+      var ds=c.date||TODAY_STR;delete calCache.e[ds];
+      if(ds===TODAY_STR)api({action:'getCalendarEvents',date:TODAY_STR},function(r){todayEvents=r?r.events||[]:[];calCache.e[TODAY_STR]=todayEvents;renderEvents();});
+    });
+    return;
+  }
+  var p={action:'addTask',name:encodeURIComponent(c.name||'งานใหม่'),priority:c.priority||'Medium'};
+  if(c.date)p.date=c.date;if(c.endDate&&c.date&&c.endDate>c.date)p.endDate=c.endDate;if(c.note)p.note=encodeURIComponent(c.note);
+  api(p,function(d){
+    done(!!d);if(!d)return;showToast('✅ เพิ่มงานแล้ว: '+c.name);
+    api({action:'getTasks',date:TODAY_STR},function(r){if(r){todayTasks=pqApply(r.tasks||[],true,false);calCache.t[TODAY_STR]=todayTasks;renderMain();}});
+    loadMonthTasks(true);
+  });
+}
+function rcSend(){
+  var inp=document.getElementById('rc-input');var text=(inp.value||'').trim();if(!text||_rcBusy)return;
+  inp.value='';rcPush({who:'me',text:text});
+  var mode=_rcMode;_rcMode='';document.querySelectorAll('.rc-chip[data-m]').forEach(function(x){x.classList.remove('on');});inp.placeholder='เช่น “นัดคุยโรงงานพรุ่งนี้บ่ายสอง”';
+  if(mode==='note'){rcNoteCard(text);return;} // จด note ไม่ต้องถาม AI
+  _rcBusy=true;rcRender();
+  var d=new Date(TODAY_STR+'T00:00:00+07:00'),wd=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()];
+  var prompt='You are Rudy, a Thai personal task assistant. Today is '+TODAY_STR+' ('+wd+'), Asia/Bangkok.'
+    +(mode?' The user picked type='+mode+'.':'')
+    +' Read the Thai message and reply with ONLY one JSON object, no markdown: {"type":"task|event|note|query|chat","name":"short Thai title","date":"YYYY-MM-DD or empty","endDate":"","startTime":"HH:MM or empty","endTime":"","priority":"High|Medium|Low","location":"","note":"extra detail or note content","queryDate":"YYYY-MM-DD","reply":"short Thai reply"}.'
+    +' Rules: meeting/appointment/นัด or a clock time -> event (บ่ายสอง=14:00, สองทุ่ม=20:00, 10 โมง=10:00). To-do -> task (no date given -> empty date). จด/note/บันทึก/ไอเดีย -> note (name=title, note=full content). Asking what is scheduled or what to do -> query with queryDate. Otherwise chat with a helpful reply. ด่วน/urgent -> High, default Medium. Resolve พรุ่งนี้/มะรืน/ศุกร์นี้/สัปดาห์หน้า from today.'
+    +'\nMessage: '+text;
+  var fin=false,to=setTimeout(function(){if(fin)return;fin=true;_rcBusy=false;rcPush({who:'bot',text:'ขอโทษครับ ตอบช้าไป ลองส่งใหม่อีกครั้งนะครับ'});},30000);
+  api({action:'askRudy',prompt:encodeURIComponent(prompt)},function(r){
+    if(fin)return;fin=true;clearTimeout(to);_rcBusy=false;
+    var js=null;try{var raw=String(r&&r.reply||'');var m=raw.match(/\{[\s\S]*\}/);js=JSON.parse(m?m[0]:raw);}catch(e){}
+    if(!js){rcPush({who:'bot',text:r&&r.reply?String(r.reply).slice(0,500):'ขอโทษครับ ไม่เข้าใจ ลองพิมพ์ใหม่ หรือกดปุ่มด้านล่างนะครับ'});return;}
+    rcHandle(js,text);
+  });
+}
+function rcNoteCard(text){
+  var lines=text.split('\n'),title=lines[0].slice(0,60);
+  rcPush({who:'bot',card:{type:'note',name:title,note:text}});
+}
+function rcValidDate(s){return /^\d{4}-\d{2}-\d{2}$/.test(s||'')?s:'';}
+function rcValidTime(s){var m=/^(\d{1,2}):(\d{2})$/.exec(s||'');return m?String(Math.min(23,+m[1])).padStart(2,'0')+':'+m[2]:'';}
+function rcHandle(js,text){
+  var t=String(js.type||'').toLowerCase();
+  if(t==='task'||t==='event'||t==='note'){
+    var c={type:t,name:String(js.name||text).slice(0,120),date:rcValidDate(js.date),endDate:rcValidDate(js.endDate),startTime:rcValidTime(js.startTime),endTime:rcValidTime(js.endTime),
+      priority:['High','Medium','Low'].indexOf(js.priority)>=0?js.priority:'Medium',location:String(js.location||'').slice(0,80),note:String(js.note||'').slice(0,1000)};
+    if(t==='event'&&!c.date)c.date=TODAY_STR;
+    if(t==='note'&&!c.note)c.note=text;
+    if(js.reply)rcPush({who:'bot',text:String(js.reply).slice(0,300)});
+    rcPush({who:'bot',card:c});return;
+  }
+  if(t==='query'){rcSummary(rcValidDate(js.queryDate)||TODAY_STR);return;}
+  rcPush({who:'bot',text:String(js.reply||'รับทราบครับ').slice(0,600)});
+}
+// ตอบคำถาม "วันนี้/พรุ่งนี้มีอะไร" จากข้อมูลจริงในแดชบอร์ด (ไม่เดา)
+function rcSummary(ds){
+  rcOpen();
+  var fmtT=function(t){return'• '+t.name+(t.priority==='High'?' (ด่วน)':'');};
+  var fmtE=function(e){var s=String(e.start||''),m=/T(\d\d:\d\d)/.exec(s);return'• '+(m?m[1]+' ':'')+e.title;};
+  var build=function(tasks,events,od){
+    var h='📅 '+rcFmtDate(ds)+(ds!==TODAY_STR?' ('+fmtShort(ds)+')':'');
+    if(od&&od.length)h+='\n\n⚠️ งานค้าง '+od.length+'\n'+od.slice(0,8).map(fmtT).join('\n');
+    h+='\n\n✅ งาน '+tasks.length+(tasks.length?'\n'+tasks.slice(0,10).map(fmtT).join('\n'):' — ว่าง');
+    h+='\n\n🗓 นัดหมาย '+events.length+(events.length?'\n'+events.slice(0,8).map(fmtE).join('\n'):' — ไม่มี');
+    rcPush({who:'bot',text:h});
+  };
+  if(ds===TODAY_STR){build(todayTasks.filter(function(t){return!t.done;}),todayEvents||[],overdueTasks.filter(function(t){return!t.done;}));return;}
+  _rcBusy=true;rcRender();var got=0,T=[],E=[];
+  var fin=function(){if(++got<2)return;_rcBusy=false;build(T,E,null);};
+  api({action:'getTasks',date:ds},function(r){T=(r&&r.tasks||[]).filter(function(t){return!t.done;});fin();});
+  api({action:'getCalendarEvents',date:ds},function(r){E=r&&r.events||[];fin();});
+}
 function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 function restoreLastTab(){
@@ -2793,6 +3015,7 @@ function init(){
     });
   },3000);
   restoreLastTab(); // กลับไปหน้าที่เปิดอยู่ล่าสุดก่อน reload (ไม่ใช่ Main เสมอ)
+  rcInit(); // ปุ่มแชท Rudy มุมขวาล่าง
 }
 init();
 </script>

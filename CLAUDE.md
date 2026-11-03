@@ -44,6 +44,12 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Compact cards (30 Oct): smaller padding/fonts/toolbar. Resizable (31 Oct): `.note-grid` is flex-wrap; each card width = `n.w`
   (default 240) and optional fixed height `n.h` (body scrolls). Drag `.note-grip` (bottom-right) / arrow keys → `noteSaveSize`
   autosaves; double-click grip = reset. Phone: width forced 100%, only height resizes.
+- Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
+  No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
+  startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`
+  (name/date/endDate/priority/note) or `addCalendarEvent` (name[+ " @ location"], date, startTime, endTime). Notes go to `rudy_notes`
+  locally (📝 chip skips AI). Queries are answered from dashboard data (`rcSummary`), not Gemini. Prompt is English to keep the
+  GET URL short (prompt is double-encoded). History in localStorage `rudy_chat_v1` (last 60).
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 ## Pending
