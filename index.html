@@ -352,14 +352,17 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .pin-name:hover{text-decoration:underline}
 .pin-card{cursor:pointer;transition:box-shadow .15s}.pin-card:hover{box-shadow:0 2px 10px rgba(110,77,18,.12)}
 .tc.pin-flash{box-shadow:0 0 0 3px #E2C98F;transition:box-shadow .3s}
-.pin-nedit{display:block;width:100%;box-sizing:border-box;min-height:28px;max-height:66px;overflow-y:auto;background:#FBF8F1;border:1px solid transparent;border-radius:6px;padding:5px 8px;font-size:11.5px;line-height:1.5;color:#3f3a30;cursor:text;outline:none;word-break:break-word;transition:max-height .15s,border-color .15s,background .15s}
-.pin-nedit:hover{background:#F6EEDC}
-.pin-nedit:focus{max-height:180px;background:#fff;border-color:#D7AE64;box-shadow:0 0 0 3px rgba(215,174,100,.18)}
-.pin-nedit:empty:before{content:attr(data-ph);color:#9a8a6a}
+.pin-nwrap{position:relative;margin-top:2px;background:#FFFBEA;border:1px solid #F0DFA8;border-radius:8px;padding:6px 8px 4px;cursor:text;transition:border-color .15s,box-shadow .15s,background .15s}
+.pin-nwrap:hover{border-color:#E2C778}
+.pin-nwrap:focus-within{background:#fff;border-color:#D7AE64;box-shadow:0 0 0 3px rgba(215,174,100,.2)}
+.pin-nlbl{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.4px;color:#9A7B2E;margin-bottom:3px;user-select:none}
+.pin-nlbl svg{flex:none}
+.pin-nlbl .pin-nst{margin-left:auto;font-weight:600;letter-spacing:0;color:#2E7D4F}
+.pin-nedit{display:block;width:100%;box-sizing:border-box;min-height:36px;max-height:72px;overflow-y:auto;font-size:12px;line-height:1.5;color:#3f3a30;outline:none;word-break:break-word;background-image:repeating-linear-gradient(transparent 0 17px,#F3E6BF 17px 18px);background-attachment:local;transition:max-height .15s}
+.pin-nedit:focus{max-height:200px}
+.pin-nedit:empty:before{content:attr(data-ph);color:#B39A5A}
 .pin-nedit img{max-width:100%;border-radius:4px}
-.pin-nst{font-size:10px;color:#9a8a6a;text-align:right;height:12px;margin-top:2px}
-.pin-nst:empty{height:0;margin:0}
-@media(max-width:760px){.pin-nedit{padding:8px 10px;font-size:13px;max-height:84px}}
+@media(max-width:760px){.pin-nedit{font-size:13.5px;line-height:1.55;max-height:96px;background-image:repeating-linear-gradient(transparent 0 20px,#F3E6BF 20px 21px)}}
 .pin-note{display:block;width:100%;text-align:left;background:#FBF8F1;border:none;border-radius:6px;padding:5px 8px;font-size:11px;color:#5c5446;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;font-family:inherit}
 .pin-note:hover{background:#F6EEDC}
 .pin-note.empty{color:#9a8a6a;background:transparent;border:1px dashed #ECDCB8}
@@ -3331,7 +3334,7 @@ function renderPinned(){
     var st=pinnedSubs[pinKey(t.id)], stTxt='';
     if(st&&st.length){var dn=st.filter(function(x){return x.done;}).length;stTxt='<span class="pin-st">'+dn+'/'+st.length+'</span>';}
     var nm=String(t.name||'').replace(/"/g,'&quot;');
-    h+='<div class="pin-card" style="border-top-color:'+ps[3]+'" data-id="'+t.id+'" onclick="if(!event.target.closest(\'.pin-acts,.pin-note,.pin-nedit\'))openPinDetail(this.dataset.id)">';
+    h+='<div class="pin-card" style="border-top-color:'+ps[3]+'" data-id="'+t.id+'" onclick="if(!event.target.closest(\'.pin-acts,.pin-note,.pin-nwrap\'))openPinDetail(this.dataset.id)">';
     h+='<div class="pin-row"><button type="button" class="pin-name" title="ดูรายละเอียด: '+nm+'">'+t.name+'</button><span class="pin-pri" style="background:'+ps[1]+';color:'+ps[2]+'">'+ps[0]+'</span></div>';
     var ad=t.actionDate||'',badge;
     if(ad){var late=ad<TODAY_STR;badge='<span class="pin-age dt'+(late?' late':'')+'">'+(ad===TODAY_STR?'เริ่มวันนี้':(late?'เริ่มแล้ว ':'เริ่ม ')+fmtShort(ad))+'</span>';}
@@ -3342,7 +3345,9 @@ function renderPinned(){
     h+='<button type="button" class="pin-cal" aria-label="'+(ad?'เปลี่ยนวัน':'เลือกวันเริ่ม')+'" title="'+(ad?'เปลี่ยนวัน':'เลือกวันเริ่ม')+'" data-id="'+t.id+'" data-name="'+nm+'" data-sd="'+ad+'" data-ed="'+(t.endDate||'')+'" onclick="pinPickDate(this)">'+calSvg+'</button>';
     h+='<button type="button" class="pin-x" aria-label="ถอดหมุด" title="ถอดหมุด" data-id="'+t.id+'" onclick="togglePin(this.dataset.id)">'+xSvg+'</button></div></div>';
     // จด note สั้น ๆ ได้ตรงนี้เลย — บันทึกเองหลังหยุดพิมพ์ / คลิกออก
-    h+='<div class="pin-nedit" contenteditable="true" role="textbox" aria-multiline="true" aria-label="note ของ '+nm+'" data-ph="📝 จด note…" data-id="'+t.id+'" id="pne-'+t.id+'" oninput="pinNoteInput(this)" onblur="pinNoteFlush(this.dataset.id)" onpaste="pinNotePaste(event)" onkeydown="if(event.key===\'Escape\')this.blur()">'+pinNoteHtml(t)+'</div><div class="pin-nst" id="pns-'+t.id+'"></div>';
+    var penSvg='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>';
+    h+='<div class="pin-nwrap" onclick="var e=this.querySelector(\'.pin-nedit\');if(event.target!==e){e.focus();pinCaretEnd(e);}"><div class="pin-nlbl">'+penSvg+'<span>NOTE · พิมพ์ได้เลย</span><span class="pin-nst" id="pns-'+t.id+'"></span></div>';
+    h+='<div class="pin-nedit" contenteditable="true" role="textbox" aria-multiline="true" aria-label="note ของ '+nm+'" data-ph="แตะเพื่อจด note…" data-id="'+t.id+'" id="pne-'+t.id+'" oninput="pinNoteInput(this)" onblur="pinNoteFlush(this.dataset.id)" onpaste="pinNotePaste(event)" onkeydown="if(event.key===\'Escape\')this.blur()">'+pinNoteHtml(t)+'</div></div>';
     h+='</div>';
   });
   h+='</div></section>';
@@ -3365,6 +3370,7 @@ function pinNoteText(t){
   return (d.innerText||d.textContent||'').replace(/\s+/g,' ').trim().slice(0,120);
 }
 var _pinRenderLater=false,_pinNoteTimers={};
+function pinCaretEnd(el){try{var r=document.createRange();r.selectNodeContents(el);r.collapse(false);var sl=window.getSelection();sl.removeAllRanges();sl.addRange(r);}catch(e){}}
 function pinNoteHtml(t){
   var html=null;try{html=localStorage.getItem('note_html_'+t.id);}catch(e){}
   if(html===null)html=t.note||'';

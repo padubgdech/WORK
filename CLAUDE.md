@@ -30,7 +30,7 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Click a pinned card → `openPinDetail` popup = full `tcCard` (note, subtasks, Done/เลื่อน/ลบ) + ถอดหมุด; undated tasks show
   `pinDateBox` (flag `t._pinBox`) instead of the date bar. If the task is already in the Main lists it scrolls/highlights that card instead.
   `getTask()` also falls back to `allActiveTasks` so subtask/note actions work in the popup.
-  Each pinned card has an inline note (4 Nov, Dech: "จด NOTE ย่อตรงนี้ได้"): `.pin-nedit#pne-<id>` contenteditable (`pinNoteHtml`),
+  Each pinned card has an inline note (4 Nov, Dech: "จด NOTE ย่อตรงนี้ได้"): yellow lined box `.pin-nwrap` (label "NOTE · พิมพ์ได้เลย" + save status) → `.pin-nedit#pne-<id>` contenteditable (`pinNoteHtml`),
   autosave 900 ms / blur / tab hide (`pinNoteInput`/`pinNoteFlush`) → `noteCommit` (shared with `saveNoteInline`: localStorage
   `note_html_<id>` + task arrays + pushNote). Paste = plain text. `renderPinned` skips while a pin note is focused (`_pinRenderLater`). Note: 21 of 25 active tasks had no date (Tasks backlog) — that's why pinning is an explicit checkbox,
   not "no date". Main sidebar NOTE notebook was removed (29 Oct) at Dech's request.
