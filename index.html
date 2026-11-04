@@ -344,15 +344,22 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .pin-ttl small{font-size:11px;font-weight:400}
 .pin-hd-btn{background:none;border:none;color:#6E4D12;font-size:11px;font-weight:600;padding:4px 8px;cursor:pointer;font-family:inherit;border-radius:6px}
 .pin-hd-btn:hover{background:rgba(110,77,18,.08)}
-.pin-qn{background:#FFF6CF;border:1px solid #F0DC95;border-radius:8px;padding:7px 9px 6px;display:flex;flex-direction:column;gap:4px;min-width:0;box-shadow:0 1px 0 rgba(160,120,20,.08);transition:box-shadow .15s,border-color .15s}
-.pin-qn:focus-within{border-color:#D7AE64;box-shadow:0 0 0 3px rgba(215,174,100,.2)}
-.pin-qn-hd{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.4px;color:#9A7B2E}
+.pin-qn{position:relative;background:#FFFCF2;border:1px solid #EEDDB2;border-top:3px solid var(--qc,#D7AE64);border-radius:8px;padding:7px 9px 6px;display:flex;flex-direction:column;gap:4px;min-width:0;box-shadow:0 1px 0 rgba(160,120,20,.08);transition:box-shadow .15s,border-color .15s}
+.pin-qn:focus-within{border-color:#D7AE64;border-top-color:var(--qc,#D7AE64);box-shadow:0 0 0 3px rgba(215,174,100,.2)}
+.pin-qn-hd{display:flex;align-items:center;gap:6px;white-space:nowrap;min-width:0;font-size:10px;font-weight:700;letter-spacing:.4px;color:#9A7B2E}
 .pin-qn-hd .pin-nst{margin-left:auto;font-weight:600;letter-spacing:0;color:#2E7D4F}
+.pin-qn:hover .pin-qn-hd .pin-nst,.pin-qn:focus-within .pin-qn-hd .pin-nst{max-width:10px;overflow:hidden}
 .pin-qn-del{flex:none;border:0;background:transparent;color:#A8925A;cursor:pointer;border-radius:5px;padding:2px 5px;font-size:11px;font-family:inherit;display:inline-flex;align-items:center;gap:3px}
 .pin-qn-hd .pin-nst:empty+.pin-qn-del{margin-left:auto}
 .pin-qn-del:hover{background:#F6E6B0;color:#7A5A12}
 .pin-qn-del.arm{background:#C8363D;color:#fff}
-.pin-qn .pin-nedit{min-height:54px;max-height:110px;background-image:repeating-linear-gradient(transparent 0 17px,#EFDDA2 17px 18px)}
+.pin-qn .pin-nedit{min-height:54px;max-height:110px;background-image:repeating-linear-gradient(transparent 0 17px,#F1E6C8 17px 18px)}
+.pin-qn-cols{display:none;gap:4px;align-items:center}
+.pin-qn:hover .pin-qn-cols,.pin-qn:focus-within .pin-qn-cols{display:inline-flex}
+.pin-qn-col{width:12px;height:12px;border-radius:50%;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12);padding:0;cursor:pointer}
+.pin-qn-col.on{box-shadow:0 0 0 2px #3f3a30}
+@media(hover:none){.pin-qn-cols{display:inline-flex}}
+@media(max-width:760px){.pin-qn-col{width:18px;height:18px}}
 .pin-qn .pin-nedit:focus{max-height:220px}
 .pin-qadd{border:1.5px dashed #E2C778;background:rgba(255,250,232,.6);border-radius:8px;color:#9A7B2E;font-size:13px;font-weight:700;cursor:pointer;min-height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-family:inherit;transition:background .15s,border-color .15s}
 .pin-qadd:hover{background:#FFF4CC;border-color:#D7AE64}
@@ -3367,7 +3374,10 @@ function renderPinned(){
   });
   var trSvg='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>';
   qns.forEach(function(n){
-    h+='<div class="pin-qn" data-qn="'+n.id+'"><div class="pin-qn-hd"><span>📝 NOTE</span><span class="pin-nst" id="pqs-'+n.id+'"></span>';
+    var qc=PIN_QN_COLS.indexOf(n.bar)>=0?n.bar:PIN_QN_COLS[0];
+    h+='<div class="pin-qn" data-qn="'+n.id+'" style="--qc:'+qc+'"><div class="pin-qn-hd"><span>📝 NOTE</span><span class="pin-qn-cols" role="group" aria-label="สีแถบบน">'
+      +PIN_QN_COLS.map(function(c){return '<button type="button" class="pin-qn-col'+(c===qc?' on':'')+'" style="background:'+c+'" aria-label="สีแถบ" aria-pressed="'+(c===qc)+'" data-id="'+n.id+'" data-c="'+c+'" onmousedown="event.preventDefault()" onclick="pinQnColor(this)"></button>';}).join('')
+      +'</span><span class="pin-nst" id="pqs-'+n.id+'"></span>';
     h+='<button type="button" class="pin-qn-del" aria-label="ลบ note" title="ลบ note" data-id="'+n.id+'" onmousedown="event.preventDefault()" onclick="pinQnDel(this)">'+trSvg+'</button></div>';
     h+='<div class="pin-nedit" contenteditable="true" role="textbox" aria-multiline="true" aria-label="note" data-ph="จด note…" data-id="'+n.id+'" id="pqn-'+n.id+'" oninput="pinQnInput(this)" onblur="pinQnFlush(this.dataset.id)" onpaste="pinNotePaste(event)" onkeydown="if(event.key===\'Escape\')this.blur()">'+(n.html||String(n.body||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>'))+'</div></div>';
   });
@@ -3377,6 +3387,13 @@ function renderPinned(){
 }
 /* ===== Note ด่วนบนแถบปักหมุด — เก็บใน rudy_notes (เห็นในหน้า NOTE ด้วย) ติดธง main:true ===== */
 var _pqTimers={};
+var PIN_QN_COLS=['#D7AE64','#C8363D','#E07A2E','#2E7D4F','#2457C5','#7C3AED'];
+function pinQnColor(b){ // เปลี่ยนสีแถบบนของ note (เก็บใน n.bar)
+  var id=b.dataset.id,c=b.dataset.c,notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n)return;
+  n.bar=c;notesSave(notes);
+  var card=b.closest('.pin-qn');if(card)card.style.setProperty('--qc',c);
+  card.querySelectorAll('.pin-qn-col').forEach(function(x){var on=x.dataset.c===c;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);});
+}
 function pinQuickNotes(){return notesLoad().filter(function(n){return n.main;});}
 function pinQnNew(){
   var notes=notesLoad(),now=new Date().toISOString();

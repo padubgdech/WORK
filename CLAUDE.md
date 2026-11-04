@@ -34,7 +34,7 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   autosave 900 ms / blur / tab hide (`pinNoteInput`/`pinNoteFlush`) → `noteCommit` (shared with `saveNoteInline`: localStorage
   `note_html_<id>` + task arrays + pushNote). Paste = plain text. `renderPinned` skips while a pin note is focused (`_pinRenderLater`).
   Quick notes (4 Nov, Dech: "เพิ่ม tap note ใหม่" in the empty band space): `.pin-qadd` tile "+ Note ใหม่" → `pinQnNew` creates a
-  `rudy_notes` entry with `main:true` (also shows in the Note tab) → yellow `.pin-qn` sticky, editor `#pqn-<id>` autosave 800 ms
+  `rudy_notes` entry with `main:true` (also shows in the Note tab) → `.pin-qn` sticky (light cream bg like the add tile, 3px top bar `--qc`; colour dots `PIN_QN_COLS` on hover/focus → `pinQnColor`, stored `n.bar`), editor `#pqn-<id>` autosave 800 ms
   (`pinQnInput`/`pinQnFlush`, noteSanitize), delete = 2-tap trash (`pinQnDel`, no confirm() in LINE). Band shows if pinned tasks OR
   quick notes exist; `showPage('main')` re-renders the band. (The earlier "+" inside the task note box was removed at his request.) Note: 21 of 25 active tasks had no date (Tasks backlog) — that's why pinning is an explicit checkbox,
   not "no date". Main sidebar NOTE notebook was removed (29 Oct) at Dech's request.
