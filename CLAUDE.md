@@ -30,9 +30,13 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Click a pinned card → `openPinDetail` popup = full `tcCard` (note, subtasks, Done/เลื่อน/ลบ) + ถอดหมุด; undated tasks show
   `pinDateBox` (flag `t._pinBox`) instead of the date bar. If the task is already in the Main lists it scrolls/highlights that card instead.
   `getTask()` also falls back to `allActiveTasks` so subtask/note actions work in the popup.
-  Each pinned card has an inline note (4 Nov, Dech: "จด NOTE ย่อตรงนี้ได้"): yellow lined box `.pin-nwrap` (label "NOTE · พิมพ์ได้เลย" + save status + `.pin-nadd` "+" → `pinNoteAdd` appends a "• " line and focuses it) → `.pin-nedit#pne-<id>` contenteditable (`pinNoteHtml`),
+  Each pinned card has an inline note (4 Nov, Dech: "จด NOTE ย่อตรงนี้ได้"): yellow lined box `.pin-nwrap` (label "NOTE · พิมพ์ได้เลย" + save status) → `.pin-nedit#pne-<id>` contenteditable (`pinNoteHtml`),
   autosave 900 ms / blur / tab hide (`pinNoteInput`/`pinNoteFlush`) → `noteCommit` (shared with `saveNoteInline`: localStorage
-  `note_html_<id>` + task arrays + pushNote). Paste = plain text. `renderPinned` skips while a pin note is focused (`_pinRenderLater`). Note: 21 of 25 active tasks had no date (Tasks backlog) — that's why pinning is an explicit checkbox,
+  `note_html_<id>` + task arrays + pushNote). Paste = plain text. `renderPinned` skips while a pin note is focused (`_pinRenderLater`).
+  Quick notes (4 Nov, Dech: "เพิ่ม tap note ใหม่" in the empty band space): `.pin-qadd` tile "+ Note ใหม่" → `pinQnNew` creates a
+  `rudy_notes` entry with `main:true` (also shows in the Note tab) → yellow `.pin-qn` sticky, editor `#pqn-<id>` autosave 800 ms
+  (`pinQnInput`/`pinQnFlush`, noteSanitize), delete = 2-tap trash (`pinQnDel`, no confirm() in LINE). Band shows if pinned tasks OR
+  quick notes exist; `showPage('main')` re-renders the band. (The earlier "+" inside the task note box was removed at his request.) Note: 21 of 25 active tasks had no date (Tasks backlog) — that's why pinning is an explicit checkbox,
   not "no date". Main sidebar NOTE notebook was removed (29 Oct) at Dech's request.
 - Note tab (`renderNotes`, localStorage `rudy_notes`): cards + detail panel restyled to Apple frosted single colour (design "การ์ด 5" on the canvas,
   29 Oct). Per-note colour picker removed from the panel (n.color still stored, just unused). Selected card = blue ring (`.note-card.sel`).
