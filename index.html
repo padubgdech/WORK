@@ -352,6 +352,14 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .pin-name:hover{text-decoration:underline}
 .pin-card{cursor:pointer;transition:box-shadow .15s}.pin-card:hover{box-shadow:0 2px 10px rgba(110,77,18,.12)}
 .tc.pin-flash{box-shadow:0 0 0 3px #E2C98F;transition:box-shadow .3s}
+.pin-nedit{display:block;width:100%;box-sizing:border-box;min-height:28px;max-height:66px;overflow-y:auto;background:#FBF8F1;border:1px solid transparent;border-radius:6px;padding:5px 8px;font-size:11.5px;line-height:1.5;color:#3f3a30;cursor:text;outline:none;word-break:break-word;transition:max-height .15s,border-color .15s,background .15s}
+.pin-nedit:hover{background:#F6EEDC}
+.pin-nedit:focus{max-height:180px;background:#fff;border-color:#D7AE64;box-shadow:0 0 0 3px rgba(215,174,100,.18)}
+.pin-nedit:empty:before{content:attr(data-ph);color:#9a8a6a}
+.pin-nedit img{max-width:100%;border-radius:4px}
+.pin-nst{font-size:10px;color:#9a8a6a;text-align:right;height:12px;margin-top:2px}
+.pin-nst:empty{height:0;margin:0}
+@media(max-width:760px){.pin-nedit{padding:8px 10px;font-size:13px;max-height:84px}}
 .pin-note{display:block;width:100%;text-align:left;background:#FBF8F1;border:none;border-radius:6px;padding:5px 8px;font-size:11px;color:#5c5446;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;font-family:inherit}
 .pin-note:hover{background:#F6EEDC}
 .pin-note.empty{color:#9a8a6a;background:transparent;border:1px dashed #ECDCB8}
@@ -1423,6 +1431,19 @@ function closeNoteInline(tid){
   document.getElementById('ne-'+tid).style.display='none';
   document.getElementById('nv-'+tid).style.display='block';
 }
+// เก็บ note ของงาน (ใช้ร่วมกันทั้งการ์ดงานและแถบปักหมุด) → localStorage + ส่งขึ้น Notion/sync
+function noteCommit(tid,noteHtml,noteTxt){
+  try{localStorage.setItem('note_html_'+tid,noteHtml);}catch(e){}
+  [todayTasks,overdueTasks,allActiveTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid){t.note=noteHtml;t._noteSaved=true;}});});
+  var vb=document.getElementById('nvb-'+tid);if(vb&&document.getElementById('ne-'+tid)&&document.getElementById('ne-'+tid).style.display!=='block')vb.innerHTML=noteHtml||'<span style="color:#ccc;font-style:italic">ยังไม่มี note</span>';
+  // เก็บเวลาแก้ไข + ทำเครื่องหมายว่ายังไม่ได้ส่ง → pushNote ส่งทั้ง text (Notion) และ HTML (sync ข้ามเครื่อง)
+  try{
+    localStorage.setItem('note_ts_'+tid,String(Date.now()));
+    localStorage.setItem('note_txt_'+tid,noteTxt);
+    localStorage.setItem('note_dirty_'+tid,'1');
+  }catch(e){}
+  pushNote(tid);
+}
 function saveNoteInline(tid){
   var editor=document.getElementById('nta-'+tid);
   var noteHtml=editor.innerHTML.trim();
@@ -1450,15 +1471,8 @@ function saveNoteInline(tid){
   lbl.innerHTML='&#128221; Note <span class="note-saved-badge">&#10003; บันทึกแล้ว</span>';
   document.getElementById('ne-'+tid).style.display='none';
   document.getElementById('nv-'+tid).style.display='block';
-  [todayTasks,overdueTasks,allActiveTasks].forEach(function(arr){arr.forEach(function(t){if(t.id===tid){t.note=noteHtml;t._noteSaved=true;}});});
-  if(isPinned(tid))setTimeout(renderPinned,0); // อัปเดต preview note บนแถบปักหมุด
-  // เก็บเวลาแก้ไข + ทำเครื่องหมายว่ายังไม่ได้ส่ง → pushNote ส่งทั้ง text (Notion) และ HTML (sync ข้ามเครื่อง)
-  try{
-    localStorage.setItem('note_ts_'+tid,String(Date.now()));
-    localStorage.setItem('note_txt_'+tid,noteTxt);
-    localStorage.setItem('note_dirty_'+tid,'1');
-  }catch(e){}
-  pushNote(tid);
+  noteCommit(tid,noteHtml,noteTxt);
+  if(isPinned(tid))setTimeout(renderPinned,0); // อัปเดต note บนแถบปักหมุด
   showToast('📝 บันทึก Note แล้ว');
   // หลังบันทึก note ใหม่ → ล้าง Rudy cache แล้ววิเคราะห์ใหม่
   try{localStorage.removeItem('rudy_'+tid);}catch(e){}
@@ -3300,6 +3314,7 @@ function getPinnedTasks(){
 function pinAgeDays(id){var c=pinnedMeta[pinKey(id)];if(!c)return 0;return Math.max(0,Math.round((new Date(TODAY_STR+'T00:00:00')-new Date(c+'T00:00:00'))/864e5));}
 function renderPinned(){
   var el=document.getElementById('main-pinned');if(!el)return;
+  var ae=document.activeElement;if(ae&&ae.classList&&ae.classList.contains('pin-nedit')&&el.contains(ae)){_pinRenderLater=true;return;} // กำลังพิมพ์ note อยู่ → วาดใหม่หลังคลิกออก
   var list=getPinnedTasks();
   if(!list.length){el.innerHTML='';return;}
   var priS={High:['HIGH','#111','#fff','#C2553F'],Medium:['MED','#ECEAE5','#444','#B8862F'],Low:['LOW','#E7F1EA','#2F5B44','#4E8B6A']};
@@ -3316,7 +3331,7 @@ function renderPinned(){
     var st=pinnedSubs[pinKey(t.id)], stTxt='';
     if(st&&st.length){var dn=st.filter(function(x){return x.done;}).length;stTxt='<span class="pin-st">'+dn+'/'+st.length+'</span>';}
     var nm=String(t.name||'').replace(/"/g,'&quot;');
-    h+='<div class="pin-card" style="border-top-color:'+ps[3]+'" data-id="'+t.id+'" onclick="if(!event.target.closest(\'.pin-acts,.pin-note\'))openPinDetail(this.dataset.id)">';
+    h+='<div class="pin-card" style="border-top-color:'+ps[3]+'" data-id="'+t.id+'" onclick="if(!event.target.closest(\'.pin-acts,.pin-note,.pin-nedit\'))openPinDetail(this.dataset.id)">';
     h+='<div class="pin-row"><button type="button" class="pin-name" title="ดูรายละเอียด: '+nm+'">'+t.name+'</button><span class="pin-pri" style="background:'+ps[1]+';color:'+ps[2]+'">'+ps[0]+'</span></div>';
     var ad=t.actionDate||'',badge;
     if(ad){var late=ad<TODAY_STR;badge='<span class="pin-age dt'+(late?' late':'')+'">'+(ad===TODAY_STR?'เริ่มวันนี้':(late?'เริ่มแล้ว ':'เริ่ม ')+fmtShort(ad))+'</span>';}
@@ -3326,8 +3341,8 @@ function renderPinned(){
     if(!ad)h+='<button type="button" class="pin-btn" data-id="'+t.id+'" onclick="pinToday(this.dataset.id)">วันนี้</button>';
     h+='<button type="button" class="pin-cal" aria-label="'+(ad?'เปลี่ยนวัน':'เลือกวันเริ่ม')+'" title="'+(ad?'เปลี่ยนวัน':'เลือกวันเริ่ม')+'" data-id="'+t.id+'" data-name="'+nm+'" data-sd="'+ad+'" data-ed="'+(t.endDate||'')+'" onclick="pinPickDate(this)">'+calSvg+'</button>';
     h+='<button type="button" class="pin-x" aria-label="ถอดหมุด" title="ถอดหมุด" data-id="'+t.id+'" onclick="togglePin(this.dataset.id)">'+xSvg+'</button></div></div>';
-    var nt=pinNoteText(t);
-    h+='<button type="button" class="pin-note'+(nt?'':' empty')+'" data-id="'+t.id+'" onclick="openPinNote(this.dataset.id)" title="'+(nt?'แก้ไข note':'เพิ่ม note')+'">'+(nt?'📝 '+nt.replace(/</g,'&lt;'):'+ เพิ่ม note')+'</button>';
+    // จด note สั้น ๆ ได้ตรงนี้เลย — บันทึกเองหลังหยุดพิมพ์ / คลิกออก
+    h+='<div class="pin-nedit" contenteditable="true" role="textbox" aria-multiline="true" aria-label="note ของ '+nm+'" data-ph="📝 จด note…" data-id="'+t.id+'" id="pne-'+t.id+'" oninput="pinNoteInput(this)" onblur="pinNoteFlush(this.dataset.id)" onpaste="pinNotePaste(event)" onkeydown="if(event.key===\'Escape\')this.blur()">'+pinNoteHtml(t)+'</div><div class="pin-nst" id="pns-'+t.id+'"></div>';
     h+='</div>';
   });
   h+='</div></section>';
@@ -3349,6 +3364,38 @@ function pinNoteText(t){
   var d=document.createElement('div');d.innerHTML=html;
   return (d.innerText||d.textContent||'').replace(/\s+/g,' ').trim().slice(0,120);
 }
+var _pinRenderLater=false,_pinNoteTimers={};
+function pinNoteHtml(t){
+  var html=null;try{html=localStorage.getItem('note_html_'+t.id);}catch(e){}
+  if(html===null)html=t.note||'';
+  html=String(html||'');
+  if(!/<[a-z][\s\S]*>/i.test(html))html=html.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>');
+  return /^\s*(<br\s*\/?>\s*)*$/i.test(html)?'':html;
+}
+function pinNoteInput(el){
+  var id=el.dataset.id,st=document.getElementById('pns-'+id);if(st)st.textContent='กำลังพิมพ์…';
+  clearTimeout(_pinNoteTimers[id]);_pinNoteTimers[id]=setTimeout(function(){pinNoteFlush(id,true);},900);
+}
+function pinNotePaste(e){ // วางเป็นตัวอักษรล้วน กันสไตล์แปลก ๆ ติดมา
+  var t=(e.clipboardData||window.clipboardData);if(!t)return;
+  e.preventDefault();document.execCommand('insertText',false,t.getData('text/plain'));
+}
+function pinNoteFlush(id,keepFocus){
+  clearTimeout(_pinNoteTimers[id]);delete _pinNoteTimers[id];
+  var el=document.getElementById('pne-'+id);
+  if(el){
+    var html=el.innerHTML.trim();if(/^\s*(<br\s*\/?>\s*)*$/i.test(html))html='';
+    var prev=null;try{prev=localStorage.getItem('note_html_'+id);}catch(e){}
+    if(prev===null){var t0=getTask(id);prev=t0?pinNoteHtml(t0):'';}
+    if(html!==prev){
+      noteCommit(id,html,(el.innerText||el.textContent||'').trim());
+      var st=document.getElementById('pns-'+id);if(st){st.textContent='✓ บันทึกแล้ว';setTimeout(function(){if(st.textContent==='✓ บันทึกแล้ว')st.textContent='';},1800);}
+    }else{var st2=document.getElementById('pns-'+id);if(st2&&st2.textContent==='กำลังพิมพ์…')st2.textContent='';}
+  }
+  if(!keepFocus&&_pinRenderLater){_pinRenderLater=false;setTimeout(function(){var ae=document.activeElement;if(!(ae&&ae.classList&&ae.classList.contains('pin-nedit')))renderPinned();},50);}
+}
+window.addEventListener('beforeunload',function(){Object.keys(_pinNoteTimers).forEach(function(id){pinNoteFlush(id,true);});});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')Object.keys(_pinNoteTimers).forEach(function(id){pinNoteFlush(id,true);});});
 function openPinNote(id){ // เปิดการ์ดงานแล้วเปิดช่องแก้ note ให้พิมพ์ได้เลย
   openPinDetail(id);
   setTimeout(function(){if(document.getElementById('nta-'+id))openNoteInline(id);},120);
