@@ -161,7 +161,11 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Hotel per stop (5 Nov "ใส่ที่พักได้ด้วยแสดงบนแผนที่"): `s.hotel={name,lat?,lng?,addr?}`; dialog field `#tps-h` (`tpHotelHtml`, Nominatim search
   `tpHotelSearch`/`tpHotelPick`, "📍 ปัก" = mini map mode `{hotel:true}`, working copy `window._tpHotel`); 🏨 markers `.tp-mk.ht` (`tpHotelPts`/
   `tpHotelEl`, both engines, in fitBounds); timeline card line `.tp-st-ht`; day plan row `.tp-day-ht` with "กลับที่พัก" Google Maps link;
-  main-map panel button "🏨 เป็นที่พัก" (`tpPanSave(true)`); plan text "🏨 พัก … (n วัน)" on the stop's first day. Test: test_hotel.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
+  main-map panel button "🏨 เป็นที่พัก" (`tpPanSave(true)`); plan text "🏨 พัก … (n วัน)" on the stop's first day. Test: test_hotel.py.
+  Real metro lines (5 Nov "ไม่มีรถไฟในตัวเมือง"): vector tiles showed nothing in the city, so `tpMetroGeo` fetches OSM route relations
+  subway/light_rail/monorail/tram + stations via Overpass (20 km around each stop, sequential, cache `_tpMetroMem` + sessionStorage `tp_metro_v1_*`)
+  with the line's real `colour`; MapLibre layers `tpr-osm-line(-c)`/`tpr-osm-sta(-c)` (`tpMetroML`, click line = toast name), Leaflet group
+  `_tpMetroLF` (`tpMetroLF`, tooltips) + faint OpenRailwayMap. Toggle = same 🚇 button. Test: test_metro.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`

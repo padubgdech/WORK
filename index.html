@@ -3693,7 +3693,7 @@ function tpMapDrawLeaflet(t){
     el.innerHTML='';
     _tpMap=L.map(el,{zoomControl:true,attributionControl:true}).setView([13.75,100.5],5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(_tpMap);
-    _tpRailLF=null;if(tpRailOn())tpRailLF(_tpMap,true);
+    _tpRailLF=null;_tpMetroLF=null;if(tpRailOn())tpRailLF(_tpMap,true);
     _tpLayer=L.layerGroup().addTo(_tpMap);tpMapTools(el,tpEngLF(_tpMap,_tpLayer));
     var st=tpStops(t).filter(function(s){return s.lat!=null&&s.lng!=null;}),spp=tpSpotPts(t);
     spp.forEach(function(p){
@@ -4256,9 +4256,9 @@ var TP_METRO=['subway','light_rail','monorail','tram'];
 function tpLangExpr(lang){return lang==='en'?['coalesce',['get','name:en'],['get','name_en'],['get','name:latin'],['get','name']]:['coalesce',['get','name:th'],['get','name_th'],['get','name'],['get','name:latin']];}
 function tpRailML(map,on){
   ['tpr-sta','tpr-sta-c','tpr-metro','tpr-metro-c','tpr-rail'].forEach(function(id){try{if(map.getLayer(id))map.removeLayer(id);}catch(e){}});
-  if(!on)return;
+  if(!on){tpMetroML(map,false);return;}
   var st=map.getStyle(),src=null,font=['Noto Sans Regular'];if(!st)return;
-  Object.keys(st.sources||{}).some(function(k){if(st.sources[k].type==='vector'){src=k;return true;}return false;});if(!src)return;
+  Object.keys(st.sources||{}).some(function(k){if(st.sources[k].type==='vector'){src=k;return true;}return false;});if(!src){tpMetroML(map,true);return;}
   (st.layers||[]).some(function(l){if(l.type==='symbol'&&l.layout&&l.layout['text-font']){font=l.layout['text-font'];return true;}return false;});
   var before=map.getLayer('tp-route')?'tp-route':undefined,isMetro=['any',['==',['get','class'],'transit'],['in',['get','subclass'],['literal',TP_METRO]]];
   try{
@@ -4274,12 +4274,89 @@ function tpRailML(map,on){
       layout:{'text-field':tpLangExpr(tpMapLang()),'text-font':font,'text-size':11,'text-offset':[0,1.1],'text-anchor':'top','text-optional':true},
       paint:{'text-color':'#1f4fb8','text-halo-color':'#fff','text-halo-width':1.6}},before);
   }catch(e){}
+  tpMetroML(map,true);
+}
+// สายรถไฟฟ้าจริงจาก OpenStreetMap (Overpass): route=subway/light_rail/monorail/tram รอบ ๆ แต่ละเมือง (20 กม.) พร้อมสีประจำสาย + ชื่อสถานี
+var _tpMetroMem={};
+function tpMetroCenters(){
+  var t=tpCur(tpLoad()),o=[];if(t)tpStops(t).forEach(function(s){if(s.lat!=null)o.push([s.lat,s.lng]);});
+  if(_tpGeo)o.push([_tpGeo.lat,_tpGeo.lng]);
+  var seen={};return o.filter(function(p){var k=p[0].toFixed(1)+','+p[1].toFixed(1);if(seen[k])return false;seen[k]=1;return true;}).slice(0,6);
+}
+function tpMetroOne(p){
+  var key='tp_metro_v1_'+p[0].toFixed(1)+','+p[1].toFixed(1);
+  if(_tpMetroMem[key])return Promise.resolve(_tpMetroMem[key]); // ผลลัพธ์ หรือคำขอที่กำลังรอ (promise)
+  try{var c=sessionStorage.getItem(key);if(c){_tpMetroMem[key]=JSON.parse(c);return Promise.resolve(_tpMetroMem[key]);}}catch(e){}
+  var a='(around:20000,'+p[0].toFixed(4)+','+p[1].toFixed(4)+')';
+  var q='[out:json][timeout:40];(relation["route"~"^(subway|light_rail|monorail|tram)$"]'+a+';)->.r;.r out geom;'
+    +'(node["railway"="station"]["station"~"subway|light_rail|monorail"]'+a+';node["railway"="station"]["subway"="yes"]'+a+';node["railway"="station"]["light_rail"="yes"]'+a+';);out;';
+  return _tpMetroMem[key]=fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}})
+    .then(function(r){return r.json();}).catch(function(e){delete _tpMetroMem[key];throw e;}).then(function(j){
+      var lines=[],sta=[],seenW={},seenS={};
+      (j.elements||[]).forEach(function(e){
+        var tg=e.tags||{};
+        if(e.type==='relation'){
+          var col=String(tg.colour||tg.color||'').trim();if(col&&!/^#/.test(col)&&/^[0-9a-f]{6}$/i.test(col))col='#'+col;if(!/^#[0-9a-f]{3,8}$/i.test(col))col=tg.route==='light_rail'?'#8e44ad':tg.route==='monorail'?'#0f9d8a':tg.route==='tram'?'#d97706':'#1f6feb';
+          var nm=tg['name:th']||tg.name||tg.ref||'',ln={c:col,n:nm,ne:tg['name:en']||tg.name||'',r:tg.ref||'',k:tg.route};
+          (e.members||[]).forEach(function(m){if(m.type!=='way'||!m.geometry||seenW[m.ref]||(m.role&&/platform|stop/.test(m.role)))return;seenW[m.ref]=1;
+            lines.push({p:ln,g:m.geometry.map(function(q){return [Math.round(q.lon*1e5)/1e5,Math.round(q.lat*1e5)/1e5];})});});
+        }else if(e.type==='node'&&!seenS[e.id]){seenS[e.id]=1;sta.push({x:Math.round(e.lon*1e5)/1e5,y:Math.round(e.lat*1e5)/1e5,th:tg['name:th']||'',en:tg['name:en']||'',n:tg.name||''});}
+      });
+      var out={lines:lines,sta:sta};_tpMetroMem[key]=out;try{sessionStorage.setItem(key,JSON.stringify(out));}catch(e){}
+      return out;
+    });
+}
+function tpMetroGeo(cb){
+  var cs=tpMetroCenters();if(!cs.length){cb(null);return;}
+  var rs=[];cs.reduce(function(pr,p){return pr.then(function(){return tpMetroOne(p).catch(function(){return {lines:[],sta:[]};}).then(function(r){rs.push(r);});});},Promise.resolve()).then(function(){ // ทีละเมือง (Overpass จำกัดจำนวนคำขอพร้อมกัน)
+    var fl=[],fs=[],sk={};
+    rs.forEach(function(r){r.lines.forEach(function(l){fl.push({type:'Feature',properties:{c:l.p.c,n:l.p.n,ne:l.p.ne,r:l.p.r,k:l.p.k},geometry:{type:'LineString',coordinates:l.g}});});
+      r.sta.forEach(function(s){var k=s.x+','+s.y;if(sk[k])return;sk[k]=1;fs.push({type:'Feature',properties:{'name:th':s.th,'name:en':s.en,name:s.n},geometry:{type:'Point',coordinates:[s.x,s.y]}});});});
+    cb({lines:{type:'FeatureCollection',features:fl},sta:{type:'FeatureCollection',features:fs}});
+  });
+}
+function tpMetroML(map,on){
+  ['tpr-osm-sta','tpr-osm-sta-c','tpr-osm-line','tpr-osm-line-c'].forEach(function(id){try{if(map.getLayer(id))map.removeLayer(id);}catch(e){}});
+  ['tpr-osm-l','tpr-osm-s'].forEach(function(id){try{if(map.getSource(id))map.removeSource(id);}catch(e){}});
+  if(!on)return;
+  tpMetroGeo(function(g){
+    if(!g||!g.lines.features.length&&!g.sta.features.length||!map.getStyle())return;if(!tpRailOn())return;
+    var st=map.getStyle(),font=['Noto Sans Regular'];(st.layers||[]).some(function(l){if(l.type==='symbol'&&l.layout&&l.layout['text-font']){font=l.layout['text-font'];return true;}return false;});
+    var before=map.getLayer('tp-route')?'tp-route':undefined;
+    try{
+      if(map.getSource('tpr-osm-l'))return;
+      map.addSource('tpr-osm-l',{type:'geojson',data:g.lines});map.addSource('tpr-osm-s',{type:'geojson',data:g.sta});
+      map.addLayer({id:'tpr-osm-line-c',type:'line',source:'tpr-osm-l',minzoom:8,layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#fff','line-width':['interpolate',['linear'],['zoom'],9,3,16,9]}},before);
+      map.addLayer({id:'tpr-osm-line',type:'line',source:'tpr-osm-l',minzoom:8,layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':['get','c'],'line-width':['interpolate',['linear'],['zoom'],9,1.8,16,5.5]}},before);
+      map.addLayer({id:'tpr-osm-sta-c',type:'circle',source:'tpr-osm-s',minzoom:11,paint:{'circle-radius':['interpolate',['linear'],['zoom'],11,2.5,16,6],'circle-color':'#fff','circle-stroke-color':'#1d2033','circle-stroke-width':1.6}},before);
+      map.addLayer({id:'tpr-osm-sta',type:'symbol',source:'tpr-osm-s',minzoom:12.5,layout:{'text-field':tpLangExpr(tpMapLang()),'text-font':font,'text-size':11,'text-offset':[0,1.1],'text-anchor':'top','text-optional':true},paint:{'text-color':'#1d2033','text-halo-color':'#fff','text-halo-width':1.6}},before);
+      if(map.getLayer('tpr-sta'))map.setLayoutProperty('tpr-sta','visibility','none'); // ใช้ชื่อสถานีจาก OSM แทน
+      map.on('click','tpr-osm-line',function(e){var f=e.features&&e.features[0];if(f&&!_tpPinOn){var p=f.properties||{};showToast('🚇 '+((tpMapLang()==='en'?p.ne:p.n)||p.r||'รถไฟฟ้า'));}});
+      map.on('mouseenter','tpr-osm-line',function(){map.getCanvas().style.cursor='pointer';});map.on('mouseleave','tpr-osm-line',function(){map.getCanvas().style.cursor='';});
+    }catch(e){}
+  });
+}
+var _tpMetroLF=null;
+function tpMetroLF(map,on){
+  if(_tpMetroLF){try{map.removeLayer(_tpMetroLF);}catch(e){}_tpMetroLF=null;}
+  if(!on)return;
+  tpMetroGeo(function(g){
+    if(!g||!tpRailOn()||_tpMap!==map||_tpMetroLF)return;var lang=tpMapLang();
+    var grp=L.layerGroup();
+    L.geoJSON(g.lines,{style:function(f){return {color:'#fff',weight:7,opacity:.9};},interactive:false}).addTo(grp);
+    L.geoJSON(g.lines,{style:function(f){return {color:f.properties.c,weight:4,opacity:1};},onEachFeature:function(f,l){var p=f.properties;l.bindTooltip('🚇 '+((lang==='en'?p.ne:p.n)||p.r||'รถไฟฟ้า'),{sticky:true});}}).addTo(grp);
+    g.sta.features.forEach(function(f){var p=f.properties,c=f.geometry.coordinates,nm=lang==='en'?(p['name:en']||p.name):(p['name:th']||p.name||p['name:en']);
+      L.circleMarker([c[1],c[0]],{radius:4,color:'#1d2033',weight:1.5,fillColor:'#fff',fillOpacity:1}).bindTooltip(nm||'สถานี').addTo(grp);});
+    _tpMetroLF=grp.addTo(map);
+    if(_tpLayer){try{_tpLayer.remove();_tpLayer.addTo(map);}catch(e){}} // หมุดอยู่บนเส้น
+  });
 }
 var _tpRailLF=null;
 function tpRailLF(map,on){
   if(_tpRailLF){try{map.removeLayer(_tpRailLF);}catch(e){}_tpRailLF=null;}
+  tpMetroLF(map,on);
   if(!on)return;
-  _tpRailLF=L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png',{subdomains:'abc',maxZoom:19,opacity:.85,attribution:'© OpenRailwayMap'}).addTo(map);
+  _tpRailLF=L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png',{subdomains:'abc',maxZoom:19,opacity:.55,attribution:'© OpenRailwayMap'}).addTo(map);
 }
 function tpRailToggle(){
   var on=!tpRailOn();try{localStorage.setItem('tp_rail',on?'1':'0');}catch(e){}
