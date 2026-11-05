@@ -930,6 +930,91 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
 .nx-linkbar button{border:0;background:transparent;color:#fff;border-radius:5px;padding:4px 9px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px}
 .nx-linkbar button:hover{background:rgba(255,255,255,.15)}
 .nx-linkbar .nx-lb-del.arm{background:#b42318}
+/* TRIP */
+#tp{font-family:'IBM Plex Sans Thai',sans-serif;color:#1f2433}
+.tp-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.tp-trips{display:flex;gap:6px;flex-wrap:wrap}
+.tp-pill{border:1px solid #e4e6ef;background:#fff;border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;color:#4b5168;cursor:pointer;font-family:inherit}
+.tp-pill.on{background:#7c6cf0;border-color:#7c6cf0;color:#fff;box-shadow:0 4px 12px rgba(124,108,240,.3)}
+.tp-pill.add{border-style:dashed;color:#7c6cf0}
+.tp-head-acts{display:flex;gap:6px}
+.tp-btn-l{border:1px solid #e4e6ef;background:#fff;border-radius:10px;padding:7px 12px;font-size:12.5px;color:#4b5168;cursor:pointer;font-family:inherit}
+.tp-btn-l:hover{background:#f5f6fb}.tp-btn-l:disabled{color:#3d9a4f;cursor:default}
+.tp-btn-d{border:0;background:#7c6cf0;color:#fff;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px rgba(124,108,240,.28)}
+.tp-btn-d:hover{background:#6c5ce0}
+.tp-grid{display:grid;grid-template-columns:minmax(280px,340px) minmax(300px,1fr) minmax(320px,1.15fr);gap:18px;align-items:start}
+.tp-col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.tp-card{background:#fff;border:1px solid #eceef5;border-radius:18px;padding:16px;box-shadow:0 6px 18px rgba(31,36,51,.04)}
+.tp-card-h{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;margin-bottom:10px}
+.tp-next-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tp-kv{margin-bottom:10px}.tp-kv>span{display:block;font-size:11.5px;color:#8a90a6}
+.tp-v{color:#2f6fd6}.tp-v .tp-big{font-size:24px;font-weight:800;line-height:1.1}.tp-v span{font-size:13px;font-weight:600}
+.tp-v b{font-size:14px}
+.tp-trans{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.tp-tr{width:32px;height:32px;border:1px solid #eceef5;background:#fff;border-radius:9px;cursor:pointer;font-size:15px;padding:0}
+.tp-tr.on{background:#fff3c4;border-color:#f2c94c;box-shadow:0 2px 6px rgba(242,201,76,.35)}
+.tp-route{list-style:none;margin:0;padding:0 0 0 18px;position:relative;display:flex;flex-direction:column;gap:14px}
+.tp-route:before{content:'';position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:repeating-linear-gradient(#c9cde0 0 4px,transparent 4px 8px)}
+.tp-route li{position:relative;display:flex;flex-direction:column;font-size:13px;line-height:1.35}
+.tp-route li:before{content:'';position:absolute;left:-18px;top:4px;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid #c9cde0}
+.tp-route li.a:before{background:#2f6fd6;border-color:#2f6fd6}.tp-route li.z:before{background:#e5484d;border-color:#e5484d}
+.tp-route small{font-size:10.5px;color:#8a90a6}.tp-route b{font-weight:600;word-break:break-word}
+.tp-avs{margin-left:auto;display:flex}.tp-avs i,.tp-av{width:24px;height:24px;border-radius:50%;background:#e9e6fd;color:#5b4bd6;font-style:normal;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;border:2px solid #fff;margin-left:-6px}
+.tp-av{margin-left:0;flex:none}
+.tp-tot{display:flex;align-items:center;justify-content:space-between;background:#f7f7fc;border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.tp-tot b{font-size:14px}.tp-tot-v{background:#a89cf6;color:#fff;font-weight:800;font-size:17px;padding:8px 14px;border-radius:12px}
+.tp-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.tp-chip{flex:none;border:1px solid #d7d2fb;background:#fff;color:#5b4bd6;border-radius:999px;padding:5px 11px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.tp-chip.on{background:#a89cf6;border-color:#a89cf6;color:#fff}
+.tp-sort{margin:8px 0 4px;font-size:12px;color:#8a90a6}.tp-sort select{border:1px solid #eceef5;border-radius:8px;padding:3px 6px;font-family:inherit;font-size:12px;background:#fff}
+.tp-exl,.tp-pkl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.tp-exl li{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid #f2f3f8}
+.tp-ex-t{flex:1;min-width:0;display:flex;flex-direction:column}.tp-ex-t b{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tp-ex-t small{font-size:11px;color:#8a90a6}
+.tp-ex-a{font-weight:700;color:#2f6fd6;font-size:13.5px}
+.tp-x{border:0;background:transparent;color:#b4b8c9;font-size:16px;cursor:pointer;width:24px;height:24px;border-radius:6px;padding:0;opacity:0}
+li:hover>.tp-x,.tp-x:focus-visible{opacity:1}.tp-x:hover{background:#fde6e8;color:#d6455a}
+@media(hover:none){.tp-x{opacity:.6}}
+.tp-none{color:#8a90a6;font-size:12.5px;padding:10px 2px}.tp-none.big{background:#fff;border:1px dashed #d7d9e6;border-radius:16px;padding:28px 18px;text-align:center;font-size:13.5px}
+.tp-exf{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.tp-exf select,.tp-exf input,.tp-pkf input{border:1px solid #e4e6ef;border-radius:10px;padding:8px 10px;font-size:13px;font-family:inherit;min-width:0;background:#fff}
+.tp-exf select{grid-column:1/-1}.tp-exf input[name=note]{grid-column:1/-1}.tp-exf .tp-btn-d{grid-column:1/-1}
+.tp-cnt{margin-left:auto;font-size:12px;color:#8a90a6;font-weight:600}
+.tp-pkl li{display:flex;align-items:center;gap:6px;padding:4px 0}.tp-pkl label{flex:1;display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer}
+.tp-pkl input{width:17px;height:17px;accent-color:#7c6cf0}.tp-pkl .dn{text-decoration:line-through;color:#a0a5b8}
+.tp-pkf{display:flex;gap:6px;margin-top:8px}.tp-pkf input{flex:1}
+.tp-tl-h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.tp-tl-h h2{margin:0;font-size:20px;font-weight:600;line-height:1.3}.tp-tl-h h2 b{font-weight:800}
+.tp-tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.tp-st{display:flex;gap:12px;align-items:stretch}
+.tp-st-d{flex:none;width:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#2f6fd6;line-height:1.1}
+.tp-st-d b{font-size:17px;font-weight:800}.tp-st-d span{font-size:11px;font-weight:600}
+.tp-st-c{flex:1;min-width:0;display:flex;gap:12px;align-items:stretch;border:0;border-radius:16px;padding:10px;text-align:left;cursor:pointer;font-family:inherit;color:#1f2433;transition:transform .12s,box-shadow .12s}
+.tp-st-c:hover,.tp-st.hi .tp-st-c{transform:translateY(-1px);box-shadow:0 8px 20px rgba(31,36,51,.1)}
+.tp-st-ic{flex:none;width:64px;min-height:72px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.tp-st-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tp-st-r{display:flex;justify-content:space-between;gap:8px}.tp-st-r b{font-size:14.5px;font-weight:700}.tp-st-r small{flex:none;font-size:11px;color:#2f6fd6;font-weight:600}
+.tp-st-cn{font-size:11.5px;font-weight:600}
+.tp-st-x{font-size:12px;color:#5a607a;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tp-st-f{display:flex;gap:12px;font-size:11.5px;color:#4b5168;margin-top:2px;flex-wrap:wrap}.tp-warn{color:#d98a1f}
+.tp-right{position:sticky;top:76px}
+.tp-map{height:calc(100vh - 220px);min-height:420px;border-radius:20px;overflow:hidden;background:#e8eef6;border:1px solid #eceef5;position:relative;z-index:0;isolation:isolate}
+.tp-map-msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#8a90a6;font-size:13px}
+.tp-mk span{display:flex;width:26px;height:26px;border-radius:50%;color:#fff;font-weight:800;font-size:12px;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3);transition:transform .12s;font-family:'IBM Plex Sans Thai',sans-serif}
+.tp-mk.hi span{transform:scale(1.35)}
+.tp-empty{max-width:520px;margin:40px auto;text-align:center;background:#fff;border:1px solid #eceef5;border-radius:24px;padding:36px 24px}
+.tp-empty-ic{font-size:44px}.tp-empty h2{margin:8px 0 6px;font-size:22px}.tp-empty p{color:#6b7189;font-size:14px;margin:0 0 16px}
+.tp-sug-h{margin:22px 0 8px;font-size:12px;color:#8a90a6;font-weight:600}
+.tp-sug{display:flex;justify-content:space-between;gap:10px;width:100%;border:1px solid #e4e6ef;background:#f9f9fd;border-radius:12px;padding:10px 12px;margin-top:6px;font-size:13.5px;cursor:pointer;font-family:inherit;text-align:left}
+.tp-sug span{color:#2f6fd6;font-size:12px;flex:none}.tp-sug:hover{border-color:#a89cf6}
+.tp-geo{display:flex;flex-direction:column;max-height:220px;overflow-y:auto;margin-top:4px;border-radius:10px}
+.tp-geo-i{display:flex;flex-direction:column;align-items:flex-start;border:0;border-bottom:1px solid #f0f1f6;background:#fff;padding:7px 10px;text-align:left;cursor:pointer;font-family:inherit}
+.tp-geo-i:hover{background:#f5f4fe}.tp-geo-i b{font-size:13px}.tp-geo-i small{font-size:11px;color:#8a90a6}.tp-geo-i.muted{color:#8a90a6;font-size:12px;cursor:default}
+.tp-pos{display:block;margin-top:4px;font-size:11.5px;color:#6b7189}
+.tp-icp{display:flex;flex-wrap:wrap;gap:4px}.tp-icb{width:36px;height:36px;border:1px solid #eceef5;background:#fff;border-radius:9px;font-size:18px;cursor:pointer;padding:0}.tp-icb.on{border-color:#7c6cf0;background:#f0eefe}
+.tp-del-trip{display:block;width:100%;margin-top:8px;border:1px solid #f3c7cc;background:#fff;color:#c2394d;border-radius:10px;padding:9px;font-size:13px;cursor:pointer;font-family:inherit}
+.tp-del-trip.arm{background:#c2394d;color:#fff}
+@media(max-width:1180px){.tp-grid{grid-template-columns:minmax(280px,340px) 1fr}.tp-right{grid-column:1/-1;position:static}.tp-map{height:420px}}
+@media(max-width:760px){.tp-grid{grid-template-columns:1fr;gap:14px}.tp-mid{order:-1}.tp-right{order:-1}.tp-map{height:300px;min-height:0}.tp-tl-h h2{font-size:18px}.tp-st-ic{width:52px;font-size:24px}.tp-tr{width:38px;height:38px}}
 </style>
 </head>
 <body>
@@ -953,6 +1038,10 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
         <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
       Calendar
+    </div>
+    <div class="tab" data-tab="trip" onclick="goTab('trip',this)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z" fill="currentColor" fill-opacity=".2"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+      Trip
     </div>
     <div class="tab" data-tab="tasks" onclick="goTab('tasks',this)">
       <svg width="15" height="15" viewBox="0 0 24 24">
@@ -1029,6 +1118,7 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
     </div>
   </div>
 </div>
+<div id="page-trip" class="page"><div id="tp"></div></div>
 <div id="page-cal" class="page">
   <div class="cv">
     <div class="cv-head">
@@ -2270,13 +2360,13 @@ function submitAdd(){
 }
 function showModal(html){var ov=document.getElementById('overlay');ov.innerHTML='<div class="modal" onclick="event.stopPropagation()"><div id="modal-body">'+html+'</div></div>';ov.classList.add('open');}
 function closeModal(){var ov=document.getElementById('overlay');ov.classList.remove('open');ov.innerHTML='';}
-var tabMeta={main:{title:'งานวันนี้',stats:true},cal:{title:'Calendar',stats:false},tasks:{title:'Tasks',stats:false},history:{title:'ประวัติงาน',stats:false},note:{title:'Note',stats:false},summary:{title:'Summary',stats:false}};
+var tabMeta={main:{title:'งานวันนี้',stats:true},cal:{title:'Calendar',stats:false},trip:{title:'Trip',stats:false},tasks:{title:'Tasks',stats:false},history:{title:'ประวัติงาน',stats:false},note:{title:'Note',stats:false},summary:{title:'Summary',stats:false}};
 function goTab(p,btn){
   document.querySelectorAll('.tab').forEach(function(b){b.className='tab';});btn.className='tab active';
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('show');});document.getElementById('page-'+p).classList.add('show');
   var m=tabMeta[p];document.getElementById('ph-title').textContent=m.title;document.getElementById('ph-stats').style.display=m.stats?'flex':'none';
   document.body.classList.toggle('nx-full',p==='note');if(p==='note'&&typeof nxSyncSoon==='function')nxSyncSoon(300); // หน้า Note แบบเต็มจอ (ซ่อนหัวหน้า + ไม่มีขอบ)
-  if(p==='main')renderPinned();if(p==='tasks')renderNDTasks();if(p==='history')renderHistory();if(p==='summary')renderSummary();if(p==='cal')renderCal();if(p==='note')renderNotes();
+  if(p==='main')renderPinned();if(p==='tasks')renderNDTasks();if(p==='history')renderHistory();if(p==='summary')renderSummary();if(p==='cal')renderCal();if(p==='trip')renderTrip();if(p==='note')renderNotes();
   try{localStorage.setItem('rudyLastTab',p);}catch(err){}
 }
 /* ========================= NOTES (Post-it Masonry) ========================= */
@@ -3317,6 +3407,288 @@ function nxSync(){
 })();
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')nxSyncSoon(1500);else if(_nxSync.t){clearTimeout(_nxSync.t);nxSync();}});
 setTimeout(function(){nxSyncSoon(10);},3500);
+
+/* ===== TRIP (5 พ.ย. — Dech: "เพิ่ม tap trip ด้านบน แล้วทำเว็บตามรูป") =====
+   ซ้าย: ทริปถัดไป + ค่าใช้จ่าย + ของที่ต้องเตรียม · กลาง: ไทม์ไลน์สถานที่ · ขวา: แผนที่ (Leaflet + OSM) เส้นทางสีแดง
+   เก็บ localStorage rudy_trips_v1 · ซิงก์ทั้งก้อนผ่าน key trip__all (note-html-sync) ฉบับใหม่กว่าชนะ */
+var TP_KEY='rudy_trips_v1';
+var TP_CATS=[['hotel','ที่พัก','🏨'],['gas','น้ำมัน/เดินทาง','⛽'],['food','อาหาร','🍜'],['rest','ร้านอาหาร','🍽'],['ticket','ตั๋ว','🎟'],['shop','ช้อปปิ้ง','🛍'],['other','อื่น ๆ','💼']];
+var TP_TRANS=[['car','🚗','รถยนต์'],['plane','✈️','เครื่องบิน'],['train','🚆','รถไฟ'],['bus','🚌','รถบัส'],['boat','⛴','เรือ']];
+var TP_SOFT=[['#efe9fb','#7c5cd6'],['#e3eefc','#2f6fd6'],['#fdf0e0','#d98a1f'],['#e4f4e4','#3d9a4f'],['#fde6e8','#d6455a'],['#e0f3f1','#1f9a8a']];
+var TP_ICONS=['🏛','🏙','🏝','⛰','🏯','🗼','🌉','🏖','🛕','🌋','🏞','🍜','🛍','☕'];
+var _tpMap=null,_tpLayer=null,_tpFilter='all',_tpSort='late',_tpHi=null,_tpSyncT=null,_tpPullAt=0;
+function tpLoad(){var d=null;try{d=JSON.parse(localStorage.getItem(TP_KEY)||'null');}catch(e){}if(!d||!Array.isArray(d.trips))d={trips:[],cur:null,ts:0};return d;}
+function tpStore(d,noSync){d.ts=Date.now();try{localStorage.setItem(TP_KEY,JSON.stringify(d));}catch(e){showToast('⚠️ พื้นที่เก็บข้อมูลเต็ม');}if(!noSync){clearTimeout(_tpSyncT);_tpSyncT=setTimeout(tpPush,3000);}}
+function tpCur(d){return d.trips.find(function(t){return t.id===d.cur;})||d.trips[0]||null;}
+function tpEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function tpMoney(n){return '฿'+Math.round(n||0).toLocaleString('th-TH');}
+function tpDM(ds){if(!ds)return['',''];var d=new Date(ds+'T00:00:00+07:00'),m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return [String(d.getDate()),m[d.getMonth()]];}
+function tpStops(t){return (t.stops||[]).slice().sort(function(a,b){return (a.date||'9')<(b.date||'9')?-1:(a.date||'9')>(b.date||'9')?1:(a.ord||0)-(b.ord||0);});}
+function tpUid(){return 't'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);}
+
+// ---------- render ----------
+function renderTrip(){
+  var root=document.getElementById('tp');if(!root)return;
+  var d=tpLoad(),t=tpCur(d);
+  if(Date.now()-_tpPullAt>15000){_tpPullAt=Date.now();tpPull();}
+  if(!t){root.innerHTML=tpEmptyHtml();tpCalSuggest();return;}
+  if(d.cur!==t.id){d.cur=t.id;tpStore(d,true);}
+  var h='<div class="tp-head"><div class="tp-trips" role="tablist" aria-label="ทริป">'+d.trips.map(function(x){return '<button type="button" role="tab" aria-selected="'+(x.id===t.id)+'" class="tp-pill'+(x.id===t.id?' on':'')+'" data-id="'+x.id+'" onclick="tpSwitch(this.dataset.id)">'+tpEsc(x.name)+'</button>';}).join('')
+    +'<button type="button" class="tp-pill add" onclick="tpTripDlg()">+ ทริปใหม่</button></div>'
+    +'<div class="tp-head-acts"><button type="button" class="tp-btn-l" onclick="tpTripDlg(\''+t.id+'\')">แก้ทริป</button>'
+    +'<button type="button" class="tp-btn-l" onclick="tpToCal()"'+(t.calAdded?' disabled':'')+'>'+(t.calAdded?'✓ อยู่ในปฏิทินแล้ว':'📅 ลงปฏิทิน')+'</button></div></div>';
+  h+='<div class="tp-grid"><div class="tp-col tp-left">'+tpNextHtml(t)+tpExpHtml(t)+tpPackHtml(t)+'</div>'
+    +'<div class="tp-col tp-mid">'+tpTimelineHtml(t)+'</div>'
+    +'<div class="tp-col tp-right"><div class="tp-map" id="tp-map" role="region" aria-label="แผนที่เส้นทาง"><div class="tp-map-msg">กำลังโหลดแผนที่…</div></div></div></div>';
+  root.innerHTML=h;
+  tpMapDraw(t);
+}
+function tpEmptyHtml(){
+  return '<div class="tp-empty"><div class="tp-empty-ic" aria-hidden="true">🧳</div><h2>วางแผนทริปแรก</h2><p>ใส่สถานที่ที่จะไป วันที่ และค่าใช้จ่าย แล้วดูเส้นทางบนแผนที่ได้เลย</p>'
+    +'<button type="button" class="tp-btn-d" onclick="tpTripDlg()">+ สร้างทริป</button><div id="tp-calsug"></div></div>';
+}
+// ทริปจากปฏิทิน (นัดหมายทั้งวันหลายวัน) → สร้างทริปได้ในคลิกเดียว
+function tpCalSuggest(){
+  api({action:'getRangeEvents',from:TODAY_STR,to:addDays(TODAY_STR,180)},function(r){
+    var el=document.getElementById('tp-calsug');if(!el||!r||!r.events)return;
+    var ev=r.events.filter(function(e){return e.allDay&&e.endDate&&e.endDate>e.date;});
+    if(!ev.length)return;
+    el.innerHTML='<div class="tp-sug-h">หรือสร้างจากทริปในปฏิทิน</div>'+ev.slice(0,5).map(function(e){return '<button type="button" class="tp-sug" data-n="'+tpEsc(e.title)+'" data-s="'+e.date+'" data-e="'+e.endDate+'" onclick="tpNewTrip(this.dataset.n,this.dataset.s,this.dataset.e,true)">📅 '+tpEsc(e.title)+' <span>'+fmtShort(e.date)+' – '+fmtShort(e.endDate)+'</span></button>';}).join('');
+  });
+}
+function tpNextHtml(t){
+  var st=tpStops(t),days=t.start&&t.end?diffD(t.start,t.end)+1:0,status;
+  if(!t.start)status='<b>ยังไม่กำหนดวัน</b>';
+  else if(TODAY_STR<t.start){var n=diffD(TODAY_STR,t.start);status='<b class="tp-big">'+n+'</b> <span>วัน</span>';}
+  else if(t.end&&TODAY_STR>t.end)status='<b>จบทริปแล้ว</b>';
+  else status='<b class="tp-big">'+(diffD(t.start,TODAY_STR)+1)+'</b> <span>/ '+(days||'?')+' วัน</span>';
+  var lbl=!t.start?'วันเดินทาง':TODAY_STR<t.start?'ออกเดินทางใน':t.end&&TODAY_STR>t.end?'สถานะ':'กำลังเที่ยว วันที่';
+  var tr=TP_TRANS.find(function(x){return x[0]===t.transport;})||TP_TRANS[0];
+  var h='<section class="tp-card tp-next" aria-label="ทริปถัดไป"><div class="tp-card-h">ทริปถัดไป</div><div class="tp-next-g"><div class="tp-next-l">'
+    +'<div class="tp-kv"><span>'+lbl+'</span><div class="tp-v">'+status+'</div></div>'
+    +'<div class="tp-kv"><span>ระยะเวลา</span><div class="tp-v"><b class="tp-big">'+(days||'–')+'</b> <span>วัน</span></div></div>'
+    +'<div class="tp-kv"><span>การเดินทาง</span><div class="tp-trans" role="group" aria-label="การเดินทาง">'+TP_TRANS.map(function(x){return '<button type="button" class="tp-tr'+(x[0]===tr[0]?' on':'')+'" aria-pressed="'+(x[0]===tr[0])+'" title="'+x[2]+'" aria-label="'+x[2]+'" data-k="'+x[0]+'" onclick="tpSetTrans(this.dataset.k)">'+x[1]+'</button>';}).join('')+'</div></div></div>';
+  var ends=st.length?[st[0]].concat(st.length>2?[st[Math.floor(st.length/2)]]:[]).concat(st.length>1?[st[st.length-1]]:[]):[];
+  h+='<ol class="tp-route" aria-label="เส้นทาง">'+(ends.length?ends.map(function(s,i){return '<li class="'+(i===0?'a':i===ends.length-1?'z':'m')+'"><small>'+(i===0?'เริ่มต้น':i===ends.length-1?'ปลายทาง':'ผ่าน')+'</small><b>'+tpEsc(s.name)+'</b><small>'+(s.date?fmtShort(s.date):'')+'</small></li>';}).join(''):'<li class="m"><small>ยังไม่มีสถานที่</small><b>กด "+ เพิ่มสถานที่"</b></li>')+'</ol></div></section>';
+  return h;
+}
+function tpExpHtml(t){
+  var ex=t.exp||[],tot=ex.reduce(function(a,x){return a+(+x.amt||0);},0);
+  var list=ex.filter(function(x){return _tpFilter==='all'||x.cat===_tpFilter;});
+  list.sort(_tpSort==='amt'?function(a,b){return (b.amt||0)-(a.amt||0);}:function(a,b){return (b.at||0)-(a.at||0);});
+  var who={};ex.forEach(function(x){if(x.who)who[x.who]=1;});
+  var h='<section class="tp-card tp-exp" aria-label="ค่าใช้จ่าย"><div class="tp-card-h">ค่าใช้จ่าย<span class="tp-avs">'+Object.keys(who).slice(0,4).map(function(w){return '<i title="'+tpEsc(w)+'">'+tpEsc(w.charAt(0))+'</i>';}).join('')+'</span></div>'
+    +'<div class="tp-tot"><b>ค่าใช้จ่ายรวม</b><span class="tp-tot-v">'+tpMoney(tot)+'</span></div>'
+    +'<div class="tp-chips" role="group" aria-label="หมวดค่าใช้จ่าย"><button type="button" class="tp-chip'+(_tpFilter==='all'?' on':'')+'" onclick="tpFilt(\'all\')">ทั้งหมด</button>'
+    +TP_CATS.map(function(c){var sum=ex.filter(function(x){return x.cat===c[0];}).reduce(function(a,x){return a+(+x.amt||0);},0);return '<button type="button" class="tp-chip'+(_tpFilter===c[0]?' on':'')+'" onclick="tpFilt(\''+c[0]+'\')">'+c[2]+' '+c[1]+(sum?' · '+tpMoney(sum):'')+'</button>';}).join('')+'</div>'
+    +'<div class="tp-sort"><label>เรียง <select onchange="_tpSort=this.value;renderTrip()"><option value="late"'+(_tpSort==='late'?' selected':'')+'>ล่าสุด</option><option value="amt"'+(_tpSort==='amt'?' selected':'')+'>มากสุด</option></select></label></div>';
+  h+='<ul class="tp-exl">'+(list.length?list.map(function(x){var c=TP_CATS.find(function(q){return q[0]===x.cat;})||TP_CATS[6];
+      return '<li><i class="tp-av">'+tpEsc((x.who||'?').charAt(0))+'</i><div class="tp-ex-t"><b>'+tpEsc(x.note||c[1])+'</b><small>'+c[2]+' '+c[1]+(x.who?' · '+tpEsc(x.who):'')+'</small></div><span class="tp-ex-a">'+tpMoney(x.amt)+'</span>'
+      +'<button type="button" class="tp-x" aria-label="ลบรายการ" data-id="'+x.id+'" onclick="tpExpDel(this.dataset.id)">×</button></li>';}).join(''):'<li class="tp-none">ยังไม่มีรายการ'+(_tpFilter!=='all'?'ในหมวดนี้':'')+'</li>')+'</ul>';
+  h+='<form class="tp-exf" onsubmit="event.preventDefault();tpExpAdd(this)"><select name="cat" aria-label="หมวด">'+TP_CATS.map(function(c){return '<option value="'+c[0]+'"'+((_tpFilter===c[0])?' selected':'')+'>'+c[2]+' '+c[1]+'</option>';}).join('')+'</select>'
+    +'<input name="note" placeholder="รายการ เช่น โรงแรมคืนแรก" aria-label="รายการ"><input name="who" placeholder="ใครจ่าย" aria-label="ใครจ่าย" value="'+tpEsc(t.lastWho||'เดช')+'"><input name="amt" type="number" inputmode="decimal" min="0" step="any" placeholder="บาท" aria-label="จำนวนเงิน" required>'
+    +'<button type="submit" class="tp-btn-d">+ เพิ่ม</button></form></section>';
+  return h;
+}
+function tpPackHtml(t){
+  var pk=t.pack||[],done=pk.filter(function(x){return x.done;}).length;
+  return '<section class="tp-card tp-pack" aria-label="ของที่ต้องเตรียม"><div class="tp-card-h">ของที่ต้องเตรียม<span class="tp-cnt">'+done+'/'+pk.length+'</span></div>'
+    +'<ul class="tp-pkl">'+pk.map(function(x){return '<li><label><input type="checkbox"'+(x.done?' checked':'')+' data-id="'+x.id+'" onchange="tpPackTog(this.dataset.id)"><span'+(x.done?' class="dn"':'')+'>'+tpEsc(x.t)+'</span></label><button type="button" class="tp-x" aria-label="ลบ" data-id="'+x.id+'" onclick="tpPackDel(this.dataset.id)">×</button></li>';}).join('')+'</ul>'
+    +'<form class="tp-pkf" onsubmit="event.preventDefault();tpPackAdd(this)"><input name="t" placeholder="เช่น พาสปอร์ต, ปลั๊กแปลง, ซิมเน็ต" aria-label="เพิ่มของที่ต้องเตรียม"><button type="submit" class="tp-btn-l">+ เพิ่ม</button></form></section>';
+}
+function tpTimelineHtml(t){
+  var st=tpStops(t),left=st.filter(function(s){return !s.date||(s.date>=TODAY_STR)||(s.days&&addDays(s.date,(+s.days||1)-1)>=TODAY_STR);}).length;
+  var h='<div class="tp-tl-h"><h2>คุณมีอีก <b>'+left+'</b> ที่ที่จะไป</h2><button type="button" class="tp-btn-d" onclick="tpStopDlg()">+ เพิ่มสถานที่</button></div>';
+  if(!st.length)return h+'<div class="tp-none big">ยังไม่มีสถานที่ · กด "+ เพิ่มสถานที่" แล้วพิมพ์ชื่อเมือง/สถานที่ ระบบจะหาตำแหน่งบนแผนที่ให้</div>';
+  h+='<ol class="tp-tl">';
+  st.forEach(function(s,i){
+    var c=TP_SOFT[(s.color==null?i:s.color)%TP_SOFT.length],dm=tpDM(s.date),end=s.date&&s.days>1?addDays(s.date,s.days-1):'';
+    var range=s.date?(tpDM(s.date)[0]+(end?'–'+tpDM(end)[0]:'')+' '+tpDM(end||s.date)[1]):'';
+    h+='<li class="tp-st'+(_tpHi===s.id?' hi':'')+'" data-id="'+s.id+'" onmouseenter="tpHi(this.dataset.id)" onmouseleave="tpHi(null)">'
+      +'<div class="tp-st-d" aria-hidden="true"><b>'+dm[0]+'</b><span>'+dm[1]+'</span></div>'
+      +'<button type="button" class="tp-st-c" style="background:'+c[0]+'" data-id="'+s.id+'" onclick="tpStopDlg(this.dataset.id)" aria-label="แก้ '+tpEsc(s.name)+'">'
+      +'<span class="tp-st-ic" style="background:'+c[1]+'">'+tpEsc(s.icon||TP_ICONS[i%TP_ICONS.length])+'</span>'
+      +'<span class="tp-st-b"><span class="tp-st-r"><b>'+(i+1)+'. '+tpEsc(s.name)+'</b><small>'+range+'</small></span>'
+      +'<span class="tp-st-cn" style="color:'+c[1]+'">'+tpEsc(s.country||'')+'</span>'
+      +(s.desc?'<span class="tp-st-x">'+tpEsc(s.desc)+'</span>':'')
+      +'<span class="tp-st-f"><span>📍 '+(+s.places||0)+' สถานที่</span><span>🗓 '+(+s.days||1)+' วัน</span>'+(s.lat==null?'<span class="tp-warn">ยังไม่มีพิกัด</span>':'')+'</span></span></button></li>';
+  });
+  return h+'</ol>';
+}
+
+// ---------- map ----------
+function tpLeaflet(cb){
+  if(window.L){cb(true);return;}
+  if(!document.getElementById('tp-lf-css')){var l=document.createElement('link');l.id='tp-lf-css';l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(l);}
+  var s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=function(){cb(!!window.L);};s.onerror=function(){cb(false);};document.head.appendChild(s);
+}
+function tpMapDraw(t){
+  tpLeaflet(function(ok){
+    var el=document.getElementById('tp-map');if(!el)return;
+    if(!ok){el.innerHTML='<div class="tp-map-msg">โหลดแผนที่ไม่ได้ — ตรวจอินเทอร์เน็ต</div>';return;}
+    if(_tpMap){try{_tpMap.remove();}catch(e){}_tpMap=null;}
+    el.innerHTML='';
+    _tpMap=L.map(el,{zoomControl:true,attributionControl:true}).setView([13.75,100.5],5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(_tpMap);
+    _tpLayer=L.layerGroup().addTo(_tpMap);
+    var st=tpStops(t).filter(function(s){return s.lat!=null&&s.lng!=null;});
+    if(!st.length){L.marker([13.75,100.5],{opacity:0}).addTo(_tpLayer);return;}
+    var pts=st.map(function(s){return [s.lat,s.lng];});
+    st.forEach(function(s,i){
+      var c=TP_SOFT[(s.color==null?tpStops(t).indexOf(s):s.color)%TP_SOFT.length][1];
+      var ic=L.divIcon({className:'tp-mk',html:'<span style="background:'+c+'">'+(tpStops(t).indexOf(s)+1)+'</span>',iconSize:[26,26],iconAnchor:[13,13]});
+      var m=L.marker([s.lat,s.lng],{icon:ic,title:s.name}).addTo(_tpLayer);m.bindTooltip(s.name);m._tpId=s.id;
+      m.on('click',function(){tpStopDlg(s.id);});
+    });
+    if(pts.length>1)tpRoute(t,pts);
+    _tpMap.fitBounds(L.latLngBounds(pts).pad(0.25),{maxZoom:11});
+    setTimeout(function(){if(_tpMap)_tpMap.invalidateSize();},200);
+  });
+}
+// เส้นทาง: รถ/รถบัส → เส้นถนนจริง (OSRM) ถ้าได้ · อื่น ๆ หรือหาไม่ได้ → เส้นตรงประ
+function tpRoute(t,pts){
+  var key=pts.map(function(p){return p[0].toFixed(4)+','+p[1].toFixed(4);}).join(';');
+  var road=t.transport==='car'||t.transport==='bus'||!t.transport;
+  function draw(geo,dashed){if(!_tpLayer)return;L.polyline(geo,{color:'#e5484d',weight:4,opacity:.9,dashArray:dashed?'8 8':null}).addTo(_tpLayer);}
+  if(!road||pts.length>25){draw(pts,true);return;}
+  var cache=null;try{cache=JSON.parse(sessionStorage.getItem('tp_rt_'+key)||'null');}catch(e){}
+  if(cache){draw(cache,false);return;}
+  var url='https://router.project-osrm.org/route/v1/driving/'+pts.map(function(p){return p[1]+','+p[0];}).join(';')+'?overview=simplified&geometries=geojson';
+  fetch(url).then(function(r){return r.json();}).then(function(j){
+    var g=j&&j.routes&&j.routes[0]&&j.routes[0].geometry&&j.routes[0].geometry.coordinates;
+    if(!g){draw(pts,true);return;}
+    var geo=g.map(function(c){return [c[1],c[0]];});try{sessionStorage.setItem('tp_rt_'+key,JSON.stringify(geo));}catch(e){}draw(geo,false);
+  }).catch(function(){draw(pts,true);});
+}
+function tpHi(id){
+  _tpHi=id;document.querySelectorAll('#tp .tp-st').forEach(function(x){x.classList.toggle('hi',x.dataset.id===id);});
+  if(!_tpLayer)return;_tpLayer.eachLayer(function(m){if(m._tpId&&m.getElement){var e=m.getElement();if(e)e.classList.toggle('hi',m._tpId===id);}});
+}
+
+// ---------- actions ----------
+function tpMut(fn){var d=tpLoad(),t=tpCur(d);if(!t)return;fn(t,d);tpStore(d);renderTrip();}
+function tpSwitch(id){var d=tpLoad();d.cur=id;tpStore(d,true);renderTrip();}
+function tpSetTrans(k){tpMut(function(t){t.transport=k;});}
+function tpFilt(k){_tpFilter=k;renderTrip();}
+function tpExpAdd(f){var a=parseFloat(f.amt.value);if(!(a>=0))return;var who=f.who.value.trim(),cat=f.cat.value;
+  tpMut(function(t){t.exp=t.exp||[];t.exp.push({id:tpUid(),cat:cat,who:who,amt:a,note:f.note.value.trim(),at:Date.now()});if(who)t.lastWho=who;});
+  var nf=document.querySelector('#tp .tp-exf input[name=note]');if(nf)nf.focus();}
+function tpExpDel(id){tpMut(function(t){t.exp=(t.exp||[]).filter(function(x){return x.id!==id;});});}
+function tpPackAdd(f){var v=f.t.value.trim();if(!v)return;tpMut(function(t){t.pack=t.pack||[];v.split(/[,\n]/).map(function(x){return x.trim();}).filter(String).forEach(function(x){t.pack.push({id:tpUid(),t:x,done:false});});});var i=document.querySelector('#tp .tp-pkf input');if(i)i.focus();}
+function tpPackTog(id){tpMut(function(t){(t.pack||[]).forEach(function(x){if(x.id===id)x.done=!x.done;});});}
+function tpPackDel(id){tpMut(function(t){t.pack=(t.pack||[]).filter(function(x){return x.id!==id;});});}
+function tpNewTrip(name,s,e,fromCal){
+  var d=tpLoad(),t={id:tpUid(),name:name||'ทริปใหม่',start:s||'',end:e||'',transport:'car',stops:[],exp:[],pack:[],calAdded:!!fromCal,createdAt:Date.now()};
+  d.trips.push(t);d.cur=t.id;tpStore(d);renderTrip();return t;
+}
+function tpTripDlg(id){
+  var d=tpLoad(),t=id?d.trips.find(function(x){return x.id===id;}):null;
+  showModal('<div class="modal-title">'+(t?'แก้ทริป':'ทริปใหม่')+' <button class="modal-x" onclick="closeModal()" aria-label="ปิด">×</button></div>'
+    +'<div class="fld"><label for="tpf-n">ชื่อทริป</label><input id="tpf-n" value="'+tpEsc(t?t.name:'')+'" placeholder="เช่น ไต้หวัน 13–23 พ.ย."></div>'
+    +'<div style="display:flex;gap:10px"><div class="fld" style="flex:1"><label for="tpf-s">วันเริ่ม</label><input type="date" id="tpf-s" value="'+(t?t.start:'')+'"></div><div class="fld" style="flex:1"><label for="tpf-e">วันกลับ</label><input type="date" id="tpf-e" value="'+(t?t.end:'')+'"></div></div>'
+    +'<button class="btn-submit" onclick="tpTripSave(\''+(t?t.id:'')+'\')">✓ บันทึก</button>'
+    +(t?'<button type="button" class="tp-del-trip" id="tpf-del" onclick="tpTripDel(\''+t.id+'\',this)">ลบทริปนี้</button>':''));
+  setTimeout(function(){var i=document.getElementById('tpf-n');if(i)i.focus();},50);
+}
+function tpTripSave(id){
+  var n=(document.getElementById('tpf-n').value||'').trim()||'ทริปใหม่',s=document.getElementById('tpf-s').value,e=document.getElementById('tpf-e').value;
+  if(s&&e&&e<s){showToast('วันกลับต้องไม่ก่อนวันเริ่ม');return;}
+  closeModal();
+  if(!id){tpNewTrip(n,s,e);return;}
+  var d=tpLoad(),t=d.trips.find(function(x){return x.id===id;});if(!t)return;
+  if(t.start!==s||t.end!==e)t.calAdded=false;t.name=n;t.start=s;t.end=e;tpStore(d);renderTrip();
+}
+function tpTripDel(id,b){
+  if(!b.classList.contains('arm')){b.classList.add('arm');b.textContent='กดอีกครั้งเพื่อลบทริป (ลบสถานที่และค่าใช้จ่ายด้วย)';return;}
+  var d=tpLoad();d.trips=d.trips.filter(function(x){return x.id!==id;});d.cur=d.trips[0]?d.trips[0].id:null;tpStore(d);closeModal();renderTrip();showToast('ลบทริปแล้ว');
+}
+function tpToCal(){
+  var d=tpLoad(),t=tpCur(d);if(!t)return;
+  if(!t.start){showToast('ใส่วันเริ่ม/วันกลับก่อน');tpTripDlg(t.id);return;}
+  api({action:'addAllDayEvent',name:encodeURIComponent('✈️ '+t.name),date:t.start,endDate:t.end||t.start},function(r){
+    if(r&&r.ok){var d2=tpLoad(),t2=tpCur(d2);if(t2){t2.calAdded=true;tpStore(d2);}if(typeof calInvalidate==='function')calInvalidate();renderTrip();showToast('📅 ลงปฏิทินแล้ว');}
+    else showToast('❌ ลงปฏิทินไม่สำเร็จ');
+  });
+}
+// ---------- stop dialog + ค้นหาตำแหน่ง ----------
+var _tpGeo=null,_tpGeoT=null;
+function tpStopDlg(id){
+  var d=tpLoad(),t=tpCur(d);if(!t)return;
+  var s=id?(t.stops||[]).find(function(x){return x.id===id;}):null,st=tpStops(t),last=st[st.length-1];
+  var defDate=s?s.date:(last&&last.date?addDays(last.date,+last.days||1):(t.start||''));
+  _tpGeo=s&&s.lat!=null?{lat:s.lat,lng:s.lng}:null;
+  showModal('<div class="modal-title">'+(s?'แก้สถานที่':'เพิ่มสถานที่')+' <button class="modal-x" onclick="closeModal()" aria-label="ปิด">×</button></div>'
+    +'<div class="fld"><label for="tps-n">ชื่อเมือง / สถานที่</label><input id="tps-n" autocomplete="off" value="'+tpEsc(s?s.name:'')+'" placeholder="พิมพ์แล้วเลือกจากรายการ เช่น Taipei, เชียงใหม่" oninput="tpGeoSearch(this.value)"><div id="tps-res" class="tp-geo" role="listbox" aria-label="ผลค้นหาสถานที่"></div><small id="tps-pos" class="tp-pos">'+(_tpGeo?'📍 มีพิกัดแล้ว':'ยังไม่มีพิกัด — เลือกจากรายการเพื่อปักหมุดบนแผนที่')+'</small></div>'
+    +'<div class="fld"><label for="tps-c">ประเทศ / จังหวัด</label><input id="tps-c" value="'+tpEsc(s?s.country:'')+'"></div>'
+    +'<div style="display:flex;gap:10px"><div class="fld" style="flex:1"><label for="tps-d">วันที่ถึง</label><input type="date" id="tps-d" value="'+(defDate||'')+'"></div>'
+    +'<div class="fld" style="width:90px"><label for="tps-k">กี่วัน</label><input type="number" min="1" id="tps-k" value="'+(s?(+s.days||1):1)+'"></div>'
+    +'<div class="fld" style="width:110px"><label for="tps-p">กี่สถานที่</label><input type="number" min="0" id="tps-p" value="'+(s?(+s.places||0):0)+'"></div></div>'
+    +'<div class="fld"><label for="tps-x">รายละเอียด / แผน</label><textarea id="tps-x" rows="3" placeholder="ที่เที่ยว ร้านอาหาร ที่พัก">'+tpEsc(s?s.desc:'')+'</textarea></div>'
+    +'<div class="fld"><label>ไอคอน</label><div class="tp-icp">'+TP_ICONS.map(function(ic){return '<button type="button" class="tp-icb'+((s&&s.icon)===ic?' on':'')+'" data-ic="'+ic+'" onclick="document.querySelectorAll(\'.tp-icb\').forEach(function(x){x.classList.remove(\'on\')});this.classList.add(\'on\')">'+ic+'</button>';}).join('')+'</div></div>'
+    +'<button class="btn-submit" onclick="tpStopSave(\''+(s?s.id:'')+'\')">✓ บันทึก</button>'
+    +(s?'<button type="button" class="tp-del-trip" onclick="tpStopDel(\''+s.id+'\',this)">ลบสถานที่นี้</button>':''));
+  setTimeout(function(){var i=document.getElementById('tps-n');if(i)i.focus();},50);
+}
+function tpGeoSearch(q){
+  clearTimeout(_tpGeoT);_tpGeo=null;var pos=document.getElementById('tps-pos');if(pos)pos.textContent='ยังไม่มีพิกัด — เลือกจากรายการเพื่อปักหมุดบนแผนที่';
+  var box=document.getElementById('tps-res');if(!box)return;
+  if(String(q).trim().length<2){box.innerHTML='';return;}
+  _tpGeoT=setTimeout(function(){
+    box.innerHTML='<div class="tp-geo-i muted">กำลังค้นหา…</div>';
+    fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=6&accept-language=th,en&q='+encodeURIComponent(q))
+      .then(function(r){return r.json();}).then(function(a){
+        if(!document.getElementById('tps-res'))return;
+        if(!a||!a.length){box.innerHTML='<div class="tp-geo-i muted">ไม่พบสถานที่ — ลองพิมพ์ภาษาอังกฤษ</div>';return;}
+        window._tpGeoRes=a;
+        box.innerHTML=a.map(function(r,i){var ad=r.address||{};return '<button type="button" role="option" class="tp-geo-i" data-i="'+i+'" onclick="tpGeoPick(+this.dataset.i)"><b>'+tpEsc(r.name||r.display_name.split(',')[0])+'</b><small>'+tpEsc(r.display_name)+'</small></button>';}).join('');
+      }).catch(function(){box.innerHTML='<div class="tp-geo-i muted">ค้นหาไม่ได้ตอนนี้ — บันทึกชื่อไว้ก่อนได้</div>';});
+  },600);
+}
+function tpGeoPick(i){
+  var r=(window._tpGeoRes||[])[i];if(!r)return;var ad=r.address||{};
+  _tpGeo={lat:+r.lat,lng:+r.lon};
+  document.getElementById('tps-n').value=r.name||r.display_name.split(',')[0];
+  var c=document.getElementById('tps-c');if(c&&!c.value)c.value=[ad.state||ad.province||'',ad.country||''].filter(String).join(', ');
+  document.getElementById('tps-res').innerHTML='';document.getElementById('tps-pos').textContent='📍 ปักหมุดแล้ว ('+_tpGeo.lat.toFixed(3)+', '+_tpGeo.lng.toFixed(3)+')';
+}
+function tpStopSave(id){
+  var name=(document.getElementById('tps-n').value||'').trim();if(!name){showToast('ใส่ชื่อสถานที่ก่อน');return;}
+  var ic=document.querySelector('.tp-icb.on'),v={name:name,country:document.getElementById('tps-c').value.trim(),date:document.getElementById('tps-d').value,
+    days:Math.max(1,parseInt(document.getElementById('tps-k').value,10)||1),places:Math.max(0,parseInt(document.getElementById('tps-p').value,10)||0),
+    desc:document.getElementById('tps-x').value.trim(),icon:ic?ic.dataset.ic:''};
+  var geo=_tpGeo;closeModal();
+  tpMut(function(t){
+    t.stops=t.stops||[];
+    var s=id?t.stops.find(function(x){return x.id===id;}):null;
+    if(!s){s={id:tpUid(),color:t.stops.length%TP_SOFT.length,ord:t.stops.length};t.stops.push(s);}
+    Object.keys(v).forEach(function(k){s[k]=v[k];});
+    if(geo){s.lat=geo.lat;s.lng=geo.lng;}
+    // ทริปยังไม่มีวัน → ใช้วันของสถานที่
+    var st=tpStops(t);if(st[0]&&st[0].date&&(!t.start||st[0].date<t.start))t.start=st[0].date;
+    var lastEnd=st.reduce(function(m,x){var e=x.date?addDays(x.date,(+x.days||1)-1):'';return e>m?e:m;},'');if(lastEnd&&(!t.end||lastEnd>t.end))t.end=lastEnd;
+  });
+}
+function tpStopDel(id,b){
+  if(!b.classList.contains('arm')){b.classList.add('arm');b.textContent='กดอีกครั้งเพื่อลบ';return;}
+  closeModal();tpMut(function(t){t.stops=(t.stops||[]).filter(function(x){return x.id!==id;});});
+}
+// ---------- sync (ใช้ที่เก็บเดียวกับ Note) ----------
+function tpPush(){
+  if(typeof nxPutKey!=='function'||(typeof _nxSync!=='undefined'&&_nxSync.off))return;
+  var d=tpLoad();nxPutKey('trip__all',JSON.stringify(d),d.ts||Date.now(),function(){});
+}
+function tpPull(){
+  if(typeof nxGetKeys!=='function'||(typeof _nxSync!=='undefined'&&_nxSync.off))return;
+  nxGetKeys(['trip__all'],function(st,got){
+    if(st!=='ok'||!got||!got.trip__all||!got.trip__all.html)return;
+    var r=null;try{r=JSON.parse(got.trip__all.html);}catch(e){}
+    var l=tpLoad();if(!r||!Array.isArray(r.trips))return;
+    if((r.ts||0)>(l.ts||0)){r.cur=l.cur&&r.trips.some(function(x){return x.id===l.cur;})?l.cur:r.cur;try{localStorage.setItem(TP_KEY,JSON.stringify(r));}catch(e){}
+      var pg=document.getElementById('page-trip');if(pg&&pg.classList.contains('show')&&!document.querySelector('#overlay.open'))renderTrip();}
+    else if((l.ts||0)>(r.ts||0))tpPush();
+  });
+}
+window.addEventListener('resize',function(){if(_tpMap)setTimeout(function(){if(_tpMap)_tpMap.invalidateSize();},150);});
 
 function noteShortDate(iso){if(!iso)return'';var d=new Date(iso);if(isNaN(d))return'';var m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return d.getDate()+' '+m[d.getMonth()];}
 // แก้ในการ์ดได้เลย — บันทึกอัตโนมัติ (ไม่ต้องกดบันทึก)

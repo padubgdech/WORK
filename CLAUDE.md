@@ -108,6 +108,18 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   hover bar `#nx-linkbar` over inline subpage links (เปิด / ลบลิงก์ `nxLinkUnlink` / ลบหน้า). `nxDeletePageId(id)` = shared delete (with
   subpages, into trash) and also strips `a.nx-link` pointing at deleted pages from other pages. Test: test_del.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
+- Trip tab (5 Nov, from a travel-dashboard image Dech sent): tab `trip` between Calendar and Tasks → `#page-trip > #tp`, `renderTrip()`,
+  all code prefixed `tp`. Data localStorage `rudy_trips_v1` {trips:[{id,name,start,end,transport,calAdded,stops:[{id,name,country,date,
+  days,places,desc,icon,color,lat,lng}],exp:[{id,cat,who,amt,note,at}],pack:[{id,t,done}]}],cur,ts}; synced whole as key `trip__all`
+  via `nxPutKey`/`nxGetKeys` (newer ts wins; `tpPush` 3 s after a change, `tpPull` on render ≥15 s apart).
+  Layout 3 columns (≤1180: map below, ≤760: timeline → map → left cards): left = ทริปถัดไป (countdown/day n of N, duration,
+  transport picker, start/middle/end route) + ค่าใช้จ่าย (total, category chips `TP_CATS` filter with sums, sort, add form, delete) +
+  ของที่ต้องเตรียม (checklist, comma-separated add); middle = "คุณมีอีก N ที่ที่จะไป" stop cards (`TP_SOFT` colours, icon, range,
+  country, desc, places/days) → click = `tpStopDlg` (Nominatim place search → lat/lng, date, days, places, desc, icon, 2-tap delete);
+  right = Leaflet 1.9.4 (unpkg, lazy) + OSM tiles, numbered markers, red route via OSRM demo server for car/bus (sessionStorage cache),
+  dashed straight line otherwise; hover a card highlights its marker. Empty state offers trips from calendar multi-day all-day events
+  (`getRangeEvents` next 180 days). "📅 ลงปฏิทิน" → `addAllDayEvent`. `.tp-map` has z-index:0/isolation so Leaflet stays under the
+  phone tab bar. Test: scratchpad test_trip.py (mocks leaflet/tiles/nominatim/osrm), test_trip2.py.
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`
