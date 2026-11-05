@@ -4,8 +4,9 @@
 // ต้องมีสิทธิ์ https://www.googleapis.com/auth/drive ใน appsscript.json
 function handleDashboardPost_(e) {
 var action = e && e.parameter && e.parameter.action;
-if (action !== 'uploadImage') return null;
+if (action !== 'uploadImage' && action !== 'readBooking') return null;
 if (typeof authGuard_ === 'function') { var ag = authGuard_(e, true); if (ag) return ag; }
+if (action === 'readBooking') return handleDashboardAi_(e);
 var out;
 try {
 var body = JSON.parse((e.postData && e.postData.contents) || '{}');

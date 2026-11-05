@@ -165,7 +165,15 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Real metro lines (5 Nov "ไม่มีรถไฟในตัวเมือง"): vector tiles showed nothing in the city, so `tpMetroGeo` fetches OSM route relations
   subway/light_rail/monorail/tram + stations via Overpass (20 km around each stop, sequential, cache `_tpMetroMem` + sessionStorage `tp_metro_v1_*`)
   with the line's real `colour`; MapLibre layers `tpr-osm-line(-c)`/`tpr-osm-sta(-c)` (`tpMetroML`, click line = toast name), Leaflet group
-  `_tpMetroLF` (`tpMetroLF`, tooltips) + faint OpenRailwayMap. Toggle = same 🚇 button. Test: test_metro.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
+  `_tpMetroLF` (`tpMetroLF`, tooltips) + faint OpenRailwayMap. Toggle = same 🚇 button. Test: test_metro.py.
+  AI booking reader (5 Nov, Dech chose canvas page "Trip · AI อ่านใบจอง" แบบ 1–3): NEW GAS `gas/dashboard-ai.gs` (NOT yet installed) —
+  POST `?action=readBooking` {image dataURL, ctx} → Gemini 2.5 Flash (inline image, responseMimeType JSON) → {ok, items:[{type,title,date,time,
+  endDate,endTime,from,to,code,people,price,currency,address,note,uncertain}]}; key = Script Property `GEMINI_API_KEY` else any CONFIG key named
+  *gemini*. Routed from `handleDashboardPost_` (dashboard-upload.gs, also updated → paste the new version too). Frontend: bookings card button
+  "📷 อ่านใบจอง" → `tpAiDlg` (drop/paste/pick many images, queue 2 at a time `tpAiPump`, editable item cards, yellow = uncertain, per-day preview
+  `tpAiSum`) → `tpAiSave` (bookings + hotel check-out booking, expenses with THB/oa/oc, sets `stop.hotel` + Nominatim geocode `tpAiGeo`, dedupe by
+  title+date+code, image uploaded to Drive = booking link). Rudy chat: chip / 📷 button / paste image → `rcAiFiles` → history item `{ai:{items}}`
+  (`rcAiHtml`, บันทึกทั้งหมด / แก้ก่อน → modal). Without the GAS file the reader says it must be installed first. Test: test_ai.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`
@@ -206,6 +214,7 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   NOTE: once enforced, anything else calling the dashboard deployment's doGet without a session breaks (only the dashboard is known to).
 
 ## Pending
+0. Install `gas/dashboard-ai.gs` + updated `gas/dashboard-upload.gs` (readBooking route) → deploy new version of the dashboard deployment. Check the Gemini key name in รหัส.gs CONFIG or set Script Property GEMINI_API_KEY.
 1. Security: login step above (in progress). Tokens (LINE/Notion/Gemini) are hard-coded in `รหัส.gs` CONFIG → move to Script Properties;
    rotating them also needs the LINE-bot webhook deployment updated (it runs an old pinned version with the old tokens).
 2. Separate HR/employee app: profile "แก้ไขข้อมูล" opens the first-login modal (only "ออกจากระบบ", no ✕, save button stuck on "กำลังบันทึก..."). Location of that code unknown — ask Dech.

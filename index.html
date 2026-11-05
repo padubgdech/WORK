@@ -1102,6 +1102,37 @@ button.tp-sp-n{border:0;padding:0;cursor:pointer;font-family:inherit}button.tp-s
 .tp-mk.ht span{width:30px;height:30px;font-size:16px;background:#fff;border:3px solid #1d2033;box-shadow:0 3px 10px rgba(0,0,0,.3)}
 .tp-st-ht{display:block;font-size:11.5px;color:#3d4258;margin-top:3px}
 .tp-day-ht{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-direction:column;gap:4px}.tp-day-ht li{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f1f6ff;border-radius:10px;padding:6px 6px 6px 10px;font-size:12.5px}.tp-day-ht small{color:#6b7189}
+.tpa-modal{width:980px}
+.tpa-sub{margin:-6px 0 12px;font-size:12.5px;color:#5d6378}
+.tpa-grid{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:760px){.tpa-grid{grid-template-columns:1fr}}
+.tpa-drop{border:2px dashed #c9c3f7;background:#f8f7ff;border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:13px;color:#4a3fd1;outline:none}
+.tpa-drop.over,.tpa-drop:focus{border-color:#7c6cf0;background:#f1efff}.tpa-drop span{font-size:12px;color:#5d6378}.tpa-pick{display:inline-flex;align-items:center;margin-top:4px;cursor:pointer;min-height:40px}
+.tpa-q{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.tpa-qi{display:flex;align-items:center;gap:8px;font-size:12px;color:#4b5168;border:1px solid #eef0f5;border-radius:10px;padding:5px}
+.tpa-qi img,.tpa-ph{width:40px;height:52px;object-fit:cover;border-radius:7px;background:#eceef4;flex:0 0 auto}
+.tpa-qi.busy span{color:#4a3fd1}.tpa-qi.ok{border-color:#cdebd3}.tpa-qi.ok span{color:#2f6b3a}.tpa-qi.err{border-color:#f3c0c0}.tpa-qi.err span{color:#b42318}
+.tpa-items{display:flex;flex-direction:column;gap:10px;max-height:52vh;overflow-y:auto}
+.tpa-empty{border:1px dashed #dcdfea;border-radius:12px;padding:24px;text-align:center;font-size:13px;color:#6b7189}
+.tpa-it{border:1px solid #eef0f5;border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}.tpa-it.off{opacity:.5}.tpa-it.unc{border-color:#f3c66b}
+.tpa-ih{display:flex;gap:6px;align-items:center}.tpa-ih input[type=checkbox]{width:20px;height:20px;accent-color:#7c6cf0}
+.tpa-ih select{border:1px solid #e3e5ee;border-radius:8px;padding:6px;font-size:12.5px;font-family:inherit;background:#fff}
+.tpa-ttl{flex:1;min-width:0;border:1px solid #e3e5ee;border-radius:8px;padding:7px 9px;font-size:13.5px;font-weight:600;font-family:inherit}
+.tpa-f{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:6px}
+.tpa-f label{display:flex;flex-direction:column;gap:2px;font-size:11px;color:#5d6378}.tpa-f input{border:1px solid #e3e5ee;border-radius:8px;padding:6px 7px;font-size:12.5px;font-family:inherit;min-width:0}
+.tpa-it .warn{border-color:#f3c66b!important;background:#fffaf0}
+.tpa-ft{font-size:11.5px;color:#4b5168}.tpa-warn{font-size:11.5px;color:#9a5b00}
+.tpa-do{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:#3d4258}.tpa-do label{display:flex;align-items:center;gap:5px}.tpa-do input{accent-color:#7c6cf0}
+.tpa-sum{margin-top:10px;font-size:12.5px}.tpa-sum:empty{display:none}
+.tpa-days{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-top:6px}
+.tpa-days>div{border:1px solid #eef0f5;border-radius:10px;padding:7px;display:flex;flex-direction:column;gap:4px}.tpa-days b{font-size:12px}
+.tpa-days span{font-size:11.5px;background:#f1efff;color:#3a2fb8;border-radius:7px;padding:3px 6px}
+.tpa-tot{margin-top:6px;font-weight:600}
+.tpa-btn{padding:7px 12px;font-size:12.5px;box-shadow:none}
+.tp-book .tp-card-h{flex-wrap:wrap}
+.rc-att{flex:0 0 auto;width:38px;height:38px;border:0;border-radius:10px;background:#f0eeea;cursor:pointer;font-size:16px}
+.rc-ai{display:flex;flex-direction:column;gap:6px}.rc-ai-i{background:#fff;border:1px solid #ece9e2;border-radius:10px;padding:7px 9px;display:flex;flex-direction:column}
+.rc-ai-i small{font-size:11px;color:#666}.rc-ai-i b{font-size:13px}.rc-ai-acts{display:flex;gap:6px}.rc-ai-done{font-size:12px;color:#1a7f37}
 .tp-mtools{position:absolute;top:52px;right:10px;z-index:1000;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
 .tp-mtools button{border:0;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:0 12px;min-height:36px;font:600 12.5px 'IBM Plex Sans Thai',sans-serif;color:#1d2033;cursor:pointer}
 .tp-mtools button.on{background:#1d2033;color:#fff}
@@ -4198,12 +4229,12 @@ function tpWeather(t){
 // ---- การจอง & เอกสาร ----
 function tpBookHtml(t){
   var bk=(t.book||[]).slice().sort(function(a,b){return ((a.date||'9')+(a.time||''))<((b.date||'9')+(b.time||''))?-1:1;});
-  return '<section class="tp-card tp-book" aria-label="การจองและเอกสาร"><div class="tp-card-h">การจอง & เอกสาร<span class="tp-cnt">'+bk.length+'</span><button type="button" class="tp-btn-l" style="margin-left:auto" onclick="tpBookDlg()">+ เพิ่ม</button></div>'
+  return '<section class="tp-card tp-book" aria-label="การจองและเอกสาร"><div class="tp-card-h">การจอง & เอกสาร<span class="tp-cnt">'+bk.length+'</span><button type="button" class="tp-btn-d tpa-btn" style="margin-left:auto" onclick="tpAiDlg()">📷 อ่านใบจอง</button><button type="button" class="tp-btn-l" onclick="tpBookDlg()">+ เพิ่ม</button></div>'
     +(bk.length?'<ul class="tp-bkl">'+bk.map(function(b){var k=TP_BOOK.find(function(q){return q[0]===b.type;})||TP_BOOK[6];
       return '<li><button type="button" class="tp-bk-m" data-id="'+b.id+'" onclick="tpBookDlg(this.dataset.id)"><span class="tp-bk-ic" aria-hidden="true">'+k[1]+'</span><span class="tp-bk-t"><b>'+tpEsc(b.title||k[2])+'</b><small>'+(b.date?tpExpDayLabel(t,b.date):'ไม่ระบุวัน')+(b.time?' · '+tpEsc(b.time):'')+(b.note?' · '+tpEsc(b.note.slice(0,40)):'')+'</small></span></button>'
         +(b.code?'<button type="button" class="tp-bk-code" data-c="'+tpEsc(b.code)+'" onclick="tpCopy(this.dataset.c,\'คัดลอกรหัสแล้ว\')" title="คัดลอกรหัสจอง">'+tpEsc(b.code)+'</button>':'')
         +(b.link?'<a class="tp-bk-ln" href="'+tpEsc(b.link)+'" target="_blank" rel="noopener" aria-label="เปิดลิงก์ '+tpEsc(b.title||'')+'">↗</a>':'')+'</li>';}).join('')+'</ul>'
-      :'<div class="tp-none">เก็บเที่ยวบิน ที่พัก รหัสจอง ลิงก์ใบจองไว้ที่นี่ — เปิดดูได้ตอนอยู่หน้างาน</div>')+'</section>';
+      :'<div class="tp-none">เก็บเที่ยวบิน ที่พัก รหัสจอง ลิงก์ใบจองไว้ที่นี่ — กด “📷 อ่านใบจอง” แล้วส่งรูปที่แคป Rudy จะกรอกให้</div>')+'</section>';
 }
 function tpBookDlg(id){
   var t=tpCur(tpLoad());if(!t)return;var b=id?(t.book||[]).find(function(x){return x.id===id;}):null,days=tpExpDays(t);
@@ -4461,6 +4492,159 @@ function tpHotelSearch(q){
 }
 function tpHotelPick(i){var r=(window._tpHotRes||[])[i];if(!r)return;window._tpHotel={name:r.name||r.display_name.split(',')[0],lat:+r.lat,lng:+r.lon,addr:r.display_name};document.getElementById('tps-hres').innerHTML='';tpHotelUpd();if(typeof tpDlgMapMarks==='function')tpDlgMapMarks();}
 function tpHotelOf(t,d){var o=[];tpDayStops(t,d).forEach(function(s){if(s.hotel&&s.hotel.name)o.push({h:s.hotel,s:s});});return o;}
+// ========== 📷 AI อ่านใบจอง (5 พ.ย. แบบ 1+2+3) — GAS readBooking (dashboard-ai.gs → Gemini) ==========
+var _tpA={imgs:[],items:[]};
+var TP_AI_CAT={flight:'ticket',hotel:'hotel',train:'gas',car:'gas',ticket:'ticket',ins:'other',other:'other'};
+function tpAiCtx(){var t=tpCur(tpLoad());return t?{trip:t.name,start:t.start||'',end:t.end||'',today:TODAY_STR,cur:t.cur||'',stops:tpStops(t).map(function(s){return {name:s.name,date:s.date||'',days:+s.days||1};})}:{today:TODAY_STR};}
+// อ่าน 1 รูป → cb(err, items)
+function tpAiRead(dataUrl,cb){
+  var done=false;function fin(e,a){if(done)return;done=true;cb(e,a);}
+  setTimeout(function(){fin('ใช้เวลานานเกินไป ลองใหม่อีกครั้ง');},90000);
+  shrinkImage(dataUrl,1600,.85,function(small){
+    try{
+      fetch(GAS+'?action=readBooking'+(typeof authSess==='function'&&authSess()?'&_s='+authSess():''),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({image:small,ctx:tpAiCtx()})})
+        .then(function(r){return r.text();}).then(function(txt){
+          var d=null;try{d=JSON.parse(txt);}catch(e){}
+          if(!d||d.ok==null){fin('ยังอ่านรูปไม่ได้ — ต้องติดตั้งตัวอ่านรูป (dashboard-ai.gs) ใน Apps Script ก่อน');return;}
+          if(!d.ok){fin(d.error==='no gemini key'?'ยังไม่ได้ตั้งคีย์ Gemini ใน Apps Script':'อ่านไม่สำเร็จ ('+(d.error||'?')+')');return;}
+          fin(null,(d.items||[]).map(tpAiNorm));
+        }).catch(function(){fin('ส่งรูปไม่ได้ — ตรวจอินเทอร์เน็ต');});
+    }catch(e){fin('ส่งรูปไม่ได้');}
+  });
+}
+function tpAiNorm(x){
+  var t=tpCur(tpLoad()),ty=TP_BOOK.some(function(k){return k[0]===x.type;})?x.type:'other',cur=String(x.currency||'').toUpperCase().trim(),pr=+x.price||0,thb='';
+  if(pr>0){if(!cur||cur==='THB')thb=pr;else if(t&&t.cur===cur&&+t.rate>0)thb=Math.round(pr*t.rate);}
+  var d=/^\d{4}-\d\d-\d\d$/.test(x.date||'')?x.date:'',ed=/^\d{4}-\d\d-\d\d$/.test(x.endDate||'')?x.endDate:'';
+  return {id:tpUid(),type:ty,title:String(x.title||'').trim(),date:d,time:String(x.time||'').slice(0,5),endDate:ed,endTime:String(x.endTime||'').slice(0,5),
+    from:x.from||'',to:x.to||'',code:String(x.code||'').trim(),people:x.people||'',price:pr,cur:cur||'THB',thb:thb,address:x.address||'',note:x.note||'',
+    unc:Array.isArray(x.uncertain)?x.uncertain:[],on:true,doExp:pr>0,doHotel:ty==='hotel'};
+}
+function tpAiDlg(items){
+  var t=tpCur(tpLoad());if(!t){showToast('สร้างทริปก่อน');tpTripDlg();return;}
+  _tpA={imgs:[],items:items||[]};
+  showModal('<div class="modal-title">📷 อ่านใบจองด้วย Rudy <button class="modal-x" onclick="closeModal()" aria-label="ปิด">×</button></div>'
+    +'<p class="tpa-sub">ตั๋วเครื่องบิน · ที่พัก · รถไฟ · ตั๋วกิจกรรม · ใบเสร็จ → ลงการจอง ค่าใช้จ่าย และที่พักของทริป “'+tpEsc(t.name)+'” ให้เอง</p>'
+    +'<div class="tpa-grid"><div class="tpa-left">'
+    +'<div class="tpa-drop" id="tpa-drop" tabindex="0" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="tpAiDrop(event)" onpaste="tpAiPaste(event)">'
+    +'<b>ลากรูปมาวาง หรือ ⌘V / Ctrl+V</b><span>ได้หลายรูปพร้อมกัน</span><label class="tp-btn-d tpa-pick">เลือกรูป / ถ่ายรูป<input type="file" accept="image/*" multiple onchange="tpAiFiles(this.files);this.value=\'\'" hidden></label></div>'
+    +'<ul class="tpa-q" id="tpa-q"></ul></div>'
+    +'<div class="tpa-right"><div id="tpa-items" class="tpa-items"></div><div id="tpa-sum" class="tpa-sum"></div></div></div>'
+    +'<button class="btn-submit" id="tpa-save" onclick="tpAiSave()" disabled>✓ บันทึก</button>');
+  var m=document.querySelector('#overlay .modal');if(m)m.classList.add('tpa-modal');
+  tpAiRender();setTimeout(function(){var d=document.getElementById('tpa-drop');if(d)d.focus();},60);
+}
+function tpAiDrop(e){e.preventDefault();var d=document.getElementById('tpa-drop');if(d)d.classList.remove('over');tpAiFiles(e.dataTransfer&&e.dataTransfer.files);}
+function tpAiPaste(e){var f=typeof nxClipImages==='function'?nxClipImages(e.clipboardData):[];if(f&&f.length){e.preventDefault();tpAiFiles(f);}}
+function tpAiFiles(files){
+  Array.prototype.slice.call(files||[]).filter(function(f){return /^image\//.test(f.type);}).slice(0,12).forEach(function(f){
+    var im={id:tpUid(),status:'wait',thumb:'',msg:''};_tpA.imgs.push(im);tpAiRender();
+    var r=new FileReader();r.onload=function(){shrinkImage(r.result,240,.7,function(th){im.thumb=th;tpAiRender();});im.data=r.result;tpAiPump();};r.readAsDataURL(f);
+  });
+}
+var _tpAiBusy=0;
+function tpAiPump(){ // อ่านทีละ 2 รูป
+  if(_tpAiBusy>=2)return;var im=_tpA.imgs.find(function(x){return x.status==='wait'&&x.data;});if(!im)return;
+  _tpAiBusy++;im.status='read';tpAiRender();
+  tpAiRead(im.data,function(err,items){
+    _tpAiBusy--;
+    if(err){im.status='err';im.msg=err;}
+    else{im.status='ok';im.msg=items.length?items.length+' รายการ':'ไม่พบข้อมูลการจอง';items.forEach(function(x){x.img=im.id;});_tpA.items=_tpA.items.concat(items);
+      if(items.length)uploadImagePost(im.data,'booking_'+Date.now()+'.jpg',function(d){var u=d&&(d.url||d.link||d.thumbUrl);if(u){im.url=u;}});}
+    tpAiRender();tpAiPump();
+  });
+  tpAiPump();
+}
+function tpAiSet(i,f,v){var x=_tpA.items[i];if(!x)return;x[f]=v;if(f==='type'){x.doHotel=v==='hotel';tpAiRender();return;}if(f==='on'||f==='doExp'||f==='doHotel'){tpAiSum();return;}tpAiSum();}
+function tpAiRender(){
+  var q=document.getElementById('tpa-q');if(!q)return;
+  q.innerHTML=_tpA.imgs.map(function(im){var st={wait:['รอคิว',''],read:['กำลังอ่าน…','busy'],ok:[im.msg,'ok'],err:[im.msg,'err']}[im.status];
+    return '<li class="tpa-qi '+st[1]+'">'+(im.thumb?'<img src="'+im.thumb+'" alt="">':'<span class="tpa-ph"></span>')+'<span>'+tpEsc(st[0])+'</span></li>';}).join('');
+  var t=tpCur(tpLoad()),box=document.getElementById('tpa-items');
+  if(!_tpA.items.length){box.innerHTML='<div class="tpa-empty">'+(_tpA.imgs.some(function(x){return x.status==='read'||x.status==='wait';})?'Rudy กำลังอ่านรูป…':'ข้อมูลที่อ่านได้จะขึ้นตรงนี้ ตรวจ/แก้ได้ก่อนบันทึก')+'</div>';tpAiSum();return;}
+  box.innerHTML=_tpA.items.map(function(x,i){
+    var w=function(f){return x.unc.indexOf(f)>=0?' warn':'';},inp=function(f,ty,lb,cls){return '<label class="'+(cls||'')+'">'+lb+'<input'+(ty?' type="'+ty+'"':'')+' class="'+w(f)+'" value="'+tpEsc(x[f]||'')+'" oninput="tpAiSet('+i+',\''+f+'\',this.value)"></label>';};
+    var st=x.date?tpDayStops(t,x.date)[0]:null;
+    return '<div class="tpa-it'+(x.on?'':' off')+(x.unc.length?' unc':'')+'"><div class="tpa-ih"><input type="checkbox"'+(x.on?' checked':'')+' aria-label="บันทึกรายการนี้" onchange="tpAiSet('+i+',\'on\',this.checked);this.closest(\'.tpa-it\').classList.toggle(\'off\',!this.checked)">'
+      +'<select aria-label="ประเภท" onchange="tpAiSet('+i+',\'type\',this.value)">'+TP_BOOK.map(function(k){return '<option value="'+k[0]+'"'+(k[0]===x.type?' selected':'')+'>'+k[1]+' '+k[2]+'</option>';}).join('')+'</select>'
+      +'<input class="tpa-ttl'+w('title')+'" aria-label="ชื่อ" value="'+tpEsc(x.title)+'" oninput="tpAiSet('+i+',\'title\',this.value)"></div>'
+      +'<div class="tpa-f">'+inp('date','date',x.type==='hotel'?'เช็กอิน':'วัน')+inp('time','time','เวลา')+inp('endDate','date',x.type==='hotel'?'เช็กเอาต์':'ถึงวัน')+inp('endTime','time','เวลา')
+      +inp('code','','รหัสจอง')+'<label>ราคา (บาท)<input type="number" inputmode="decimal" class="'+w('price')+'" value="'+(x.thb===''?'':x.thb)+'" placeholder="'+(x.price&&x.cur!=='THB'?x.price+' '+x.cur:'')+'" oninput="tpAiSet('+i+',\'thb\',this.value)"></label></div>'
+      +(x.from||x.to?'<div class="tpa-ft">'+tpEsc([x.from,x.to].filter(String).join(' → '))+(x.people?' · '+tpEsc(x.people)+' คน':'')+'</div>':'')
+      +(x.price&&x.cur!=='THB'?'<div class="tpa-ft">ราคาในใบจอง '+x.price.toLocaleString('th-TH')+' '+tpEsc(x.cur)+(x.thb===''?' — ใส่เป็นบาท หรือตั้งอัตราใน “แก้ทริป / งบ”':'')+'</div>':'')
+      +'<div class="tpa-do"><label><input type="checkbox" checked disabled> การจอง</label>'
+      +'<label><input type="checkbox"'+(x.doExp?' checked':'')+' onchange="tpAiSet('+i+',\'doExp\',this.checked)"> ค่าใช้จ่าย</label>'
+      +(x.type==='hotel'?'<label><input type="checkbox"'+(x.doHotel?' checked':'')+' onchange="tpAiSet('+i+',\'doHotel\',this.checked)"> ตั้งเป็นที่พัก'+(st?' ของ '+tpEsc(st.name):'')+' + ปักหมุด</label>':'')+'</div>'
+      +(x.unc.length?'<div class="tpa-warn">ตรวจอีกครั้ง: ช่องสีเหลือง</div>':'')+'</div>';
+  }).join('');
+  tpAiSum();
+}
+function tpAiSum(){
+  var el=document.getElementById('tpa-sum'),btn=document.getElementById('tpa-save');if(!el)return;var t=tpCur(tpLoad());
+  var on=_tpA.items.filter(function(x){return x.on;}),by={};
+  on.forEach(function(x){var k=x.date||'';(by[k]=by[k]||[]).push(x);if(x.type==='hotel'&&x.endDate){(by[x.endDate]=by[x.endDate]||[]).push({type:'hotel',title:'เช็กเอาต์ '+x.title,time:x.endTime});}});
+  var ks=Object.keys(by).sort(),exp=on.filter(function(x){return x.doExp&&+x.thb>0;}).reduce(function(a,x){return a+(+x.thb);},0);
+  el.innerHTML=on.length?'<b>จะลงในแผนแบบนี้</b><div class="tpa-days">'+ks.map(function(k){return '<div><b>'+(k?tpExpDayLabel(t,k):'ไม่ระบุวัน')+'</b>'+by[k].map(function(x){var kk=TP_BOOK.find(function(q){return q[0]===x.type;})||TP_BOOK[6];return '<span>'+kk[1]+' '+(x.time?x.time+' ':'')+tpEsc(x.title||kk[2])+'</span>';}).join('')+'</div>';}).join('')+'</div>'
+    +(exp?'<div class="tpa-tot">ค่าใช้จ่ายรวม '+tpMoney(exp)+'</div>':''):'';
+  if(btn){btn.disabled=!on.length;btn.textContent=on.length?'✓ บันทึก '+on.length+' รายการ':'✓ บันทึก';}
+}
+function tpAiSave(quiet){
+  var on=_tpA.items.filter(function(x){return x.on;});if(!on.length)return;
+  var imgUrl={};_tpA.imgs.forEach(function(im){if(im.url)imgUrl[im.id]=im.url;});
+  var geo=[],nB=0,nE=0,nH=0;
+  tpMut(function(t){
+    t.book=t.book||[];t.exp=t.exp||[];
+    var dup=function(x){return t.book.some(function(b){return b.date===x.date&&(b.title||'')===(x.title||'')&&(b.code||'')===(x.code||'');});};
+    on.forEach(function(x){
+      if(dup(x)){nB--;return;} // อ่านรูปเดิมซ้ำ → ไม่ลงซ้ำ
+      var nt=[x.from&&x.to?x.from+' → '+x.to:'',x.endDate&&x.type!=='hotel'?'ถึง '+tpDM(x.endDate).join(' ')+(x.endTime?' '+x.endTime:''):'',x.type==='hotel'&&x.endDate?'เช็กเอาต์ '+tpDM(x.endDate).join(' ')+(x.endTime?' '+x.endTime:''):'',x.people?x.people+' คน':'',x.address,x.note].filter(String).join(' · ');
+      t.book.push({id:tpUid(),type:x.type,title:x.title||(TP_BOOK.find(function(k){return k[0]===x.type;})||TP_BOOK[6])[2],date:x.date,time:x.time,code:x.code,link:imgUrl[x.img]||'',note:nt,ai:1});nB++;
+      if(x.type==='hotel'&&x.endDate){t.book.push({id:tpUid(),type:'hotel',title:'เช็กเอาต์ '+(x.title||'ที่พัก'),date:x.endDate,time:x.endTime,code:x.code,link:'',note:'',ai:1});}
+      var thb=+x.thb||0;
+      if(x.doExp&&thb>0){var o={id:tpUid(),cat:TP_AI_CAT[x.type]||'other',who:t.lastWho||'',amt:thb,note:x.title||'',at:Date.now(),date:t.start&&TODAY_STR<t.start?'pre':(tpExpDays(t).indexOf(TODAY_STR)>=0?TODAY_STR:'')};
+        if(x.price&&x.cur&&x.cur!=='THB'){o.oa=x.price;o.oc=x.cur;}if(!o.date)delete o.date;t.exp.push(o);nE++;}
+      if(x.type==='hotel'&&x.doHotel&&x.title){
+        var st=tpStops(t),s=x.date?tpDayStops(t,x.date)[0]:null;
+        if(!s&&st.length){s=st.slice().sort(function(a,b){return Math.abs(new Date(a.date||'2000-01-01')-new Date(x.date||'2000-01-01'))-Math.abs(new Date(b.date||'2000-01-01')-new Date(x.date||'2000-01-01'));})[0];}
+        if(s){s.hotel={name:x.title};if(x.address)s.hotel.addr=x.address;geo.push({sid:s.id,q:[x.address,x.title+(s.name?', '+s.name:'')].filter(String)});nH++;}
+      }
+    });
+    if(!t.start){var ds=on.map(function(x){return x.date;}).concat(on.map(function(x){return x.endDate;})).filter(String).sort();if(ds.length){t.start=ds[0];t.end=ds[ds.length-1];}}
+  });
+  if(!quiet)closeModal();
+  if(nB<0)nB=0;showToast(nB||nE||nH?'✓ บันทึกแล้ว: การจอง '+nB+(nE?' · ค่าใช้จ่าย '+nE:'')+(nH?' · ที่พัก '+nH:''):'รายการนี้บันทึกไว้แล้ว — ไม่ลงซ้ำ');
+  geo.forEach(function(g){tpAiGeo(g.sid,g.q.slice());});
+  _tpA={imgs:[],items:[]};
+}
+function tpAiGeo(sid,qs){ // หาพิกัดที่พัก: ที่อยู่ก่อน แล้วค่อยชื่อโรงแรม
+  var q=qs.shift();if(!q)return;
+  fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=th,en&q='+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(a){
+    if(!a||!a[0]){tpAiGeo(sid,qs);return;}
+    var d=tpLoad(),t=tpCur(d),s=t&&(t.stops||[]).find(function(x){return x.id===sid;});if(!s||!s.hotel)return;
+    s.hotel.lat=+a[0].lat;s.hotel.lng=+a[0].lon;tpStore(d);var pg=document.getElementById('page-trip');if(pg&&pg.classList.contains('show')&&!document.querySelector('#overlay.open'))renderTrip();
+  }).catch(function(){});
+}
+// ---- แชท Rudy: ส่งรูปใบจอง (แบบ 2) ----
+function rcAiPick(){var i=document.createElement('input');i.type='file';i.accept='image/*';i.multiple=true;i.onchange=function(){rcAiFiles(i.files);};i.click();}
+function rcAiFiles(files){
+  var fs=Array.prototype.slice.call(files||[]).filter(function(f){return /^image\//.test(f.type);}).slice(0,6);if(!fs.length)return;
+  if(!tpCur(tpLoad())){rcPush({who:'bot',text:'ยังไม่มีทริปครับ ไปที่แท็บ Trip แล้วกด “+ สร้างทริป” ก่อน แล้วส่งรูปใบจองมาใหม่ได้เลย'});return;}
+  rcPush({who:'me',text:'📷 ส่งรูปใบจอง '+fs.length+' รูป'});_rcBusy=true;rcRender();
+  var all=[],errs=[],left=fs.length;
+  fs.forEach(function(f){var r=new FileReader();r.onload=function(){var data=r.result;tpAiRead(data,function(err,items){
+    if(err)errs.push(err);else{all=all.concat(items);if(items.length)uploadImagePost(data,'booking_'+Date.now()+'.jpg',function(){});}
+    if(--left===0){_rcBusy=false;if(all.length)rcPush({who:'bot',ai:{items:all}});else rcPush({who:'bot',text:errs[0]||'ไม่พบข้อมูลการจองในรูปครับ'});}
+  });};r.readAsDataURL(f);});
+}
+function rcAiHtml(a,i){
+  var t=tpCur(tpLoad());
+  return '<div class="rc-m rc-bot rc-ai"><div>เจอ '+a.items.length+' รายการ'+(t?' — ลงทริป “'+escH(t.name)+'” ได้เลย':'')+'</div>'
+    +a.items.map(function(x){var k=TP_BOOK.find(function(q){return q[0]===x.type;})||TP_BOOK[6];return '<div class="rc-ai-i"><small>'+k[1]+' '+k[2]+(x.date?' · '+escH(tpExpDayLabel(t||{},x.date)):'')+'</small><b>'+escH(x.title||k[2])+'</b>'
+      +'<small>'+escH([x.time,x.endDate&&x.type==='hotel'?'ถึง '+tpDM(x.endDate).join(' '):'',x.code?'รหัส '+x.code:'',x.thb?tpMoney(x.thb):(x.price?x.price+' '+x.cur:'')].filter(String).join(' · '))+'</small></div>';}).join('')
+    +(a.saved?'<div class="rc-ai-done">✓ บันทึกแล้ว</div>':'<div class="rc-ai-acts"><button type="button" class="rc-ok" onclick="rcAiSave('+i+')">✓ บันทึกทั้ง '+a.items.length+' รายการ</button><button type="button" class="rc-ed" onclick="rcAiEdit('+i+')">แก้ก่อน</button></div>')+'</div>';
+}
+function rcAiSave(i){var log=rcLoad(),m=log[i];if(!m||!m.ai||m.ai.saved)return;_tpA={imgs:[],items:m.ai.items.map(function(x){var y=JSON.parse(JSON.stringify(x));y.on=true;return y;})};tpAiSave(true);m.ai.saved=true;rcSave(log);rcRender();}
+function rcAiEdit(i){var log=rcLoad(),m=log[i];if(!m||!m.ai)return;m.ai.saved=true;rcSave(log);rcRender();tpAiDlg(m.ai.items.map(function(x){return JSON.parse(JSON.stringify(x));}));}
 // ---------- actions ----------
 function tpMut(fn){var d=tpLoad(),t=tpCur(d);if(!t)return;fn(t,d);tpStore(d);renderTrip();}
 function tpSwitch(id){var d=tpLoad();d.cur=id;tpStore(d,true);renderTrip();}
@@ -4833,10 +5017,12 @@ function rcInit(){
     +'<button type="button" class="rc-chip" data-m="event" onclick="rcChip(this)">📅 นัดหมาย</button>'
     +'<button type="button" class="rc-chip" data-m="note" onclick="rcChip(this)">📝 จด Note</button>'
     +'<button type="button" class="rc-chip" data-m="find" onclick="rcChip(this)">🔎 ค้น Note</button>'
+    +'<button type="button" class="rc-chip" onclick="rcAiPick()">📷 อ่านใบจอง</button>'
     +'<button type="button" class="rc-chip" onclick="rcSummary(TODAY_STR)">สรุปวันนี้</button>'
     +'<button type="button" class="rc-chip" onclick="rcSummary(addDays(TODAY_STR,1))">พรุ่งนี้</button></div>'
     +'<form class="rc-in" onsubmit="rcSend();return false"><label for="rc-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">พิมพ์ข้อความถึง Rudy</label>'
-    +'<input id="rc-input" type="text" autocomplete="off" placeholder="เช่น “นัดคุยโรงงานพรุ่งนี้บ่ายสอง”">'
+    +'<button type="button" class="rc-att" aria-label="แนบรูปใบจอง" title="แนบรูปใบจอง (ตั๋ว / ที่พัก)" onclick="rcAiPick()">📷</button>'
+    +'<input id="rc-input" type="text" autocomplete="off" placeholder="เช่น “นัดคุยโรงงานพรุ่งนี้บ่ายสอง”" onpaste="var f=typeof nxClipImages===\'function\'?nxClipImages(event.clipboardData):[];if(f&&f.length){event.preventDefault();rcAiFiles(f);}">'
     +'<button type="submit" class="rc-send" aria-label="ส่ง">↑</button></form>';
   document.body.appendChild(fab);document.body.appendChild(p);
   p.addEventListener('keydown',function(e){if(e.key==='Escape')rcClose();});
@@ -4867,6 +5053,7 @@ function rcRender(){
     if(m.who==='me'){h+='<div class="rc-m rc-me">'+escH(m.text)+'</div>';return;}
     if(m.card){h+=rcCardHtml(m.card,i);return;}
     if(m.found){h+=rcFoundHtml(m.found);return;}
+    if(m.ai){h+=rcAiHtml(m.ai,i);return;}
     h+='<div class="rc-m rc-bot">'+escH(m.text)+'</div>';
   });
   if(_rcBusy)h+='<div class="rc-typing" aria-label="Rudy กำลังพิมพ์"><i></i><i></i><i></i></div>';
