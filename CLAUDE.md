@@ -120,6 +120,11 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   dashed straight line otherwise; hover a card highlights its marker. Empty state offers trips from calendar multi-day all-day events
   (`getRangeEvents` next 180 days). "📅 ลงปฏิทิน" → `addAllDayEvent`. `.tp-map` has z-index:0/isolation so Leaflet stays under the
   phone tab bar. Test: scratchpad test_trip.py (mocks leaflet/tiles/nominatim/osrm), test_trip2.py.
+  Map v2 (5 Nov "แผนที่ชื่อภาษาไทย + ปุ่มเปลี่ยนเป็นอังกฤษ"): MapLibre GL 4.7.1 (unpkg) + OpenFreeMap vector style `liberty` (free, no
+  key). `tpApplyLang` rewrites every symbol layer's text-field to coalesce(name:th|name:en …); toggle `.tp-lang` ไทย/EN on the map,
+  saved in localStorage `tp_map_lang` (default th). Markers = `maplibregl.Marker` buttons (`_tpMk`), route = geojson line layer
+  `tp-route` (`tpRouteGeo`, OSRM for car/bus, dashed otherwise). No WebGL / style fails (12 s guard or error) → `tpMapDrawLeaflet`
+  (old Leaflet + OSM raster, local-language labels). Test: test_trip3.py (swiftshader, mocked style).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`

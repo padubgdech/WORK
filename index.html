@@ -1015,6 +1015,11 @@ li:hover>.tp-x,.tp-x:focus-visible{opacity:1}.tp-x:hover{background:#fde6e8;colo
 .tp-del-trip.arm{background:#c2394d;color:#fff}
 @media(max-width:1180px){.tp-grid{grid-template-columns:minmax(280px,340px) 1fr}.tp-right{grid-column:1/-1;position:static}.tp-map{height:420px}}
 @media(max-width:760px){.tp-grid{grid-template-columns:1fr;gap:14px}.tp-mid{order:-1}.tp-right{order:-1}.tp-map{height:300px;min-height:0}.tp-tl-h h2{font-size:18px}.tp-st-ic{width:52px;font-size:24px}.tp-tr{width:38px;height:38px}}
+.tp-lang{position:absolute;top:10px;right:10px;z-index:5;display:flex;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:3px;gap:2px}
+.tp-lang button{border:0;background:transparent;border-radius:7px;padding:5px 11px;font-size:12px;font-weight:700;color:#4b5168;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif}
+.tp-lang button.on{background:#7c6cf0;color:#fff}
+.tp-map .maplibregl-map{font-family:'IBM Plex Sans Thai',sans-serif}
+button.tp-mk{border:0;background:transparent;padding:0;cursor:pointer}
 </style>
 </head>
 <body>
@@ -3522,7 +3527,7 @@ function tpLeaflet(cb){
   if(!document.getElementById('tp-lf-css')){var l=document.createElement('link');l.id='tp-lf-css';l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(l);}
   var s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=function(){cb(!!window.L);};s.onerror=function(){cb(false);};document.head.appendChild(s);
 }
-function tpMapDraw(t){
+function tpMapDrawLeaflet(t){
   tpLeaflet(function(ok){
     var el=document.getElementById('tp-map');if(!el)return;
     if(!ok){el.innerHTML='<div class="tp-map-msg">โหลดแผนที่ไม่ได้ — ตรวจอินเทอร์เน็ต</div>';return;}
@@ -3560,9 +3565,88 @@ function tpRoute(t,pts){
     var geo=g.map(function(c){return [c[1],c[0]];});try{sessionStorage.setItem('tp_rt_'+key,JSON.stringify(geo));}catch(e){}draw(geo,false);
   }).catch(function(){draw(pts,true);});
 }
+// แผนที่เวกเตอร์ (MapLibre + OpenFreeMap) — เลือกภาษาชื่อสถานที่ได้ (ไทย/อังกฤษ) · เปิดไม่ได้ → กลับไปใช้ Leaflet + OSM แบบเดิม
+var TP_STYLE='https://tiles.openfreemap.org/styles/liberty',_tpMl=null,_tpMk={};
+function tpMapLang(){try{return localStorage.getItem('tp_map_lang')||'th';}catch(e){return 'th';}}
+function tpML(cb){
+  if(window.maplibregl){cb(true);return;}
+  if(!document.getElementById('tp-ml-css')){var l=document.createElement('link');l.id='tp-ml-css';l.rel='stylesheet';l.href='https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css';document.head.appendChild(l);}
+  var s=document.createElement('script');s.src='https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js';s.onload=function(){cb(!!window.maplibregl);};s.onerror=function(){cb(false);};document.head.appendChild(s);
+}
+function tpWebGL(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(e){return false;}}
+function tpApplyLang(map,lang){
+  var st=map.getStyle();if(!st||!st.layers)return;
+  var expr=lang==='en'?['coalesce',['get','name:en'],['get','name_en'],['get','name:latin'],['get','name']]:['coalesce',['get','name:th'],['get','name_th'],['get','name'],['get','name:latin']];
+  st.layers.forEach(function(l){if(l.type==='symbol'&&l.layout&&l.layout['text-field']!=null&&l.id.indexOf('tp-')!==0){try{map.setLayoutProperty(l.id,'text-field',expr);}catch(e){}}});
+}
+function tpSetLang(lang){
+  try{localStorage.setItem('tp_map_lang',lang);}catch(e){}
+  document.querySelectorAll('#tp-map .tp-lang button').forEach(function(b){var on=b.dataset.l===lang;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});
+  if(_tpMl&&_tpMl.isStyleLoaded())tpApplyLang(_tpMl,lang);
+}
+function tpLangCtl(el){
+  var lang=tpMapLang(),d=document.createElement('div');d.className='tp-lang';d.setAttribute('role','group');d.setAttribute('aria-label','ภาษาบนแผนที่');
+  d.innerHTML=[['th','ไทย'],['en','EN']].map(function(x){return '<button type="button" data-l="'+x[0]+'" class="'+(x[0]===lang?'on':'')+'" aria-pressed="'+(x[0]===lang)+'" onclick="tpSetLang(this.dataset.l)">'+x[1]+'</button>';}).join('');
+  el.appendChild(d);
+}
+function tpMapDraw(t){
+  var el=document.getElementById('tp-map');if(!el)return;
+  if(_tpMl){try{_tpMl.remove();}catch(e){}_tpMl=null;}
+  if(_tpMap){try{_tpMap.remove();}catch(e){}_tpMap=null;_tpLayer=null;}
+  if(!tpWebGL()){tpMapDrawLeaflet(t);return;}
+  tpML(function(ok){
+    el=document.getElementById('tp-map');if(!el)return;
+    if(!ok){tpMapDrawLeaflet(t);return;}
+    el.innerHTML='';_tpMk={};
+    var map;
+    try{map=new maplibregl.Map({container:el,style:TP_STYLE,center:[100.5,13.75],zoom:4,attributionControl:{compact:true},cooperativeGestures:window.innerWidth<=760});}
+    catch(e){tpMapDrawLeaflet(t);return;}
+    _tpMl=map;var failed=false;
+    var guard=setTimeout(function(){if(!map.isStyleLoaded()&&_tpMl===map){failed=true;try{map.remove();}catch(e){}_tpMl=null;tpMapDrawLeaflet(t);}},12000); // โหลดสไตล์ไม่ได้ → แผนที่แบบเดิม
+    map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-left');
+    tpLangCtl(el);
+    map.on('load',function(){
+      clearTimeout(guard);if(failed)return;
+      tpApplyLang(map,tpMapLang());
+      var all=tpStops(t),st=all.filter(function(s){return s.lat!=null&&s.lng!=null;});
+      st.forEach(function(s){
+        var i=all.indexOf(s),c=TP_SOFT[(s.color==null?i:s.color)%TP_SOFT.length][1];
+        var m=document.createElement('button');m.type='button';m.className='tp-mk';m.setAttribute('aria-label',(i+1)+'. '+s.name);m.title=s.name;
+        m.innerHTML='<span style="background:'+c+'">'+(i+1)+'</span>';m.onclick=function(ev){ev.stopPropagation();tpStopDlg(s.id);};
+        new maplibregl.Marker({element:m}).setLngLat([s.lng,s.lat]).addTo(map);_tpMk[s.id]=m;
+      });
+      if(!st.length)return;
+      var pts=st.map(function(s){return [s.lat,s.lng];});
+      if(pts.length>1)tpRouteGeo(t,pts,function(geo,dashed){
+        if(_tpMl!==map)return;
+        map.addSource('tp-route',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:geo.map(function(p){return [p[1],p[0]];})}}});
+        map.addLayer({id:'tp-route',type:'line',source:'tp-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#e5484d','line-width':4,'line-opacity':.9,'line-dasharray':dashed?[2,2]:[1,0]}});
+      });
+      var b=new maplibregl.LngLatBounds();pts.forEach(function(p){b.extend([p[1],p[0]]);});
+      map.fitBounds(b,{padding:60,maxZoom:11,duration:0});
+    });
+    map.on('error',function(e){if(!map.isStyleLoaded()&&!failed&&e&&e.error&&/style|Failed to fetch|NetworkError/i.test(String(e.error.message||''))){failed=true;clearTimeout(guard);try{map.remove();}catch(x){}_tpMl=null;tpMapDrawLeaflet(t);}});
+  });
+}
+// เส้นทาง: รถ/รถบัส → ถนนจริง (OSRM) · อื่น ๆ หรือหาไม่ได้ → เส้นตรงประ · cb(geo [[lat,lng]...], dashed)
+function tpRouteGeo(t,pts,cb){
+  var key=pts.map(function(p){return p[0].toFixed(4)+','+p[1].toFixed(4);}).join(';');
+  var road=t.transport==='car'||t.transport==='bus'||!t.transport;
+  if(!road||pts.length>25){cb(pts,true);return;}
+  var cache=null;try{cache=JSON.parse(sessionStorage.getItem('tp_rt_'+key)||'null');}catch(e){}
+  if(cache){cb(cache,false);return;}
+  fetch('https://router.project-osrm.org/route/v1/driving/'+pts.map(function(p){return p[1]+','+p[0];}).join(';')+'?overview=simplified&geometries=geojson')
+    .then(function(r){return r.json();}).then(function(j){
+      var g=j&&j.routes&&j.routes[0]&&j.routes[0].geometry&&j.routes[0].geometry.coordinates;
+      if(!g){cb(pts,true);return;}
+      var geo=g.map(function(c){return [c[1],c[0]];});try{sessionStorage.setItem('tp_rt_'+key,JSON.stringify(geo));}catch(e){}cb(geo,false);
+    }).catch(function(){cb(pts,true);});
+}
+
 function tpHi(id){
   _tpHi=id;document.querySelectorAll('#tp .tp-st').forEach(function(x){x.classList.toggle('hi',x.dataset.id===id);});
-  if(!_tpLayer)return;_tpLayer.eachLayer(function(m){if(m._tpId&&m.getElement){var e=m.getElement();if(e)e.classList.toggle('hi',m._tpId===id);}});
+  Object.keys(_tpMk).forEach(function(k){if(_tpMk[k].isConnected)_tpMk[k].classList.toggle('hi',k===id);});
+  if(!_tpLayer||_tpMl)return;_tpLayer.eachLayer(function(m){if(m._tpId&&m.getElement){var e=m.getElement();if(e)e.classList.toggle('hi',m._tpId===id);}});
 }
 
 // ---------- actions ----------
@@ -3688,7 +3772,7 @@ function tpPull(){
     else if((l.ts||0)>(r.ts||0))tpPush();
   });
 }
-window.addEventListener('resize',function(){if(_tpMap)setTimeout(function(){if(_tpMap)_tpMap.invalidateSize();},150);});
+window.addEventListener('resize',function(){if(_tpMap)setTimeout(function(){if(_tpMap)_tpMap.invalidateSize();},150);if(_tpMl)setTimeout(function(){if(_tpMl)_tpMl.resize();},150);});
 
 function noteShortDate(iso){if(!iso)return'';var d=new Date(iso);if(isNaN(d))return'';var m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return d.getDate()+' '+m[d.getMonth()];}
 // แก้ในการ์ดได้เลย — บันทึกอัตโนมัติ (ไม่ต้องกดบันทึก)
