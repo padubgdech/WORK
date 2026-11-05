@@ -61,7 +61,11 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Slash menu (`nxSlashCheck`, `NX_BLOCKS`: table, todo, h2, h3, ul, ol, quote, hr, page) filtered by typed text, ↑↓ Enter Esc.
   Tables: floating `#nx-ttools` (+row/+col/del row/del col/del table) under the table; Tab moves cells (adds a row at the end).
   Todo = `ul.nx-todo > li[data-done]`, click the box to toggle. Subpage = `a.nx-link[data-page]` (text refreshed to the page title on render).
-  Phone: list view ↔ page view (`_nxMob`, back button), toolbar scrolls horizontally. Test: scratchpad test_nx.py.
+  Full-page (5 Nov, "ให้เต็มหน้า คล้ายแบบ 1"): `goTab` toggles `body.nx-full` → hides `#phdr`, no padding/border, `.nx` = 100vh − 60px.
+  Format bar `#nx-tb` = floating dark bubble above a text selection on desktop (`nxBubble` on selectionchange), sticky row while
+  typing on phone (+ ตาราง / + เช็กลิสต์ there). Page options moved to ⋯ (`nxOpts` → `#nx-opts`: font, section, cover, delete).
+  New pages get cover `NX_COVERS[1]`. Phone: list view ↔ page view (`_nxMob`, back button). Test: scratchpad test_nx.py.
+  Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`
