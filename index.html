@@ -2420,6 +2420,7 @@ function nxRender(focusId){
       +nxPageHtml(notes,secs,cur)+'</section></div>':nxPageHtml(notes,secs,cur);
   root.innerHTML='<aside class="nx-side" aria-label="หัวข้อและหน้า">'+nxSideHtml(notes,secs,cur)+'</aside><main class="nx-main'+(peekP?' peek':'')+'" id="nx-main">'+mainHtml+'</main>';
   // ลิงก์หน้าย่อยในเนื้อหา → แสดงชื่อหน้าล่าสุด
+  root.querySelectorAll('a.nx-link,a.nx-sublink').forEach(function(a){a.setAttribute('draggable','false');});
   root.querySelectorAll('a.nx-link').forEach(function(a){var t=notes.find(function(x){return x.id===a.getAttribute('data-page');});a.innerHTML=t?nxPgIcon2(t)+'<span>'+nxEsc(nxTitleOf(t))+'</span>':'(หน้าถูกลบ)';});
 }
 function nxSortKids(a,b){var ha=a.ord!=null,hb=b.ord!=null;if(ha&&hb)return a.ord-b.ord;if(ha)return -1;if(hb)return 1;return nxCreated(a)<nxCreated(b)?-1:1;}
@@ -2544,7 +2545,7 @@ function nxPageHtml(notes,secs,cur){
     +'<button type="button" class="nx-mob" onmousedown="event.preventDefault()" onclick="nxInsert(\'todo\')">+ เช็กลิสต์</button>'
     +'</div>';
   h+='<h1 class="nx-title" id="nx-title" contenteditable="true" role="textbox" aria-label="ชื่อหน้า" data-ph="ไม่มีชื่อ" oninput="nxTitleInput(this)" onkeydown="nxTitleKey(event)" onpaste="nxPastePlain(event)" onblur="nxFlush()">'+nxEsc(n.title||'')+'</h1>';
-  h+='<div class="nx-body" id="nx-body" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหา" data-ph="พิมพ์ / เพื่อแทรก ตาราง · เช็กลิสต์ · หัวข้อ · หน้าย่อย" data-id="'+n.id+'" oninput="nxBodyInput()" onkeydown="nxKey(event)" onclick="nxBodyClick(event)" onpaste="nxPaste(event)" ondragover="if(event.dataTransfer&&Array.prototype.indexOf.call(event.dataTransfer.types||[],\'Files\')>=0)event.preventDefault()" ondrop="nxDropFiles(event)" onblur="nxFlush();setTimeout(nxSlashHide,150)">'+(n.html||noteHtmlOf(n))+'</div>';
+  h+='<div class="nx-body" id="nx-body" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหา" data-ph="พิมพ์ / เพื่อแทรก ตาราง · เช็กลิสต์ · หัวข้อ · หน้าย่อย" data-id="'+n.id+'" oninput="nxBodyInput()" onkeydown="nxKey(event)" onclick="nxBodyClick(event)" onpaste="nxPaste(event)" ondragstart="nxBodyDragStart(event)" ondragover="nxBodyDragOver(event)" ondrop="nxDropFiles(event)" onblur="nxFlush();setTimeout(nxSlashHide,150)">'+(n.html||noteHtmlOf(n))+'</div>';
   var subs=notes.filter(function(x){return x.parent===n.id;});
   h+='<div class="nx-subs"><div class="nx-lbl" style="margin:0 0 6px">หน้าย่อย'+(subs.length?' · '+subs.length:'')+'</div>'
     +subs.sort(nxSortKids).map(function(x){return '<a href="#" class="nx-sublink" data-id="'+x.id+'" data-page="'+x.id+'" onclick="event.preventDefault();nxPeekOpen(this.dataset.id)">'+nxPgIcon2(x)+'<span>'+nxEsc(nxTitleOf(x))+'</span></a>';}).join('')
@@ -2605,7 +2606,16 @@ function nxClipImages(d){
   return out;
 }
 function nxPickImage(){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;inp.onchange=function(){Array.prototype.slice.call(inp.files||[]).forEach(nxUploadImage);};inp.click();}
-function nxDropFiles(e){var f=Array.prototype.slice.call((e.dataTransfer&&e.dataTransfer.files)||[]).filter(function(x){return /^image\//.test(x.type);});if(!f.length)return;e.preventDefault();
+// ลากหน้าจากแถบซ้าย / ลิงก์หน้าย่อย มาปล่อยในเนื้อหา → ไม่ให้เบราว์เซอร์วางสำเนาลงไป
+function nxIsPageDrag(e){var t=e.dataTransfer&&e.dataTransfer.types;return !!_nxDrag||!!(t&&Array.prototype.indexOf.call(t,'application/x-nx-page')>=0);}
+function nxBodyDragStart(e){var a=e.target&&(e.target.nodeType===1?e.target:e.target.parentNode);if(a&&a.closest&&a.closest('a.nx-link,span.nx-tag')){e.preventDefault();}}
+function nxBodyDragOver(e){
+  var t=e.dataTransfer&&e.dataTransfer.types;
+  if(nxIsPageDrag(e)){e.preventDefault();try{e.dataTransfer.dropEffect='none';}catch(err){}return;}
+  if(t&&Array.prototype.indexOf.call(t,'Files')>=0)e.preventDefault();
+}
+function nxDropFiles(e){
+  if(nxIsPageDrag(e)){e.preventDefault();e.stopPropagation();nxDragEnd();return;}var f=Array.prototype.slice.call((e.dataTransfer&&e.dataTransfer.files)||[]).filter(function(x){return /^image\//.test(x.type);});if(!f.length)return;e.preventDefault();
   var r=document.caretRangeFromPoint?document.caretRangeFromPoint(e.clientX,e.clientY):null;if(r){var s0=window.getSelection();s0.removeAllRanges();s0.addRange(r);}f.forEach(nxUploadImage);}
 function nxUploadImage(file){
   var ed=document.getElementById('nx-body');if(!ed)return;
@@ -2863,7 +2873,7 @@ function nxPurge(i){
 }
 // ---------- ลากเรียงหน้า (คอม) ----------
 function nxIsDesc(notes,id,anc){var n=notes.find(function(x){return x.id===id;}),g=0;while(n&&n.parent&&g++<10){if(n.parent===anc)return true;n=notes.find(function(x){return x.id===n.parent;});}return false;}
-function nxDragStart(e){var row=e.currentTarget;_nxDrag=row.dataset.id;try{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',_nxDrag);}catch(err){}row.classList.add('dragging');}
+function nxDragStart(e){var row=e.currentTarget;_nxDrag=row.dataset.id;try{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('application/x-nx-page',_nxDrag);}catch(err){}row.classList.add('dragging');}
 function nxDragOver(e){
   if(!_nxDrag)return;var t=e.currentTarget;
   if(t.dataset.id===_nxDrag)return;

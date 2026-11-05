@@ -99,6 +99,9 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Image paste (5 Nov "control v วางรูป"): `nxClipImages(clipboardData)` (items kind=file, then files) used by `nxPaste` and `pinNotePaste`
   (pin task notes, quick notes, task-card `nta-` editor) → `pinPasteImage` (shrink 1280 → Drive → <img>, dispatches input → autosave).
   `noteSanitize` now keeps IMG with lh3/drive/data:image src. Copy/paste of an lh3 <img> between notes works via text/html. Test: test_paste.py.
+  Drag fix (5 Nov "ทำไมการลากวาง page เป็นการ copy"): sidebar row drags use type `application/x-nx-page` (not text/plain); `#nx-body`
+  ondragover/ondrop refuse page drags (`nxIsPageDrag`) so the browser never inserts a copy; `a.nx-link`/`a.nx-sublink` draggable=false
+  and `nxBodyDragStart` blocks dragging links/tags inside the body. Test: test_dragcopy.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
