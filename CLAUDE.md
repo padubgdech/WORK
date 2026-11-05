@@ -158,6 +158,13 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Agenda: mini calendar + "ช่วงยาวเดือนนี้" progress + list (multi-day all-day events = block with inner timed events).
   Timeline: rows งาน / ทริป / นัดหมาย, today line, 3 summary cards. Clicks: bar → task popup (tcCard) / event popup (cancel);
   day → day popup (+ งาน / + นัดหมาย → Rudy chat in event mode). Old per-day functions (loadCalDay, cellChips…) are now unused.
+- Tab bar settings (5 Nov, Dech: "ให้มี setting ปรับหัวข้อตรงนี้"): gear `.tabset-btn` in `.topbar-r` (all widths) → `tabsDlg()` modal: reorder
+  (drag ⋮⋮ / ↑↓), show/hide (Main can't be hidden), rename (empty = default; also renames `tabMeta[k].title`), คืนค่าเดิม. localStorage
+  `khum_tabs_v1` {order,hide,names,ts}; `tabsApply()` reorders the `.tabs` DOM on load (before `restoreLastTab`, which skips hidden tabs);
+  synced as key `ui__tabs` (`nxPutKey` on save, `tabsPull` 4.5 s after load, newer ts wins). Test: scratchpad test_tabs.py.
+- Quick-note order on the pinned band (5 Nov, "เลื่อนจัดอันดับ note ได้"): `n.qord` (pinQuickNotes sorts by it; new notes get min-1 = first);
+  drag the ⋮⋮ grip `.pin-qn-grip` (desktop HTML5 DnD, `pinQnDragStart/Over/Drop`, left/right drop indicator) or ‹ › `.pin-qn-mv` in the footer
+  (`pinQnMove`; always visible on touch). `pinQnOrder` bumps updatedAt so the order syncs with the notes.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 - LINE login (3 Nov, code written, NOT yet installed): `gas/dashboard-auth.gs` + frontend `authBoot/authLogin/authLost` (index.html, top of script).

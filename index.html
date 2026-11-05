@@ -338,6 +338,27 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .rep-btn.on{background:#111;color:#fff;border-color:#111}
 .rep-hint{font-size:10.5px;color:#aaa;margin-top:6px}
 /* ===== งานปักหมุด (ยังไม่กำหนดวัน) — แถบบนสุดหน้า Main ===== */
+.tabset-btn{width:32px;height:32px;border-radius:50%;border:.5px solid var(--border);background:#f0eeea;color:#555;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;margin-right:2px}
+.tabset-btn:hover{background:#e6e3dc;color:#111}
+.tbs-hint{margin:0 0 10px;font-size:12px;color:#666}
+.tbs-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.tbs-row{display:flex;align-items:center;gap:8px;background:#f7f6f3;border:1px solid #ece9e2;border-radius:12px;padding:6px 8px}
+.tbs-row.off{opacity:.55}.tbs-row.drag{outline:2px dashed #b9b2a3;opacity:.7}
+.tbs-grip{cursor:grab;color:#999;font-size:13px;letter-spacing:-2px;padding:0 2px;user-select:none}
+.tbs-ic{display:flex;color:#666}.tbs-name{flex:1;min-width:0;border:1px solid transparent;background:transparent;border-radius:8px;padding:7px 8px;font:inherit;font-size:14px;color:#222}
+.tbs-name:hover,.tbs-name:focus{border-color:#ddd8cc;background:#fff;outline:none}
+.tbs-mv{width:34px;height:34px;border:0;border-radius:9px;background:#fff;color:#444;cursor:pointer;font-size:14px;flex:0 0 auto}
+.tbs-mv:hover{background:#ece9e2}
+.tbs-sw{display:flex;align-items:center;gap:4px;font-size:12px;color:#555;cursor:pointer;flex:0 0 auto}.tbs-sw input{width:18px;height:18px;accent-color:#111}
+.tbs-lock{font-size:11px;color:#888;background:#ece9e2;border-radius:6px;padding:3px 8px;flex:0 0 auto}
+.tbs-ft{display:flex;gap:8px;margin-top:14px;align-items:center}.tbs-reset{border:1px solid #ddd8cc;background:#fff;border-radius:12px;padding:0 14px;min-height:44px;font:inherit;font-size:13px;cursor:pointer;color:#444}
+.pin-qn-grip{cursor:grab;color:#C4AE74;font-size:11px;letter-spacing:-2px;user-select:none;padding:0 1px;flex:none}
+.pin-qn-grip:active{cursor:grabbing}
+.pin-qn.drag{opacity:.45}.pin-qn.dl{box-shadow:-4px 0 0 #B8862F}.pin-qn.dr{box-shadow:4px 0 0 #B8862F}
+.pin-qn-mvs{display:inline-flex;gap:2px;opacity:0;transition:opacity .15s}.pin-qn:hover .pin-qn-mvs,.pin-qn:focus-within .pin-qn-mvs{opacity:1}
+.pin-qn-mv{border:0;background:transparent;color:#9A7B2E;border-radius:5px;width:22px;height:22px;cursor:pointer;font-size:15px;line-height:1;padding:0}
+.pin-qn-mv:hover{background:#F6E6B0;color:#7A5A12}
+@media(hover:none){.pin-qn-mvs{opacity:1}.pin-qn-mv{width:32px;height:32px}.pin-qn-grip{display:none}}
 .pin-band{background:#FBF3E4;border:1px solid #F1DEB2;border-radius:12px;padding:8px 12px 10px;margin-bottom:18px}
 .pin-hd{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .pin-ttl{display:flex;align-items:center;gap:6px;color:#6E4D12;font-size:12px;font-weight:700}
@@ -1133,6 +1154,7 @@ button.tp-mk{border:0;background:transparent;padding:0;cursor:pointer}
     </div>
   </div>
   <div class="topbar-r">
+    <button type="button" class="tabset-btn" onclick="tabsDlg()" aria-label="ตั้งค่าแถบเมนู" title="ตั้งค่าแถบเมนู"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
     <button class="btn-add" onclick="openAdd()">+ เพิ่มงาน</button>
     <div class="avatar">👤</div>
   </div>
@@ -4563,7 +4585,7 @@ function restoreLastTab(){
   try{last=localStorage.getItem('rudyLastTab');}catch(err){}
   if(!last||last==='main'||!tabMeta[last])return; // main คือหน้า default อยู่แล้ว ไม่ต้องทำอะไร
   var btn=document.querySelector('.tab[data-tab="'+last+'"]');
-  if(btn)goTab(last,btn);
+  if(btn&&btn.style.display!=='none')goTab(last,btn);
 }
 /* ===== Calendar ใหม่ — เดือน / รายการ / ไทม์ไลน์ (ตาม mockup "Rudy Calendar Multi-day") =====
    นัดหมายทั้งเดือนโหลดคำขอเดียว (GAS getRangeEvents) · งานจาก allActiveTasks (actionDate–endDate) */
@@ -5495,6 +5517,89 @@ function getPinnedTasks(){
     .sort(function(a,b){var pa=a.priority in pr?pr[a.priority]:1,pb=b.priority in pr?pr[b.priority]:1,d=pa-pb;if(d)return d;var ca=pinnedMeta[pinKey(a.id)]||'',cb=pinnedMeta[pinKey(b.id)]||'';return ca<cb?-1:ca>cb?1:0;});
 }
 function pinAgeDays(id){var c=pinnedMeta[pinKey(id)];if(!c)return 0;return Math.max(0,Math.round((new Date(TODAY_STR+'T00:00:00')-new Date(c+'T00:00:00'))/864e5));}
+/* ===== ตั้งค่าแถบเมนู (ลำดับ / ซ่อน / เปลี่ยนชื่อ) — localStorage khum_tabs_v1 + ซิงก์ key ui__tabs ===== */
+var TABS_KEY='khum_tabs_v1';
+function tabsDefault(){return Array.prototype.map.call(document.querySelectorAll('.tabs .tab'),function(b){return b.dataset.tab;});}
+function tabsLoad(){var o=null;try{o=JSON.parse(localStorage.getItem(TABS_KEY)||'null');}catch(e){}return o&&o.order?o:{order:[],hide:[],names:{},ts:0};}
+function tabsLabelEl(b){var n=null;Array.prototype.forEach.call(b.childNodes,function(c){if(c.nodeType===3&&c.textContent.trim())n=c;});if(!n){n=document.createTextNode('');b.appendChild(n);}return n;}
+function tabsDefName(b){if(!b.dataset.label)b.dataset.label=tabsLabelEl(b).textContent.trim();return b.dataset.label;}
+function tabsApply(){
+  var bar=document.querySelector('.tabs');if(!bar)return;var p=tabsLoad();
+  var all=Array.prototype.slice.call(bar.querySelectorAll('.tab')),by={};all.forEach(function(b){by[b.dataset.tab]=b;tabsDefName(b);});
+  var order=p.order.filter(function(k){return by[k];});all.forEach(function(b){if(order.indexOf(b.dataset.tab)<0)order.push(b.dataset.tab);});
+  order.forEach(function(k){bar.appendChild(by[k]);});
+  all.forEach(function(b){
+    var k=b.dataset.tab,hide=k!=='main'&&p.hide.indexOf(k)>=0;b.style.display=hide?'none':'';
+    var nm=(p.names&&p.names[k]||'').trim();tabsLabelEl(b).textContent=' '+(nm||b.dataset.label)+' ';
+    if(tabMeta[k]&&k!=='main')tabMeta[k].title=nm||tabMeta[k]._t||(tabMeta[k]._t=tabMeta[k].title);
+  });
+  var act=bar.querySelector('.tab.active');if(act&&act.style.display==='none'){var m=by.main;if(m)goTab('main',m);}
+}
+function tabsSave(p,noSync){p.ts=Date.now();try{localStorage.setItem(TABS_KEY,JSON.stringify(p));}catch(e){}tabsApply();if(!noSync&&typeof nxPutKey==='function')try{nxPutKey('ui__tabs',JSON.stringify(p),p.ts,function(){});}catch(e){}}
+function tabsPull(){
+  if(typeof nxGetKeys!=='function')return;
+  if(typeof _nxSync!=='undefined'&&_nxSync.off)return;
+  try{nxGetKeys(['ui__tabs'],function(st,got){if(st!=='ok'||!got||!got.ui__tabs||!got.ui__tabs.html)return;var o=null;try{o=JSON.parse(got.ui__tabs.html);}catch(e){}
+    if(o&&o.order&&(o.ts||0)>(tabsLoad().ts||0)){try{localStorage.setItem(TABS_KEY,JSON.stringify(o));}catch(e){}tabsApply();}});}catch(e){}
+}
+function tabsDlg(){
+  var p=tabsLoad(),bar=document.querySelector('.tabs');
+  var rows=Array.prototype.map.call(bar.querySelectorAll('.tab'),function(b){
+    var k=b.dataset.tab,hid=k!=='main'&&p.hide.indexOf(k)>=0,ic=b.querySelector('svg');
+    return '<li class="tbs-row'+(hid?' off':'')+'" data-k="'+k+'" draggable="true" ondragstart="tabsDragStart(event)" ondragover="tabsDragOver(event)" ondrop="tabsDrop(event)" ondragend="tabsDragEnd()">'
+      +'<span class="tbs-grip" aria-hidden="true">⋮⋮</span><span class="tbs-ic" aria-hidden="true">'+(ic?ic.outerHTML:'')+'</span>'
+      +'<input class="tbs-name" aria-label="ชื่อแท็บ '+escH(b.dataset.label)+'" value="'+escH(p.names&&p.names[k]||'')+'" placeholder="'+escH(b.dataset.label)+'" maxlength="16" data-k="'+k+'" oninput="tabsName(this)">'
+      +'<button type="button" class="tbs-mv" aria-label="เลื่อนขึ้น" data-k="'+k+'" onclick="tabsMove(this.dataset.k,-1)">↑</button><button type="button" class="tbs-mv" aria-label="เลื่อนลง" data-k="'+k+'" onclick="tabsMove(this.dataset.k,1)">↓</button>'
+      +(k==='main'?'<span class="tbs-lock" title="หน้า Main ซ่อนไม่ได้">หลัก</span>':'<label class="tbs-sw"><input type="checkbox"'+(hid?'':' checked')+' data-k="'+k+'" onchange="tabsShow(this)" aria-label="แสดงแท็บ '+escH(b.dataset.label)+'"><span>แสดง</span></label>')+'</li>';
+  }).join('');
+  showModal('<div class="modal-title">ตั้งค่าแถบเมนู <button class="modal-x" onclick="closeModal()" aria-label="ปิด">×</button></div>'
+    +'<p class="tbs-hint">ลาก ⋮⋮ หรือกด ↑ ↓ เพื่อเรียงลำดับ · ปิด “แสดง” เพื่อซ่อน · พิมพ์ชื่อใหม่ได้ (ว่าง = ชื่อเดิม)</p>'
+    +'<ul class="tbs-list" id="tbs-list">'+rows+'</ul>'
+    +'<div class="tbs-ft"><button type="button" class="tbs-reset" onclick="tabsReset()">คืนค่าเดิม</button><button type="button" class="btn-submit" style="flex:1" onclick="closeModal()">เสร็จ</button></div>');
+}
+function tabsCur(){var p=tabsLoad();p.order=Array.prototype.map.call(document.querySelectorAll('#tbs-list .tbs-row'),function(r){return r.dataset.k;});return p;}
+function tabsMove(k,d){
+  var r=document.querySelector('#tbs-list .tbs-row[data-k="'+k+'"]');if(!r)return;
+  var sib=d<0?r.previousElementSibling:r.nextElementSibling;if(!sib)return;
+  if(d<0)r.parentNode.insertBefore(r,sib);else r.parentNode.insertBefore(sib,r);
+  tabsSave(tabsCur());var b=r.querySelector('.tbs-mv:'+(d<0?'first-of-type':'last-of-type'));if(b)b.focus();
+}
+function tabsShow(cb){var p=tabsCur(),k=cb.dataset.k;p.hide=p.hide.filter(function(x){return x!==k;});if(!cb.checked)p.hide.push(k);cb.closest('.tbs-row').classList.toggle('off',!cb.checked);tabsSave(p);}
+var _tbsT=null;
+function tabsName(inp){clearTimeout(_tbsT);_tbsT=setTimeout(function(){var p=tabsCur();p.names=p.names||{};var v=inp.value.trim();if(v)p.names[inp.dataset.k]=v;else delete p.names[inp.dataset.k];tabsSave(p);},350);}
+function tabsReset(){tabsSave({order:tabsDefaultOrder(),hide:[],names:{}});tabsDlg();}
+var TABS_ORDER0=null;function tabsDefaultOrder(){return (TABS_ORDER0||tabsDefault()).slice();}
+var _tbsDrag=null;
+function tabsDragStart(e){var r=e.target.closest('.tbs-row');if(!r||e.target.tagName==='INPUT'){e.preventDefault();return;}_tbsDrag=r;r.classList.add('drag');try{e.dataTransfer.setData('application/x-khum-tab',r.dataset.k);e.dataTransfer.effectAllowed='move';}catch(x){}}
+function tabsDragOver(e){if(!_tbsDrag)return;e.preventDefault();var r=e.target.closest('.tbs-row');if(!r||r===_tbsDrag)return;var b=r.getBoundingClientRect();if(e.clientY<b.top+b.height/2)r.parentNode.insertBefore(_tbsDrag,r);else r.parentNode.insertBefore(_tbsDrag,r.nextSibling);}
+function tabsDrop(e){if(!_tbsDrag)return;e.preventDefault();tabsDragEnd();}
+function tabsDragEnd(){if(!_tbsDrag)return;_tbsDrag.classList.remove('drag');_tbsDrag=null;tabsSave(tabsCur());}
+
+/* ===== เรียงลำดับ note ด่วนบนแถบปักหมุด (n.qord) — ลาก ⋮⋮ (คอม) หรือ ‹ › ===== */
+var _pqDrag=null;
+function pinQnOrder(ids){
+  var notes=notesLoad(),now=new Date().toISOString();
+  ids.forEach(function(id,i){var n=notes.find(function(x){return x.id===id;});if(n&&n.qord!==i){n.qord=i;n.updatedAt=now;}});
+  notesSave(notes);
+}
+function pinQnIds(){return Array.prototype.map.call(document.querySelectorAll('#main-pinned .pin-qn'),function(x){return x.dataset.qn;});}
+function pinQnMove(id,d){
+  var ids=pinQnIds(),i=ids.indexOf(id),j=i+d;if(i<0||j<0||j>=ids.length)return;
+  ids.splice(i,1);ids.splice(j,0,id);pinQnOrder(ids);renderPinned();
+  var b=document.querySelector('#main-pinned .pin-qn[data-qn="'+id+'"] .pin-qn-mv[data-d="'+d+'"]');if(b)b.focus();
+}
+function pinQnDragStart(e,id){_pqDrag=id;var c=e.target.closest('.pin-qn');if(c){c.classList.add('drag');try{e.dataTransfer.setDragImage(c,20,20);}catch(x){}}try{e.dataTransfer.setData('application/x-pin-qn',id);e.dataTransfer.effectAllowed='move';}catch(x){}}
+function pinQnDragOver(e){
+  if(!_pqDrag)return;var c=e.target.closest('.pin-qn');if(!c)return;e.preventDefault();
+  document.querySelectorAll('#main-pinned .pin-qn.dl,#main-pinned .pin-qn.dr').forEach(function(x){x.classList.remove('dl','dr');});
+  if(c.dataset.qn===_pqDrag)return;var b=c.getBoundingClientRect();c.classList.add(e.clientX<b.left+b.width/2?'dl':'dr');
+}
+function pinQnDrop(e){
+  if(!_pqDrag)return;e.preventDefault();var c=e.target.closest('.pin-qn');var id=_pqDrag;pinQnDragEnd();
+  if(!c||c.dataset.qn===id)return;var b=c.getBoundingClientRect(),after=e.clientX>=b.left+b.width/2;
+  var ids=pinQnIds().filter(function(x){return x!==id;}),at=ids.indexOf(c.dataset.qn)+(after?1:0);ids.splice(at,0,id);pinQnOrder(ids);renderPinned();
+}
+function pinQnDragEnd(){_pqDrag=null;document.querySelectorAll('#main-pinned .pin-qn.drag,#main-pinned .pin-qn.dl,#main-pinned .pin-qn.dr').forEach(function(x){x.classList.remove('drag','dl','dr');});}
 function renderPinned(){
   var el=document.getElementById('main-pinned');if(!el)return;
   var ae=document.activeElement;if(ae&&ae.classList&&(ae.classList.contains('pin-nedit')||ae.classList.contains('pin-qn-ttl'))&&el.contains(ae)){_pinRenderLater=true;return;} // กำลังพิมพ์ note อยู่ → วาดใหม่หลังคลิกออก
@@ -5534,7 +5639,7 @@ function renderPinned(){
   var trSvg='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>';
   qns.forEach(function(n){
     var qc=PIN_QN_COLS.indexOf(n.bar)>=0?n.bar:PIN_QN_COLS[0];
-    h+='<div class="pin-qn" data-qn="'+n.id+'" style="--qc:'+qc+'"><div class="pin-qn-hd"><span class="pin-qn-ic" aria-hidden="true">'+(n.icon?escH(n.icon):'📝')+'</span>'
+    h+='<div class="pin-qn" data-qn="'+n.id+'" style="--qc:'+qc+'" ondragover="pinQnDragOver(event)" ondrop="pinQnDrop(event)"><div class="pin-qn-hd"><span class="pin-qn-grip" draggable="true" title="ลากเพื่อเรียงลำดับ" aria-hidden="true" data-id="'+n.id+'" ondragstart="pinQnDragStart(event,this.dataset.id)" ondragend="pinQnDragEnd()">⋮⋮</span><span class="pin-qn-ic" aria-hidden="true">'+(n.icon?escH(n.icon):'📝')+'</span>'
       +'<input class="pin-qn-ttl" id="pqt-'+n.id+'" data-id="'+n.id+'" value="'+escH(n.title||'')+'" placeholder="ชื่อ note…" aria-label="ชื่อ note" maxlength="120" oninput="pinQnTitle(this)" onblur="pinQnTitleSave(this.dataset.id)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();var b=document.getElementById(\'pqn-\'+this.dataset.id);if(b){b.focus();pinCaretEnd(b);}}if(event.key===\'Escape\')this.blur()">'
       +'<span class="pin-nst" id="pqs-'+n.id+'"></span>';
     h+='<button type="button" class="pin-qn-del" aria-label="ลบ note" title="ลบ note" data-id="'+n.id+'" onmousedown="event.preventDefault()" onclick="pinQnDel(this)">'+trSvg+'</button></div>'+pinToolbar();
@@ -5542,6 +5647,7 @@ function renderPinned(){
       +'<div class="pin-qn-ft">'+'<span class="pin-qn-cols" role="group" aria-label="สีแถบบน">'
       +PIN_QN_COLS.map(function(c){return '<button type="button" class="pin-qn-col'+(c===qc?' on':'')+'" style="background:'+c+'" aria-label="สีแถบ" aria-pressed="'+(c===qc)+'" data-id="'+n.id+'" data-c="'+c+'" onmousedown="event.preventDefault()" onclick="pinQnColor(this)"></button>';}).join('')
       +'</span>'
+      +'<span class="pin-qn-mvs"><button type="button" class="pin-qn-mv" data-d="-1" aria-label="เลื่อนไปซ้าย" title="เลื่อนไปซ้าย" data-id="'+n.id+'" onmousedown="event.preventDefault()" onclick="pinQnMove(this.dataset.id,-1)">‹</button><button type="button" class="pin-qn-mv" data-d="1" aria-label="เลื่อนไปขวา" title="เลื่อนไปขวา" data-id="'+n.id+'" onmousedown="event.preventDefault()" onclick="pinQnMove(this.dataset.id,1)">›</button></span>'
       +(typeof nxSecs==='function'?'<label class="pin-qn-sec"><span>หัวข้อ</span><select aria-label="หัวข้อของ note นี้" data-id="'+n.id+'" onchange="pinQnSec(this)">'+nxSecs().map(function(x){return '<option value="'+x.id+'"'+((n.sec||'s_general')===x.id?' selected':'')+'>'+escH(x.name)+'</option>';}).join('')+'</select></label>':'')
       +'</div></div>';
   });
@@ -5589,10 +5695,11 @@ function pinQnColor(b){ // เปลี่ยนสีแถบบนของ n
   var card=b.closest('.pin-qn');if(card)card.style.setProperty('--qc',c);
   card.querySelectorAll('.pin-qn-col').forEach(function(x){var on=x.dataset.c===c;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);});
 }
-function pinQuickNotes(){return notesLoad().filter(function(n){return n.main;});}
+function pinQuickNotes(){var a=notesLoad().filter(function(n){return n.main;});a.forEach(function(n,i){n._i=i;});return a.sort(function(x,y){var qx=x.qord==null?-1e6+x._i:x.qord,qy=y.qord==null?-1e6+y._i:y.qord;return qx-qy;});}
 function pinQnNew(){
   var notes=notesLoad(),now=new Date().toISOString();
-  var n={id:'n'+Date.now(),title:'',body:'',html:'',tag:NOTE_TAGS[5].label,main:true,createdAt:now,updatedAt:now};
+  var q0=pinQuickNotes().reduce(function(m,x){return x.qord!=null&&x.qord<m?x.qord:m;},0);
+  var n={id:'n'+Date.now(),title:'',body:'',html:'',tag:NOTE_TAGS[5].label,main:true,qord:q0-1,createdAt:now,updatedAt:now};
   notes.unshift(n);notesSave(notes);
   _pinCollapsed=false;renderPinned();
   var ed=document.getElementById('pqn-'+n.id);if(ed){ed.focus();ed.scrollIntoView({block:'nearest',behavior:'smooth'});}
@@ -5811,6 +5918,7 @@ function init(){
       api({action:'askRudy',prompt:encodeURIComponent('วิเคราะห์งานที่คุณเดชทำเสร็จในสัปดาห์นี้:\n\n'+tl+'\n\nตอบ 2-3 ประโยค ภาษาไทย สั้นกระชับ:')},function(d){var el=document.getElementById('main-rudy-text');if(el&&d&&d.reply)el.textContent=d.reply;});
     });
   },3000);
+  try{TABS_ORDER0=tabsDefault();tabsApply();setTimeout(tabsPull,4500);}catch(e){}
   restoreLastTab(); // กลับไปหน้าที่เปิดอยู่ล่าสุดก่อน reload (ไม่ใช่ Main เสมอ)
   rcInit(); // ปุ่มแชท Rudy มุมขวาล่าง
 }
