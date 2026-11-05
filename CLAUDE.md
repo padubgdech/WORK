@@ -130,6 +130,17 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   date select = stop's days `tpSpotDays`). "กี่สถานที่" input removed: `places = spots.length` (`tpSpotCount` falls back to old `places`).
   Card shows spot chips; map draws small `.tp-mk.sp` pins (`tpSpotPts`, label "1.2 name · วันที่ n (date) — city", click = stop dialog) in both
   MapLibre and Leaflet, included in fitBounds. Test: test_spots.py.
+  Suggestions (5 Nov, Dech chose canvas page "Trip · แนะนำที่เที่ยว" แบบ 1+2 + "กดปักหมุดใน map ได้"):
+  (1) stop dialog box `#tps-rb` "Rudy แนะนำใน <city>" (`tpRudyBoxHtml`/`tpRudyAsk`/`tpRudyRender`/`tpRudyAdd`): askRudy prompt (English)
+  → JSON array [{name,th,type,why,day}], categories `TP_RCATS`, sessionStorage cache `tp_rudy_<city|ctry|cat|days>`; "+ ปักหมุด" geocodes
+  `name` with Nominatim (bounded viewbox ±0.8° around `_tpGeo`, then "name, city") → `tpSpotAdd` (no hit = name only). (2) map tools
+  `.tp-mtools` (`tpMapTools(el,eng)` called in both engines; engine adapter `_tpE` = `tpEngML`/`tpEngLF`: addMk/rm/center/zoom/fly/fit/onClick):
+  "✨ ที่น่าสนใจ" (`tpSugToggle`/`tpSugLoad`; cats `TP_SUG_CATS`: see = Wikipedia geosearch th (+en if <8) 10 km, food/cafe/view = Overpass
+  `overpass-api.de` POST; cache sessionStorage `tp_sug_*`; dashed `.tp-mk.sug` markers, map fits them clear of the panel) and "📍 ปักเอง"
+  (`tpPinToggle`, crosshair, click → `tpPinAt` temp marker + Nominatim reverse for the name). Panel `#tp-mpan` (`tpPan`, events don't reach
+  the map): list → item (image, Wikipedia link, stop select = nearest stop or "＋ เมืองใหม่" → opens stop dialog with coords, day buttons
+  `tpPanDays`) → `tpPanSave` adds the spot WITHOUT redrawing the map (re-renders only `.tp-mid`, adds a `.tp-mk.sp` marker). Panel max 58 % of map;
+  phone map grows to 540px while the panel is open. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`

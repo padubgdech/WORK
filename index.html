@@ -1031,6 +1031,47 @@ li:hover>.tp-x,.tp-x:focus-visible{opacity:1}.tp-x:hover{background:#fde6e8;colo
 .tp-lang button.on{background:#7c6cf0;color:#fff}
 .tp-map .maplibregl-map{font-family:'IBM Plex Sans Thai',sans-serif}
 button.tp-mk{border:0;background:transparent;padding:0;cursor:pointer}
+.tp-mtools{position:absolute;top:52px;right:10px;z-index:1000;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.tp-mtools button{border:0;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:0 12px;min-height:36px;font:600 12.5px 'IBM Plex Sans Thai',sans-serif;color:#1d2033;cursor:pointer}
+.tp-mtools button.on{background:#1d2033;color:#fff}
+.tp-pinmode,.tp-pinmode .maplibregl-canvas-container,.tp-pinmode .leaflet-container,.tp-pinmode.leaflet-container{cursor:crosshair!important}
+.tp-mpan{position:absolute;left:10px;bottom:10px;z-index:1000;width:310px;max-width:calc(100% - 20px);max-height:58%;overflow-y:auto;background:#fff;border-radius:16px;box-shadow:0 12px 34px rgba(29,32,51,.22);padding:12px;box-sizing:border-box;font-family:'IBM Plex Sans Thai',sans-serif;color:#1d2033;display:flex;flex-direction:column;gap:8px}
+.tp-mpan[hidden]{display:none}
+.tp-mp-x{position:absolute;top:6px;right:6px;border:0;background:#f2f3f8;width:30px;height:30px;border-radius:9px;font-size:17px;color:#4b5168;cursor:pointer;z-index:1}
+.tp-mp-cats{display:flex;flex-wrap:wrap;gap:5px;padding-right:32px}.tp-mp-cats button{border:1px solid #e3e5ee;background:#fff;border-radius:999px;padding:5px 10px;font:12px inherit;font-family:inherit;color:#3d4258;cursor:pointer}
+.tp-mp-cats button.on{background:#7c6cf0;border-color:#7c6cf0;color:#fff;font-weight:600}.tp-mp-cats .tp-mp-here{border-style:dashed}
+.tp-mp-sub,.tp-mp-src,.tp-mp-ad{font-size:11.5px;color:#5d6378}.tp-mp-hint{font-size:12.5px;color:#3d4258;padding-right:30px;line-height:1.5}
+.tp-mp-list{display:flex;flex-direction:column;gap:2px;max-height:260px;overflow-y:auto}
+.tp-mp-li{display:flex;gap:9px;align-items:center;border:0;background:transparent;text-align:left;padding:6px;border-radius:10px;cursor:pointer;font-family:inherit}
+.tp-mp-li:hover{background:#f5f4fe}.tp-mp-li img,.tp-mp-noimg{width:40px;height:40px;border-radius:8px;object-fit:cover;flex:0 0 auto;background:#eceef4}
+.tp-mp-li span{display:flex;flex-direction:column;min-width:0}.tp-mp-li b{font-size:13px;font-weight:600}.tp-mp-li small{font-size:11px;color:#5d6378;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tp-mp-img{width:calc(100% + 24px);margin:-12px -12px 0;height:120px;object-fit:cover;border-radius:16px 16px 0 0}
+.tp-mp-t{padding-right:30px;font-size:14px}.tp-mp-t a{font-size:11.5px;color:#4a3fd1}.tp-mp-d{margin:0;font-size:12px;color:#3d4258;line-height:1.5}
+.tp-mp-lb{font-size:12px;font-weight:600;color:#4b5168}.tp-mp-in{border:1px solid #d9dce8;border-radius:10px;padding:9px 10px;font:13px inherit;font-family:inherit}
+.tp-mp-row{display:flex;align-items:center;gap:8px;font-size:12px;color:#4b5168}.tp-mp-row select{flex:1;min-width:0;border:1px solid #e3e5ee;border-radius:9px;padding:7px;font:12.5px inherit;font-family:inherit;background:#fff}
+.tp-mp-days{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:5px}.tp-mp-days small{font-size:11.5px;color:#5d6378;grid-column:1/-1}
+.tp-mp-days button{border:1px solid #e3e5ee;background:#fff;border-radius:10px;min-height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;padding:2px}
+.tp-mp-days button b{font-size:12px;font-weight:600}.tp-mp-days button small{font-size:10.5px;color:inherit;grid-column:auto}
+.tp-mp-days button.on{background:#1d2033;border-color:#1d2033;color:#fff}
+.tp-mp-acts{display:flex;gap:8px;justify-content:flex-end}.tp-mp-acts button{min-height:40px}
+.tp-mk.sug span{width:18px;height:18px;background:rgba(255,255,255,.9);border:2px dashed #7c6cf0;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.tp-mk.sug.hi span,.tp-mk.sug:hover span{background:#7c6cf0;transform:scale(1.25)}
+.tp-mk.tmp span{width:20px;height:20px;background:#e5484d;animation:tpPulse 1.2s infinite}
+@keyframes tpPulse{0%,100%{box-shadow:0 0 0 0 rgba(229,72,77,.5)}50%{box-shadow:0 0 0 9px rgba(229,72,77,0)}}
+.tp-lfwrap{background:none;border:0}.tp-lfwrap .tp-mk{transform:translate(-50%,-50%)}
+@media(max-width:760px){.tp-mpan{left:6px;right:6px;bottom:6px;width:auto;max-width:none;max-height:58%}.tp-mtools{top:46px}.tp-map:has(.tp-mpan:not([hidden])){height:540px}}
+.tp-rb{margin-top:10px;border:1px solid #e6e3ff;background:#f8f7ff;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.tp-rb-h{display:flex;align-items:center;gap:8px;font-size:13.5px}.tp-rb-h b{flex:1}
+.tp-rb-av{width:26px;height:26px;border-radius:50%;background:#1d2033;color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.tp-rb-go{border:1px solid #d6d1ff;background:#fff;color:#4a3fd1;border-radius:999px;padding:0 12px;min-height:32px;font:600 12px inherit;font-family:inherit;cursor:pointer}
+.tp-rb-cats{display:flex;flex-wrap:wrap;gap:5px}.tp-rb-cats button{border:1px solid #e3e5ee;background:#fff;border-radius:999px;padding:5px 10px;font-size:12px;font-family:inherit;color:#3d4258;cursor:pointer}
+.tp-rb-cats button.on{background:#7c6cf0;border-color:#7c6cf0;color:#fff;font-weight:600}
+.tp-rb-l{display:flex;flex-direction:column;gap:6px}.tp-rb-e{font-size:11.5px;color:#5d6378}
+.tp-rb-i{display:flex;align-items:center;gap:8px;background:#fff;border-radius:11px;padding:8px 10px;flex-wrap:wrap}
+.tp-rb-b{flex:1;min-width:140px;display:flex;flex-direction:column}.tp-rb-b b{font-size:13px;font-weight:600}.tp-rb-b small{font-size:11.5px;color:#5d6378}.tp-rb-b .tp-rb-en{font-size:11px;color:#8a90a6}
+.tp-rb-i select{border:1px solid #e3e5ee;border-radius:8px;padding:5px;font-size:12px;font-family:inherit;background:#fff;max-width:118px}
+.tp-rb-add{border:0;background:#1d2033;color:#fff;border-radius:9px;padding:0 12px;min-height:34px;font:600 12px inherit;font-family:inherit;cursor:pointer}.tp-rb-add:disabled{background:#c3c7d6;cursor:default}
+
 </style>
 </head>
 <body>
@@ -3560,7 +3601,7 @@ function tpMapDrawLeaflet(t){
     el.innerHTML='';
     _tpMap=L.map(el,{zoomControl:true,attributionControl:true}).setView([13.75,100.5],5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(_tpMap);
-    _tpLayer=L.layerGroup().addTo(_tpMap);
+    _tpLayer=L.layerGroup().addTo(_tpMap);tpMapTools(el,tpEngLF(_tpMap,_tpLayer));
     var st=tpStops(t).filter(function(s){return s.lat!=null&&s.lng!=null;}),spp=tpSpotPts(t);
     spp.forEach(function(p){
       var ic=L.divIcon({className:'tp-mk sp',html:'<span style="background:'+p.c+'">'+p.n+'</span>',iconSize:[16,16],iconAnchor:[8,8]});
@@ -3633,7 +3674,7 @@ function tpMapDraw(t){
     _tpMl=map;var failed=false;
     var guard=setTimeout(function(){if(!map.isStyleLoaded()&&_tpMl===map){failed=true;try{map.remove();}catch(e){}_tpMl=null;tpMapDrawLeaflet(t);}},12000); // โหลดสไตล์ไม่ได้ → แผนที่แบบเดิม
     map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-left');
-    tpLangCtl(el);
+    tpLangCtl(el);tpMapTools(el,tpEngML(map));
     map.on('load',function(){
       clearTimeout(guard);if(failed)return;
       tpApplyLang(map,tpMapLang());
@@ -3642,7 +3683,7 @@ function tpMapDraw(t){
         var i=all.indexOf(s),c=TP_SOFT[(s.color==null?i:s.color)%TP_SOFT.length][1];
         var m=document.createElement('button');m.type='button';m.className='tp-mk';m.setAttribute('aria-label',(i+1)+'. '+s.name);m.title=s.name;
         m.innerHTML='<span style="background:'+c+'">'+(i+1)+'</span>';m.onclick=function(ev){ev.stopPropagation();tpStopDlg(s.id);};
-        new maplibregl.Marker({element:m}).setLngLat([s.lng,s.lat]).addTo(map);_tpMk[s.id]=m;
+        new maplibregl.Marker({element:m}).setLngLat([s.lng,s.lat]).addTo(map);m.setAttribute('aria-label',(i+1)+'. '+s.name);_tpMk[s.id]=m;
       });
       var spp=tpSpotPts(t);
       spp.forEach(function(p){
@@ -3684,6 +3725,263 @@ function tpHi(id){
   if(!_tpLayer||_tpMl)return;_tpLayer.eachLayer(function(m){if(m._tpId&&m.getElement){var e=m.getElement();if(e)e.classList.toggle('hi',m._tpId===id);}});
 }
 
+// ---------- แผนที่: ที่น่าสนใจรอบ ๆ (Wikipedia / OSM) + ปักหมุดเองด้วยการกดบนแผนที่ ----------
+// _tpE = ตัวกลางของแผนที่ (MapLibre หรือ Leaflet): addMk(lat,lng,el,title,onclick) → handle · rm(h) · center() · zoom() · fly(lat,lng,z) · onClick(fn)
+var _tpE=null,_tpSugOn=false,_tpSugCat='see',_tpSugMk=[],_tpSugList=[],_tpPinOn=false,_tpTmpMk=null,_tpPanItem=null;
+var TP_SUG_CATS=[['see','ที่เที่ยว'],['food','ร้านอาหาร'],['cafe','คาเฟ่'],['view','จุดชมวิว']];
+function tpEngML(map){
+  return {kind:'ml',
+    addMk:function(lat,lng,el,title,fn){var lb=el.getAttribute('aria-label');el.title=title||'';el.onclick=function(ev){ev.stopPropagation();if(fn)fn();};var m=new maplibregl.Marker({element:el}).setLngLat([lng,lat]).addTo(map);if(lb)el.setAttribute('aria-label',lb);return m;},
+    fit:function(pts,pad){var b=new maplibregl.LngLatBounds();pts.forEach(function(p){b.extend([p[1],p[0]]);});map.fitBounds(b,{padding:pad,maxZoom:15,duration:0});},
+    rm:function(m){try{m.remove();}catch(e){}},
+    center:function(){var c=map.getCenter();return {lat:c.lat,lng:c.lng};},zoom:function(){return map.getZoom();},
+    fly:function(lat,lng,z){map.jumpTo({center:[lng,lat],zoom:z==null?map.getZoom():z});},
+    onClick:function(fn){map.on('click',function(e){fn(e.lngLat.lat,e.lngLat.lng);});},
+    alive:function(){return _tpMl===map;}};
+}
+function tpEngLF(map,layer){
+  return {kind:'lf',
+    addMk:function(lat,lng,el,title,fn){var ic=L.divIcon({className:'tp-lfwrap',html:el,iconSize:null});var m=L.marker([lat,lng],{icon:ic,title:title||''}).addTo(layer);if(fn)m.on('click',fn);return m;},
+    rm:function(m){try{layer.removeLayer(m);}catch(e){}},
+    center:function(){var c=map.getCenter();return {lat:c.lat,lng:c.lng};},zoom:function(){return map.getZoom();},
+    fly:function(lat,lng,z){map.setView([lat,lng],z==null?map.getZoom():z);},
+    fit:function(pts,pad){map.fitBounds(L.latLngBounds(pts),{paddingTopLeft:[pad.left,pad.top],paddingBottomRight:[pad.right,pad.bottom],maxZoom:15});},
+    onClick:function(fn){map.on('click',function(e){fn(e.latlng.lat,e.latlng.lng);});},
+    alive:function(){return _tpMap===map;}};
+}
+// ปุ่มบนแผนที่ + แผงล่าง (กดในแผงไม่ทะลุไปที่แผนที่)
+function tpMapTools(el,eng){
+  _tpE=eng;_tpSugMk=[];_tpTmpMk=null;_tpPanItem=null;
+  var bar=document.createElement('div');bar.className='tp-mtools';bar.setAttribute('role','group');bar.setAttribute('aria-label','เครื่องมือแผนที่');
+  bar.innerHTML='<button type="button" id="tp-sugbtn" aria-pressed="'+_tpSugOn+'" class="'+(_tpSugOn?'on':'')+'" onclick="tpSugToggle()">✨ ที่น่าสนใจ</button>'
+    +'<button type="button" id="tp-pinbtn" aria-pressed="false" onclick="tpPinToggle()">📍 ปักเอง</button>';
+  var pan=document.createElement('div');pan.className='tp-mpan';pan.id='tp-mpan';pan.hidden=true;
+  [bar,pan].forEach(function(x){['click','dblclick','mousedown','pointerdown','touchstart','wheel','contextmenu'].forEach(function(ev){x.addEventListener(ev,function(e){e.stopPropagation();},{passive:true});});el.appendChild(x);});
+  _tpPinOn=false;
+  eng.onClick(function(lat,lng){if(_tpPinOn)tpPinAt(lat,lng);});
+  if(_tpSugOn)setTimeout(function(){tpSugLoad(true);},300);
+}
+function tpPinToggle(force){
+  _tpPinOn=force==null?!_tpPinOn:force;
+  var b=document.getElementById('tp-pinbtn');if(b){b.classList.toggle('on',_tpPinOn);b.setAttribute('aria-pressed',_tpPinOn);}
+  var m=document.getElementById('tp-map');if(m)m.classList.toggle('tp-pinmode',_tpPinOn);
+  if(_tpPinOn){if(!_tpPanItem||_tpPanItem.manual){if(_tpTmpMk&&_tpE){_tpE.rm(_tpTmpMk);_tpTmpMk=null;}tpPan({hint:true});}}
+  else{if(_tpPanItem&&_tpPanItem.manual){if(_tpTmpMk&&_tpE){_tpE.rm(_tpTmpMk);_tpTmpMk=null;}_tpPanItem=null;}
+    if(_tpPanItem==null){if(_tpSugOn&&_tpSugList.length)tpPan({list:true});else tpPanClose();}}
+}
+function tpSugToggle(){
+  _tpSugOn=!_tpSugOn;var b=document.getElementById('tp-sugbtn');if(b){b.classList.toggle('on',_tpSugOn);b.setAttribute('aria-pressed',_tpSugOn);}
+  if(_tpSugOn)tpSugLoad(true);else{tpSugClear();tpPanClose();}
+}
+function tpSugClear(){if(_tpE)_tpSugMk.forEach(function(m){_tpE.rm(m);});_tpSugMk=[];_tpSugList=[];}
+function tpSugCat(c){_tpSugCat=c;tpSugLoad(false);}
+// first=true: แผนที่ซูมออกกว้างอยู่ → ไปที่เมืองที่ใกล้กลางจอก่อน
+function tpSugLoad(first){
+  if(!_tpE)return;var c=_tpE.center();
+  if(first&&_tpE.zoom()<10){
+    var t=tpCur(tpLoad()),st=t?tpStops(t).filter(function(s){return s.lat!=null;}):[];
+    if(st.length){var best=st[0],bd=1e9;st.forEach(function(s){var dd=Math.pow(s.lat-c.lat,2)+Math.pow(s.lng-c.lng,2);if(dd<bd){bd=dd;best=s;}});_tpE.fly(best.lat,best.lng,12.5);c={lat:best.lat,lng:best.lng};}
+  }
+  tpSugClear();tpPan({loading:true});
+  var cat=_tpSugCat,key='tp_sug_'+cat+'_'+c.lat.toFixed(2)+','+c.lng.toFixed(2),cache=null;
+  try{cache=JSON.parse(sessionStorage.getItem(key)||'null');}catch(e){}
+  function done(list){
+    if(!_tpSugOn||cat!==_tpSugCat||!_tpE||!_tpE.alive())return;
+    try{sessionStorage.setItem(key,JSON.stringify(list));}catch(e){}
+    var have=tpAllSpots();
+    list=list.filter(function(x){return !have.some(function(h){return h.name===x.name||(Math.abs(h.lat-x.lat)<0.0006&&Math.abs(h.lng-x.lng)<0.0006);});}).slice(0,20);
+    _tpSugList=list;
+    list.forEach(function(x,i){
+      var el=document.createElement('button');el.type='button';el.className='tp-mk sug';el.setAttribute('aria-label','แนะนำ: '+x.name);el.innerHTML='<span></span>';
+      _tpSugMk.push(_tpE.addMk(x.lat,x.lng,el,x.name,function(){tpSugPick(_tpSugList.indexOf(x));}));
+    });
+    tpPan({list:true});
+    if(list.length&&_tpE.fit){ // ให้หมุดแนะนำไม่ถูกแผงบัง
+      var pm=document.getElementById('tp-mpan'),mp=document.getElementById('tp-map'),pad={top:60,right:60,bottom:40,left:40};
+      if(pm&&mp){var pw=pm.offsetWidth,mw=mp.offsetWidth;if(pw>mw*0.6)pad.bottom=Math.min(pm.offsetHeight+20,mp.offsetHeight*0.6);else pad.left=pw+30;}
+      try{_tpE.fit(list.map(function(x){return [x.lat,x.lng];}),pad);}catch(e){}
+    }
+  }
+  if(cache){done(cache);return;}
+  (cat==='see'?tpWikiNear(c):tpOsmNear(c,cat)).then(done).catch(function(){tpPan({err:true});});
+}
+function tpAllSpots(){var t=tpCur(tpLoad()),o=[];if(t)(t.stops||[]).forEach(function(s){(s.spots||[]).forEach(function(x){if(x.lat!=null)o.push(x);});});return o;}
+var TP_WIKI_SKIP=/สถานี|station|เขต|อำเภอ|ตำบล|district|โรงเรียน|school|มหาวิทยาลัย|university|college|hospital|โรงพยาบาล|ถนน|road|street|line|สาย|interchange|ทางแยก|bridge|สะพาน/i;
+function tpWikiOne(lang,c){
+  var u='https://'+lang+'.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=geosearch&ggscoord='+c.lat.toFixed(5)+'%7C'+c.lng.toFixed(5)
+    +'&ggsradius=10000&ggslimit=40&prop=coordinates%7Cpageimages%7Cdescription%7Cextracts&exintro=1&explaintext=1&exsentences=2&exlimit=max&piprop=thumbnail&pithumbsize=320&pilimit=max';
+  return fetch(u).then(function(r){return r.json();}).then(function(j){
+    var pg=j&&j.query&&j.query.pages?Object.keys(j.query.pages).map(function(k){return j.query.pages[k];}):[];
+    return pg.filter(function(p){return p.coordinates&&p.coordinates[0]&&!TP_WIKI_SKIP.test(p.title+' '+(p.description||''));}).map(function(p){
+      return {name:p.title,lat:p.coordinates[0].lat,lng:p.coordinates[0].lon,img:p.thumbnail&&p.thumbnail.source||'',desc:String(p.extract||p.description||'').slice(0,180),src:'Wikipedia',url:'https://'+lang+'.wikipedia.org/wiki/'+encodeURIComponent(p.title),dist:p.index||0};
+    });
+  });
+}
+function tpWikiNear(c){
+  return tpWikiOne('th',c).catch(function(){return [];}).then(function(th){
+    var lang=tpMapLang();
+    if(th.length>=8&&lang!=='en')return th;
+    return tpWikiOne('en',c).catch(function(){return [];}).then(function(en){
+      var a=lang==='en'?en.concat(th):th.concat(en),seen={};
+      return a.filter(function(x){var k=x.lat.toFixed(3)+','+x.lng.toFixed(3);if(seen[k])return false;seen[k]=1;return true;});
+    });
+  }).then(function(a){a.sort(function(x,y){return (y.img?1:0)-(x.img?1:0);});if(!a.length)throw new Error('none');return a;});
+}
+function tpOsmNear(c,cat){
+  var q={food:'nwr["amenity"="restaurant"]["name"](around:2500,LAT,LNG);',cafe:'nwr["amenity"="cafe"]["name"](around:2500,LAT,LNG);',view:'nwr["tourism"="viewpoint"](around:10000,LAT,LNG);'}[cat].replace(/LAT/g,c.lat.toFixed(5)).replace(/LNG/g,c.lng.toFixed(5));
+  var lang=tpMapLang();
+  return fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent('[out:json][timeout:20];('+q+');out center 60;'),headers:{'Content-Type':'application/x-www-form-urlencoded'}})
+    .then(function(r){return r.json();}).then(function(j){
+      var a=(j&&j.elements||[]).map(function(e){var tg=e.tags||{},lat=e.lat!=null?e.lat:e.center&&e.center.lat,lng=e.lon!=null?e.lon:e.center&&e.center.lon;
+        var nm=lang==='en'?(tg['name:en']||tg.name):(tg['name:th']||tg.name||tg['name:en']);
+        return {name:nm||(cat==='view'?'จุดชมวิว':''),lat:lat,lng:lng,img:'',desc:[tg.cuisine?String(tg.cuisine).replace(/;/g,', '):'',tg.opening_hours?'เปิด '+tg.opening_hours:''].filter(String).join(' · '),src:'OpenStreetMap'};})
+        .filter(function(x){return x.name&&x.lat!=null;});
+      a.sort(function(x,y){return (Math.pow(x.lat-c.lat,2)+Math.pow(x.lng-c.lng,2))-(Math.pow(y.lat-c.lat,2)+Math.pow(y.lng-c.lng,2));});
+      if(!a.length)throw new Error('none');return a;
+    });
+}
+function tpSugPick(i){
+  var x=_tpSugList[i];if(!x)return;
+  _tpSugMk.forEach(function(m,j){var e=m.getElement?m.getElement():null;if(e){var b=e.classList.contains('tp-mk')?e:e.querySelector('.tp-mk');if(b)b.classList.toggle('hi',j===i);}});
+  tpPan({item:{name:x.name,lat:x.lat,lng:x.lng,img:x.img,desc:x.desc,src:x.src,url:x.url,sug:i}});
+}
+function tpPinAt(lat,lng){
+  if(_tpTmpMk&&_tpE)_tpE.rm(_tpTmpMk);
+  var el=document.createElement('button');el.type='button';el.className='tp-mk tmp';el.setAttribute('aria-label','จุดที่เลือก');el.innerHTML='<span></span>';
+  _tpTmpMk=_tpE.addMk(lat,lng,el,'จุดที่เลือก',null);
+  var it={name:'',lat:lat,lng:lng,manual:true,looking:true};tpPan({item:it});
+  fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18&accept-language='+(tpMapLang()==='en'?'en':'th,en')+'&lat='+lat+'&lon='+lng)
+    .then(function(r){return r.json();}).then(function(r){
+      if(_tpPanItem!==it)return;it.looking=false;
+      var nm=r&&(r.name||(r.display_name||'').split(',')[0])||'';var inp=document.getElementById('tp-mp-n');
+      if(inp&&!inp.value){inp.value=nm;}var s=document.getElementById('tp-mp-ad');if(s)s.textContent=r&&r.display_name?r.display_name:'';
+    }).catch(function(){it.looking=false;var s=document.getElementById('tp-mp-ad');if(s)s.textContent='';});
+}
+function tpNearestStop(t,lat,lng){
+  var st=tpStops(t),best=null,bd=1e9;st.forEach(function(s){if(s.lat==null)return;var d=Math.pow(s.lat-lat,2)+Math.pow(s.lng-lng,2);if(d<bd){bd=d;best=s;}});
+  return best||st[0]||null;
+}
+function tpPanClose(){
+  var p=document.getElementById('tp-mpan');if(p){p.hidden=true;p.innerHTML='';}
+  _tpPanItem=null;if(_tpTmpMk&&_tpE){_tpE.rm(_tpTmpMk);_tpTmpMk=null;}
+}
+function tpPanBack(){if(_tpTmpMk&&_tpE){_tpE.rm(_tpTmpMk);_tpTmpMk=null;}_tpPanItem=null;if(_tpSugOn&&_tpSugList.length)tpPan({list:true});else if(_tpPinOn)tpPan({hint:true});else tpPanClose();}
+// o: {loading|err|list|hint|item}
+function tpPan(o){
+  var p=document.getElementById('tp-mpan');if(!p)return;p.hidden=false;
+  var cats='<div class="tp-mp-cats" role="group" aria-label="หมวด">'+TP_SUG_CATS.map(function(c){return '<button type="button" class="'+(c[0]===_tpSugCat?'on':'')+'" aria-pressed="'+(c[0]===_tpSugCat)+'" data-c="'+c[0]+'" onclick="tpSugCat(this.dataset.c)">'+c[1]+'</button>';}).join('')
+    +'<button type="button" class="tp-mp-here" onclick="tpSugLoad(false)">↻ ค้นหาตรงนี้</button></div>';
+  var x='<button type="button" class="tp-mp-x" aria-label="ปิด" onclick="'+(o.item?'tpPanBack()':(_tpPinOn&&o.hint?'tpPinToggle(false)':'tpSugToggle()'))+'">×</button>';
+  if(o.item){_tpPanItem=o.item;p.innerHTML=x+tpPanItemHtml(o.item);tpPanDays();var n=document.getElementById('tp-mp-n');if(n&&o.item.manual)setTimeout(function(){n.focus();},30);return;}
+  _tpPanItem=null;
+  if(o.hint){p.innerHTML=x+'<div class="tp-mp-hint"><b>📍 ปักเอง</b> แตะบนแผนที่ตรงจุดที่อยากไป แล้วตั้งชื่อ เลือกเมืองและวัน</div>';return;}
+  if(o.loading){p.innerHTML=x+cats+'<div class="tp-mp-hint">กำลังหาที่น่าสนใจรอบ ๆ …</div>';return;}
+  if(o.err){p.innerHTML=x+cats+'<div class="tp-mp-hint">ไม่พบในบริเวณนี้ — ลองเลื่อนแผนที่ไปที่อื่นแล้วกด ↻ ค้นหาตรงนี้ หรือเปลี่ยนหมวด</div>';return;}
+  p.innerHTML=x+cats+'<div class="tp-mp-sub">พบ '+_tpSugList.length+' ที่ · วงประบนแผนที่ = แนะนำ</div><div class="tp-mp-list">'
+    +_tpSugList.map(function(s,i){return '<button type="button" class="tp-mp-li" data-i="'+i+'" onclick="tpSugPick(+this.dataset.i)">'+(s.img?'<img src="'+tpEsc(s.img)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<span class="tp-mp-noimg" aria-hidden="true"></span>')+'<span><b>'+tpEsc(s.name)+'</b>'+(s.desc?'<small>'+tpEsc(s.desc.slice(0,70))+'</small>':'')+'</span></button>';}).join('')+'</div>'
+    +'<div class="tp-mp-src">ข้อมูล: '+(_tpSugCat==='see'?'Wikipedia':'OpenStreetMap')+'</div>';
+}
+function tpPanItemHtml(it){
+  var t=tpCur(tpLoad());if(!t)return '';
+  var ns=tpNearestStop(t,it.lat,it.lng),st=tpStops(t);
+  var sel='<select id="tp-mp-s" aria-label="เพิ่มเข้าเมือง" onchange="tpPanDays()">'+st.map(function(s,i){return '<option value="'+s.id+'"'+(ns&&ns.id===s.id?' selected':'')+'>'+(i+1)+'. '+tpEsc(s.name)+'</option>';}).join('')+'<option value="__new"'+(st.length?'':' selected')+'>＋ ตั้งเป็นเมือง/จุดหมายใหม่</option></select>';
+  return (it.img?'<img class="tp-mp-img" src="'+tpEsc(it.img)+'" alt="" onerror="this.remove()">':'')
+    +(it.manual?'<label class="tp-mp-lb" for="tp-mp-n">ชื่อสถานที่</label><input id="tp-mp-n" class="tp-mp-in" placeholder="'+(it.looking?'กำลังหาชื่อ…':'ตั้งชื่อ เช่น ร้านอาหารที่เพื่อนแนะนำ')+'" onkeydown="if(event.key===\'Enter\')tpPanSave()"><small id="tp-mp-ad" class="tp-mp-ad"></small>'
+      :'<div class="tp-mp-t"><b>'+tpEsc(it.name)+'</b>'+(it.url?' <a href="'+tpEsc(it.url)+'" target="_blank" rel="noopener">อ่านต่อ ↗</a>':'')+'</div>'+(it.desc?'<p class="tp-mp-d">'+tpEsc(it.desc)+'</p>':''))
+    +'<div class="tp-mp-row"><label for="tp-mp-s">เพิ่มเข้า</label>'+sel+'</div>'
+    +'<div class="tp-mp-days" id="tp-mp-days" role="group" aria-label="วันที่ไป"></div>'
+    +'<div class="tp-mp-acts">'+(_tpSugOn&&_tpSugList.length||it.manual?'<button type="button" class="tp-btn-l" onclick="tpPanBack()">'+(it.manual?'ยกเลิก':'‹ รายการ')+'</button>':'')+'<button type="button" class="tp-btn-d" onclick="tpPanSave()">✓ ปักหมุด</button></div>';
+}
+var _tpPanDay='';
+function tpPanDays(){
+  var box=document.getElementById('tp-mp-days'),sv=document.getElementById('tp-mp-s');if(!box||!sv)return;
+  var t=tpCur(tpLoad()),s=t&&(t.stops||[]).find(function(x){return x.id===sv.value;});
+  if(!s||!s.date){_tpPanDay='';box.innerHTML=s?'<small>เมืองนี้ยังไม่ได้ใส่วันที่ — ปักแบบไม่ระบุวัน</small>':'<small>จะสร้างเป็นเมืองใหม่ในทริป</small>';return;}
+  var n=Math.max(1,+s.days||1),days=[];for(var i=0;i<Math.min(n,14);i++)days.push(addDays(s.date,i));
+  if(days.indexOf(_tpPanDay)<0)_tpPanDay=days[0];
+  box.innerHTML=days.map(function(ds,i){var dm=tpDM(ds);return '<button type="button" class="'+(ds===_tpPanDay?'on':'')+'" aria-pressed="'+(ds===_tpPanDay)+'" data-d="'+ds+'" onclick="_tpPanDay=this.dataset.d;tpPanDays()"><b>วันที่ '+(i+1)+'</b><small>'+dm[0]+' '+dm[1]+'</small></button>';}).join('')
+    +'<button type="button" class="'+(_tpPanDay==='-'?'on':'')+'" aria-pressed="'+(_tpPanDay==='-')+'" data-d="-" onclick="_tpPanDay=this.dataset.d;tpPanDays()"><b>ไม่ระบุ</b><small>วัน</small></button>';
+}
+function tpPanSave(){
+  var it=_tpPanItem;if(!it)return;var sv=document.getElementById('tp-mp-s');
+  var name=it.manual?((document.getElementById('tp-mp-n')||{}).value||'').trim():it.name;
+  if(!name){showToast('ตั้งชื่อสถานที่ก่อน');var n=document.getElementById('tp-mp-n');if(n)n.focus();return;}
+  var sid=sv?sv.value:'__new';
+  if(sid==='__new'){ // เมืองใหม่ → เปิดหน้าต่างเพิ่มสถานที่พร้อมพิกัด
+    tpPanClose();tpPinToggle(false);tpStopDlg();var i=document.getElementById('tps-n');if(i)i.value=name;_tpGeo={lat:it.lat,lng:it.lng};var p=document.getElementById('tps-pos');if(p)p.textContent='📍 ปักหมุดแล้ว ('+it.lat.toFixed(3)+', '+it.lng.toFixed(3)+')';return;
+  }
+  var d=tpLoad(),t=tpCur(d),s=t&&(t.stops||[]).find(function(x){return x.id===sid;});if(!s)return;
+  s.spots=s.spots||[];var sp={id:tpUid(),name:name,date:_tpPanDay==='-'?'':(s.date?_tpPanDay:''),lat:it.lat,lng:it.lng};s.spots.push(sp);s.places=s.spots.length;
+  tpStore(d);
+  // อัปเดตการ์ดเมืองโดยไม่วาดแผนที่ใหม่ (ตำแหน่ง/หมุดแนะนำยังอยู่)
+  var mid=document.querySelector('#tp .tp-mid');if(mid)mid.innerHTML=tpTimelineHtml(t);
+  var all=tpStops(t),idx=all.indexOf(s),c=TP_SOFT[(s.color==null?idx:s.color)%TP_SOFT.length][1];
+  var el=document.createElement('button');el.type='button';el.className='tp-mk sp';el.innerHTML='<span style="background:'+c+'">'+s.spots.length+'</span>';
+  var lb=(idx+1)+'.'+s.spots.length+' '+name+(sp.date?' · '+tpDM(sp.date).join(' '):'')+' — '+s.name;el.setAttribute('aria-label',lb);
+  if(_tpE)_tpE.addMk(sp.lat,sp.lng,el,lb,function(){tpStopDlg(s.id);});
+  if(it.sug!=null){var m=_tpSugMk[it.sug];if(m&&_tpE)_tpE.rm(m);_tpSugList.splice(it.sug,1);_tpSugMk.splice(it.sug,1);}
+  if(_tpTmpMk&&_tpE){_tpE.rm(_tpTmpMk);_tpTmpMk=null;}
+  showToast('📍 ปัก “'+name+'” ใน '+s.name+(sp.date?' วันที่ '+(Math.round((new Date(sp.date)-new Date(s.date))/864e5)+1):''));
+  if(it.manual){_tpPanItem=null;tpPinToggle(false);}else tpPanBack();
+}
+// ---------- Rudy แนะนำที่เที่ยวในหน้าต่างแก้สถานที่ (askRudy เดิม → JSON) ----------
+var TP_RCATS=[['','ทั้งหมด'],['famous','ที่เที่ยวดัง'],['food','ของกิน / ตลาด'],['cafe','คาเฟ่'],['nature','ธรรมชาติ'],['culture','วัด / พิพิธภัณฑ์'],['shop','ช้อปปิ้ง']];
+var _tpRCat='',_tpRList=[],_tpRBusy=false;
+function tpRudyBoxHtml(){
+  return '<div class="tp-rb" id="tps-rb"><div class="tp-rb-h"><span class="tp-rb-av" aria-hidden="true">R</span><b id="tps-rb-t">Rudy แนะนำที่เที่ยว</b>'
+    +'<button type="button" class="tp-rb-go" id="tps-rb-go" onclick="tpRudyAsk(true)">✨ แนะนำ</button></div>'
+    +'<div class="tp-rb-cats" role="group" aria-label="หมวด">'+TP_RCATS.map(function(c){return '<button type="button" class="'+(c[0]===_tpRCat?'on':'')+'" aria-pressed="'+(c[0]===_tpRCat)+'" data-c="'+c[0]+'" onclick="_tpRCat=this.dataset.c;tpRudyAsk(false)">'+c[1]+'</button>';}).join('')+'</div>'
+    +'<div id="tps-rb-l" class="tp-rb-l"><div class="tp-rb-e">กด “✨ แนะนำ” หรือเลือกหมวด แล้ว Rudy จะเสนอที่เที่ยวพร้อมวันให้</div></div></div>';
+}
+function tpRudyAsk(fresh){
+  document.querySelectorAll('#tps-rb .tp-rb-cats button').forEach(function(b){var on=b.dataset.c===_tpRCat;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});
+  var city=((document.getElementById('tps-n')||{}).value||'').trim(),ctry=((document.getElementById('tps-c')||{}).value||'').trim(),box=document.getElementById('tps-rb-l');if(!box)return;
+  if(!city){box.innerHTML='<div class="tp-rb-e">ใส่ชื่อเมืองด้านบนก่อน</div>';return;}
+  var days=Math.max(1,parseInt((document.getElementById('tps-k')||{}).value,10)||1);
+  var key='tp_rudy_'+city+'|'+ctry+'|'+_tpRCat+'|'+days,cache=null;
+  if(!fresh){try{cache=JSON.parse(sessionStorage.getItem(key)||'null');}catch(e){}}
+  if(cache){_tpRList=cache;tpRudyRender();return;}
+  if(_tpRBusy)return;_tpRBusy=true;box.innerHTML='<div class="tp-rb-e">Rudy กำลังคิด…</div>';
+  var have=(window._tpSpots||[]).map(function(x){return x.name;}).slice(0,12);
+  var catW={famous:'famous sights',food:'local food, street food and markets',cafe:'cafes',nature:'nature, parks and viewpoints',culture:'temples and museums',shop:'shopping areas'}[_tpRCat]||'a good mix of sights, food and experiences';
+  var prompt='Suggest 6 places in '+city+(ctry?', '+ctry:'')+' for a '+days+'-day stay, focus: '+catW+'.'+(have.length?' Skip: '+have.join('; ')+'.':'')
+    +' Put nearby places on the same day (day 1..'+days+'). Reply ONLY a JSON array: [{"name":"name as on OpenStreetMap (English or local)","th":"Thai name","type":"Thai category 1-2 words","why":"Thai reason under 50 chars","day":1}]';
+  var fin=false,to=setTimeout(function(){if(fin)return;fin=true;_tpRBusy=false;var b=document.getElementById('tps-rb-l');if(b)b.innerHTML='<div class="tp-rb-e">Rudy ตอบช้า — ลองกด ✨ แนะนำ อีกครั้ง</div>';},30000);
+  api({action:'askRudy',prompt:encodeURIComponent(prompt)},function(r){
+    if(fin)return;fin=true;clearTimeout(to);_tpRBusy=false;
+    var a=null;try{var raw=String(r&&r.reply||'');var m=raw.match(/\[[\s\S]*\]/);a=JSON.parse(m?m[0]:raw);}catch(e){}
+    var b=document.getElementById('tps-rb-l');if(!b)return;
+    if(!Array.isArray(a)||!a.length){b.innerHTML='<div class="tp-rb-e">ยังไม่ได้คำแนะนำ — ลองใหม่อีกครั้ง</div>';return;}
+    _tpRList=a.filter(function(x){return x&&(x.name||x.th);}).slice(0,8).map(function(x){return {name:String(x.name||x.th),th:String(x.th||x.name),type:String(x.type||''),why:String(x.why||''),day:Math.max(1,Math.min(days,parseInt(x.day,10)||1))};});
+    try{sessionStorage.setItem(key,JSON.stringify(_tpRList));}catch(e){}
+    tpRudyRender();
+  });
+}
+function tpRudyRender(){
+  var box=document.getElementById('tps-rb-l');if(!box)return;var days=tpSpotDays(),have=(window._tpSpots||[]).map(function(x){return x.name;});
+  var t=document.getElementById('tps-rb-t'),city=((document.getElementById('tps-n')||{}).value||'').trim();if(t)t.textContent='Rudy แนะนำใน '+(city||'เมืองนี้');
+  var g=document.getElementById('tps-rb-go');if(g)g.textContent='↻ แนะนำใหม่';
+  box.innerHTML=_tpRList.map(function(x,i){
+    var added=have.indexOf(x.th)>=0||have.indexOf(x.name)>=0;
+    var opts=days.length?days.map(function(ds,j){var dm=tpDM(ds);return '<option value="'+ds+'"'+(j+1===x.day?' selected':'')+'>วันที่ '+(j+1)+' · '+dm[0]+' '+dm[1]+'</option>';}).join(''):'<option value="">ไม่ระบุวัน</option>';
+    return '<div class="tp-rb-i"><div class="tp-rb-b"><b>'+tpEsc(x.th)+'</b>'+(x.th!==x.name?'<small class="tp-rb-en">'+tpEsc(x.name)+'</small>':'')+'<small>'+tpEsc([x.type,x.why].filter(String).join(' · '))+'</small></div>'
+      +'<select id="tps-rd-'+i+'" aria-label="วันที่ไป '+tpEsc(x.th)+'"'+(added?' disabled':'')+'>'+opts+'</select>'
+      +'<button type="button" class="tp-rb-add" data-i="'+i+'" onclick="tpRudyAdd(+this.dataset.i,this)"'+(added?' disabled':'')+'>'+(added?'✓ เพิ่มแล้ว':'+ ปักหมุด')+'</button></div>';
+  }).join('')+'<div class="tp-rb-e">หาพิกัดจาก OpenStreetMap ให้อัตโนมัติ · อย่าลืมกดบันทึก</div>';
+}
+function tpRudyAdd(i,btn){
+  var x=_tpRList[i];if(!x)return;var sel=document.getElementById('tps-rd-'+i),date=sel?sel.value:'';
+  btn.disabled=true;btn.textContent='กำลังหาพิกัด…';
+  var city=((document.getElementById('tps-n')||{}).value||'').trim();
+  function q(text,vb){return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=th,en'+vb+'&q='+encodeURIComponent(text)).then(function(r){return r.json();}).then(function(a){return a&&a[0]?{lat:+a[0].lat,lng:+a[0].lon}:null;});}
+  var vb=_tpGeo?'&bounded=1&viewbox='+(_tpGeo.lng-0.8)+','+(_tpGeo.lat+0.8)+','+(_tpGeo.lng+0.8)+','+(_tpGeo.lat-0.8):'';
+  q(x.name,vb).then(function(g){return g||q(x.name+', '+city,'');}).catch(function(){return null;}).then(function(g){
+    tpSpotAdd({name:x.th,lat:g?g.lat:null,lng:g?g.lng:null,date:date});
+    var w=(window._tpSpots||[])[window._tpSpots.length-1];if(w&&!g){delete w.lat;delete w.lng;tpSpotRender();}
+    btn.textContent='✓ เพิ่มแล้ว';if(sel)sel.disabled=true;
+    if(!g)showToast('หาพิกัด “'+x.th+'” ไม่เจอ — เพิ่มชื่อไว้ก่อน');
+  });
+}
 // ---------- actions ----------
 function tpMut(fn){var d=tpLoad(),t=tpCur(d);if(!t)return;fn(t,d);tpStore(d);renderTrip();}
 function tpSwitch(id){var d=tpLoad();d.cur=id;tpStore(d,true);renderTrip();}
@@ -3744,13 +4042,13 @@ function tpStopDlg(id){
     +'</div>'
     +'<div class="fld"><label for="tps-q">สถานที่เที่ยว · ปักหมุดรายวัน</label><div id="tps-sl" class="tp-spl"></div>'
     +'<input id="tps-q" autocomplete="off" placeholder="ค้นหาที่เที่ยว เช่น Taipei 101, ตลาดกลางคืน" oninput="tpSpotSearch(this.value)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();tpSpotAddText();}">'
-    +'<div id="tps-qres" class="tp-geo" role="listbox" aria-label="ผลค้นหาที่เที่ยว"></div><div class="tp-sp-hint">เลือกจากรายการ = ปักหมุดบนแผนที่ · กด Enter = เพิ่มชื่ออย่างเดียว · เลือกวันที่จะไปได้ทีละที่</div></div>'
+    +'<div id="tps-qres" class="tp-geo" role="listbox" aria-label="ผลค้นหาที่เที่ยว"></div><div class="tp-sp-hint">เลือกจากรายการ = ปักหมุดบนแผนที่ · กด Enter = เพิ่มชื่ออย่างเดียว · เลือกวันที่จะไปได้ทีละที่</div>'+tpRudyBoxHtml()+'</div>'
     +'<div class="fld"><label for="tps-x">รายละเอียด / แผน</label><textarea id="tps-x" rows="3" placeholder="ที่เที่ยว ร้านอาหาร ที่พัก">'+tpEsc(s?s.desc:'')+'</textarea></div>'
     +'<div class="fld"><label>ไอคอน</label><div class="tp-icp">'+TP_ICONS.map(function(ic){return '<button type="button" class="tp-icb'+((s&&s.icon)===ic?' on':'')+'" data-ic="'+ic+'" onclick="document.querySelectorAll(\'.tp-icb\').forEach(function(x){x.classList.remove(\'on\')});this.classList.add(\'on\')">'+ic+'</button>';}).join('')+'</div></div>'
     +'<button class="btn-submit" onclick="tpStopSave(\''+(s?s.id:'')+'\')">✓ บันทึก</button>'
     +(s?'<button type="button" class="tp-del-trip" onclick="tpStopDel(\''+s.id+'\',this)">ลบสถานที่นี้</button>':''));
   window._tpSpots=JSON.parse(JSON.stringify((s&&s.spots)||[]));window._tpSpCol=TP_SOFT[((s&&s.color!=null)?s.color:(t.stops||[]).length)%TP_SOFT.length][1];
-  tpSpotRender();
+  tpSpotRender();_tpRList=[];
   setTimeout(function(){var i=document.getElementById('tps-n');if(i)i.focus();},50);
 }
 // ---------- ที่เที่ยวย่อยในแต่ละเมือง (ปักหมุดรายวัน) ----------
@@ -3760,7 +4058,7 @@ function tpSpotDays(){
   if(!d)return out;for(var i=0;i<Math.min(k,60);i++)out.push(addDays(d,i));return out;
 }
 function tpSpotRender(){
-  var box=document.getElementById('tps-sl');if(!box)return;
+  var box=document.getElementById('tps-sl');if(!box)return;if(_tpRList&&_tpRList.length&&document.getElementById('tps-rb-l'))setTimeout(tpRudyRender,0);
   var sp=window._tpSpots||[],days=tpSpotDays(),c=window._tpSpCol||'#6b5cff';
   box.innerHTML=sp.map(function(x,i){
     var opts='<option value="">ไม่ระบุวัน</option>'+days.map(function(ds,j){var dm=tpDM(ds);return '<option value="'+ds+'"'+(x.date===ds?' selected':'')+'>วันที่ '+(j+1)+' · '+dm[0]+' '+dm[1]+'</option>';}).join('');
