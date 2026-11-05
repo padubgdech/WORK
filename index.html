@@ -697,13 +697,22 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .nx-danger{border:1px solid #f0c9c9;background:#fff;color:#b42318;border-radius:6px;padding:6px 8px;font-size:12px;cursor:pointer;font-family:inherit;text-align:left}
 .nx-danger.arm{background:#b42318;color:#fff;border-color:#b42318}
 .nx-main{min-width:0;overflow-y:auto;max-height:calc(100vh - 170px);position:relative}
-.nx-cover{height:120px;position:relative}
+.nx-cover{height:120px;position:relative;z-index:1}
+.nx-cover.img{height:200px}
+.nx-cover.repos{cursor:ns-resize;outline:2px dashed rgba(255,255,255,.9);outline-offset:-6px}
+.nx-cov-acts{position:absolute;right:14px;top:10px;display:flex;gap:6px;opacity:0;transition:opacity .15s}
+.nx-cover:hover .nx-cov-acts,.nx-cov-acts:focus-within,.nx-cover.repos .nx-cov-acts{opacity:1}
+.nx-cov-acts button{display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(0,0,0,.08);background:rgba(255,255,255,.9);border-radius:6px;padding:5px 10px;font-size:12px;color:#37352f;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif}
+.nx-cov-acts button:hover{background:#fff}
+.nx-cover.none .nx-cov-acts{top:8px}
+.nx-doc .nx-icon{z-index:2}
+@media(hover:none){.nx-cov-acts{opacity:1}}
 .nx-cover-btn{position:absolute;right:14px;bottom:10px;border:1px solid rgba(0,0,0,.08);background:rgba(255,255,255,.85);border-radius:6px;padding:5px 10px;font-size:12px;color:#37352f;cursor:pointer;font-family:inherit;opacity:0;transition:opacity .15s}
 .nx-cover:hover .nx-cover-btn,.nx-cover-btn:focus-visible{opacity:1}
 @media(hover:none){.nx-cover-btn{opacity:1}}
 .nx-cover-pop{position:absolute;right:14px;top:100%;z-index:5;margin:0}
 .nx-doc{max-width:780px;margin:0 auto;padding:0 44px 60px;box-sizing:border-box}
-.nx-icon{width:64px;height:64px;margin-top:-32px;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;letter-spacing:1px;box-shadow:0 4px 12px rgba(0,0,0,.15);font-family:'IBM Plex Sans Thai',sans-serif;position:relative}
+.nx-icon{border:0;padding:0;cursor:pointer;overflow:hidden;width:64px;height:64px;margin-top:-32px;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;letter-spacing:1px;box-shadow:0 4px 12px rgba(0,0,0,.15);font-family:'IBM Plex Sans Thai',sans-serif;position:relative}
 .nx-doc.nocover .nx-icon{margin-top:-20px}
 .nx-crumb{display:flex;gap:6px;align-items:center;margin-top:12px;font-size:12px;color:#6b6b6b;flex-wrap:wrap;font-family:'IBM Plex Sans Thai',sans-serif}
 .nx-crumb a{color:#6b6b6b;text-decoration:none}.nx-crumb a:hover{color:#1f1e1c;text-decoration:underline}
@@ -784,7 +793,7 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
   .nx-back{display:inline-flex}
   .nx-title{font-size:26px}
   .nx-tb{position:sticky;top:0;left:auto!important;top:0!important;display:none;margin:0 -16px;border-radius:0;padding:6px 12px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;box-shadow:none}
-  .nx-doc:focus-within .nx-tb{display:flex}
+  .nx-tb.mob-on{display:flex}
   .nx-tb>*{flex:none}
   .nx-tb .nx-mob{display:inline-flex}
   .nx-tb .sep.nx-mob{display:block}
@@ -848,6 +857,13 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
 .nx-todotool:disabled{color:#6b6b6b;cursor:default;background:#f7f6f3;border-color:#e6e4de}
 .nx-side-ft{margin-top:10px;border-top:1px solid #ecebe7;padding-top:6px}
 .nx-side-ft .nx-trashbtn{margin-top:2px}
+
+.nx-icon.pic{background:#fff;padding:0}
+.nx-icon.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.nx-icon:hover{filter:brightness(.96)}
+.nx-iconpop{position:absolute;left:44px;z-index:10047;width:250px;margin-top:6px}
+.nx-btn-light{display:inline-flex;align-items:center;gap:6px}
+@media(max-width:760px){.nx-cover.img{height:150px}.nx-iconpop{left:16px;right:16px;width:auto}}
 </style>
 </head>
 <body>
@@ -2429,9 +2445,20 @@ function nxPageHtml(notes,secs,cur){
   var s=secs.find(function(x){return x.id===nxSecOf(n,secs);});
   var font=NX_FONTS.some(function(f){return f[0]===n.font;})?n.font:NX_FONTS[0][0];
   var crumbs=[],p=n,guard=0;while(p&&p.parent&&guard++<6){p=notes.find(function(x){return x.id===p.parent;});if(p)crumbs.unshift(p);}
-  var h='<div class="nx-cover'+(n.cover?'':' none')+'" style="background:'+(n.cover||'transparent')+'"></div>';
+  var hasCov=!!(n.cover||n.coverImg),pos=n.coverPos==null?50:n.coverPos;
+  var covStyle=n.coverImg?'background:#e9e7e2 url(\''+nxEsc(n.coverImg)+'\') center '+pos+'%/cover no-repeat':'background:'+(n.cover||'transparent');
+  var h='<div class="nx-cover'+(hasCov?'':' none')+(n.coverImg?' img':'')+'" id="nx-cover" style="'+covStyle+'">'
+    +'<div class="nx-cov-acts">'
+    +'<button type="button" onclick="nxPickCover()">'+'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+NX_IC.img+'</svg>'+(n.coverImg?'เปลี่ยนรูปปก':'เพิ่มรูปปก')+'</button>'
+    +(n.coverImg?'<button type="button" id="nx-cov-pos" onclick="nxCoverReposition()">↕ จัดตำแหน่ง</button><button type="button" onclick="nxCoverRemoveImg()">เอารูปออก</button>':'')
+    +'</div></div>';
   h+='<div class="nx-doc'+(n.cover?'':' nocover')+'" style="font-family:\''+font+'\',\'IBM Plex Sans Thai\',sans-serif">';
-  h+=n.icon?'<div class="nx-icon emoji" aria-hidden="true">'+nxEsc(n.icon)+'</div>':'<div class="nx-icon" style="background:'+s.color+'" aria-hidden="true">'+nxEsc(nxInit2(s.name))+'</div>';
+  var icIn=n.iconImg?'<img src="'+nxEsc(n.iconImg)+'" alt="">':n.icon?nxEsc(n.icon):nxEsc(nxInit2(s.name));
+  h+='<button type="button" class="nx-icon'+(n.iconImg?' pic':n.icon?' emoji':'')+'" style="'+(n.iconImg||n.icon?'':'background:'+s.color)+'" aria-label="เปลี่ยนไอคอนหน้า" aria-haspopup="true" onclick="nxIconMenu(this)">'+icIn+'</button>';
+  h+='<div class="nx-pop nx-iconpop" id="nx-iconpop" hidden><div class="nx-pop-l">ไอคอนหน้า</div>'
+    +'<button type="button" class="nx-btn-light" onclick="nxPickIconImg()">'+'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+NX_IC.img+'</svg>'+' อัปโหลดรูปเป็นไอคอน</button>'
+    +'<div class="nx-icons">'+NX_ICONS.map(function(ic){return '<button type="button" class="nx-icbtn'+(n.icon===ic&&!n.iconImg?' on':'')+'" aria-label="ไอคอน '+ic+'" data-ic="'+ic+'" onclick="nxSetIcon(this.dataset.ic)">'+ic+'</button>';}).join('')
+    +'<button type="button" class="nx-icbtn txt'+(n.icon||n.iconImg?'':' on')+'" onclick="nxSetIcon(\'\')" aria-label="ใช้ตัวย่อหัวข้อ">Aa</button></div></div>';
   h+='<div class="nx-crumb"><button type="button" class="nx-back" onclick="nxBack()" aria-label="กลับไปรายการหน้า"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>'
     +'<span>'+nxEsc(s.name)+'</span>'+crumbs.map(function(c){return '<span aria-hidden="true">/</span><a href="#" data-id="'+c.id+'" onclick="event.preventDefault();nxOpen(this.dataset.id)">'+nxEsc(nxTitleOf(c))+'</a>';}).join('')
     +'<span aria-hidden="true">/</span><span class="nx-crumb-me" id="nx-crumb-me">'+nxEsc(nxTitleOf(n))+'</span>'
@@ -2441,7 +2468,7 @@ function nxPageHtml(notes,secs,cur){
   // ตัวเลือกหน้า (⋯): ฟอนต์ · หัวข้อ · สีปก · ลบหน้า
   h+='<div class="nx-pop nx-opts" id="nx-opts" hidden><label class="nx-pop-l">ฟอนต์ของหน้านี้<select onchange="nxSetFont(this.value)">'+NX_FONTS.map(function(f){return '<option value="'+f[0]+'"'+(f[0]===font?' selected':'')+' style="font-family:\''+f[0]+'\'">'+f[1]+'</option>';}).join('')+'</select></label>'
     +'<label class="nx-pop-l">อยู่ในหัวข้อ<select onchange="nxMoveSec(this.value)">'+secs.map(function(x){return '<option value="'+x.id+'"'+(x.id===s.id?' selected':'')+'>'+nxEsc(x.name)+'</option>';}).join('')+'</select></label>'
-    +'<div class="nx-pop-l">ไอคอนหน้า</div><div class="nx-icons">'+NX_ICONS.map(function(ic){return '<button type="button" class="nx-icbtn'+(n.icon===ic?' on':'')+'" aria-label="ไอคอน '+ic+'" data-ic="'+ic+'" onclick="nxSetIcon(this.dataset.ic)">'+ic+'</button>';}).join('')+'<button type="button" class="nx-icbtn txt'+(n.icon?'':' on')+'" onclick="nxSetIcon(\'\')" aria-label="ใช้ตัวย่อหัวข้อ">Aa</button></div>'
+    +'<button type="button" class="nx-btn-light" style="justify-content:flex-start" onclick="nxPickCover()">'+'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+NX_IC.img+'</svg>'+' '+(n.coverImg?'เปลี่ยนรูปปก':'อัปโหลดรูปปก')+'</button>'
     +'<div class="nx-pop-l">สีปก</div><div class="nx-cols">'+NX_COVERS.map(function(c){return '<button type="button" class="nx-col'+(c===(n.cover||'')?' on':'')+'" style="background:'+(c||'#fff')+(c?'':';box-shadow:inset 0 0 0 1px #ccc')+'" aria-label="'+(c?'สีปก':'ไม่มีปก')+'" data-c="'+c+'" onclick="nxSetCover(this.dataset.c)"></button>';}).join('')+'</div>'
     +'<div class="nx-pop-l">ลำดับในแถบซ้าย</div><div style="display:flex;gap:6px"><button type="button" class="nx-btn-light" onclick="nxMovePage(-1)">↑ เลื่อนขึ้น</button><button type="button" class="nx-btn-light" onclick="nxMovePage(1)">↓ เลื่อนลง</button></div>'
     +'<button type="button" class="nx-danger nx-del" onclick="nxDeletePage()">ลบหน้า</button></div>';
@@ -2619,7 +2646,34 @@ function nxRestoreFile(inp){
   };
   rd.readAsText(f);inp.value='';
 }
-function nxSetIcon(ic){nxFlush();nxPatch(function(n){n.icon=ic||'';});nxRender();}
+function nxSetIcon(ic){nxFlush();nxPatch(function(n){n.icon=ic||'';n.iconImg='';});nxRender();}
+// ---------- รูปปก / รูปไอคอน (อัปขึ้น Drive) ----------
+document.addEventListener('focusin',function(e){var tb=document.getElementById('nx-tb');if(tb)tb.classList.toggle('mob-on',!!(e.target&&(e.target.id==='nx-body'||e.target.id==='nx-title')));});
+document.addEventListener('focusout',function(e){var tb=document.getElementById('nx-tb');if(tb&&e.target&&(e.target.id==='nx-body'||e.target.id==='nx-title'))setTimeout(function(){var a=document.activeElement;if(!(a&&(a.id==='nx-body'||a.id==='nx-title')))tb.classList.remove('mob-on');},150);});
+function nxPickFile(cb){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=function(){var f=inp.files&&inp.files[0];if(f)cb(f);};inp.click();}
+function nxUploadTo(file,maxW,cb){
+  showToast('⏳ กำลังอัปโหลดรูป…');
+  var rd=new FileReader();rd.onload=function(ev){shrinkImage(ev.target.result,maxW,0.85,function(b64){
+    uploadImagePost(b64,file.name||'image.jpg',function(d){
+      if(d&&d.ok&&d.url){cb(d.url);showToast('🖼 อัปโหลดรูปแล้ว');}
+      else{cb(b64);showToast('⚠️ อัปโหลดไม่สำเร็จ — เก็บรูปไว้ในเครื่องนี้แทน');}
+    });});};rd.readAsDataURL(file);
+}
+function nxPickCover(){nxPickFile(function(f){nxUploadTo(f,1800,function(url){nxFlush();nxPatch(function(n){n.coverImg=url;n.coverPos=50;});nxRender();});});}
+function nxCoverRemoveImg(){nxFlush();nxPatch(function(n){n.coverImg='';if(!n.cover)n.cover=NX_COVERS[1];});nxRender();}
+function nxIconMenu(b){var p=document.getElementById('nx-iconpop');if(p){p.hidden=!p.hidden;b.setAttribute('aria-expanded',!p.hidden);}}
+function nxPickIconImg(){nxPickFile(function(f){nxUploadTo(f,256,function(url){nxFlush();nxPatch(function(n){n.iconImg=url;});nxRender();});});}
+document.addEventListener('mousedown',function(e){var p=document.getElementById('nx-iconpop');if(p&&!p.hidden&&!e.target.closest('#nx-iconpop,.nx-icon'))p.hidden=true;});
+// ลากรูปปกขึ้น/ลงเพื่อเลือกส่วนที่จะแสดง
+var _nxCovDrag=null;
+function nxCoverReposition(){
+  var c=document.getElementById('nx-cover'),b=document.getElementById('nx-cov-pos');if(!c)return;
+  if(c.classList.contains('repos')){c.classList.remove('repos');if(b)b.textContent='↕ จัดตำแหน่ง';var y=parseFloat((c.style.backgroundPositionY||'50%'));nxPatch(function(n){n.coverPos=Math.round(y);});showToast('บันทึกตำแหน่งปกแล้ว');return;}
+  c.classList.add('repos');if(b)b.textContent='✓ บันทึกตำแหน่ง';showToast('ลากรูปขึ้น/ลง แล้วกด "บันทึกตำแหน่ง"');
+}
+document.addEventListener('pointerdown',function(e){var c=e.target.closest&&e.target.closest('#nx-cover.repos');if(!c||e.target.closest('.nx-cov-acts'))return;e.preventDefault();_nxCovDrag={c:c,y:e.clientY,p:parseFloat(c.style.backgroundPositionY||'50')};});
+document.addEventListener('pointermove',function(e){if(!_nxCovDrag)return;var h=_nxCovDrag.c.offsetHeight||120,np=Math.max(0,Math.min(100,_nxCovDrag.p-(e.clientY-_nxCovDrag.y)/h*60));_nxCovDrag.c.style.backgroundPositionY=np+'%';});
+document.addEventListener('pointerup',function(){_nxCovDrag=null;});
 function nxToggleFav(){nxFlush();var n=nxPatch(function(n){n.fav=!n.fav;});nxRender();if(n)showToast(n.fav?'★ เพิ่มในหน้าโปรดแล้ว':'เอาออกจากหน้าโปรดแล้ว');}
 function nxFold(id){var notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n)return;n.fold=!n.fold;notesSave(notes);var side=document.querySelector('#nx .nx-side'),st=side?side.scrollTop:0;nxRender();side=document.querySelector('#nx .nx-side');if(side)side.scrollTop=st;}
 // ---------- ถังขยะ (30 วัน) ----------

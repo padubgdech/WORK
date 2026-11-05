@@ -79,6 +79,9 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   "＋ ส่งเป็นงานใน Tasks" → `api addTask` (note "จาก Note: <page>") + `li[data-task]`. Reorder without drag: ⋯ ↑↓ for pages
   (`nxMovePage`) and sections (`nxSecMove`). Backup JSON download (`nxBackup`) / import-merge (`nxRestoreFile`, newer updatedAt wins).
   Test: scratchpad test_nx4.py.
+  Cover/icon images (5 Nov "ให้สามารถเพื่มรูปได้"): cover hover buttons `.nx-cov-acts` (top-right) → `nxPickCover` (1800px → Drive) →
+  `n.coverImg` + `n.coverPos` (0–100 %, "↕ จัดตำแหน่ง" = drag `#nx-cover.repos`); icon is a button → `#nx-iconpop` (upload `n.iconImg`
+  256px, emoji `n.icon`, Aa = section initials). Phone format bar shows only while title/body focused (`.nx-tb.mob-on`). Test: test_nx5.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
