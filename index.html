@@ -1098,6 +1098,10 @@ button.tp-mk{border:0;background:transparent;padding:0;cursor:pointer}
 .tp-dmap-m{height:260px;position:relative;background:#e8eef6;cursor:crosshair}.tp-dmap-m .maplibregl-canvas-container{cursor:crosshair}
 button.tp-sp-n{border:0;padding:0;cursor:pointer;font-family:inherit}button.tp-sp-n:hover{transform:scale(1.12)}
 .tp-sp-pin{flex:0 0 auto;border:1px dashed #b9b2f5;background:#fff;color:#4a3fd1;border-radius:8px;padding:3px 8px;font-size:11.5px;cursor:pointer;font-family:inherit}
+.tp-ht-row{display:flex;gap:6px;align-items:center}.tp-ht-row input{flex:1;min-width:0}
+.tp-mk.ht span{width:30px;height:30px;font-size:16px;background:#fff;border:3px solid #1d2033;box-shadow:0 3px 10px rgba(0,0,0,.3)}
+.tp-st-ht{display:block;font-size:11.5px;color:#3d4258;margin-top:3px}
+.tp-day-ht{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-direction:column;gap:4px}.tp-day-ht li{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f1f6ff;border-radius:10px;padding:6px 6px 6px 10px;font-size:12.5px}.tp-day-ht small{color:#6b7189}
 .tp-mtools{position:absolute;top:52px;right:10px;z-index:1000;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
 .tp-mtools button{border:0;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:0 12px;min-height:36px;font:600 12.5px 'IBM Plex Sans Thai',sans-serif;color:#1d2033;cursor:pointer}
 .tp-mtools button.on{background:#1d2033;color:#fff}
@@ -3656,6 +3660,7 @@ function tpTimelineHtml(t){
       +'<span class="tp-st-cn" style="color:'+c[1]+'">'+tpEsc(s.country||'')+'</span>'
       +(s.desc?'<span class="tp-st-x">'+tpEsc(s.desc)+'</span>':'')
       +((s.spots&&s.spots.length)?'<span class="tp-st-sp">'+s.spots.slice(0,4).map(function(x){return '<span>'+(x.lat!=null?'📍 ':'')+tpEsc(x.name)+'</span>';}).join('')+(s.spots.length>4?'<span>+'+(s.spots.length-4)+'</span>':'')+'</span>':'')
+      +(s.hotel&&s.hotel.name?'<span class="tp-st-ht">🏨 '+tpEsc(s.hotel.name)+'</span>':'')
       +'<span class="tp-st-f"><span>📍 '+tpSpotCount(s)+' สถานที่</span><span>🗓 '+(+s.days||1)+' วัน</span>'+(s.lat==null?'<span class="tp-warn">ยังไม่มีพิกัด</span>':'')+'</span></span></button></li>';
   });
   return h+'</ol>';
@@ -3695,6 +3700,9 @@ function tpMapDrawLeaflet(t){
       var ic=L.divIcon({className:'tp-mk sp',html:'<span data-day="'+p.d+'" style="background:'+p.c+'">'+p.n+'</span>',iconSize:[16,16],iconAnchor:[8,8]});
       var m=L.marker([p.lat,p.lng],{icon:ic,title:p.label}).addTo(_tpLayer);m.bindTooltip(p.label);m.on('click',function(){tpStopDlg(p.sid);});
     });
+    var htp=tpHotelPts(t);
+    htp.forEach(function(p){var m=L.marker([p.lat,p.lng],{icon:L.divIcon({className:'tp-lfwrap',html:tpHotelEl(p),iconSize:null}),title:p.label,zIndexOffset:500}).addTo(_tpLayer);m.bindTooltip(p.label);m.on('click',function(){tpStopDlg(p.sid);});});
+    spp=spp.concat(htp);
     tpDayDim();
     if(!st.length&&!spp.length){L.marker([13.75,100.5],{opacity:0}).addTo(_tpLayer);return;}
     var pts=st.map(function(s){return [s.lat,s.lng];});
@@ -3780,6 +3788,9 @@ function tpMapDraw(t){
         m.innerHTML='<span data-day="'+p.d+'" style="background:'+p.c+'">'+p.n+'</span>';m.onclick=function(ev){ev.stopPropagation();tpStopDlg(p.sid);};
         new maplibregl.Marker({element:m}).setLngLat([p.lng,p.lat]).addTo(map);
       });
+      var htp=tpHotelPts(t);
+      htp.forEach(function(p){var m=tpHotelEl(p);m.onclick=function(ev){ev.stopPropagation();tpStopDlg(p.sid);};new maplibregl.Marker({element:m}).setLngLat([p.lng,p.lat]).addTo(map);});
+      spp=spp.concat(htp);
       tpDayDim();
       if(!st.length&&!spp.length)return;
       var pts=st.map(function(s){return [s.lat,s.lng];});
@@ -3981,7 +3992,7 @@ function tpPanItemHtml(it){
       :'<div class="tp-mp-t"><b>'+tpEsc(it.name)+'</b>'+(it.url?' <a href="'+tpEsc(it.url)+'" target="_blank" rel="noopener">อ่านต่อ ↗</a>':'')+'</div>'+(it.desc?'<p class="tp-mp-d">'+tpEsc(it.desc)+'</p>':''))
     +'<div class="tp-mp-row"><label for="tp-mp-s">เพิ่มเข้า</label>'+sel+'</div>'
     +'<div class="tp-mp-days" id="tp-mp-days" role="group" aria-label="วันที่ไป"></div>'
-    +'<div class="tp-mp-acts">'+(_tpSugOn&&_tpSugList.length||it.manual?'<button type="button" class="tp-btn-l" onclick="tpPanBack()">'+(it.manual?'ยกเลิก':'‹ รายการ')+'</button>':'')+'<button type="button" class="tp-btn-d" onclick="tpPanSave()">✓ ปักหมุด</button></div>';
+    +'<div class="tp-mp-acts">'+(_tpSugOn&&_tpSugList.length||it.manual?'<button type="button" class="tp-btn-l" onclick="tpPanBack()">'+(it.manual?'ยกเลิก':'‹ รายการ')+'</button>':'')+'<button type="button" class="tp-btn-l" onclick="tpPanSave(true)" title="ตั้งจุดนี้เป็นที่พักของเมืองที่เลือก">🏨 เป็นที่พัก</button><button type="button" class="tp-btn-d" onclick="tpPanSave()">✓ ปักหมุด</button></div>';
 }
 var _tpPanDay='';
 function tpPanDays(){
@@ -3993,11 +4004,12 @@ function tpPanDays(){
   box.innerHTML=days.map(function(ds,i){var dm=tpDM(ds);return '<button type="button" class="'+(ds===_tpPanDay?'on':'')+'" aria-pressed="'+(ds===_tpPanDay)+'" data-d="'+ds+'" onclick="_tpPanDay=this.dataset.d;tpPanDays()"><b>'+dm[0]+' '+dm[1]+'</b><small>วันที่ '+(i+1)+'</small></button>';}).join('')
     +'<button type="button" class="'+(_tpPanDay==='-'?'on':'')+'" aria-pressed="'+(_tpPanDay==='-')+'" data-d="-" onclick="_tpPanDay=this.dataset.d;tpPanDays()"><b>ไม่ระบุ</b><small>วัน</small></button>';
 }
-function tpPanSave(){
+function tpPanSave(asHotel){
   var it=_tpPanItem;if(!it)return;var sv=document.getElementById('tp-mp-s');
   var name=it.manual?((document.getElementById('tp-mp-n')||{}).value||'').trim():it.name;
   if(!name){showToast('ตั้งชื่อสถานที่ก่อน');var n=document.getElementById('tp-mp-n');if(n)n.focus();return;}
   var sid=sv?sv.value:'__new';
+  if(asHotel&&sid!=='__new'){tpPanClose();tpPinToggle(false);tpMut(function(t){var s=(t.stops||[]).find(function(x){return x.id===sid;});if(s)s.hotel={name:name,lat:it.lat,lng:it.lng};});showToast('🏨 ตั้ง “'+name+'” เป็นที่พักแล้ว');return;}
   if(sid==='__new'){ // เมืองใหม่ → เปิดหน้าต่างเพิ่มสถานที่พร้อมพิกัด
     tpPanClose();tpPinToggle(false);tpStopDlg();var i=document.getElementById('tps-n');if(i)i.value=name;_tpGeo={lat:it.lat,lng:it.lng};var p=document.getElementById('tps-pos');if(p)p.textContent='📍 ปักหมุดแล้ว ('+it.lat.toFixed(3)+', '+it.lng.toFixed(3)+')';return;
   }
@@ -4141,6 +4153,8 @@ function tpDayHtml(t){
     +(hasNone?'<button type="button" role="tab" aria-selected="'+(d==='none')+'" class="tp-dt'+(d==='none'?' on':'')+'" data-d="none" onclick="tpDaySel(this.dataset.d)"><b>ไม่ระบุ</b><small>วัน</small></button>':'')+'</div>';
   var ds=d==='none'?[]:tpDayStops(t,d),sp=tpDaySpots(t,d),bk=d==='none'?[]:(t.book||[]).filter(function(b){return b.date===d;}),exs=d==='none'?0:(t.exp||[]).filter(function(x){return x.date===d;}).reduce(function(a,x){return a+(+x.amt||0);},0);
   h+='<div class="tp-day-hd"><div><b>'+(d==='none'?'ที่เที่ยวที่ยังไม่ระบุวัน':ds.length?ds.map(function(s){return tpEsc(s.name);}).join(' → '):'ยังไม่มีเมืองในวันนี้')+'</b>'+(d!=='none'&&exs?'<small>ใช้จ่ายวันนี้ '+tpMoney(exs)+'</small>':'')+'</div><span class="tp-wx" id="tp-wx" aria-live="polite"></span></div>';
+  var hts=d==='none'?[]:tpHotelOf(t,d);
+  if(hts.length)h+='<ul class="tp-day-ht">'+hts.map(function(o){return '<li><span>🏨 <b>'+tpEsc(o.h.name)+'</b>'+(hts.length>1?' <small>'+tpEsc(o.s.name)+'</small>':'')+'</span>'+(o.h.lat!=null?'<a class="tp-nav" href="https://www.google.com/maps/dir/?api=1&amp;destination='+o.h.lat+','+o.h.lng+'" target="_blank" rel="noopener" aria-label="นำทางกลับที่พัก">กลับที่พัก</a>':'<button type="button" class="tp-btn-l" data-id="'+o.s.id+'" onclick="tpStopDlg(this.dataset.id)">ปักหมุด</button>')+'</li>';}).join('')+'</ul>';
   if(bk.length)h+='<ul class="tp-day-bk">'+bk.map(function(b){var k=TP_BOOK.find(function(q){return q[0]===b.type;})||TP_BOOK[6];return '<li><button type="button" data-id="'+b.id+'" onclick="tpBookDlg(this.dataset.id)">'+k[1]+' '+(b.time?'<b>'+tpEsc(b.time)+'</b> ':'')+tpEsc(b.title||k[2])+(b.code?' · '+tpEsc(b.code):'')+'</button></li>';}).join('')+'</ul>';
   h+=sp.length?'<ol class="tp-day-l">'+sp.map(function(o){var x=o.x,c=TP_SOFT[(o.s.color==null?o.si:o.s.color)%TP_SOFT.length][1];
       return '<li class="'+(x.done?'dn':'')+'"><label class="tp-dchk"><input type="checkbox"'+(x.done?' checked':'')+' data-s="'+o.s.id+'" data-id="'+x.id+'" onchange="tpSpotDone(this.dataset.s,this.dataset.id,this.checked)" aria-label="ไปแล้ว: '+tpEsc(x.name)+'"></label>'
@@ -4226,9 +4240,10 @@ function tpPlanText(t){
   var bk=(t.book||[]).slice().sort(function(a,b){return ((a.date||'9')+(a.time||''))<((b.date||'9')+(b.time||''))?-1:1;});
   if(bk.length){L.push('','📌 การจอง');bk.forEach(function(b){var k=TP_BOOK.find(function(q){return q[0]===b.type;})||TP_BOOK[6];L.push('• '+k[1]+' '+(b.title||k[2])+(b.date?' · '+tpDM(b.date).join(' '):'')+(b.time?' '+b.time:'')+(b.code?' · รหัส '+b.code:''));});}
   tpExpDays(t).forEach(function(d,i){
-    var ds=tpDayStops(t,d),sp=tpDaySpots(t,d);if(!ds.length&&!sp.length)return;
+    var ds=tpDayStops(t,d),sp=tpDaySpots(t,d);if(!sp.length&&!tpHotelOf(t,d).length)return;
     L.push('','วันที่ '+(i+1)+' ('+tpDM(d).join(' ')+')'+(ds.length?' · '+ds.map(function(s){return s.name;}).join(' → '):''));
     sp.forEach(function(o){L.push('  '+(o.x.time?o.x.time+' ':'- ')+o.x.name);});
+    tpHotelOf(t,d).forEach(function(o){if(o.s.date===d||i===0)L.push('  🏨 พัก '+o.h.name+((+o.s.days||1)>1?' ('+(+o.s.days)+' วัน)':''));});
   });
   var nd=tpDaySpots(t,'none');if(nd.length){L.push('','ยังไม่ระบุวัน');nd.forEach(function(o){L.push('  - '+o.x.name+' ('+o.s.name+')');});}
   var tot=(t.exp||[]).reduce(function(a,x){return a+(+x.amt||0);},0);if(tot||t.budget)L.push('','💰 ใช้ไป '+tpMoney(tot)+(t.budget?' / งบ '+tpMoney(t.budget):''));
@@ -4280,14 +4295,16 @@ function tpDlgMapClose(){
 }
 function tpDlgMapHint(){
   var h=document.getElementById('tps-maph');if(!h)return;var sp=window._tpSpots||[];
+  if(_tpDMode&&_tpDMode.hotel){h.textContent='แตะแผนที่ตรงที่พัก 🏨';return;}
   h.textContent=_tpDMode&&_tpDMode.row!=null?'แตะแผนที่เพื่อปักตำแหน่ง “'+((sp[_tpDMode.row]||{}).name||'ที่ '+(_tpDMode.row+1))+'”':'แตะแผนที่ตรงที่อยากไป = เพิ่มที่เที่ยวใหม่';
 }
 function tpDlgMap(row){
   var w=document.getElementById('tps-mapw');if(!w)return;w.hidden=false;
-  _tpDMode=row==null?{add:true}:{row:row};tpDlgMapHint();
-  var sp=window._tpSpots||[],c=null;
+  _tpDMode=row==='hotel'?{hotel:true}:row==null?{add:true}:{row:row};tpDlgMapHint();if(row==='hotel')row=null;
+  var sp=window._tpSpots||[],c=null,hh=window._tpHotel;
+  if(_tpDMode.hotel&&hh&&hh.lat!=null)c=[hh.lat,hh.lng];
   if(row!=null&&sp[row]&&sp[row].lat!=null)c=[sp[row].lat,sp[row].lng];
-  if(!c){var last=sp.filter(function(x){return x.lat!=null;}).slice(-1)[0];c=last?[last.lat,last.lng]:_tpGeo?[_tpGeo.lat,_tpGeo.lng]:null;}
+  if(!c&&!_tpDMode.hotel||!c){var last=sp.filter(function(x){return x.lat!=null;}).slice(-1)[0];c=last?[last.lat,last.lng]:_tpGeo?[_tpGeo.lat,_tpGeo.lng]:null;}
   if(_tpDM){tpDlgMapMarks();if(c)tpDlgMapGo(c,14);w.scrollIntoView({block:'nearest',behavior:'smooth'});return;}
   var el=document.getElementById('tps-map');el.innerHTML='';
   var z=c?13:5;c=c||[13.75,100.5];
@@ -4316,9 +4333,16 @@ function tpDlgMapMarks(){
     if(_tpDMKind==='ml')_tpDMk.push(new maplibregl.Marker({element:el}).setLngLat([x.lng,x.lat]).addTo(_tpDM));
     else _tpDMk.push(L.marker([x.lat,x.lng],{icon:L.divIcon({className:'tp-lfwrap',html:el,iconSize:null}),title:x.name||''}).addTo(_tpDM));
   });
+  var hh=window._tpHotel;if(hh&&hh.lat!=null){var he=tpHotelEl({c:col,label:'ที่พัก: '+(hh.name||'')});
+    if(_tpDMKind==='ml')_tpDMk.push(new maplibregl.Marker({element:he}).setLngLat([hh.lng,hh.lat]).addTo(_tpDM));
+    else _tpDMk.push(L.marker([hh.lat,hh.lng],{icon:L.divIcon({className:'tp-lfwrap',html:he,iconSize:null})}).addTo(_tpDM));}
 }
 function tpDlgMapTap(lat,lng){
   var sp=window._tpSpots=window._tpSpots||[],target;
+  if(_tpDMode&&_tpDMode.hotel){var hh=window._tpHotel=window._tpHotel||{name:''};hh.lat=lat;hh.lng=lng;delete hh.addr;tpHotelUpd();tpDlgMapMarks();_tpDMode={add:true};tpDlgMapHint();
+    if(!String(hh.name||'').trim())fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18&accept-language='+(tpMapLang()==='en'?'en':'th,en')+'&lat='+lat+'&lon='+lng)
+      .then(function(r){return r.json();}).then(function(r){if(!String(hh.name||'').trim()){hh.name=r&&(r.name||(r.display_name||'').split(',')[0])||'ที่พัก';hh.addr=r&&r.display_name||'';tpHotelUpd();}}).catch(function(){if(!hh.name){hh.name='ที่พัก';tpHotelUpd();}});
+    return;}
   if(_tpDMode&&_tpDMode.row!=null&&sp[_tpDMode.row]){target=sp[_tpDMode.row];target.lat=lat;target.lng=lng;_tpDMode={add:true};}
   else{tpSpotAdd({name:'',lat:lat,lng:lng});target=sp[sp.length-1];var q=document.getElementById('tps-q');if(q)q.blur();}
   tpSpotRender();tpDlgMapMarks();tpDlgMapHint();
@@ -4329,6 +4353,37 @@ function tpDlgMapTap(lat,lng){
   }
   var i=sp.indexOf(target),inp=document.querySelector('#tps-sl .tp-sp[data-i="'+i+'"] input');if(inp&&!target.name)inp.placeholder='กำลังหาชื่อ… (พิมพ์เองได้)';
 }
+// ---------- ที่พักของแต่ละเมือง (s.hotel = {name,lat?,lng?,addr?}) ----------
+var _tpHotT=null;
+function tpHotelPts(t){var all=tpStops(t),o=[];all.forEach(function(s,i){var h=s.hotel;if(h&&h.lat!=null)o.push({lat:h.lat,lng:h.lng,name:h.name,sid:s.id,c:TP_SOFT[(s.color==null?i:s.color)%TP_SOFT.length][1],label:'🏨 ที่พัก: '+h.name+' — '+s.name});});return o;}
+function tpHotelEl(p){var m=document.createElement('button');m.type='button';m.className='tp-mk ht';m.title=p.label;m.setAttribute('aria-label',p.label);m.innerHTML='<span style="border-color:'+p.c+'">🏨</span>';return m;}
+function tpHotelHtml(s){
+  var h=s&&s.hotel||null;window._tpHotel=h?JSON.parse(JSON.stringify(h)):{name:''};
+  return '<div class="fld"><label for="tps-h">ที่พัก</label><div class="tp-ht-row"><input id="tps-h" autocomplete="off" value="'+tpEsc(h?h.name:'')+'" placeholder="ค้นหาชื่อโรงแรม / ที่พัก" oninput="tpHotelSearch(this.value)">'
+    +'<button type="button" class="tp-btn-l" onclick="tpDlgMap(\'hotel\')" title="ปักที่พักบนแผนที่">📍 ปัก</button>'
+    +'<button type="button" class="tp-x" style="opacity:.8" aria-label="ล้างที่พัก" onclick="tpHotelClear()">×</button></div>'
+    +'<div id="tps-hres" class="tp-geo" role="listbox" aria-label="ผลค้นหาที่พัก"></div><small id="tps-hpos" class="tp-pos">'+tpHotelPos()+'</small></div>';
+}
+function tpHotelPos(){var h=window._tpHotel||{};return h.lat!=null?'🏨 ปักหมุดที่พักแล้ว'+(h.addr?' · '+tpEsc(h.addr.slice(0,60)):''):(h.name?'ยังไม่มีพิกัด — เลือกจากรายการ หรือกด 📍 ปัก':'ใส่ที่พักแล้วจะขึ้นเป็นหมุด 🏨 บนแผนที่ + ปุ่มนำทางกลับที่พัก');}
+function tpHotelUpd(){var p=document.getElementById('tps-hpos');if(p)p.innerHTML=tpHotelPos();var i=document.getElementById('tps-h');if(i&&window._tpHotel&&i.value!==window._tpHotel.name)i.value=window._tpHotel.name||'';}
+function tpHotelClear(){window._tpHotel={name:''};tpHotelUpd();var b=document.getElementById('tps-hres');if(b)b.innerHTML='';if(typeof tpDlgMapMarks==='function')tpDlgMapMarks();}
+function tpHotelSearch(q){
+  window._tpHotel={name:q};tpHotelUpd();clearTimeout(_tpHotT);var box=document.getElementById('tps-hres');if(!box)return;
+  if(String(q).trim().length<2){box.innerHTML='';return;}
+  _tpHotT=setTimeout(function(){
+    box.innerHTML='<div class="tp-geo-i muted">กำลังค้นหา…</div>';
+    var vb=_tpGeo?'&viewbox='+(_tpGeo.lng-0.6)+','+(_tpGeo.lat+0.6)+','+(_tpGeo.lng+0.6)+','+(_tpGeo.lat-0.6):'';
+    fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=6&accept-language=th,en'+vb+'&q='+encodeURIComponent(q))
+      .then(function(r){return r.json();}).then(function(a){
+        if(!document.getElementById('tps-hres'))return;
+        if(!a||!a.length){box.innerHTML='<div class="tp-geo-i muted">ไม่พบ — ลองชื่อภาษาอังกฤษ หรือกด 📍 ปัก แล้วแตะบนแผนที่</div>';return;}
+        window._tpHotRes=a;
+        box.innerHTML=a.map(function(r,i){return '<button type="button" role="option" class="tp-geo-i" data-i="'+i+'" onclick="tpHotelPick(+this.dataset.i)"><b>'+tpEsc(r.name||r.display_name.split(',')[0])+'</b><small>'+tpEsc(r.display_name)+'</small></button>';}).join('');
+      }).catch(function(){box.innerHTML='<div class="tp-geo-i muted">ค้นหาไม่ได้ตอนนี้ — กด 📍 ปัก แล้วแตะบนแผนที่ได้</div>';});
+  },600);
+}
+function tpHotelPick(i){var r=(window._tpHotRes||[])[i];if(!r)return;window._tpHotel={name:r.name||r.display_name.split(',')[0],lat:+r.lat,lng:+r.lon,addr:r.display_name};document.getElementById('tps-hres').innerHTML='';tpHotelUpd();if(typeof tpDlgMapMarks==='function')tpDlgMapMarks();}
+function tpHotelOf(t,d){var o=[];tpDayStops(t,d).forEach(function(s){if(s.hotel&&s.hotel.name)o.push({h:s.hotel,s:s});});return o;}
 // ---------- actions ----------
 function tpMut(fn){var d=tpLoad(),t=tpCur(d);if(!t)return;fn(t,d);tpStore(d);renderTrip();}
 function tpSwitch(id){var d=tpLoad();d.cur=id;tpStore(d,true);renderTrip();}
@@ -4396,6 +4451,7 @@ function tpStopDlg(id){
     +'<div style="display:flex;gap:10px"><div class="fld" style="flex:1"><label for="tps-d">วันที่ถึง</label><input type="date" id="tps-d" value="'+(defDate||'')+'" onchange="tpSpotRender()"></div>'
     +'<div class="fld" style="width:90px"><label for="tps-k">กี่วัน</label><input type="number" min="1" id="tps-k" value="'+(s?(+s.days||1):1)+'" oninput="tpSpotRender()"></div>'
     +'</div>'
+    +tpHotelHtml(s)
     +'<div class="fld"><label for="tps-q">สถานที่เที่ยว · ปักหมุดรายวัน</label><div id="tps-sl" class="tp-spl"></div>'
     +'<input id="tps-q" autocomplete="off" placeholder="ค้นหาที่เที่ยว เช่น Taipei 101, ตลาดกลางคืน" oninput="tpSpotSearch(this.value)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();tpSpotAddText();}">'
     +'<div id="tps-qres" class="tp-geo" role="listbox" aria-label="ผลค้นหาที่เที่ยว"></div><div class="tp-sp-q2"><button type="button" class="tp-btn-l" onclick="tpDlgMap()">📍 ปักบนแผนที่</button><span class="tp-sp-hint">ค้นหาแล้วเลือก · หรือแตะแผนที่ · กด Enter = เพิ่มชื่ออย่างเดียว</span></div>'
@@ -4492,12 +4548,13 @@ function tpStopSave(id){
     days:Math.max(1,parseInt(document.getElementById('tps-k').value,10)||1),
     spots:(window._tpSpots||[]).filter(function(x){return String(x.name||'').trim();}).map(function(x){var o={id:x.id||tpUid(),name:String(x.name).trim(),date:x.date||''};if(x.lat!=null){o.lat=x.lat;o.lng=x.lng;}if(x.note)o.note=x.note;if(x.time)o.time=x.time;if(x.done)o.done=true;return o;}),
     desc:document.getElementById('tps-x').value.trim(),icon:ic?ic.dataset.ic:''};
+  var hh=window._tpHotel||{},hn=String(hh.name||'').trim(),hotel=hn?{name:hn}:null;if(hotel){if(hh.lat!=null){hotel.lat=hh.lat;hotel.lng=hh.lng;}if(hh.addr)hotel.addr=hh.addr;}
   var geo=_tpGeo;tpDlgMapClose();closeModal();
   tpMut(function(t){
     t.stops=t.stops||[];
     var s=id?t.stops.find(function(x){return x.id===id;}):null;
     if(!s){s={id:tpUid(),color:t.stops.length%TP_SOFT.length,ord:t.stops.length};t.stops.push(s);}
-    Object.keys(v).forEach(function(k){s[k]=v[k];});s.places=s.spots.length;
+    Object.keys(v).forEach(function(k){s[k]=v[k];});s.places=s.spots.length;if(hotel)s.hotel=hotel;else delete s.hotel;
     if(geo){s.lat=geo.lat;s.lng=geo.lng;}
     // ทริปยังไม่มีวัน → ใช้วันของสถานที่
     var st=tpStops(t);if(st[0]&&st[0].date&&(!t.start||st[0].date<t.start))t.start=st[0].date;

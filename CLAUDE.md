@@ -157,7 +157,11 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   monorail/tram, coloured by subclass) / `tpr-sta(-c)` (poi class railway, labels via tpApplyLang) from the style's first vector source
   (`tpRailML`); Leaflet = OpenRailwayMap raster overlay (`tpRailLF`). OMT has no line colours, so lines are coloured by type, not by operator line.
   Stop dialog mini map `#tps-mapw` (`tpDlgMap(row?)`, MapLibre if loaded+WebGL else Leaflet): "📍 ปักบนแผนที่" = tap adds a spot (reverse-geocoded
-  name); row number button / "📍 ปัก" = tap sets/moves that spot's coords (`tpDlgMapTap`). Closed on save/reopen (`tpDlgMapClose`). Test: test_rail.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
+  name); row number button / "📍 ปัก" = tap sets/moves that spot's coords (`tpDlgMapTap`). Closed on save/reopen (`tpDlgMapClose`). Test: test_rail.py.
+  Hotel per stop (5 Nov "ใส่ที่พักได้ด้วยแสดงบนแผนที่"): `s.hotel={name,lat?,lng?,addr?}`; dialog field `#tps-h` (`tpHotelHtml`, Nominatim search
+  `tpHotelSearch`/`tpHotelPick`, "📍 ปัก" = mini map mode `{hotel:true}`, working copy `window._tpHotel`); 🏨 markers `.tp-mk.ht` (`tpHotelPts`/
+  `tpHotelEl`, both engines, in fitBounds); timeline card line `.tp-st-ht`; day plan row `.tp-day-ht` with "กลับที่พัก" Google Maps link;
+  main-map panel button "🏨 เป็นที่พัก" (`tpPanSave(true)`); plan text "🏨 พัก … (n วัน)" on the stop's first day. Test: test_hotel.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`
