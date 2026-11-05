@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23111%22/%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2224%22%20r%3D%2210%22%20fill%3D%22%23fff%22/%3E%3Cpath%20d%3D%22M13%2052c0-11%208.5-17%2019-17s19%206%2019%2017z%22%20fill%3D%22%23fff%22/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23111%22/%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2224%22%20r%3D%2210%22%20fill%3D%22%23fff%22/%3E%3Cpath%20d%3D%22M13%2052c0-11%208.5-17%2019-17s19%206%2019%2017z%22%20fill%3D%22%23fff%22/%3E%3C/svg%3E">
 <meta name="theme-color" content="#111111">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Sarabun:wght@400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Mitr:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'IBM Plex Sans Thai',sans-serif}
 html{overflow-x:hidden;width:100%}
@@ -659,6 +659,118 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 #auth-lock .al-t{font-size:17px;font-weight:800;letter-spacing:.3px;color:#1c1c1e;margin-bottom:8px}
 #auth-lock .al-m{font-size:14px;line-height:1.6;color:#3a3a3c;min-height:22px}
 #auth-lock .al-b{margin-top:16px;width:100%;border:0;border-radius:12px;padding:12px;font-size:15px;font-weight:700;color:#fff;background:#06C755;cursor:pointer;font-family:inherit}
+/* NOTE แบบ Notion (nx-) */
+.nx{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:calc(100vh - 170px);background:#fff;border:1px solid #ecebe7;border-radius:14px;overflow:hidden;color:#1f1e1c;font-family:'IBM Plex Sans Thai',sans-serif}
+.nx-side{background:#fbfaf8;border-right:1px solid #ecebe7;padding:14px 10px 18px;font-size:13px;overflow-y:auto;max-height:calc(100vh - 170px);box-sizing:border-box}
+.nx-search{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e6e4de;border-radius:8px;padding:6px 10px;color:#6b6b6b}
+.nx-search input{border:0;outline:0;background:transparent;font-size:13px;width:100%;font-family:inherit;color:#1f1e1c}
+.nx-lbl{margin:16px 6px 6px;font-size:11px;font-weight:600;color:#6b6b6b;letter-spacing:.5px}
+.nx-sec{position:relative}
+.nx-sec-row{display:flex;align-items:center;border-radius:6px}
+.nx-sec-row:hover{background:#f1efe9}
+.nx-sec-h{flex:1;min-width:0;display:flex;align-items:center;gap:8px;border:0;background:transparent;padding:7px 6px 7px 8px;text-align:left;font-size:13px;font-weight:600;color:#1f1e1c;cursor:pointer;font-family:inherit}
+.nx-sec-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nx-cnt{font-size:11px;color:#8a877f;font-weight:500}
+.nx-sq{flex:none;width:16px;height:16px;border-radius:4px;display:inline-block}
+.nx-sec-more{flex:none;width:28px;height:28px;border:0;background:transparent;border-radius:6px;color:#8a877f;cursor:pointer;opacity:0;display:flex;align-items:center;justify-content:center}
+.nx-sec-row:hover .nx-sec-more,.nx-sec-more:focus-visible{opacity:1}
+.nx-sec-more:hover{background:#e6e3dc;color:#1f1e1c}
+@media(hover:none){.nx-sec-more{opacity:1}}
+.nx-pages{display:flex;flex-direction:column;gap:1px;padding:1px 0 6px 22px}
+.nx-pg{display:flex;align-items:center;gap:6px;border:0;background:transparent;border-radius:6px;padding:5px 8px;text-align:left;font-size:13px;color:#37352f;cursor:pointer;font-family:inherit;min-width:0}
+.nx-pg:hover{background:#efece5}
+.nx-pg.on{background:#fff;box-shadow:0 0 0 1px #e2dfd7;font-weight:600;color:#1f1e1c}
+.nx-pg-t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nx-pg-sub{color:#b3afa5;font-size:11px}
+.nx-add{border:0;background:transparent;text-align:left;padding:5px 8px;color:#8a877f;font-size:13px;cursor:pointer;border-radius:6px;font-family:inherit}
+.nx-add:hover{background:#efece5;color:#1f1e1c}
+.nx-addsec{margin-top:8px;width:100%;border:1px dashed #d8d5cc;background:transparent;border-radius:6px;padding:8px;text-align:left;font-size:13px;color:#6b6b6b;cursor:pointer;font-family:inherit}
+.nx-addsec:hover{border-color:#b9b5aa;color:#1f1e1c}
+.nx-pop{background:#fff;border:1px solid #e6e4de;border-radius:10px;box-shadow:0 10px 28px rgba(0,0,0,.12);padding:10px;margin:4px 0 8px;display:flex;flex-direction:column;gap:6px;font-size:12px}
+.nx-pop[hidden]{display:none}
+.nx-cover.none{height:44px}
+.nx-pop-l{display:flex;flex-direction:column;gap:4px;color:#6b6b6b;font-weight:600}
+.nx-pop input{border:1px solid #e0ddd5;border-radius:6px;padding:6px 8px;font-size:13px;font-family:inherit;color:#1f1e1c;font-weight:500}
+.nx-cols{display:flex;gap:6px;flex-wrap:wrap}
+.nx-col{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12);cursor:pointer;padding:0}
+.nx-col.on{box-shadow:0 0 0 2px #1f1e1c}
+.nx-danger{border:1px solid #f0c9c9;background:#fff;color:#b42318;border-radius:6px;padding:6px 8px;font-size:12px;cursor:pointer;font-family:inherit;text-align:left}
+.nx-danger.arm{background:#b42318;color:#fff;border-color:#b42318}
+.nx-main{min-width:0;overflow-y:auto;max-height:calc(100vh - 170px);position:relative}
+.nx-cover{height:110px;position:relative}
+.nx-cover-btn{position:absolute;right:14px;bottom:10px;border:1px solid rgba(0,0,0,.08);background:rgba(255,255,255,.85);border-radius:6px;padding:5px 10px;font-size:12px;color:#37352f;cursor:pointer;font-family:inherit;opacity:0;transition:opacity .15s}
+.nx-cover:hover .nx-cover-btn,.nx-cover-btn:focus-visible{opacity:1}
+@media(hover:none){.nx-cover-btn{opacity:1}}
+.nx-cover-pop{position:absolute;right:14px;top:100%;z-index:5;margin:0}
+.nx-doc{max-width:780px;margin:0 auto;padding:0 44px 60px;box-sizing:border-box}
+.nx-icon{width:60px;height:60px;margin-top:-30px;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;letter-spacing:1px;box-shadow:0 4px 12px rgba(0,0,0,.15);font-family:'IBM Plex Sans Thai',sans-serif;position:relative}
+.nx-doc.nocover .nx-icon{margin-top:-20px}
+.nx-crumb{display:flex;gap:6px;align-items:center;margin-top:12px;font-size:12px;color:#6b6b6b;flex-wrap:wrap;font-family:'IBM Plex Sans Thai',sans-serif}
+.nx-crumb a{color:#6b6b6b;text-decoration:none}.nx-crumb a:hover{color:#1f1e1c;text-decoration:underline}
+.nx-st{margin-left:auto}
+.nx-back{display:none;width:32px;height:32px;border:0;background:#f3f1ec;border-radius:8px;align-items:center;justify-content:center;cursor:pointer;color:#1f1e1c}
+.nx-tb{position:sticky;top:0;z-index:3;display:flex;gap:3px;align-items:center;flex-wrap:wrap;margin:10px -8px 0;padding:6px 8px;background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid #f0eee9;font-family:'IBM Plex Sans Thai',sans-serif}
+.nx-tb select{font-size:12px;border:1px solid #e0ddd5;border-radius:6px;padding:4px 6px;background:#fff;font-family:inherit;color:#1f1e1c;max-width:130px}
+.nx-tb button{border:1px solid #e6e3dc;background:#fff;border-radius:6px;min-width:26px;height:26px;padding:0 7px;font-size:12px;color:#37352f;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center}
+.nx-tb button:hover{background:#f6f4ef;border-color:#d2cec4}
+.nx-tb button.on{background:#1f1e1c;color:#fff;border-color:#1f1e1c}
+.nx-tb .nx-tc{min-width:20px;width:20px;padding:0;font-weight:800;border-bottom-width:3px}
+.nx-tb .sep{width:1px;height:16px;background:#e6e3dc;margin:0 3px}
+.nx-tb .nx-del{margin-left:auto;color:#8a877f}
+.nx-tb .nx-del.arm{background:#b42318;border-color:#b42318;color:#fff}
+.nx-title{margin:16px 0 10px;font-size:34px;line-height:1.25;font-weight:700;outline:none;word-break:break-word}
+.nx-title:empty:before,.nx-body:empty:before{content:attr(data-ph);color:#b3afa5;font-weight:inherit}
+.nx-body{min-height:240px;font-size:16px;line-height:1.75;outline:none;word-break:break-word;padding-bottom:20px}
+.nx-body p,.nx-body div{margin:0}
+.nx-body h2{font-size:24px;margin:18px 0 6px;line-height:1.35}
+.nx-body h3{font-size:19px;margin:14px 0 4px;line-height:1.4}
+.nx-body h1{font-size:28px;margin:18px 0 6px}
+.nx-body ul,.nx-body ol{margin:4px 0;padding-left:26px}
+.nx-body blockquote{margin:8px 0;padding:10px 14px;background:#f7f6f3;border-radius:8px;border-left:3px solid #d7ae64}
+.nx-body hr{border:0;border-top:1px solid #e6e4de;margin:14px 0}
+.nx-body table.nx-tbl{border-collapse:collapse;width:100%;margin:10px 0;font-size:14px;line-height:1.5;display:block;overflow-x:auto}
+.nx-body table.nx-tbl th,.nx-body table.nx-tbl td{border:1px solid #e3e0d8;padding:7px 10px;min-width:90px;vertical-align:top;text-align:left}
+.nx-body table.nx-tbl th{background:#f7f6f3;font-weight:600}
+.nx-body ul.nx-todo{list-style:none;padding-left:2px}
+.nx-body ul.nx-todo>li{position:relative;padding-left:28px;min-height:1.75em}
+.nx-body ul.nx-todo>li:before{content:'';position:absolute;left:2px;top:.38em;width:16px;height:16px;border:1.5px solid #9a968c;border-radius:4px;background:#fff;cursor:pointer;box-sizing:border-box}
+.nx-body ul.nx-todo>li[data-done]{color:#9a968c;text-decoration:line-through}
+.nx-body ul.nx-todo>li[data-done]:before{background:#2457c5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/12px no-repeat;border-color:#2457c5}
+.nx-body a.nx-link{display:inline-flex;align-items:center;gap:4px;color:#1f1e1c;text-decoration:none;border-bottom:1px solid #cfcbc1;cursor:pointer;font-weight:500}
+.nx-body a.nx-link:before{content:'↳';color:#8a877f;font-size:.9em}
+.nx-body a.nx-link:hover{background:#f3f1ec}
+.nx-subs{border-top:1px solid #f0eee9;padding-top:12px;display:flex;flex-direction:column;gap:2px;font-family:'IBM Plex Sans Thai',sans-serif}
+.nx-sublink{display:block;padding:6px 8px;border-radius:6px;color:#1f1e1c;text-decoration:none;font-size:14px}
+.nx-sublink:before{content:'↳ ';color:#8a877f}
+.nx-sublink:hover{background:#f3f1ec}
+.nx-empty{padding:80px 24px;text-align:center}
+.nx-btn-dark{border:0;background:#1f1e1c;color:#fff;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.nx-slash{position:fixed;z-index:10050;display:none;width:270px;max-height:320px;overflow-y:auto;background:#fff;border:1px solid #e6e4de;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.16);padding:6px;font-family:'IBM Plex Sans Thai',sans-serif}
+.nx-slash-h{padding:4px 8px 6px;font-size:11px;color:#6b6b6b;font-weight:600}
+.nx-slash button{display:flex;flex-direction:column;align-items:flex-start;width:100%;border:0;background:transparent;border-radius:6px;padding:7px 10px;text-align:left;cursor:pointer;font-family:inherit;color:#1f1e1c}
+.nx-slash button b{font-size:13px;font-weight:600}
+.nx-slash button span{font-size:11.5px;color:#6b6b6b}
+.nx-slash button.on,.nx-slash button:hover{background:#f1efe9}
+.nx-ttools{position:fixed;z-index:10040;display:none;gap:2px;background:#1f1e1c;border-radius:8px;padding:4px;box-shadow:0 8px 22px rgba(0,0,0,.22);font-family:'IBM Plex Sans Thai',sans-serif}
+.nx-ttools button{border:0;background:transparent;color:#fff;border-radius:5px;padding:5px 9px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.nx-ttools button:hover{background:rgba(255,255,255,.14)}
+@media(max-width:760px){
+  .nx{display:block;border-radius:12px;min-height:0}
+  .nx.mob-page .nx-side{display:none}
+  .nx.mob-list .nx-main{display:none}
+  .nx-side,.nx-main{max-height:none;border-right:0}
+  .nx-side{padding:12px 10px}
+  .nx-pg,.nx-sec-h,.nx-add{min-height:40px;font-size:14px}
+  .nx-cover{height:80px}
+  .nx-doc{padding:0 16px 40px}
+  .nx-back{display:inline-flex}
+  .nx-title{font-size:26px}
+  .nx-tb{margin:8px -16px 0;padding:6px 16px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .nx-tb>*{flex:none}
+  .nx-tb .nx-del{margin-left:6px}
+  .nx-tb button{min-width:34px;height:34px;font-size:13px}
+  .nx-tb .nx-tc{min-width:28px;width:28px}
+}
 </style>
 </head>
 <body>
@@ -830,18 +942,7 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
   </div>
 </div>
 <div id="page-note" class="page">
-  <div style="display:grid;grid-template-columns:minmax(0,1fr);gap:20px;align-items:start">
-    <div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-        <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px">หน้ารวม</div>
-        <button onclick="noteNew()" style="background:#1c1c1e;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer">+ เพิ่มโน้ต</button>
-      </div>
-      <div id="note-grid" class="note-grid"></div>
-    </div>
-    <div id="note-detail-wrap" style="display:none">
-      <div id="note-detail"></div>
-    </div>
-  </div>
+  <div id="nx" class="nx"></div>
 </div>
 <div id="page-summary" class="page">
   <div class="grid2">
@@ -2024,7 +2125,8 @@ var NOTE_TAGS=[{label:'💡 ไอเดีย',color:'#BA7517'},{label:'👤 �
 var _noteActive=null;
 function notesLoad(){try{return JSON.parse(localStorage.getItem('rudy_notes')||'[]');}catch(e){return [];}}
 function notesSave(arr){try{localStorage.setItem('rudy_notes',JSON.stringify(arr));}catch(e){}}
-function renderNotes(focusId){
+function renderNotes(focusId){return nxRender(focusId);}
+function renderNotesOld(focusId){
   var notes=notesLoad();
   var grid=document.getElementById('note-grid');
   if(!grid)return;
@@ -2052,6 +2154,351 @@ function renderNotes(focusId){
   grid.innerHTML=h;
   if(focusId){var t=document.getElementById('nttl-'+focusId);if(t){t.focus();t.scrollIntoView({block:'center',behavior:'smooth'});}}
 }
+/* ===== NOTE แบบ Notion (5 พ.ย. — Dech เลือก "แบบ 1") =====
+   หัวข้อ (sections) อยู่แถบซ้าย → หน้า + หน้าย่อย · พิมพ์ / เพื่อแทรก ตาราง เช็กลิสต์ หัวข้อ หน้าย่อย · ฟอนต์ / สีปก ต่อหน้า
+   หน้า = รายการเดิมใน rudy_notes (+ sec, parent, cover, font) จึงใช้ร่วมกับ note ด่วนหน้า Main และแชท Rudy ได้
+   หัวข้อเก็บที่ localStorage rudy_nb_sec_v1 */
+var NX_SEC_KEY='rudy_nb_sec_v1',NX_CUR_KEY='rudy_nb_cur',NX_GEN='s_general';
+var NX_COLORS=['#7c2d2d','#2e5d3a','#c47a1e','#2457c5','#7c3aed','#0e7490','#be185d','#6b6b6b'];
+var NX_COVERS=['','#e9ddd0','#f3dede','#e3ece4','#f6e7cf','#dfe7f7','#ece3f7','#e6e9ef'];
+var NX_FONTS=[['IBM Plex Sans Thai','IBM Plex'],['Sarabun','Sarabun'],['Noto Serif Thai','Serif'],['Mitr','Mitr']];
+var NX_TXT=[['#1d1d1f','ดำ'],['#d70015','แดง'],['#c93400','ส้ม'],['#248a3d','เขียว'],['#0066cc','น้ำเงิน'],['#8944ab','ม่วง']];
+var NX_BLOCKS=[
+  {k:'table',t:'ตาราง',d:'แถว-คอลัมน์ แก้ได้ทุกช่อง',kw:'table ตาราง tb ตร'},
+  {k:'todo',t:'เช็กลิสต์',d:'ติ๊กได้ทีละข้อ',kw:'todo check เช็ก ลิสต์ cl'},
+  {k:'h2',t:'หัวข้อใหญ่',d:'ตัวใหญ่ สำหรับแบ่งส่วน',kw:'h1 h2 heading หัวข้อ'},
+  {k:'h3',t:'หัวข้อย่อย',d:'ตัวกลาง',kw:'h3 subheading หัวข้อย่อย'},
+  {k:'ul',t:'รายการจุด',d:'• ทีละบรรทัด',kw:'bullet list ul จุด รายการ'},
+  {k:'ol',t:'รายการเลข',d:'1. 2. 3.',kw:'number ol เลข ลำดับ'},
+  {k:'quote',t:'กล่องข้อความเด่น',d:'ไว้เน้นเรื่องสำคัญ',kw:'quote callout เด่น อ้าง'},
+  {k:'hr',t:'เส้นคั่น',d:'แบ่งส่วนด้วยเส้น',kw:'divider hr line เส้น'},
+  {k:'page',t:'หน้าย่อย',d:'สร้างหน้าใหม่ไว้ในหน้านี้',kw:'page subpage หน้า ย่อย'}
+];
+var _nxTimer=null,_nxMob='list',_nxSecMenu=null,_nxQ='',_nxSlash=null,_nxDel=null;
+function nxSecsSave(a){try{localStorage.setItem(NX_SEC_KEY,JSON.stringify(a));}catch(e){}}
+function nxSecs(){
+  var a=null;try{a=JSON.parse(localStorage.getItem(NX_SEC_KEY)||'null');}catch(e){}
+  if(!a||!a.length){a=[{id:NX_GEN,name:'ทั่วไป',color:'#6b6b6b',open:true},{id:'s_kt',name:'KHUMTONE',color:'#7c2d2d'},{id:'s_sf',name:'STILL FOREST',color:'#2e5d3a'},{id:'s_pz',name:'PETZATO',color:'#c47a1e'}];nxSecsSave(a);}
+  if(!a.some(function(s){return s.id===NX_GEN;})){a.unshift({id:NX_GEN,name:'ทั่วไป',color:'#6b6b6b'});nxSecsSave(a);}
+  return a;
+}
+function nxEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function nxSecOf(n,secs){var id=n.sec||NX_GEN;return (secs||nxSecs()).some(function(s){return s.id===id;})?id:NX_GEN;}
+function nxCreated(n){return n.createdAt||n.updatedAt||'';}
+function nxCur(notes){
+  var id=null;try{id=localStorage.getItem(NX_CUR_KEY);}catch(e){}
+  if(id&&notes.some(function(n){return n.id===id;}))return id;
+  var best=null;notes.forEach(function(n){if(!best||(n.updatedAt||'')>(best.updatedAt||''))best=n;});
+  return best?best.id:null;
+}
+function nxSetCur(id){try{localStorage.setItem(NX_CUR_KEY,id||'');}catch(e){}}
+function nxTitleOf(n){var t=String(n.title||'').trim();if(t)return t;var b=String(n.body||'').trim().split('\n')[0];return b?b.slice(0,40):'ไม่มีชื่อ';}
+function nxInit2(name){var s=String(name||'').replace(/\s+/g,' ').trim();if(!s)return'·';if(/^[\u0E00-\u0E7F]/.test(s))return s.charAt(0);var w=s.split(' ');return (w.length>1?w[0].charAt(0)+w[1].charAt(0):s.slice(0,2)).toUpperCase();}
+function nxAgo(iso){if(!iso)return'';var d=new Date(iso);if(isNaN(d))return'';var t=new Date();var same=d.toDateString()===t.toDateString();
+  return same?String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'):noteShortDate(iso);}
+
+// ---------- sanitize (ยอมให้ ตาราง / เช็กลิสต์ / ลิงก์หน้าย่อย) ----------
+function nxSanitize(html){
+  var box=document.createElement('div');box.innerHTML=html||'';
+  var OK={B:1,STRONG:1,I:1,EM:1,U:1,S:1,STRIKE:1,BR:1,DIV:1,P:1,UL:1,OL:1,LI:1,SPAN:1,FONT:1,H1:1,H2:1,H3:1,MARK:1,TABLE:1,THEAD:1,TBODY:1,TR:1,TH:1,TD:1,HR:1,A:1,BLOCKQUOTE:1};
+  (function walk(el){
+    Array.prototype.slice.call(el.childNodes).forEach(function(c){
+      if(c.nodeType===3)return;
+      if(c.nodeType!==1||!OK[c.tagName]){
+        if(c.nodeType===1&&!/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|IMG|SVG|LINK|META|INPUT|BUTTON|TEXTAREA|SELECT)$/.test(c.tagName)){walk(c);while(c.firstChild)el.insertBefore(c.firstChild,c);}
+        el.removeChild(c);return;
+      }
+      var col=c.style?c.style.color:'',bg=c.style?c.style.backgroundColor:'',fw=c.style?c.style.fontWeight:'',fc=c.getAttribute('color');
+      var cls=c.getAttribute('class')||'',done=c.getAttribute('data-done'),pg=c.getAttribute('data-page');
+      Array.prototype.slice.call(c.attributes).forEach(function(a){c.removeAttribute(a.name);});
+      var st='';
+      if(fc&&/^#?[0-9a-z]+$/i.test(fc))st+='color:'+fc+';';
+      if(col&&/^(#|rgb|[a-z]+$)/.test(col))st+='color:'+col+';';
+      if(bg&&/^(#|rgb)/.test(bg)&&!/rgba?\(\s*0,\s*0,\s*0,\s*0\)/.test(bg))st+='background-color:'+bg+';';
+      if(fw&&/^(bold|[6-9]00)$/.test(fw))st+='font-weight:700;';
+      if(st)c.setAttribute('style',st);
+      if(c.tagName==='UL'&&/\bnx-todo\b/.test(cls))c.setAttribute('class','nx-todo');
+      if(c.tagName==='TABLE')c.setAttribute('class','nx-tbl');
+      if(c.tagName==='LI'&&done==='1')c.setAttribute('data-done','1');
+      if(c.tagName==='A'){
+        if(pg&&/^[\w-]{1,40}$/.test(pg)){c.setAttribute('class','nx-link');c.setAttribute('data-page',pg);c.setAttribute('contenteditable','false');c.setAttribute('href','#');}
+        else{while(c.firstChild)el.insertBefore(c.firstChild,c);el.removeChild(c);return;}
+      }
+      walk(c);
+    });
+  })(box);
+  return box.innerHTML;
+}
+
+// ---------- render ----------
+function nxRender(focusId){
+  var root=document.getElementById('nx');if(!root)return;
+  var notes=notesLoad(),secs=nxSecs();
+  if(focusId&&notes.some(function(n){return n.id===focusId;})){nxSetCur(focusId);_nxMob='page';}
+  var cur=nxCur(notes);
+  root.className='nx '+(_nxMob==='page'&&cur?'mob-page':'mob-list');
+  root.innerHTML='<aside class="nx-side" aria-label="หัวข้อและหน้า">'+nxSideHtml(notes,secs,cur)+'</aside><main class="nx-main" id="nx-main">'+nxPageHtml(notes,secs,cur)+'</main>';
+  // ลิงก์หน้าย่อยในเนื้อหา → แสดงชื่อหน้าล่าสุด
+  root.querySelectorAll('#nx-body a.nx-link').forEach(function(a){var t=notes.find(function(x){return x.id===a.getAttribute('data-page');});a.textContent=t?nxTitleOf(t):'(หน้าถูกลบ)';});
+}
+function nxTree(pages,parent,depth,cur){
+  var kids=pages.filter(function(p){return (p.parent||null)===parent;}).sort(function(a,b){return nxCreated(a)<nxCreated(b)?-1:1;});
+  var h='';
+  kids.forEach(function(p){
+    h+='<button type="button" class="nx-pg'+(p.id===cur?' on':'')+'" style="padding-left:'+(10+depth*14)+'px" data-id="'+p.id+'" onclick="nxOpen(this.dataset.id)">'
+      +(depth?'<span class="nx-pg-sub" aria-hidden="true">└</span>':'')+'<span class="nx-pg-t" id="nxl-'+p.id+'">'+nxEsc(nxTitleOf(p))+'</span></button>';
+    if(depth<4)h+=nxTree(pages,p.id,depth+1,cur);
+  });
+  return h;
+}
+function nxSideHtml(notes,secs,cur){
+  var caretD='<svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 8l7 9 7-9z"></path></svg>';
+  var caretR='<svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l9 7-9 7z"></path></svg>';
+  var dots='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>';
+  var h='<label class="nx-search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>'
+    +'<input type="search" id="nx-q" placeholder="ค้นหาใน Note" aria-label="ค้นหาใน Note" value="'+nxEsc(_nxQ)+'" oninput="nxSearch(this.value)"></label>';
+  var curNote=notes.find(function(n){return n.id===cur;});
+  if(_nxQ){
+    var q=_nxQ.toLowerCase(),hits=notes.filter(function(n){return (nxTitleOf(n)+' '+(n.body||'')).toLowerCase().indexOf(q)>=0;});
+    h+='<div class="nx-lbl">ผลค้นหา '+hits.length+' หน้า</div>';
+    hits.forEach(function(p){var s=secs.find(function(x){return x.id===nxSecOf(p,secs);});
+      h+='<button type="button" class="nx-pg'+(p.id===cur?' on':'')+'" data-id="'+p.id+'" onclick="nxOpen(this.dataset.id)"><span class="nx-sq" style="background:'+s.color+'"></span><span class="nx-pg-t">'+nxEsc(nxTitleOf(p))+'</span></button>';});
+    return h;
+  }
+  h+='<div class="nx-lbl">หัวข้อ</div>';
+  secs.forEach(function(s){
+    var pages=notes.filter(function(n){return nxSecOf(n,secs)===s.id;});
+    var open=s.open!==false||(curNote&&nxSecOf(curNote,secs)===s.id);
+    h+='<div class="nx-sec"><div class="nx-sec-row"><button type="button" class="nx-sec-h" aria-expanded="'+open+'" data-id="'+s.id+'" onclick="nxSecToggle(this.dataset.id)">'+(open?caretD:caretR)
+      +'<span class="nx-sq" style="background:'+s.color+'"></span><span class="nx-sec-n">'+nxEsc(s.name)+'</span><span class="nx-cnt">'+pages.length+'</span></button>'
+      +'<button type="button" class="nx-sec-more" aria-label="ตั้งค่าหัวข้อ '+nxEsc(s.name)+'" data-id="'+s.id+'" onclick="nxSecMenu(this.dataset.id)">'+dots+'</button></div>';
+    if(_nxSecMenu===s.id){
+      h+='<div class="nx-pop" role="group" aria-label="ตั้งค่าหัวข้อ"><label class="nx-pop-l">ชื่อหัวข้อ<input id="nx-secname" value="'+nxEsc(s.name)+'" data-id="'+s.id+'" onkeydown="if(event.key===\'Enter\'){nxSecRename(this);}if(event.key===\'Escape\'){nxSecMenu(null);}" onblur="nxSecRename(this)"></label>'
+        +'<div class="nx-pop-l">สี</div><div class="nx-cols">'+NX_COLORS.map(function(c){return '<button type="button" class="nx-col'+(c===s.color?' on':'')+'" style="background:'+c+'" aria-label="สีหัวข้อ" data-id="'+s.id+'" data-c="'+c+'" onmousedown="event.preventDefault()" onclick="nxSecColor(this)"></button>';}).join('')+'</div>'
+        +(s.id===NX_GEN?'':'<button type="button" class="nx-danger'+(_nxDel==='sec:'+s.id?' arm':'')+'" data-id="'+s.id+'" onmousedown="event.preventDefault()" onclick="nxSecDelete(this.dataset.id)">'+(_nxDel==='sec:'+s.id?'กดอีกครั้งเพื่อลบ (หน้าในหัวข้อย้ายไป "ทั่วไป")':'ลบหัวข้อ')+'</button>')
+        +'</div>';
+    }
+    if(open){h+='<div class="nx-pages">'+nxTree(pages,null,0,cur)+'<button type="button" class="nx-add" data-id="'+s.id+'" onclick="nxNewPage(this.dataset.id,null)">+ เพิ่มหน้า</button></div>';}
+    h+='</div>';
+  });
+  h+='<button type="button" class="nx-addsec" onclick="nxSecNew()">+ หัวข้อใหม่</button>';
+  return h;
+}
+function nxPageHtml(notes,secs,cur){
+  var n=notes.find(function(x){return x.id===cur;});
+  if(!n)return '<div class="nx-empty"><div style="font-size:15px;font-weight:600;margin-bottom:6px">ยังไม่มีหน้า</div><div style="color:#6b6b6b;font-size:13px;margin-bottom:14px">เลือกหัวข้อทางซ้าย แล้วกด "+ เพิ่มหน้า"</div><button type="button" class="nx-btn-dark" onclick="nxNewPage(\''+NX_GEN+'\',null)">+ หน้าใหม่</button></div>';
+  var s=secs.find(function(x){return x.id===nxSecOf(n,secs);});
+  var font=NX_FONTS.some(function(f){return f[0]===n.font;})?n.font:NX_FONTS[0][0];
+  var crumbs=[],p=n,guard=0;while(p&&p.parent&&guard++<6){p=notes.find(function(x){return x.id===p.parent;});if(p)crumbs.unshift(p);}
+  var h='<div class="nx-cover'+(n.cover?'':' none')+'" style="background:'+(n.cover||'transparent')+'"><button type="button" class="nx-cover-btn" onclick="nxCoverMenu()">'+(n.cover?'เปลี่ยนสีปก':'+ ใส่สีปก')+'</button>'
+    +'<div class="nx-pop nx-cover-pop" id="nx-cover-pop" hidden><div class="nx-cols">'+NX_COVERS.map(function(c){return '<button type="button" class="nx-col'+(c===(n.cover||'')?' on':'')+'" style="background:'+(c||'#fff')+(c?'':';box-shadow:inset 0 0 0 1px #ccc')+'" aria-label="'+(c?'สีปก':'ไม่มีปก')+'" data-c="'+c+'" onclick="nxSetCover(this.dataset.c)"></button>';}).join('')+'</div></div></div>';
+  h+='<div class="nx-doc'+(n.cover?'':' nocover')+'" style="font-family:\''+font+'\',\'IBM Plex Sans Thai\',sans-serif">';
+  h+='<div class="nx-icon" style="background:'+s.color+'" aria-hidden="true">'+nxEsc(nxInit2(s.name))+'</div>';
+  h+='<div class="nx-crumb"><button type="button" class="nx-back" onclick="nxBack()" aria-label="กลับไปรายการหน้า"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>'
+    +'<span>'+nxEsc(s.name)+'</span>'+crumbs.map(function(c){return '<span aria-hidden="true">/</span><a href="#" data-id="'+c.id+'" onclick="event.preventDefault();nxOpen(this.dataset.id)">'+nxEsc(nxTitleOf(c))+'</a>';}).join('')
+    +'<span class="nx-st" id="nx-st">แก้ไขล่าสุด '+nxAgo(n.updatedAt)+'</span></div>';
+  h+='<div class="nx-tb" role="toolbar" aria-label="จัดรูปแบบ">'
+    +'<select aria-label="ฟอนต์ของหน้านี้" onchange="nxSetFont(this.value)">'+NX_FONTS.map(function(f){return '<option value="'+f[0]+'"'+(f[0]===font?' selected':'')+'>'+f[1]+'</option>';}).join('')+'</select>'
+    +'<select aria-label="ย้ายไปหัวข้อ" onchange="nxMoveSec(this.value)">'+secs.map(function(x){return '<option value="'+x.id+'"'+(x.id===s.id?' selected':'')+'>'+nxEsc(x.name)+'</option>';}).join('')+'</select>'
+    +'<span class="sep"></span>'
+    +'<button type="button" data-c="bold" aria-label="ตัวหนา" title="ตัวหนา (⌘B)" onmousedown="event.preventDefault()" onclick="nxFmt(this)"><b>B</b></button>'
+    +'<button type="button" data-c="italic" aria-label="ตัวเอียง" title="ตัวเอียง (⌘I)" onmousedown="event.preventDefault()" onclick="nxFmt(this)"><i style="font-family:Georgia,serif">I</i></button>'
+    +'<button type="button" data-c="underline" aria-label="ขีดเส้นใต้" title="ขีดเส้นใต้ (⌘U)" onmousedown="event.preventDefault()" onclick="nxFmt(this)"><u>U</u></button>'
+    +'<button type="button" data-c="strikeThrough" aria-label="ขีดฆ่า" title="ขีดฆ่า" onmousedown="event.preventDefault()" onclick="nxFmt(this)"><s>S</s></button><span class="sep"></span>'
+    +NX_TXT.map(function(c){return '<button type="button" class="nx-tc" data-c="foreColor" data-v="'+c[0]+'" aria-label="ตัวอักษรสี'+c[1]+'" title="สี'+c[1]+'" style="color:'+c[0]+';border-bottom-color:'+c[0]+'" onmousedown="event.preventDefault()" onclick="nxFmt(this)">A</button>';}).join('')
+    +'<button type="button" data-c="backColor" data-v="#ffe9a8" aria-label="ไฮไลต์" title="ไฮไลต์" onmousedown="event.preventDefault()" onclick="nxFmt(this)"><span style="background:#ffe9a8;padding:0 3px;border-radius:2px">ไฮไลต์</span></button>'
+    +'<button type="button" data-c="removeFormat" aria-label="ล้างรูปแบบ" title="ล้างรูปแบบ" onmousedown="event.preventDefault()" onclick="nxFmt(this)">Tx</button><span class="sep"></span>'
+    +'<button type="button" onmousedown="event.preventDefault()" onclick="nxInsert(\'table\')">+ ตาราง</button>'
+    +'<button type="button" onmousedown="event.preventDefault()" onclick="nxInsert(\'todo\')">+ เช็กลิสต์</button>'
+    +'<button type="button" class="nx-del'+(_nxDel==='pg:'+n.id?' arm':'')+'" onclick="nxDeletePage()" aria-label="ลบหน้านี้">'+(_nxDel==='pg:'+n.id?'กดอีกครั้งเพื่อลบ':'ลบหน้า')+'</button>'
+    +'</div>';
+  h+='<h1 class="nx-title" id="nx-title" contenteditable="true" role="textbox" aria-label="ชื่อหน้า" data-ph="ไม่มีชื่อ" oninput="nxTitleInput(this)" onkeydown="nxTitleKey(event)" onpaste="nxPastePlain(event)" onblur="nxFlush()">'+nxEsc(n.title||'')+'</h1>';
+  h+='<div class="nx-body" id="nx-body" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหา" data-ph="พิมพ์ / เพื่อแทรก ตาราง · เช็กลิสต์ · หัวข้อ · หน้าย่อย" data-id="'+n.id+'" oninput="nxBodyInput()" onkeydown="nxKey(event)" onclick="nxBodyClick(event)" onpaste="nxPaste(event)" onblur="nxFlush();setTimeout(nxSlashHide,150)">'+(n.html||noteHtmlOf(n))+'</div>';
+  var subs=notes.filter(function(x){return x.parent===n.id;});
+  h+='<div class="nx-subs"><div class="nx-lbl" style="margin:0 0 6px">หน้าย่อย'+(subs.length?' · '+subs.length:'')+'</div>'
+    +subs.map(function(x){return '<a href="#" class="nx-sublink" data-id="'+x.id+'" onclick="event.preventDefault();nxOpen(this.dataset.id)">'+nxEsc(nxTitleOf(x))+'</a>';}).join('')
+    +'<button type="button" class="nx-add" onclick="nxNewPage(null,\''+n.id+'\')">+ หน้าย่อย</button></div>';
+  h+='</div>';
+  return h;
+}
+
+// ---------- navigation / sections / pages ----------
+function nxOpen(id){nxFlush();_nxDel=null;nxSetCur(id);_nxMob='page';nxRender();var m=document.getElementById('nx-main');if(m)m.scrollTop=0;if(window.innerWidth<=760)window.scrollTo(0,0);}
+function nxBack(){nxFlush();_nxMob='list';nxRender();}
+function nxSearch(v){_nxQ=v;var side=document.querySelector('#nx .nx-side');if(!side)return;var notes=notesLoad();side.innerHTML=nxSideHtml(notes,nxSecs(),nxCur(notes));var q=document.getElementById('nx-q');if(q){q.focus();q.setSelectionRange(v.length,v.length);}}
+function nxSecToggle(id){var a=nxSecs();a.forEach(function(s){if(s.id===id)s.open=s.open===false;});nxSecsSave(a);nxRender();}
+function nxSecMenu(id){_nxSecMenu=_nxSecMenu===id?null:id;_nxDel=null;nxRender();var i=document.getElementById('nx-secname');if(i){i.focus();i.select();}}
+function nxSecRename(inp){var v=inp.value.trim();if(!v)return;var a=nxSecs();a.forEach(function(s){if(s.id===inp.dataset.id)s.name=v;});nxSecsSave(a);if(_nxSecMenu){_nxSecMenu=null;nxRender();}}
+function nxSecColor(b){var a=nxSecs();a.forEach(function(s){if(s.id===b.dataset.id)s.color=b.dataset.c;});nxSecsSave(a);nxRender();var i=document.getElementById('nx-secname');if(i)i.focus();}
+function nxSecNew(){var a=nxSecs();var s={id:'s'+Date.now(),name:'หัวข้อใหม่',color:NX_COLORS[a.length%NX_COLORS.length],open:true};a.push(s);nxSecsSave(a);_nxSecMenu=s.id;nxRender();var i=document.getElementById('nx-secname');if(i){i.focus();i.select();}}
+function nxSecDelete(id){
+  if(_nxDel!=='sec:'+id){_nxDel='sec:'+id;nxRender();return;}
+  _nxDel=null;_nxSecMenu=null;
+  var notes=notesLoad();notes.forEach(function(n){if(n.sec===id)n.sec=NX_GEN;});notesSave(notes);
+  nxSecsSave(nxSecs().filter(function(s){return s.id!==id;}));nxRender();showToast('🗑 ลบหัวข้อแล้ว · หน้าย้ายไป "ทั่วไป"');
+}
+function nxNewPage(sec,parent){
+  nxFlush();
+  var notes=notesLoad(),now=new Date().toISOString();
+  if(parent){var pp=notes.find(function(x){return x.id===parent;});sec=pp?nxSecOf(pp):NX_GEN;}
+  var n={id:'n'+Date.now(),title:'',body:'',html:'',tag:'📌 ทั่วไป',sec:sec||NX_GEN,parent:parent||null,createdAt:now,updatedAt:now};
+  notes.unshift(n);notesSave(notes);
+  var a=nxSecs();a.forEach(function(s){if(s.id===n.sec)s.open=true;});nxSecsSave(a);
+  nxSetCur(n.id);_nxMob='page';_nxQ='';nxRender();
+  var t=document.getElementById('nx-title');if(t)t.focus();
+  return n.id;
+}
+function nxDeletePage(){
+  var notes=notesLoad(),cur=nxCur(notes);if(!cur)return;
+  if(_nxDel!=='pg:'+cur){_nxDel='pg:'+cur;var b=document.querySelector('#nx .nx-del');if(b){b.classList.add('arm');b.textContent='กดอีกครั้งเพื่อลบ';}setTimeout(function(){if(_nxDel==='pg:'+cur){_nxDel=null;var b2=document.querySelector('#nx .nx-del');if(b2){b2.classList.remove('arm');b2.textContent='ลบหน้า';}}},3500);return;}
+  _nxDel=null;clearTimeout(_nxTimer);_nxTimer=null;
+  var kill={};kill[cur]=1;var grew=true;while(grew){grew=false;notes.forEach(function(n){if(n.parent&&kill[n.parent]&&!kill[n.id]){kill[n.id]=1;grew=true;}});}
+  var me=notes.find(function(n){return n.id===cur;}),up=me&&me.parent;
+  var cnt=Object.keys(kill).length;
+  notesSave(notes.filter(function(n){return !kill[n.id];}));
+  nxSetCur(up||'');_nxMob=up?'page':'list';nxRender();showToast('🗑 ลบแล้ว'+(cnt>1?' ('+cnt+' หน้า รวมหน้าย่อย)':''));
+}
+function nxPatch(fn){var notes=notesLoad(),cur=nxCur(notes),n=notes.find(function(x){return x.id===cur;});if(!n)return null;fn(n);n.updatedAt=new Date().toISOString();notesSave(notes);return n;}
+function nxSetFont(f){nxFlush();nxPatch(function(n){n.font=f;});var d=document.querySelector('#nx .nx-doc');if(d)d.style.fontFamily="'"+f+"','IBM Plex Sans Thai',sans-serif";}
+function nxMoveSec(id){nxFlush();nxPatch(function(n){n.sec=id;n.parent=null;});nxRender();showToast('ย้ายหน้าแล้ว');}
+function nxCoverMenu(){var p=document.getElementById('nx-cover-pop');if(p)p.hidden=!p.hidden;}
+function nxSetCover(c){nxFlush();nxPatch(function(n){n.cover=c;});nxRender();}
+
+// ---------- editing / saving ----------
+function nxStatus(t){var s=document.getElementById('nx-st');if(s)s.textContent=t;}
+function nxTitleInput(el){var notes=notesLoad(),cur=nxCur(notes);var l=document.getElementById('nxl-'+cur);if(l)l.textContent=el.innerText.trim()||'ไม่มีชื่อ';nxQueue();}
+function nxTitleKey(e){if(e.key==='Enter'){e.preventDefault();var b=document.getElementById('nx-body');if(b){b.focus();pinCaretEnd(b);}}}
+function nxBodyInput(){nxSlashCheck();nxQueue();}
+function nxQueue(){nxStatus('กำลังพิมพ์…');clearTimeout(_nxTimer);_nxTimer=setTimeout(nxFlush,700);}
+function nxFlush(){
+  if(_nxTimer===null)return;clearTimeout(_nxTimer);_nxTimer=null;
+  var b=document.getElementById('nx-body'),t=document.getElementById('nx-title');if(!b||!t)return;
+  var id=b.dataset.id,notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n)return;
+  var html=nxSanitize(b.innerHTML.trim());if(/^\s*(<br\s*\/?>\s*)*$/i.test(html))html='';
+  var title=t.innerText.replace(/\s+/g,' ').trim();
+  if(html===(n.html||'')&&title===(n.title||'')){nxStatus('แก้ไขล่าสุด '+nxAgo(n.updatedAt));return;}
+  n.html=html;n.title=title;n.body=(b.innerText||'').trim();n.updatedAt=new Date().toISOString();notesSave(notes);
+  nxStatus('✓ บันทึกแล้ว '+nxAgo(n.updatedAt));
+}
+window.addEventListener('beforeunload',function(){try{nxFlush();}catch(e){}});
+document.addEventListener('visibilitychange',function(){if(document.hidden){try{nxFlush();}catch(e){}}});
+function nxPastePlain(e){var d=e.clipboardData;if(!d)return;e.preventDefault();document.execCommand('insertText',false,d.getData('text/plain').replace(/\s+/g,' '));}
+function nxPaste(e){
+  var d=e.clipboardData;if(!d)return;
+  var html=d.getData('text/html');e.preventDefault();
+  if(html)document.execCommand('insertHTML',false,nxSanitize(html));
+  else document.execCommand('insertText',false,d.getData('text/plain'));
+}
+function nxFmt(b){
+  var ed=document.getElementById('nx-body');if(!ed)return;
+  var sel=window.getSelection(),inside=sel.rangeCount&&(ed.contains(sel.anchorNode)||document.getElementById('nx-title').contains(sel.anchorNode));
+  if(!inside){ed.focus();pinCaretEnd(ed);}
+  try{document.execCommand('styleWithCSS',false,b.dataset.c==='backColor');}catch(e){}
+  document.execCommand(b.dataset.c,false,b.dataset.v||null);
+  if(b.dataset.c==='removeFormat'&&sel.isCollapsed){['bold','italic','underline','strikeThrough'].forEach(function(c){try{if(document.queryCommandState(c))document.execCommand(c);}catch(e){}});document.execCommand('foreColor',false,'#1d1d1f');}
+  nxQueue();nxTbState();
+}
+function nxTbState(){document.querySelectorAll('#nx .nx-tb button[data-c=bold],#nx .nx-tb button[data-c=italic],#nx .nx-tb button[data-c=underline],#nx .nx-tb button[data-c=strikeThrough]').forEach(function(x){var on=false;try{on=document.queryCommandState(x.dataset.c);}catch(e){}x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);});}
+
+// ---------- blocks ----------
+function nxFocusMarker(){
+  var ed=document.getElementById('nx-body'),m=ed&&ed.querySelector('[data-nxf]');if(!m)return;
+  m.removeAttribute('data-nxf');var r=document.createRange();r.selectNodeContents(m);r.collapse(true);var s=window.getSelection();s.removeAllRanges();s.addRange(r);
+}
+function nxInsert(k){
+  var ed=document.getElementById('nx-body');if(!ed)return;
+  var sel=window.getSelection();if(!sel.rangeCount||!ed.contains(sel.anchorNode)){ed.focus();pinCaretEnd(ed);}
+  try{document.execCommand('styleWithCSS',false,false);}catch(e){}
+  if(k==='table'){
+    var th='<tr><th data-nxf><br></th><th><br></th><th><br></th></tr>',td='<tr><td><br></td><td><br></td><td><br></td></tr>';
+    document.execCommand('insertHTML',false,'<table class="nx-tbl"><tbody>'+th+td+td+'</tbody></table><p><br></p>');nxFocusMarker();
+  }else if(k==='todo'){document.execCommand('insertHTML',false,'<ul class="nx-todo"><li data-nxf><br></li></ul>');nxFocusMarker();}
+  else if(k==='h2'||k==='h3'){document.execCommand('formatBlock',false,k);}
+  else if(k==='quote'){document.execCommand('formatBlock',false,'blockquote');}
+  else if(k==='ul'){document.execCommand('insertUnorderedList');}
+  else if(k==='ol'){document.execCommand('insertOrderedList');}
+  else if(k==='hr'){document.execCommand('insertHTML',false,'<hr><p data-nxf><br></p>');nxFocusMarker();}
+  else if(k==='page'){
+    var parent=ed.dataset.id,id='n'+Date.now();
+    document.execCommand('insertHTML',false,'<a class="nx-link" contenteditable="false" href="#" data-page="'+id+'">หน้าย่อยใหม่</a>&nbsp;');
+    _nxTimer=-1;nxFlush();
+    var notes=notesLoad(),pp=notes.find(function(x){return x.id===parent;}),now=new Date().toISOString();
+    notes.unshift({id:id,title:'',body:'',html:'',tag:'📌 ทั่วไป',sec:pp?nxSecOf(pp):NX_GEN,parent:parent,createdAt:now,updatedAt:now});notesSave(notes);
+    nxSetCur(id);_nxMob='page';nxRender();var t=document.getElementById('nx-title');if(t)t.focus();return;
+  }
+  nxQueue();
+}
+function nxSlashItems(){var q=_nxSlash?_nxSlash.q:'';return NX_BLOCKS.filter(function(b){return !q||b.kw.indexOf(q)>=0||b.t.indexOf(q)>=0;});}
+function nxSlashCheck(){
+  var sel=window.getSelection();if(!sel.rangeCount||!sel.isCollapsed){nxSlashHide();return;}
+  var r=sel.getRangeAt(0),node=r.startContainer;
+  if(node.nodeType!==3){nxSlashHide();return;}
+  var before=node.textContent.slice(0,r.startOffset),m=before.match(/(?:^|[\s ])\/([^\s\/]{0,20})$/);
+  if(!m){nxSlashHide();return;}
+  _nxSlash={node:node,end:r.startOffset,start:r.startOffset-m[1].length-1,q:m[1].toLowerCase(),idx:(_nxSlash&&_nxSlash.node===node)?_nxSlash.idx:0};
+  var items=nxSlashItems();if(!items.length){nxSlashHide();return;}
+  if(_nxSlash.idx>=items.length)_nxSlash.idx=0;
+  var box=document.getElementById('nx-slash');
+  if(!box){box=document.createElement('div');box.id='nx-slash';box.className='nx-slash';box.setAttribute('role','listbox');box.setAttribute('aria-label','แทรกบล็อก');document.body.appendChild(box);}
+  box.innerHTML='<div class="nx-slash-h">แทรกบล็อก</div>'+items.map(function(b,i){return '<button type="button" role="option" aria-selected="'+(i===_nxSlash.idx)+'" class="'+(i===_nxSlash.idx?'on':'')+'" data-k="'+b.k+'" onmousedown="event.preventDefault()" onclick="nxSlashPick(this.dataset.k)"><b>'+b.t+'</b><span>'+b.d+'</span></button>';}).join('');
+  var rc=r.getBoundingClientRect();if(!rc||(!rc.top&&!rc.left)){rc=node.parentNode.getBoundingClientRect();}
+  var top=rc.bottom+6,left=Math.min(rc.left,window.innerWidth-280);
+  box.style.display='block';box.style.left=Math.max(8,left)+'px';
+  var hgt=box.offsetHeight;if(top+hgt>window.innerHeight-8)top=Math.max(8,rc.top-hgt-6);
+  box.style.top=top+'px';
+}
+function nxSlashHide(){var b=document.getElementById('nx-slash');if(b)b.style.display='none';_nxSlash=null;}
+function nxSlashPick(k){
+  if(!_nxSlash)return;
+  var r=document.createRange();
+  try{r.setStart(_nxSlash.node,_nxSlash.start);r.setEnd(_nxSlash.node,_nxSlash.end);}catch(e){nxSlashHide();return;}
+  var s=window.getSelection();s.removeAllRanges();s.addRange(r);document.execCommand('delete');
+  nxSlashHide();nxInsert(k);
+}
+function nxKey(e){
+  if(_nxSlash&&document.getElementById('nx-slash')&&document.getElementById('nx-slash').style.display==='block'){
+    var items=nxSlashItems();
+    if(e.key==='ArrowDown'){e.preventDefault();_nxSlash.idx=(_nxSlash.idx+1)%items.length;nxSlashCheck();return;}
+    if(e.key==='ArrowUp'){e.preventDefault();_nxSlash.idx=(_nxSlash.idx-1+items.length)%items.length;nxSlashCheck();return;}
+    if(e.key==='Enter'){e.preventDefault();nxSlashPick(items[_nxSlash.idx].k);return;}
+    if(e.key==='Escape'){e.preventDefault();nxSlashHide();return;}
+  }
+  if(e.key==='Tab'){ // ในตาราง: Tab = ช่องถัดไป (ช่องสุดท้าย = เพิ่มแถว)
+    var c=nxCell();if(!c)return;e.preventDefault();
+    var cells=Array.prototype.slice.call(c.closest('table').querySelectorAll('th,td')),i=cells.indexOf(c)+(e.shiftKey?-1:1);
+    if(i>=cells.length){nxTable('row');cells=Array.prototype.slice.call(c.closest('table').querySelectorAll('th,td'));}
+    var nx=cells[Math.max(0,i)];if(nx){var r=document.createRange();r.selectNodeContents(nx);r.collapse(false);var s=window.getSelection();s.removeAllRanges();s.addRange(r);}
+  }
+}
+function nxBodyClick(e){
+  var a=e.target.closest&&e.target.closest('a.nx-link');
+  if(a){e.preventDefault();var id=a.getAttribute('data-page');if(notesLoad().some(function(n){return n.id===id;}))nxOpen(id);else showToast('หน้านี้ถูกลบไปแล้ว');return;}
+  var li=e.target.closest&&e.target.closest('ul.nx-todo > li');
+  if(li&&e.target===li){var rc=li.getBoundingClientRect();if(e.clientX-rc.left<26){if(li.getAttribute('data-done'))li.removeAttribute('data-done');else li.setAttribute('data-done','1');nxQueue();}}
+}
+// ---------- table tools ----------
+function nxCell(){var s=window.getSelection();if(!s.rangeCount)return null;var n=s.anchorNode;if(!n)return null;var el=n.nodeType===1?n:n.parentNode;var ed=document.getElementById('nx-body');var c=el&&el.closest&&el.closest('td,th');return c&&ed&&ed.contains(c)?c:null;}
+function nxTable(op){
+  var c=nxCell();if(!c)return;var tr=c.parentNode,tbl=c.closest('table'),idx=c.cellIndex,rows=Array.prototype.slice.call(tbl.rows);
+  if(op==='row'){var n=document.createElement('tr');for(var i=0;i<tr.cells.length;i++){var d=document.createElement('td');d.innerHTML='<br>';n.appendChild(d);}tr.parentNode.insertBefore(n,tr.nextSibling);}
+  else if(op==='col'){rows.forEach(function(r,ri){var d=document.createElement(r.cells[0]&&r.cells[0].tagName==='TH'?'th':'td');d.innerHTML='<br>';var ref=r.cells[idx+1]||null;r.insertBefore(d,ref);});}
+  else if(op==='delrow'){if(rows.length>1)tr.parentNode.removeChild(tr);}
+  else if(op==='delcol'){if(tr.cells.length>1)rows.forEach(function(r){if(r.cells[idx])r.removeChild(r.cells[idx]);});}
+  else if(op==='del'){tbl.parentNode.removeChild(tbl);}
+  nxQueue();nxTableTools();
+}
+function nxTableTools(){
+  var bar=document.getElementById('nx-ttools'),c=nxCell();
+  if(!c){if(bar)bar.style.display='none';return;}
+  if(!bar){bar=document.createElement('div');bar.id='nx-ttools';bar.className='nx-ttools';bar.setAttribute('role','toolbar');bar.setAttribute('aria-label','เครื่องมือตาราง');
+    bar.innerHTML=[['row','+ แถว'],['col','+ คอลัมน์'],['delrow','ลบแถว'],['delcol','ลบคอลัมน์'],['del','ลบตาราง']].map(function(x){return '<button type="button" data-op="'+x[0]+'" onmousedown="event.preventDefault()" onclick="nxTable(this.dataset.op)">'+x[1]+'</button>';}).join('');
+    document.body.appendChild(bar);}
+  var rc=c.closest('table').getBoundingClientRect();bar.style.display='flex';
+  var top=rc.bottom+6;if(top+36>window.innerHeight-70)top=Math.max(8,rc.top-38);bar.style.top=top+'px';bar.style.left=Math.max(8,Math.min(rc.left,window.innerWidth-bar.offsetWidth-8))+'px';
+}
+document.addEventListener('selectionchange',function(){var a=document.activeElement;if(a&&a.id==='nx-body'){nxTableTools();nxTbState();}else{var b=document.getElementById('nx-ttools');if(b&&!(a&&a.closest&&a.closest('#nx-ttools')))b.style.display='none';}});
+window.addEventListener('scroll',function(){var b=document.getElementById('nx-ttools');if(b&&b.style.display==='flex')nxTableTools();nxSlashHide();},true);
+
 function noteShortDate(iso){if(!iso)return'';var d=new Date(iso);if(isNaN(d))return'';var m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return d.getDate()+' '+m[d.getMonth()];}
 // แก้ในการ์ดได้เลย — บันทึกอัตโนมัติ (ไม่ต้องกดบันทึก)
 var _noteTimers={};

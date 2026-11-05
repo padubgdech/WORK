@@ -51,6 +51,17 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Compact cards (30 Oct): smaller padding/fonts/toolbar. Resizable (31 Oct): `.note-grid` is flex-wrap; each card width = `n.w`
   (default 240) and optional fixed height `n.h` (body scrolls). Drag `.note-grip` (bottom-right) / arrow keys → `noteSaveSize`
   autosaves; double-click grip = reset. Phone: width forced 100%, only height resizes.
+- Note tab REBUILT as Notion-style (5 Nov, Dech chose mockup "แบบ 1" on the canvas page "Note แบบ Notion", NT1-Sidebar): `#nx`, all code
+  prefixed `nx` (`nxRender`; `renderNotes()` now just calls it; old card functions kept as `renderNotesOld`, unused). Sidebar = sections
+  (localStorage `rudy_nb_sec_v1`, seeded ทั่วไป `s_general` / KHUMTONE / STILL FOREST / PETZATO; ⋯ menu = rename, colour, 2-tap delete →
+  pages move to ทั่วไป) with page tree (subpages via `parent`, max depth 5) + search. Pages ARE `rudy_notes` entries (+ `sec`, `parent`,
+  `cover`, `font`), so Main quick notes and Rudy-chat notes show up under ทั่วไป. Page: cover colour, section icon, breadcrumb, sticky
+  toolbar (font IBM Plex/Sarabun/Noto Serif Thai/Mitr per page, move section, B I U S, 6 text colours, highlight, Tx, + ตาราง, + เช็กลิสต์,
+  2-tap ลบหน้า incl. subpages), title + body contenteditable, autosave 700 ms (`nxFlush`, `nxSanitize` allows tables/todo/nx-link).
+  Slash menu (`nxSlashCheck`, `NX_BLOCKS`: table, todo, h2, h3, ul, ol, quote, hr, page) filtered by typed text, ↑↓ Enter Esc.
+  Tables: floating `#nx-ttools` (+row/+col/del row/del col/del table) under the table; Tab moves cells (adds a row at the end).
+  Todo = `ul.nx-todo > li[data-done]`, click the box to toggle. Subpage = `a.nx-link[data-page]` (text refreshed to the page title on render).
+  Phone: list view ↔ page view (`_nxMob`, back button), toolbar scrolls horizontally. Test: scratchpad test_nx.py.
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`
