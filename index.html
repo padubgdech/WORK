@@ -920,6 +920,16 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
 .pin-qn-ft{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:2px;min-height:20px}
 .pin-qn-ft .pin-qn-sec{margin-top:0;margin-left:auto}
 @media(max-width:760px){.pin-qn-ttl{font-size:14px}}
+.nx-pg-del{flex:none;width:24px;height:24px;border:0;background:transparent;color:#8a877f;border-radius:5px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;opacity:0;padding:0;font-family:inherit;font-size:11px;font-weight:700}
+.nx-pgrow:hover .nx-pg-del,.nx-sublink:hover .nx-pg-del,.nx-pg-del:focus-visible,.nx-pg-del.arm{opacity:1}
+.nx-pg-del:hover{background:#e6e3dc;color:#b42318}
+.nx-pg-del.arm{background:#b42318;color:#fff;width:auto;padding:0 7px}
+.nx-sublink .nx-pg-del{margin-left:auto}
+@media(hover:none){.nx-pg-del{opacity:.6}}
+.nx-linkbar{position:fixed;z-index:10065;display:none;gap:2px;background:#1f1e1c;border-radius:8px;padding:3px;box-shadow:0 8px 20px rgba(0,0,0,.22);font-family:'IBM Plex Sans Thai',sans-serif}
+.nx-linkbar button{border:0;background:transparent;color:#fff;border-radius:5px;padding:4px 9px;font-size:12px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px}
+.nx-linkbar button:hover{background:rgba(255,255,255,.15)}
+.nx-linkbar .nx-lb-del.arm{background:#b42318}
 </style>
 </head>
 <body>
@@ -2413,7 +2423,7 @@ function nxSanitize(html){
 // ---------- render ----------
 function nxRender(focusId){
   var root=document.getElementById('nx');if(!root)return;
-  nxHoverHide();['nx-ttools','nx-todotool','nx-tagpop','nx-linkpop','nx-slash','nx-grip'].forEach(function(i){var x=document.getElementById(i);if(x)x.style.display='none';});
+  nxHoverHide();['nx-ttools','nx-todotool','nx-tagpop','nx-linkpop','nx-slash','nx-grip','nx-linkbar'].forEach(function(i){var x=document.getElementById(i);if(x)x.style.display='none';});
   var notes=notesLoad(),secs=nxSecs();
   if(focusId&&notes.some(function(n){return n.id===focusId;})){nxSetCur(focusId);_nxMob='page';}
   var cur=nxCur(notes);
@@ -2441,7 +2451,8 @@ function nxTree(pages,parent,depth,cur){
     var has=pages.some(function(x){return x.parent===p.id;});
     h+='<div class="nx-pgrow'+(p.id===cur?' on':'')+'" style="padding-left:'+(depth*14)+'px" draggable="true" data-id="'+p.id+'" ondragstart="nxDragStart(event)" ondragover="nxDragOver(event)" ondragleave="nxDragLeave(event)" ondrop="nxDrop(event)" ondragend="nxDragEnd()">'
       +(has?'<button type="button" class="nx-fold" aria-label="'+(p.fold?'แสดงหน้าย่อย':'ซ่อนหน้าย่อย')+'" aria-expanded="'+!p.fold+'" data-id="'+p.id+'" onclick="nxFold(this.dataset.id)"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'+(p.fold?'<path d="M8 5l9 7-9 7z"></path>':'<path d="M5 8l7 9 7-9z"></path>')+'</svg></button>':'<span class="nx-fold-sp" aria-hidden="true">'+(depth?'└':'')+'</span>')
-      +'<button type="button" class="nx-pg'+(p.id===cur?' on':'')+'" data-id="'+p.id+'" onclick="nxOpen(this.dataset.id)">'+nxPgIcon(p)+'<span class="nx-pg-t" id="nxl-'+p.id+'">'+nxEsc(nxTitleOf(p))+'</span>'+(p.fav?'<span class="nx-pg-fav" aria-label="หน้าโปรด">★</span>':'')+'</button></div>';
+      +'<button type="button" class="nx-pg'+(p.id===cur?' on':'')+'" data-id="'+p.id+'" onclick="nxOpen(this.dataset.id)">'+nxPgIcon(p)+'<span class="nx-pg-t" id="nxl-'+p.id+'">'+nxEsc(nxTitleOf(p))+'</span>'+(p.fav?'<span class="nx-pg-fav" aria-label="หน้าโปรด">★</span>':'')+'</button>'
+      +'<button type="button" class="nx-pg-del" aria-label="ลบหน้า '+nxEsc(nxTitleOf(p))+'" title="ลบหน้า" data-id="'+p.id+'" onclick="event.stopPropagation();nxDelBtn(this)">'+'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>'+'</button></div>';
     if(depth<4&&!p.fold)h+=nxTree(pages,p.id,depth+1,cur);
   });
   return h;
@@ -2556,7 +2567,8 @@ function nxPageHtml(notes,secs,cur){
   h+='<div class="nx-body" id="nx-body" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหา" data-ph="พิมพ์ / เพื่อแทรก ตาราง · เช็กลิสต์ · หัวข้อ · หน้าย่อย" data-id="'+n.id+'" oninput="nxBodyInput()" onkeydown="nxKey(event)" onclick="nxBodyClick(event)" onpaste="nxPaste(event)" ondragstart="nxBodyDragStart(event)" ondragover="nxBodyDragOver(event)" ondrop="nxDropFiles(event)" onblur="nxFlush();setTimeout(nxSlashHide,150)">'+(n.html||noteHtmlOf(n))+'</div>';
   var subs=notes.filter(function(x){return x.parent===n.id;});
   h+='<div class="nx-subs"><div class="nx-lbl" style="margin:0 0 6px">หน้าย่อย'+(subs.length?' · '+subs.length:'')+'</div>'
-    +subs.sort(nxSortKids).map(function(x){return '<a href="#" class="nx-sublink" data-id="'+x.id+'" data-page="'+x.id+'" onclick="event.preventDefault();nxPeekOpen(this.dataset.id)">'+nxPgIcon2(x)+'<span>'+nxEsc(nxTitleOf(x))+'</span></a>';}).join('')
+    +subs.sort(nxSortKids).map(function(x){return '<a href="#" class="nx-sublink" data-id="'+x.id+'" data-page="'+x.id+'" onclick="event.preventDefault();nxPeekOpen(this.dataset.id)">'+nxPgIcon2(x)+'<span>'+nxEsc(nxTitleOf(x))+'</span>'
+      +'<button type="button" class="nx-pg-del" aria-label="ลบหน้า '+nxEsc(nxTitleOf(x))+'" title="ลบหน้า" data-id="'+x.id+'" onclick="event.preventDefault();event.stopPropagation();nxDelBtn(this)">'+'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>'+'</button></a>';}).join('')
     +'<button type="button" class="nx-add" onclick="nxNewPage(null,\''+n.id+'\')">+ หน้าย่อย</button></div>';
   h+='</div>';
   return h;
@@ -2588,16 +2600,35 @@ function nxNewPage(sec,parent){
   var t=document.getElementById('nx-title');if(t)t.focus();
   return n.id;
 }
+// ปุ่มถังขยะเล็ก (แถบซ้าย / รายการหน้าย่อย / แถบลิงก์): กดครั้งแรก = แดง "ลบ?" · กดซ้ำภายใน 3 วิ = ย้ายไปถังขยะ
+function nxDelBtn(b){
+  var id=b.dataset.id;if(!id)return;
+  if(!b.classList.contains('arm')){
+    document.querySelectorAll('.nx-pg-del.arm,.nx-lb-del.arm').forEach(function(x){if(x!==b){x.classList.remove('arm');x.innerHTML=x._h||x.innerHTML;}});
+    b._h=b.innerHTML;b.classList.add('arm');b.textContent='ลบ?';
+    setTimeout(function(){if(b.isConnected&&b.classList.contains('arm')){b.classList.remove('arm');b.innerHTML=b._h;}},3000);return;
+  }
+  nxFlush();nxDeletePageId(id);
+}
 function nxDeletePage(){
   var notes=notesLoad(),cur=nxCur(notes);if(!cur)return;
   if(_nxDel!=='pg:'+cur){_nxDel='pg:'+cur;var b=document.querySelector('#nx .nx-del');if(b){b.classList.add('arm');b.textContent='กดอีกครั้งเพื่อลบ (รวมหน้าย่อย)';}setTimeout(function(){if(_nxDel==='pg:'+cur){_nxDel=null;var b2=document.querySelector('#nx .nx-del');if(b2){b2.classList.remove('arm');b2.textContent='ลบหน้า';}}},3500);return;}
-  _nxDel=null;clearTimeout(_nxTimer);_nxTimer=null;
+  _nxDel=null;nxDeletePageId(cur);
+}
+function nxDeletePageId(cur){
+  var notes=notesLoad();if(!notes.some(function(n){return n.id===cur;}))return;
+  var openNow=nxCur(notes);if(openNow===cur){clearTimeout(_nxTimer);_nxTimer=null;}else nxFlush();
+  notes=notesLoad();
   var kill={};kill[cur]=1;var grew=true;while(grew){grew=false;notes.forEach(function(n){if(n.parent&&kill[n.parent]&&!kill[n.id]){kill[n.id]=1;grew=true;}});}
   var me=notes.find(function(n){return n.id===cur;}),up=me&&me.parent;
   var cnt=Object.keys(kill).length;
   nxTrashAdd(notes.filter(function(n){return kill[n.id];}));
-  notesSave(notes.filter(function(n){return !kill[n.id];}));
-  nxSetCur(up||'');_nxMob=up?'page':'list';nxRender();showToast('🗑 ย้ายไปถังขยะแล้ว'+(cnt>1?' ('+cnt+' หน้า รวมหน้าย่อย)':'')+' · กู้คืนได้ 30 วัน');
+  // เอาลิงก์ที่ชี้ไปหน้าที่ลบออกจากหน้าอื่นด้วย
+  var rest=notes.filter(function(n){return !kill[n.id];});
+  rest.forEach(function(n){if(n.html&&n.html.indexOf('nx-link')>=0){var d=document.createElement('div');d.innerHTML=n.html;var hit=false;d.querySelectorAll('a.nx-link').forEach(function(a){if(kill[a.getAttribute('data-page')]){a.parentNode.removeChild(a);hit=true;}});if(hit){n.html=d.innerHTML;n.updatedAt=new Date().toISOString();}}});
+  notesSave(rest);
+  if(kill[openNow]||kill[_nxPeek]){if(kill[_nxPeek])_nxPeek=null;nxSetCur(kill[openNow]?(up&&!kill[up]?up:''):openNow);_nxMob=nxCur(rest)?'page':'list';}
+  nxRender();showToast('🗑 ย้ายไปถังขยะแล้ว'+(cnt>1?' ('+cnt+' หน้า รวมหน้าย่อย)':'')+' · กู้คืนได้ 30 วัน');
 }
 function nxPatch(fn){var notes=notesLoad(),cur=nxCur(notes),n=notes.find(function(x){return x.id===cur;});if(!n)return null;fn(n);n.updatedAt=new Date().toISOString();notesSave(notes);return n;}
 function nxSetFont(f){nxFlush();nxPatch(function(n){n.font=f;});var d=document.querySelector('#nx .nx-doc');if(d)d.style.fontFamily="'"+f+"','IBM Plex Sans Thai',sans-serif";}
@@ -2811,11 +2842,24 @@ function nxStaticClick(e){
 window.addEventListener('resize',function(){if(_nxPeek&&!nxPeekOk()){_nxPeek=null;nxRender();}});
 // ---------- การ์ดตัวอย่างเมื่อวางเมาส์บนลิงก์หน้าย่อย ----------
 var _nxHovT=null;
+function nxLinkBar(a){
+  var bar=document.getElementById('nx-linkbar');
+  if(!bar){bar=document.createElement('div');bar.id='nx-linkbar';bar.className='nx-linkbar';bar.setAttribute('role','toolbar');bar.setAttribute('aria-label','ลิงก์หน้าย่อย');document.body.appendChild(bar);
+    bar.addEventListener('mouseleave',function(){bar.style.display='none';});}
+  var id=a.getAttribute('data-page');bar._a=a;
+  bar.innerHTML='<button type="button" onclick="nxPeekOpen(\''+id+'\')">เปิด</button><button type="button" onclick="nxLinkUnlink()">ลบลิงก์</button><button type="button" class="nx-lb-del" data-id="'+id+'" onclick="nxDelBtn(this)">'+'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>'+' ลบหน้า</button>';
+  var r=a.getBoundingClientRect();bar.style.display='flex';
+  bar.style.left=Math.max(8,Math.min(r.left,window.innerWidth-bar.offsetWidth-8))+'px';bar.style.top=Math.max(8,r.top-bar.offsetHeight-4)+'px';
+}
+function nxLinkUnlink(){var bar=document.getElementById('nx-linkbar'),a=bar&&bar._a;if(a&&a.parentNode){a.parentNode.removeChild(a);_nxTimer=_nxTimer||-1;nxQueue();}if(bar)bar.style.display='none';}
 function nxHoverHide(){clearTimeout(_nxHovT);var c=document.getElementById('nx-hover');if(c)c.style.display='none';}
 document.addEventListener('mouseover',function(e){
   if(window.innerWidth<=760)return;
   var a=e.target.closest&&e.target.closest('#nx a.nx-link,#nx a.nx-sublink');
-  if(!a){if(!(e.target.closest&&e.target.closest('#nx-hover')))nxHoverHide();return;}
+  if(!a){if(!(e.target.closest&&e.target.closest('#nx-hover')))nxHoverHide();
+    var lb=document.getElementById('nx-linkbar');if(lb&&lb.style.display==='flex'&&!(e.target.closest&&e.target.closest('#nx-linkbar')))setTimeout(function(){if(!lb.matches(':hover'))lb.style.display='none';},250);
+    return;}
+  if(a.classList.contains('nx-link')&&a.closest('#nx-body'))nxLinkBar(a);
   var id=a.getAttribute('data-page')||a.getAttribute('data-id');clearTimeout(_nxHovT);
   _nxHovT=setTimeout(function(){
     var notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n||!a.isConnected)return;

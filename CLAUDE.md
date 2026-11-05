@@ -104,6 +104,9 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   and `nxBodyDragStart` blocks dragging links/tags inside the body. Test: test_dragcopy.py.
   Quick-note title (5 Nov "พิมเปลี่ยนชื่อ note ได้"): header "📝 NOTE" → input `.pin-qn-ttl#pqt-<id>` (= `n.title`, same as the Note-tab page
   title; autosave 700 ms/blur, Enter → body). Colour dots moved to the footer row `.pin-qn-ft` (next to หัวข้อ). Test: test_qnt.py.
+  Delete pages anywhere (5 Nov "กดลบ page ได้"): trash button `.nx-pg-del` on sidebar rows and bottom subpage list (`nxDelBtn`, 2 taps);
+  hover bar `#nx-linkbar` over inline subpage links (เปิด / ลบลิงก์ `nxLinkUnlink` / ลบหน้า). `nxDeletePageId(id)` = shared delete (with
+  subpages, into trash) and also strips `a.nx-link` pointing at deleted pages from other pages. Test: test_del.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
