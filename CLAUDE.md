@@ -92,6 +92,10 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Block drag (5 Nov): hover a top-level block in `#nx-body` → `#nx-grip` ⋮⋮ (desktop) → drag → `#nx-dropline`; `nxNormalizeTop` wraps loose
   text runs into divs first. Main quick notes: section `<select>` (`pinQnSec`). Rudy chat note search: AI type `find` (prompt rule) or
   chip `🔎 ค้น Note` (mode `find`, no AI) → `rcFindNotes` (title ×3, body ×1) → history item `{found:{q,total,items}}` → `rcOpenNote`. Test: test_nx6.py.
+  Side peek (5 Nov, from Dech's Notion screenshot): clicking a subpage link/list item → `nxPeekOpen` (≥1100px; else full open) →
+  `.nx-split`: left = parent read-only `nxStaticHtml` (`_nxPeek` = parent id), right = normal editor for the subpage + bar » (`nxPeekClose`)
+  / ⤢ (`nxOpen` full). `nxOpen`/`nxBack` clear `_nxPeek`. Link/list/sidebar icons: `nxPgIcon` (emoji or `iconImg`) / `nxPgIcon2` (+doc icon);
+  `a.nx-link` innerHTML rebuilt on render, sanitizer flattens it to text. Hover card `#nx-hover` (350 ms). Test: test_nx7.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,

@@ -880,6 +880,37 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
 .nx-grip:hover{background:#efece5;color:#57544c}
 .nx-dropline{position:fixed;z-index:10031;display:none;height:3px;border-radius:2px;background:#2457c5;pointer-events:none}
 .nx-blk-drag{opacity:.35}
+.nx-pg-ic.img{width:16px;height:16px;border-radius:3px;object-fit:cover;flex:none}
+.nx-pg-ic.doc{color:#8a877f;flex:none}
+.nx-body a.nx-link{gap:5px;border-bottom:0;padding:1px 4px;border-radius:4px;margin:0 -2px}
+.nx-body a.nx-link:before{content:none}
+.nx-body a.nx-link span{border-bottom:1px solid #cfcbc1}
+.nx-body a.nx-link .nx-pg-ic{font-size:1em}
+.nx-sublink{display:flex;align-items:center;gap:7px}
+.nx-sublink:before{content:none}
+.nx-sublink.on{background:#f1efe9;font-weight:600}
+.nx-main.peek{overflow:hidden}
+.nx-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:100%}
+.nx-peek-left{overflow-y:auto;min-width:0}
+.nx-peek-left .nx-doc{padding:0 32px 48px}
+.nx-peek-left .nx-title{font-size:28px}
+.nx-static{cursor:default}
+.nx-peek-right{overflow-y:auto;min-width:0;border-left:1px solid #e6e4de;box-shadow:-12px 0 30px rgba(0,0,0,.06);background:#fff;position:relative}
+.nx-peek-right .nx-doc{padding:0 34px 56px}
+.nx-peek-bar{position:sticky;top:0;z-index:4;display:flex;align-items:center;gap:4px;padding:6px 10px;background:rgba(255,255,255,.95);border-bottom:1px solid #f0eee9}
+.nx-peek-bar .nx-more{font-size:16px}
+.nx-peek-from{margin-left:auto;font-size:12px;color:#6b6b6b}
+.nx-peek-from button{border:0;background:transparent;color:#37352f;font-weight:600;cursor:pointer;font-family:inherit;font-size:12px;padding:2px 4px;border-radius:4px}
+.nx-peek-from button:hover{background:#f1efe9}
+.nx-peek-right .nx-cover{height:96px}.nx-peek-right .nx-cover.img{height:150px}
+.nx-hover{position:fixed;z-index:10070;display:none;width:260px;background:#fff;border:1px solid #e6e4de;border-radius:12px;box-shadow:0 14px 36px rgba(0,0,0,.14);overflow:hidden;font-family:'IBM Plex Sans Thai',sans-serif;pointer-events:none}
+.nx-hv-cov{height:46px}
+.nx-hv-b{padding:0 14px 12px;position:relative}
+.nx-hv-ic{margin-top:-13px;height:26px;display:flex;align-items:flex-end;font-size:22px}
+.nx-hv-ic .nx-pg-ic.img{width:26px;height:26px;border-radius:5px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.nx-hv-sec{font-size:11px;color:#8a877f;margin-top:6px}
+.nx-hv-t{font-size:14px;font-weight:700;color:#1f1e1c;margin-top:1px}
+.nx-hv-x{font-size:12px;color:#57544c;margin-top:6px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -2305,7 +2336,7 @@ var NX_TAGS={y:['#fdecc8','#7a4b00'],g:['#dbeddb','#1c5a2c'],b:['#d3e5ef','#1f4e
 var NX_TAG_PRESETS=[['รอดำเนินการ','y'],['กำลังทำ','b'],['เสร็จแล้ว','g'],['ติดปัญหา','r'],['รอเอกสาร','y'],['ยกเลิก','n']];
 var NX_ICONS=['📄','📌','💡','✅','📦','💰','🏦','🛒','📣','✈️','🐾','🌲','🏠','📊','🎯','⭐'];
 var NX_TRASH_KEY='rudy_nb_trash_v1',_nxView='page',_nxDrag=null;
-var _nxTimer=null,_nxMob='list',_nxSecMenu=null,_nxQ='',_nxSlash=null,_nxDel=null;
+var _nxPeek=null,_nxTimer=null,_nxMob='list',_nxSecMenu=null,_nxQ='',_nxSlash=null,_nxDel=null;
 function nxSecsSave(a){try{localStorage.setItem(NX_SEC_KEY,JSON.stringify(a));}catch(e){}}
 function nxSecs(){
   var a=null;try{a=JSON.parse(localStorage.getItem(NX_SEC_KEY)||'null');}catch(e){}
@@ -2360,7 +2391,7 @@ function nxSanitize(html){
       if(c.tagName==='LI'&&tk==='1')c.setAttribute('data-task','1');
       if(c.tagName==='IMG'){c.setAttribute('src',src);c.setAttribute('class','nx-img');c.setAttribute('alt','');if(iw>=60&&iw<=2000)c.setAttribute('style','width:'+iw+'px');else c.removeAttribute('style');}
       if(c.tagName==='A'){
-        if(pg&&/^[\w-]{1,40}$/.test(pg)){c.setAttribute('class','nx-link');c.setAttribute('data-page',pg);c.setAttribute('contenteditable','false');c.setAttribute('href','#');}
+        if(pg&&/^[\w-]{1,40}$/.test(pg)){c.textContent=c.textContent;c.setAttribute('class','nx-link');c.setAttribute('data-page',pg);c.setAttribute('contenteditable','false');c.setAttribute('href','#');}
         else if(/^https?:\/\/[^\s"<>]+$/i.test(href)){c.setAttribute('class','nx-ext');c.setAttribute('href',href);c.setAttribute('target','_blank');c.setAttribute('rel','noopener noreferrer');}
         else{while(c.firstChild)el.insertBefore(c.firstChild,c);el.removeChild(c);return;}
       }
@@ -2373,17 +2404,26 @@ function nxSanitize(html){
 // ---------- render ----------
 function nxRender(focusId){
   var root=document.getElementById('nx');if(!root)return;
-  ['nx-ttools','nx-todotool','nx-tagpop','nx-linkpop','nx-slash','nx-grip'].forEach(function(i){var x=document.getElementById(i);if(x)x.style.display='none';});
+  nxHoverHide();['nx-ttools','nx-todotool','nx-tagpop','nx-linkpop','nx-slash','nx-grip'].forEach(function(i){var x=document.getElementById(i);if(x)x.style.display='none';});
   var notes=notesLoad(),secs=nxSecs();
   if(focusId&&notes.some(function(n){return n.id===focusId;})){nxSetCur(focusId);_nxMob='page';}
   var cur=nxCur(notes);
   root.className='nx '+(_nxMob==='page'&&(cur||_nxView==='trash')?'mob-page':'mob-list');
-  root.innerHTML='<aside class="nx-side" aria-label="หัวข้อและหน้า">'+nxSideHtml(notes,secs,cur)+'</aside><main class="nx-main" id="nx-main">'+nxPageHtml(notes,secs,cur)+'</main>';
+  var peekP=_nxPeek&&_nxView==='page'&&notes.find(function(x){return x.id===_nxPeek;});
+  if(peekP&&(peekP.id===cur||!nxPeekOk()))peekP=null;
+  if(!peekP)_nxPeek=null;
+  var mainHtml=peekP?'<div class="nx-split"><div class="nx-peek-left" aria-label="หน้าแม่">'+nxStaticHtml(notes,secs,peekP)+'</div>'
+      +'<section class="nx-peek-right" aria-label="หน้าย่อย"><div class="nx-peek-bar"><button type="button" class="nx-more" aria-label="ปิดแผงหน้าย่อย" title="ปิด" onclick="nxPeekClose()">»</button>'
+      +'<button type="button" class="nx-more" aria-label="เปิดเต็มหน้า" title="เปิดเต็มหน้า" onclick="nxOpen(\''+cur+'\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"></path></svg></button>'
+      +'<span class="nx-peek-from">จาก <button type="button" onclick="nxOpen(\''+peekP.id+'\')">'+nxEsc(nxTitleOf(peekP))+'</button></span></div>'
+      +nxPageHtml(notes,secs,cur)+'</section></div>':nxPageHtml(notes,secs,cur);
+  root.innerHTML='<aside class="nx-side" aria-label="หัวข้อและหน้า">'+nxSideHtml(notes,secs,cur)+'</aside><main class="nx-main'+(peekP?' peek':'')+'" id="nx-main">'+mainHtml+'</main>';
   // ลิงก์หน้าย่อยในเนื้อหา → แสดงชื่อหน้าล่าสุด
-  root.querySelectorAll('#nx-body a.nx-link').forEach(function(a){var t=notes.find(function(x){return x.id===a.getAttribute('data-page');});a.textContent=t?nxTitleOf(t):'(หน้าถูกลบ)';});
+  root.querySelectorAll('a.nx-link').forEach(function(a){var t=notes.find(function(x){return x.id===a.getAttribute('data-page');});a.innerHTML=t?nxPgIcon2(t)+'<span>'+nxEsc(nxTitleOf(t))+'</span>':'(หน้าถูกลบ)';});
 }
 function nxSortKids(a,b){var ha=a.ord!=null,hb=b.ord!=null;if(ha&&hb)return a.ord-b.ord;if(ha)return -1;if(hb)return 1;return nxCreated(a)<nxCreated(b)?-1:1;}
-function nxPgIcon(p){return p.icon?'<span class="nx-pg-ic" aria-hidden="true">'+nxEsc(p.icon)+'</span>':'';}
+function nxPgIcon(p){if(p.iconImg)return '<img class="nx-pg-ic img" src="'+nxEsc(p.iconImg)+'" alt="" aria-hidden="true">';return p.icon?'<span class="nx-pg-ic" aria-hidden="true">'+nxEsc(p.icon)+'</span>':'';}
+function nxPgIcon2(p){return nxPgIcon(p)||'<svg class="nx-pg-ic doc" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M14 3v5h5"></path></svg>';}
 function nxTree(pages,parent,depth,cur){
   var kids=pages.filter(function(p){return (p.parent||null)===parent;}).sort(nxSortKids);
   var h='';
@@ -2506,15 +2546,15 @@ function nxPageHtml(notes,secs,cur){
   h+='<div class="nx-body" id="nx-body" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหา" data-ph="พิมพ์ / เพื่อแทรก ตาราง · เช็กลิสต์ · หัวข้อ · หน้าย่อย" data-id="'+n.id+'" oninput="nxBodyInput()" onkeydown="nxKey(event)" onclick="nxBodyClick(event)" onpaste="nxPaste(event)" ondragover="if(event.dataTransfer&&Array.prototype.indexOf.call(event.dataTransfer.types||[],\'Files\')>=0)event.preventDefault()" ondrop="nxDropFiles(event)" onblur="nxFlush();setTimeout(nxSlashHide,150)">'+(n.html||noteHtmlOf(n))+'</div>';
   var subs=notes.filter(function(x){return x.parent===n.id;});
   h+='<div class="nx-subs"><div class="nx-lbl" style="margin:0 0 6px">หน้าย่อย'+(subs.length?' · '+subs.length:'')+'</div>'
-    +subs.map(function(x){return '<a href="#" class="nx-sublink" data-id="'+x.id+'" onclick="event.preventDefault();nxOpen(this.dataset.id)">'+nxEsc(nxTitleOf(x))+'</a>';}).join('')
+    +subs.sort(nxSortKids).map(function(x){return '<a href="#" class="nx-sublink" data-id="'+x.id+'" data-page="'+x.id+'" onclick="event.preventDefault();nxPeekOpen(this.dataset.id)">'+nxPgIcon2(x)+'<span>'+nxEsc(nxTitleOf(x))+'</span></a>';}).join('')
     +'<button type="button" class="nx-add" onclick="nxNewPage(null,\''+n.id+'\')">+ หน้าย่อย</button></div>';
   h+='</div>';
   return h;
 }
 
 // ---------- navigation / sections / pages ----------
-function nxOpen(id){nxFlush();_nxDel=null;_nxView='page';nxSetCur(id);_nxMob='page';nxRender();var m=document.getElementById('nx-main');if(m)m.scrollTop=0;if(window.innerWidth<=760)window.scrollTo(0,0);}
-function nxBack(){nxFlush();_nxMob='list';nxRender();}
+function nxOpen(id){nxFlush();_nxDel=null;_nxView='page';_nxPeek=null;nxHoverHide();nxSetCur(id);_nxMob='page';nxRender();var m=document.getElementById('nx-main');if(m)m.scrollTop=0;if(window.innerWidth<=760)window.scrollTo(0,0);}
+function nxBack(){nxFlush();_nxPeek=null;_nxMob='list';nxRender();}
 function nxSearch(v){_nxQ=v;var side=document.querySelector('#nx .nx-side');if(!side)return;var notes=notesLoad();side.innerHTML=nxSideHtml(notes,nxSecs(),nxCur(notes));var q=document.getElementById('nx-q');if(q){q.focus();q.setSelectionRange(v.length,v.length);}}
 function nxSecToggle(id){var a=nxSecs();a.forEach(function(s){if(s.id===id)s.open=s.open===false;});nxSecsSave(a);nxRender();}
 function nxSecMenu(id){_nxSecMenu=_nxSecMenu===id?null:id;_nxDel=null;nxRender();var i=document.getElementById('nx-secname');if(i){i.focus();i.select();}}
@@ -2713,6 +2753,55 @@ document.addEventListener('pointerup',function(){
   var b=document.getElementById('nx-body');if(!b)return;
   if(d.before!==d.el&&d.before!==d.el.nextElementSibling){b.insertBefore(d.el,d.before);_nxTimer=_nxTimer||-1;nxQueue();}
   var g=document.getElementById('nx-grip');if(g)g.style.display='none';
+});
+// ---------- แผงหน้าย่อย (side peek แบบ Notion) ----------
+function nxPeekOk(){return window.innerWidth>=1100;}
+function nxPeekOpen(id){
+  if(!nxPeekOk()){nxOpen(id);return;}
+  nxFlush();nxHoverHide();var notes=notesLoad(),cur=nxCur(notes);
+  if(!_nxPeek)_nxPeek=cur; // หน้าที่เปิดอยู่ = หน้าแม่ทางซ้าย
+  if(id===_nxPeek){nxOpen(id);return;}
+  _nxDel=null;_nxView='page';nxSetCur(id);nxRender();
+  var r=document.querySelector('#nx .nx-peek-right');if(r)r.scrollTop=0;
+}
+function nxPeekClose(){var p=_nxPeek;nxFlush();_nxPeek=null;if(p){nxSetCur(p);}nxRender();}
+function nxStaticHtml(notes,secs,n){ // หน้าแม่แบบอ่านอย่างเดียว (กดลิงก์หน้าย่อยได้)
+  var s0=secs.find(function(x){return x.id===nxSecOf(n,secs);})||{color:'#6b6b6b',name:''};
+  var cov=n.coverImg?'background:#e9e7e2 url(\''+nxEsc(n.coverImg)+'\') center '+(n.coverPos==null?50:n.coverPos)+'%/cover no-repeat':'background:'+(n.cover||'transparent');
+  var ic=n.iconImg?'<img src="'+nxEsc(n.iconImg)+'" alt="">':n.icon?nxEsc(n.icon):nxEsc(nxInit2(s0.name));
+  var subs=notes.filter(function(x){return x.parent===n.id;}).sort(nxSortKids);
+  var cur=nxCur(notes);
+  return '<div class="nx-cover'+(n.cover||n.coverImg?'':' none')+'" style="'+cov+'"></div><div class="nx-doc">'
+    +'<div class="nx-icon'+(n.iconImg?' pic':n.icon?' emoji':'')+'" style="'+(n.iconImg||n.icon?'':'background:'+s0.color)+';cursor:default">'+ic+'</div>'
+    +'<div class="nx-crumb"><span>'+nxEsc(s0.name)+'</span></div><h1 class="nx-title">'+nxEsc(nxTitleOf(n))+'</h1>'
+    +'<div class="nx-body nx-static" onclick="nxStaticClick(event)">'+(n.html||noteHtmlOf(n))+'</div>'
+    +(subs.length?'<div class="nx-subs"><div class="nx-lbl" style="margin:0 0 6px">หน้าย่อย · '+subs.length+'</div>'+subs.map(function(x){return '<a href="#" class="nx-sublink'+(x.id===cur?' on':'')+'" data-id="'+x.id+'" data-page="'+x.id+'" onclick="event.preventDefault();nxPeekOpen(this.dataset.id)">'+nxPgIcon2(x)+'<span>'+nxEsc(nxTitleOf(x))+'</span></a>';}).join('')+'</div>':'')
+    +'</div>';
+}
+function nxStaticClick(e){
+  var a=e.target.closest&&e.target.closest('a.nx-link');if(a){e.preventDefault();nxPeekOpen(a.getAttribute('data-page'));return;}
+  var x=e.target.closest&&e.target.closest('a.nx-ext');if(x){e.preventDefault();window.open(x.href,'_blank','noopener');}
+}
+window.addEventListener('resize',function(){if(_nxPeek&&!nxPeekOk()){_nxPeek=null;nxRender();}});
+// ---------- การ์ดตัวอย่างเมื่อวางเมาส์บนลิงก์หน้าย่อย ----------
+var _nxHovT=null;
+function nxHoverHide(){clearTimeout(_nxHovT);var c=document.getElementById('nx-hover');if(c)c.style.display='none';}
+document.addEventListener('mouseover',function(e){
+  if(window.innerWidth<=760)return;
+  var a=e.target.closest&&e.target.closest('#nx a.nx-link,#nx a.nx-sublink');
+  if(!a){if(!(e.target.closest&&e.target.closest('#nx-hover')))nxHoverHide();return;}
+  var id=a.getAttribute('data-page')||a.getAttribute('data-id');clearTimeout(_nxHovT);
+  _nxHovT=setTimeout(function(){
+    var notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n||!a.isConnected)return;
+    var secs=nxSecs(),s0=secs.find(function(x){return x.id===nxSecOf(n,secs);})||{name:''};
+    var c=document.getElementById('nx-hover');if(!c){c=document.createElement('div');c.id='nx-hover';c.className='nx-hover';c.setAttribute('role','tooltip');document.body.appendChild(c);}
+    var cov=n.coverImg?'background:#e9e7e2 url(\''+nxEsc(n.coverImg)+'\') center '+(n.coverPos==null?50:n.coverPos)+'%/cover':'background:'+(n.cover||'#f1efe9');
+    var snip=String(n.body||'').replace(/\s+/g,' ').trim().slice(0,110);
+    c.innerHTML='<div class="nx-hv-cov" style="'+cov+'"></div><div class="nx-hv-b"><div class="nx-hv-ic">'+nxPgIcon2(n)+'</div><div class="nx-hv-sec">'+nxEsc(s0.name)+'</div><div class="nx-hv-t">'+nxEsc(nxTitleOf(n))+'</div>'+(snip?'<div class="nx-hv-x">'+nxEsc(snip)+'</div>':'<div class="nx-hv-x" style="color:#b3afa5">ยังไม่มีเนื้อหา</div>')+'</div>';
+    var r=a.getBoundingClientRect();c.style.display='block';
+    var top=r.bottom+6;if(top+c.offsetHeight>window.innerHeight-8)top=Math.max(8,r.top-c.offsetHeight-6);
+    c.style.top=top+'px';c.style.left=Math.max(8,Math.min(r.left,window.innerWidth-c.offsetWidth-8))+'px';
+  },350);
 });
 function nxSetIcon(ic){nxFlush();nxPatch(function(n){n.icon=ic||'';n.iconImg='';});nxRender();}
 // ---------- รูปปก / รูปไอคอน (อัปขึ้น Drive) ----------
@@ -2950,7 +3039,7 @@ function nxKey(e){
 }
 function nxBodyClick(e){
   var a=e.target.closest&&e.target.closest('a.nx-link');
-  if(a){e.preventDefault();var id=a.getAttribute('data-page');if(notesLoad().some(function(n){return n.id===id;}))nxOpen(id);else showToast('หน้านี้ถูกลบไปแล้ว');return;}
+  if(a){e.preventDefault();var id=a.getAttribute('data-page');if(notesLoad().some(function(n){return n.id===id;}))nxPeekOpen(id);else showToast('หน้านี้ถูกลบไปแล้ว');return;}
   var ex=e.target.closest&&e.target.closest('a.nx-ext');
   if(ex){e.preventDefault();nxLinkMenu(ex);return;}
   var tg=e.target.closest&&e.target.closest('span.nx-tag');
