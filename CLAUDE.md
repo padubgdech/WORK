@@ -96,6 +96,9 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   `.nx-split`: left = parent read-only `nxStaticHtml` (`_nxPeek` = parent id), right = normal editor for the subpage + bar » (`nxPeekClose`)
   / ⤢ (`nxOpen` full). `nxOpen`/`nxBack` clear `_nxPeek`. Link/list/sidebar icons: `nxPgIcon` (emoji or `iconImg`) / `nxPgIcon2` (+doc icon);
   `a.nx-link` innerHTML rebuilt on render, sanitizer flattens it to text. Hover card `#nx-hover` (350 ms). Test: test_nx7.py.
+  Image paste (5 Nov "control v วางรูป"): `nxClipImages(clipboardData)` (items kind=file, then files) used by `nxPaste` and `pinNotePaste`
+  (pin task notes, quick notes, task-card `nta-` editor) → `pinPasteImage` (shrink 1280 → Drive → <img>, dispatches input → autosave).
+  `noteSanitize` now keeps IMG with lh3/drive/data:image src. Copy/paste of an lh3 <img> between notes works via text/html. Test: test_paste.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,

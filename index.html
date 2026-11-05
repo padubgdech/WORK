@@ -911,6 +911,7 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
 .nx-hv-sec{font-size:11px;color:#8a877f;margin-top:6px}
 .nx-hv-t{font-size:14px;font-weight:700;color:#1f1e1c;margin-top:1px}
 .nx-hv-x{font-size:12px;color:#57544c;margin-top:6px;line-height:1.5}
+.pin-nedit img{display:block;max-width:100%;height:auto;border-radius:6px;margin:4px 0}
 </style>
 </head>
 <body>
@@ -1591,7 +1592,7 @@ function noteBlock(t){
   h+='<span class="tool-sep"></span>';
   h+='<button class="tool-btn" data-nid="'+tid+'" onclick="nimgUpload(this.dataset.nid)" title="แนบรูป" style="font-size:14px">🖼</button>';
   h+='</div>';
-  h+='<div id="nta-'+tid+'" class="note-editor" contenteditable="true" data-nid="'+tid+'" onmouseup="_savedSel=window.getSelection()&&window.getSelection().rangeCount>0?window.getSelection().getRangeAt(0).cloneRange():_savedSel" onkeyup="_savedSel=window.getSelection()&&window.getSelection().rangeCount>0?window.getSelection().getRangeAt(0).cloneRange():_savedSel">'+(note||'')+'</div>';
+  h+='<div id="nta-'+tid+'" class="note-editor" contenteditable="true" data-nid="'+tid+'" onpaste="if(typeof nxClipImages===\'function\'&&nxClipImages(event.clipboardData||{}).length)pinNotePaste(event)" onmouseup="_savedSel=window.getSelection()&&window.getSelection().rangeCount>0?window.getSelection().getRangeAt(0).cloneRange():_savedSel" onkeyup="_savedSel=window.getSelection()&&window.getSelection().rangeCount>0?window.getSelection().getRangeAt(0).cloneRange():_savedSel">'+(note||'')+'</div>';
   h+='<div class="note-footer-row">';
   h+='<div></div>';
   h+='<div style="display:flex;gap:5px">';
@@ -2596,6 +2597,13 @@ function nxOpts(b){var p=document.getElementById('nx-opts');if(!p)return;p.hidde
 document.addEventListener('mousedown',function(e){var p=document.getElementById('nx-opts');if(p&&!p.hidden&&!e.target.closest('#nx-opts,.nx-more')){p.hidden=true;}});
 function nxSetCover(c){nxFlush();nxPatch(function(n){n.cover=c;});nxRender();}
 // ---------- รูปภาพ (อัปขึ้น Drive ด้วย uploadImagePost เดิม) ----------
+// รูปจาก clipboard: ⌘V/Ctrl+V จากภาพหน้าจอ, "Copy Image" ในเว็บ, หรือก๊อปรูปจากไฟล์
+function nxClipImages(d){
+  var out=[];
+  Array.prototype.forEach.call(d.items||[],function(it){if(it.kind==='file'&&/^image\//.test(it.type)){var f=it.getAsFile();if(f)out.push(f);}});
+  if(!out.length)Array.prototype.forEach.call(d.files||[],function(f){if(/^image\//.test(f.type))out.push(f);});
+  return out;
+}
 function nxPickImage(){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;inp.onchange=function(){Array.prototype.slice.call(inp.files||[]).forEach(nxUploadImage);};inp.click();}
 function nxDropFiles(e){var f=Array.prototype.slice.call((e.dataTransfer&&e.dataTransfer.files)||[]).filter(function(x){return /^image\//.test(x.type);});if(!f.length)return;e.preventDefault();
   var r=document.caretRangeFromPoint?document.caretRangeFromPoint(e.clientX,e.clientY):null;if(r){var s0=window.getSelection();s0.removeAllRanges();s0.addRange(r);}f.forEach(nxUploadImage);}
@@ -2941,7 +2949,7 @@ document.addEventListener('visibilitychange',function(){if(document.hidden){try{
 function nxPastePlain(e){var d=e.clipboardData;if(!d)return;e.preventDefault();document.execCommand('insertText',false,d.getData('text/plain').replace(/\s+/g,' '));}
 function nxPaste(e){
   var d=e.clipboardData;if(!d)return;
-  var files=Array.prototype.slice.call(d.files||[]).filter(function(f){return /^image\//.test(f.type);});
+  var files=nxClipImages(d);
   if(files.length){e.preventDefault();files.forEach(nxUploadImage);return;}
   var txt=(d.getData('text/plain')||'').trim();
   if(/^https?:\/\/\S+$/i.test(txt)){e.preventDefault();var sel=window.getSelection(),label=sel&&!sel.isCollapsed?String(sel):txt;document.execCommand('insertHTML',false,'<a class="nx-ext" href="'+nxEsc(txt)+'" target="_blank" rel="noopener noreferrer">'+nxEsc(label)+'</a>&nbsp;');nxQueue();return;}
@@ -3348,7 +3356,7 @@ function noteHtmlOf(n){
 }
 function noteSanitize(html){
   var box=document.createElement('div');box.innerHTML=html||'';
-  var OK={B:1,STRONG:1,I:1,EM:1,U:1,S:1,STRIKE:1,BR:1,DIV:1,P:1,UL:1,OL:1,LI:1,SPAN:1,FONT:1,H3:1,MARK:1};
+  var OK={B:1,STRONG:1,I:1,EM:1,U:1,S:1,STRIKE:1,BR:1,DIV:1,P:1,UL:1,OL:1,LI:1,SPAN:1,FONT:1,H3:1,MARK:1,IMG:1};
   (function walk(el){
     Array.prototype.slice.call(el.childNodes).forEach(function(c){
       if(c.nodeType===3)return;
@@ -3356,6 +3364,8 @@ function noteSanitize(html){
         if(c.nodeType===1&&!/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|IMG|SVG|LINK|META)$/.test(c.tagName)){walk(c);while(c.firstChild)el.insertBefore(c.firstChild,c);}
         el.removeChild(c);return;
       }
+      if(c.tagName==='IMG'){var src=c.getAttribute('src')||'';if(!/^https:\/\/(lh3\.googleusercontent\.com|drive\.google\.com)\//.test(src)&&!/^data:image\/(png|jpe?g|gif|webp);base64,/.test(src)){el.removeChild(c);return;}
+        Array.prototype.slice.call(c.attributes).forEach(function(a){c.removeAttribute(a.name);});c.setAttribute('src',src);c.setAttribute('alt','');return;}
       var col=c.style?c.style.color:'',bg=c.style?c.style.backgroundColor:'',fw=c.style?c.style.fontWeight:'',fc=c.getAttribute('color');
       Array.prototype.slice.call(c.attributes).forEach(function(a){c.removeAttribute(a.name);});
       var st='';
@@ -4734,9 +4744,29 @@ function pinNoteInput(el){
   var id=el.dataset.id,st=document.getElementById('pns-'+id);if(st)st.textContent='กำลังพิมพ์…';
   clearTimeout(_pinNoteTimers[id]);_pinNoteTimers[id]=setTimeout(function(){pinNoteFlush(id,true);},900);
 }
-function pinNotePaste(e){ // วางเป็นตัวอักษรล้วน กันสไตล์แปลก ๆ ติดมา
+function pinNotePaste(e){ // รูป → อัปขึ้น Drive แล้วแทรก · ข้อความ → วางเป็นตัวอักษรล้วน กันสไตล์แปลก ๆ ติดมา
   var t=(e.clipboardData||window.clipboardData);if(!t)return;
-  e.preventDefault();document.execCommand('insertText',false,t.getData('text/plain'));
+  var imgs=typeof nxClipImages==='function'?nxClipImages(t):[];
+  e.preventDefault();
+  if(imgs.length){var ed=e.currentTarget||e.target.closest('.pin-nedit');imgs.forEach(function(f){pinPasteImage(ed,f);});return;}
+  var html=t.getData('text/html')||'',m=html.match(/<img[^>]+src=["'](https:\/\/(?:lh3\.googleusercontent\.com|drive\.google\.com)\/[^"']+)["']/i);
+  if(m){document.execCommand('insertHTML',false,'<img src="'+m[1].replace(/"/g,'&quot;')+'" alt="">');return;} // รูปที่ก๊อปจาก note ด้วยกัน
+  document.execCommand('insertText',false,t.getData('text/plain'));
+}
+function pinPasteImage(ed,file){
+  if(!ed)return;var id='pup'+Date.now()+Math.floor(Math.random()*999);
+  document.execCommand('insertHTML',false,'<span id="'+id+'" contenteditable="false" style="display:inline-block;background:#f1efe9;color:#6b6b6b;border-radius:6px;padding:2px 8px;font-size:11px">⏳ กำลังอัปโหลดรูป…</span>&nbsp;');
+  var rd=new FileReader();
+  rd.onload=function(ev){shrinkImage(ev.target.result,1280,0.82,function(b64){
+    uploadImagePost(b64,file.name||'image.jpg',function(d){
+      var ph=document.getElementById(id);if(!ph)return;
+      var img=document.createElement('img');img.alt='';img.src=d&&d.ok&&d.url?d.url:b64;
+      if(!(d&&d.ok))showToast('⚠️ อัปโหลดรูปไม่สำเร็จ — เก็บไว้ในเครื่องนี้แทน');
+      ph.parentNode.replaceChild(img,ph);
+      ed.dispatchEvent(new Event('input',{bubbles:true})); // ให้บันทึกอัตโนมัติ
+    });
+  });};
+  rd.readAsDataURL(file);
 }
 function pinNoteFlush(id,keepFocus){
   clearTimeout(_pinNoteTimers[id]);delete _pinNoteTimers[id];
