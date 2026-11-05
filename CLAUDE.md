@@ -102,6 +102,8 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Drag fix (5 Nov "ทำไมการลากวาง page เป็นการ copy"): sidebar row drags use type `application/x-nx-page` (not text/plain); `#nx-body`
   ondragover/ondrop refuse page drags (`nxIsPageDrag`) so the browser never inserts a copy; `a.nx-link`/`a.nx-sublink` draggable=false
   and `nxBodyDragStart` blocks dragging links/tags inside the body. Test: test_dragcopy.py.
+  Quick-note title (5 Nov "พิมเปลี่ยนชื่อ note ได้"): header "📝 NOTE" → input `.pin-qn-ttl#pqt-<id>` (= `n.title`, same as the Note-tab page
+  title; autosave 700 ms/blur, Enter → body). Colour dots moved to the footer row `.pin-qn-ft` (next to หัวข้อ). Test: test_qnt.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,

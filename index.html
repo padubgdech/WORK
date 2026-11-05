@@ -912,6 +912,14 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
 .nx-hv-t{font-size:14px;font-weight:700;color:#1f1e1c;margin-top:1px}
 .nx-hv-x{font-size:12px;color:#57544c;margin-top:6px;line-height:1.5}
 .pin-nedit img{display:block;max-width:100%;height:auto;border-radius:6px;margin:4px 0}
+.pin-qn-ic{flex:none;font-size:12px}
+.pin-qn-ttl{flex:1;min-width:40px;border:0;background:transparent;outline:none;font-family:inherit;font-size:12.5px;font-weight:700;color:#3f3a30;letter-spacing:0;padding:2px 3px;margin:-2px 0;border-radius:4px}
+.pin-qn-ttl::placeholder{color:#B39A5A;font-weight:600}
+.pin-qn-ttl:hover{background:rgba(215,174,100,.12)}
+.pin-qn-ttl:focus{background:#fff;box-shadow:0 0 0 1.5px #D7AE64}
+.pin-qn-ft{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:2px;min-height:20px}
+.pin-qn-ft .pin-qn-sec{margin-top:0;margin-left:auto}
+@media(max-width:760px){.pin-qn-ttl{font-size:14px}}
 </style>
 </head>
 <body>
@@ -4596,7 +4604,7 @@ function getPinnedTasks(){
 function pinAgeDays(id){var c=pinnedMeta[pinKey(id)];if(!c)return 0;return Math.max(0,Math.round((new Date(TODAY_STR+'T00:00:00')-new Date(c+'T00:00:00'))/864e5));}
 function renderPinned(){
   var el=document.getElementById('main-pinned');if(!el)return;
-  var ae=document.activeElement;if(ae&&ae.classList&&ae.classList.contains('pin-nedit')&&el.contains(ae)){_pinRenderLater=true;return;} // กำลังพิมพ์ note อยู่ → วาดใหม่หลังคลิกออก
+  var ae=document.activeElement;if(ae&&ae.classList&&(ae.classList.contains('pin-nedit')||ae.classList.contains('pin-qn-ttl'))&&el.contains(ae)){_pinRenderLater=true;return;} // กำลังพิมพ์ note อยู่ → วาดใหม่หลังคลิกออก
   var list=getPinnedTasks();
   var qns=pinQuickNotes();
   if(!list.length&&!qns.length){el.innerHTML='';return;}
@@ -4633,13 +4641,16 @@ function renderPinned(){
   var trSvg='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>';
   qns.forEach(function(n){
     var qc=PIN_QN_COLS.indexOf(n.bar)>=0?n.bar:PIN_QN_COLS[0];
-    h+='<div class="pin-qn" data-qn="'+n.id+'" style="--qc:'+qc+'"><div class="pin-qn-hd"><span>📝 NOTE</span><span class="pin-qn-cols" role="group" aria-label="สีแถบบน">'
-      +PIN_QN_COLS.map(function(c){return '<button type="button" class="pin-qn-col'+(c===qc?' on':'')+'" style="background:'+c+'" aria-label="สีแถบ" aria-pressed="'+(c===qc)+'" data-id="'+n.id+'" data-c="'+c+'" onmousedown="event.preventDefault()" onclick="pinQnColor(this)"></button>';}).join('')
-      +'</span><span class="pin-nst" id="pqs-'+n.id+'"></span>';
+    h+='<div class="pin-qn" data-qn="'+n.id+'" style="--qc:'+qc+'"><div class="pin-qn-hd"><span class="pin-qn-ic" aria-hidden="true">'+(n.icon?escH(n.icon):'📝')+'</span>'
+      +'<input class="pin-qn-ttl" id="pqt-'+n.id+'" data-id="'+n.id+'" value="'+escH(n.title||'')+'" placeholder="ชื่อ note…" aria-label="ชื่อ note" maxlength="120" oninput="pinQnTitle(this)" onblur="pinQnTitleSave(this.dataset.id)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();var b=document.getElementById(\'pqn-\'+this.dataset.id);if(b){b.focus();pinCaretEnd(b);}}if(event.key===\'Escape\')this.blur()">'
+      +'<span class="pin-nst" id="pqs-'+n.id+'"></span>';
     h+='<button type="button" class="pin-qn-del" aria-label="ลบ note" title="ลบ note" data-id="'+n.id+'" onmousedown="event.preventDefault()" onclick="pinQnDel(this)">'+trSvg+'</button></div>'+pinToolbar();
     h+='<div class="pin-nedit" contenteditable="true" role="textbox" aria-multiline="true" aria-label="note" data-ph="จด note…" data-id="'+n.id+'" id="pqn-'+n.id+'" oninput="pinQnInput(this)" onblur="pinQnFlush(this.dataset.id)" onpaste="pinNotePaste(event)" onkeydown="if(event.key===\'Escape\')this.blur()">'+(n.html||String(n.body||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>'))+'</div>'
+      +'<div class="pin-qn-ft">'+'<span class="pin-qn-cols" role="group" aria-label="สีแถบบน">'
+      +PIN_QN_COLS.map(function(c){return '<button type="button" class="pin-qn-col'+(c===qc?' on':'')+'" style="background:'+c+'" aria-label="สีแถบ" aria-pressed="'+(c===qc)+'" data-id="'+n.id+'" data-c="'+c+'" onmousedown="event.preventDefault()" onclick="pinQnColor(this)"></button>';}).join('')
+      +'</span>'
       +(typeof nxSecs==='function'?'<label class="pin-qn-sec"><span>หัวข้อ</span><select aria-label="หัวข้อของ note นี้" data-id="'+n.id+'" onchange="pinQnSec(this)">'+nxSecs().map(function(x){return '<option value="'+x.id+'"'+((n.sec||'s_general')===x.id?' selected':'')+'>'+escH(x.name)+'</option>';}).join('')+'</select></label>':'')
-      +'</div>';
+      +'</div></div>';
   });
   h+='<button type="button" class="pin-qadd" onclick="pinQnNew()">+ Note ใหม่<span>จดสั้น ๆ ไว้หน้าแรก</span></button>';
   h+='</div></section>';
@@ -4711,6 +4722,16 @@ function pinQnFlush(id,keepFocus){
   if(!keepFocus&&_pinRenderLater){_pinRenderLater=false;setTimeout(function(){var ae=document.activeElement;if(!(ae&&ae.classList&&ae.classList.contains('pin-nedit')))renderPinned();},50);}
 }
 // ลบ: กดครั้งแรกปุ่มเป็นสีแดง "ลบ?" กดซ้ำภายใน 3 วิ = ลบ (confirm() ใช้ไม่ได้ใน LINE) · note ว่างลบทันที
+var _pqtT={};
+function pinQnTitle(inp){var id=inp.dataset.id,st=document.getElementById('pqs-'+id);if(st)st.textContent='…';clearTimeout(_pqtT[id]);_pqtT[id]=setTimeout(function(){pinQnTitleSave(id);},700);}
+function pinQnTitleSave(id){
+  clearTimeout(_pqtT[id]);delete _pqtT[id];var inp=document.getElementById('pqt-'+id);if(!inp)return;
+  var v=inp.value.replace(/\s+/g,' ').trim(),notes=notesLoad(),n=notes.find(function(x){return x.id===id;});
+  var st=document.getElementById('pqs-'+id);
+  if(n&&(n.title||'')!==v){n.title=v;n.updatedAt=new Date().toISOString();notesSave(notes);if(st){st.textContent='✓';setTimeout(function(){if(st.textContent==='✓')st.textContent='';},1500);}}
+  else if(st&&st.textContent==='…')st.textContent='';
+  if(_pinRenderLater){_pinRenderLater=false;setTimeout(function(){var ae=document.activeElement;if(!(ae&&ae.classList&&(ae.classList.contains('pin-nedit')||ae.classList.contains('pin-qn-ttl'))))renderPinned();},50);}
+}
 function pinQnSec(sel){var notes=notesLoad(),n=notes.find(function(x){return x.id===sel.dataset.id;});if(!n)return;n.sec=sel.value;n.parent=null;n.updatedAt=new Date().toISOString();notesSave(notes);showToast('ย้าย note ไปหัวข้อ "'+sel.options[sel.selectedIndex].text+'" แล้ว');}
 function pinQnDel(btn){
   var id=btn.dataset.id,ed=document.getElementById('pqn-'+id),empty=!ed||!(ed.innerText||'').trim();
