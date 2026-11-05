@@ -151,7 +151,13 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   (`tpWeather`, only ≤15 days ahead), bookings that day, spots sorted by `time` (time input, done checkbox `spot.done`, "นำทาง" = Google Maps dir link),
   "🗺 ดูวันนี้บนแผนที่" dims other days' pins (`tpDayDim`, spot markers carry `data-day`) and fits the day. Bookings card `.tp-book` (`t.book`
   [{id,type TP_BOOK,title,date,time,code,link,note}], `tpBookDlg`, code chip copies). Pack: "＋ ชุดพื้นฐาน" `TP_PACK0`, clear done, progress bar.
-  Head: "📋 คัดลอกแผน" → `tpPlanText` (bookings + day-by-day + budget) to clipboard. Stop dialog spot rows got a time input. Test: test_tpx.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
+  Head: "📋 คัดลอกแผน" → `tpPlanText` (bookings + day-by-day + budget) to clipboard. Stop dialog spot rows got a time input. Test: test_tpx.py.
+  5 Nov later: day labels are date-first ("14 พ.ย. · วันที่ 2", tabs = date bold / วันที่ n small). Rail layer "🚇 รถไฟฟ้า" (map tools, localStorage
+  `tp_rail`, default on): MapLibre adds `tpr-rail` (dashed grey, class rail) / `tpr-metro(-c)` (class transit or subclass subway/light_rail/
+  monorail/tram, coloured by subclass) / `tpr-sta(-c)` (poi class railway, labels via tpApplyLang) from the style's first vector source
+  (`tpRailML`); Leaflet = OpenRailwayMap raster overlay (`tpRailLF`). OMT has no line colours, so lines are coloured by type, not by operator line.
+  Stop dialog mini map `#tps-mapw` (`tpDlgMap(row?)`, MapLibre if loaded+WebGL else Leaflet): "📍 ปักบนแผนที่" = tap adds a spot (reverse-geocoded
+  name); row number button / "📍 ปัก" = tap sets/moves that spot's coords (`tpDlgMapTap`). Closed on save/reopen (`tpDlgMapClose`). Test: test_rail.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`

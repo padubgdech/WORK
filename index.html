@@ -1092,6 +1092,12 @@ button.tp-mk{border:0;background:transparent;padding:0;cursor:pointer}
 .tp-bk-types{display:flex;flex-wrap:wrap;gap:6px}.tp-bk-ty{border:1px solid #e4e6ef;background:#fff;border-radius:99px;padding:6px 10px;font-size:12.5px;cursor:pointer;font-family:inherit}.tp-bk-ty.on{background:#1d2033;color:#fff;border-color:#1d2033}
 .tp-sp{flex-wrap:wrap}.tp-sp-tm{flex:0 0 auto;border:1px solid #e3e5ee;border-radius:8px;background:#fff;font-size:12px;font-family:inherit;padding:3px 4px;width:84px}
 @media(max-width:760px){.tp-head-acts{flex-wrap:wrap}.tp-dtime{width:78px}}
+.tp-sp-q2{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}.tp-sp-q2 .tp-sp-hint{margin:0}
+.tp-dmap{margin-top:8px;border:1px solid #e3e5ee;border-radius:12px;overflow:hidden}.tp-dmap[hidden]{display:none}
+.tp-dmap-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px 6px 12px;background:#f7f7fb;font-size:12px;color:#3d4258}.tp-dmap-h .tp-x{opacity:1}
+.tp-dmap-m{height:260px;position:relative;background:#e8eef6;cursor:crosshair}.tp-dmap-m .maplibregl-canvas-container{cursor:crosshair}
+button.tp-sp-n{border:0;padding:0;cursor:pointer;font-family:inherit}button.tp-sp-n:hover{transform:scale(1.12)}
+.tp-sp-pin{flex:0 0 auto;border:1px dashed #b9b2f5;background:#fff;color:#4a3fd1;border-radius:8px;padding:3px 8px;font-size:11.5px;cursor:pointer;font-family:inherit}
 .tp-mtools{position:absolute;top:52px;right:10px;z-index:1000;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
 .tp-mtools button{border:0;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:0 12px;min-height:36px;font:600 12.5px 'IBM Plex Sans Thai',sans-serif;color:#1d2033;cursor:pointer}
 .tp-mtools button.on{background:#1d2033;color:#fff}
@@ -3618,7 +3624,7 @@ function tpExpHtml(t){
 var _tpExpDay=null;
 function tpIni(w){w=String(w||'?').trim();var m=w.match(/^[เแโใไ]?(.)/);return m?m[1]:'?';} // อักษรแรกของชื่อ (ข้ามสระหน้า เ แ โ ใ ไ)
 function tpExpDays(t){var o=[];if(!t.start)return o;var e=t.end&&t.end>=t.start?t.end:t.start;for(var d=t.start,i=0;d<=e&&i<60;d=addDays(d,1),i++)o.push(d);return o;}
-function tpExpDayLabel(t,k){if(!k)return 'ไม่ระบุวัน';if(k==='pre')return 'ก่อนเดินทาง';var dm=tpDM(k),i=t.start?Math.round((new Date(k)-new Date(t.start))/864e5)+1:0;return (i>0&&(!t.end||k<=t.end)?'วันที่ '+i+' · ':'')+dm[0]+' '+dm[1];}
+function tpExpDayLabel(t,k){if(!k)return 'ไม่ระบุวัน';if(k==='pre')return 'ก่อนเดินทาง';var dm=tpDM(k),i=t.start?Math.round((new Date(k)-new Date(t.start))/864e5)+1:0;return dm[0]+' '+dm[1]+(i>0&&(!t.end||k<=t.end)?' · วันที่ '+i:'');}
 function tpExpDefDay(t,days){if(_tpExpDay!=null&&(_tpExpDay===''||_tpExpDay==='pre'||days.indexOf(_tpExpDay)>=0))return _tpExpDay;if(days.indexOf(TODAY_STR)>=0)return TODAY_STR;return TODAY_STR<days[0]?'pre':'';}
 function tpExpDaySel(t,days,v,cls,attrs){
   var o='<option value="">ไม่ระบุวัน</option><option value="pre"'+(v==='pre'?' selected':'')+'>ก่อนเดินทาง</option>'
@@ -3682,6 +3688,7 @@ function tpMapDrawLeaflet(t){
     el.innerHTML='';
     _tpMap=L.map(el,{zoomControl:true,attributionControl:true}).setView([13.75,100.5],5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(_tpMap);
+    _tpRailLF=null;if(tpRailOn())tpRailLF(_tpMap,true);
     _tpLayer=L.layerGroup().addTo(_tpMap);tpMapTools(el,tpEngLF(_tpMap,_tpLayer));
     var st=tpStops(t).filter(function(s){return s.lat!=null&&s.lng!=null;}),spp=tpSpotPts(t);
     spp.forEach(function(p){
@@ -3759,7 +3766,7 @@ function tpMapDraw(t){
     tpLangCtl(el);tpMapTools(el,tpEngML(map));
     map.on('load',function(){
       clearTimeout(guard);if(failed)return;
-      tpApplyLang(map,tpMapLang());
+      tpApplyLang(map,tpMapLang());if(tpRailOn())tpRailML(map,true);
       var all=tpStops(t),st=all.filter(function(s){return s.lat!=null&&s.lng!=null;});
       st.forEach(function(s){
         var i=all.indexOf(s),c=TP_SOFT[(s.color==null?i:s.color)%TP_SOFT.length][1];
@@ -3837,7 +3844,8 @@ function tpMapTools(el,eng){
   _tpE=eng;_tpSugMk=[];_tpTmpMk=null;_tpPanItem=null;
   var bar=document.createElement('div');bar.className='tp-mtools';bar.setAttribute('role','group');bar.setAttribute('aria-label','เครื่องมือแผนที่');
   bar.innerHTML='<button type="button" id="tp-sugbtn" aria-pressed="'+_tpSugOn+'" class="'+(_tpSugOn?'on':'')+'" onclick="tpSugToggle()">✨ ที่น่าสนใจ</button>'
-    +'<button type="button" id="tp-pinbtn" aria-pressed="false" onclick="tpPinToggle()">📍 ปักเอง</button>';
+    +'<button type="button" id="tp-pinbtn" aria-pressed="false" onclick="tpPinToggle()">📍 ปักเอง</button>'
+    +'<button type="button" id="tp-railbtn" aria-pressed="'+tpRailOn()+'" class="'+(tpRailOn()?'on':'')+'" onclick="tpRailToggle()">🚇 รถไฟฟ้า</button>';
   var pan=document.createElement('div');pan.className='tp-mpan';pan.id='tp-mpan';pan.hidden=true;
   [bar,pan].forEach(function(x){['click','dblclick','mousedown','pointerdown','touchstart','wheel','contextmenu'].forEach(function(ev){x.addEventListener(ev,function(e){e.stopPropagation();},{passive:true});});el.appendChild(x);});
   _tpPinOn=false;
@@ -3982,7 +3990,7 @@ function tpPanDays(){
   if(!s||!s.date){_tpPanDay='';box.innerHTML=s?'<small>เมืองนี้ยังไม่ได้ใส่วันที่ — ปักแบบไม่ระบุวัน</small>':'<small>จะสร้างเป็นเมืองใหม่ในทริป</small>';return;}
   var n=Math.max(1,+s.days||1),days=[];for(var i=0;i<Math.min(n,14);i++)days.push(addDays(s.date,i));
   if(days.indexOf(_tpPanDay)<0)_tpPanDay=days[0];
-  box.innerHTML=days.map(function(ds,i){var dm=tpDM(ds);return '<button type="button" class="'+(ds===_tpPanDay?'on':'')+'" aria-pressed="'+(ds===_tpPanDay)+'" data-d="'+ds+'" onclick="_tpPanDay=this.dataset.d;tpPanDays()"><b>วันที่ '+(i+1)+'</b><small>'+dm[0]+' '+dm[1]+'</small></button>';}).join('')
+  box.innerHTML=days.map(function(ds,i){var dm=tpDM(ds);return '<button type="button" class="'+(ds===_tpPanDay?'on':'')+'" aria-pressed="'+(ds===_tpPanDay)+'" data-d="'+ds+'" onclick="_tpPanDay=this.dataset.d;tpPanDays()"><b>'+dm[0]+' '+dm[1]+'</b><small>วันที่ '+(i+1)+'</small></button>';}).join('')
     +'<button type="button" class="'+(_tpPanDay==='-'?'on':'')+'" aria-pressed="'+(_tpPanDay==='-')+'" data-d="-" onclick="_tpPanDay=this.dataset.d;tpPanDays()"><b>ไม่ระบุ</b><small>วัน</small></button>';
 }
 function tpPanSave(){
@@ -4046,7 +4054,7 @@ function tpRudyRender(){
   var g=document.getElementById('tps-rb-go');if(g)g.textContent='↻ แนะนำใหม่';
   box.innerHTML=_tpRList.map(function(x,i){
     var added=have.indexOf(x.th)>=0||have.indexOf(x.name)>=0;
-    var opts=days.length?days.map(function(ds,j){var dm=tpDM(ds);return '<option value="'+ds+'"'+(j+1===x.day?' selected':'')+'>วันที่ '+(j+1)+' · '+dm[0]+' '+dm[1]+'</option>';}).join(''):'<option value="">ไม่ระบุวัน</option>';
+    var opts=days.length?days.map(function(ds,j){var dm=tpDM(ds);return '<option value="'+ds+'"'+(j+1===x.day?' selected':'')+'>'+dm[0]+' '+dm[1]+' · วันที่ '+(j+1)+'</option>';}).join(''):'<option value="">ไม่ระบุวัน</option>';
     return '<div class="tp-rb-i"><div class="tp-rb-b"><b>'+tpEsc(x.th)+'</b>'+(x.th!==x.name?'<small class="tp-rb-en">'+tpEsc(x.name)+'</small>':'')+'<small>'+tpEsc([x.type,x.why].filter(String).join(' · '))+'</small></div>'
       +'<select id="tps-rd-'+i+'" aria-label="วันที่ไป '+tpEsc(x.th)+'"'+(added?' disabled':'')+'>'+opts+'</select>'
       +'<button type="button" class="tp-rb-add" data-i="'+i+'" onclick="tpRudyAdd(+this.dataset.i,this)"'+(added?' disabled':'')+'>'+(added?'✓ เพิ่มแล้ว':'+ ปักหมุด')+'</button></div>';
@@ -4129,7 +4137,7 @@ function tpDayHtml(t){
   var hasNone=tpStops(t).some(function(s){return (s.spots||[]).some(function(x){return !x.date;});});
   if(!_tpDay||(_tpDay!=='none'&&days.indexOf(_tpDay)<0))_tpDay=days.indexOf(TODAY_STR)>=0?TODAY_STR:days[0];
   var d=_tpDay,h='<section class="tp-card tp-day" aria-label="แผนรายวัน"><div class="tp-card-h">แผนรายวัน<button type="button" class="tp-btn-l tp-day-map" onclick="tpDayMap()">🗺 ดูวันนี้บนแผนที่</button></div>'
-    +'<div class="tp-day-tabs" role="tablist" aria-label="เลือกวัน">'+days.map(function(x,i){var dm=tpDM(x),n=tpDaySpots(t,x).length;return '<button type="button" role="tab" aria-selected="'+(x===d)+'" class="tp-dt'+(x===d?' on':'')+(x===TODAY_STR?' today':'')+'" data-d="'+x+'" onclick="tpDaySel(this.dataset.d)"><b>วันที่ '+(i+1)+'</b><small>'+dm[0]+' '+dm[1]+'</small>'+(n?'<i>'+n+'</i>':'')+'</button>';}).join('')
+    +'<div class="tp-day-tabs" role="tablist" aria-label="เลือกวัน">'+days.map(function(x,i){var dm=tpDM(x),n=tpDaySpots(t,x).length;return '<button type="button" role="tab" aria-selected="'+(x===d)+'" class="tp-dt'+(x===d?' on':'')+(x===TODAY_STR?' today':'')+'" data-d="'+x+'" onclick="tpDaySel(this.dataset.d)"><b>'+dm[0]+' '+dm[1]+'</b><small>วันที่ '+(i+1)+'</small>'+(n?'<i>'+n+'</i>':'')+'</button>';}).join('')
     +(hasNone?'<button type="button" role="tab" aria-selected="'+(d==='none')+'" class="tp-dt'+(d==='none'?' on':'')+'" data-d="none" onclick="tpDaySel(this.dataset.d)"><b>ไม่ระบุ</b><small>วัน</small></button>':'')+'</div>';
   var ds=d==='none'?[]:tpDayStops(t,d),sp=tpDaySpots(t,d),bk=d==='none'?[]:(t.book||[]).filter(function(b){return b.date===d;}),exs=d==='none'?0:(t.exp||[]).filter(function(x){return x.date===d;}).reduce(function(a,x){return a+(+x.amt||0);},0);
   h+='<div class="tp-day-hd"><div><b>'+(d==='none'?'ที่เที่ยวที่ยังไม่ระบุวัน':ds.length?ds.map(function(s){return tpEsc(s.name);}).join(' → '):'ยังไม่มีเมืองในวันนี้')+'</b>'+(d!=='none'&&exs?'<small>ใช้จ่ายวันนี้ '+tpMoney(exs)+'</small>':'')+'</div><span class="tp-wx" id="tp-wx" aria-live="polite"></span></div>';
@@ -4227,6 +4235,100 @@ function tpPlanText(t){
   return L.join('\n');
 }
 function tpCopyPlan(){var t=tpCur(tpLoad());if(t)tpCopy(tpPlanText(t),'📋 คัดลอกแผนแล้ว — วางใน LINE ได้เลย');}
+// ---------- เส้นทางรถไฟ / รถไฟฟ้า บนแผนที่ (MapLibre: ชั้น transportation ของ OpenFreeMap · Leaflet: OpenRailwayMap) ----------
+function tpRailOn(){try{return localStorage.getItem('tp_rail')!=='0';}catch(e){return true;}}
+var TP_METRO=['subway','light_rail','monorail','tram'];
+function tpLangExpr(lang){return lang==='en'?['coalesce',['get','name:en'],['get','name_en'],['get','name:latin'],['get','name']]:['coalesce',['get','name:th'],['get','name_th'],['get','name'],['get','name:latin']];}
+function tpRailML(map,on){
+  ['tpr-sta','tpr-sta-c','tpr-metro','tpr-metro-c','tpr-rail'].forEach(function(id){try{if(map.getLayer(id))map.removeLayer(id);}catch(e){}});
+  if(!on)return;
+  var st=map.getStyle(),src=null,font=['Noto Sans Regular'];if(!st)return;
+  Object.keys(st.sources||{}).some(function(k){if(st.sources[k].type==='vector'){src=k;return true;}return false;});if(!src)return;
+  (st.layers||[]).some(function(l){if(l.type==='symbol'&&l.layout&&l.layout['text-font']){font=l.layout['text-font'];return true;}return false;});
+  var before=map.getLayer('tp-route')?'tp-route':undefined,isMetro=['any',['==',['get','class'],'transit'],['in',['get','subclass'],['literal',TP_METRO]]];
+  try{
+    map.addLayer({id:'tpr-rail',type:'line',source:src,'source-layer':'transportation',minzoom:5,filter:['all',['==',['get','class'],'rail'],['!',isMetro]],
+      paint:{'line-color':'#59607a','line-width':['interpolate',['linear'],['zoom'],5,.8,14,2.6],'line-dasharray':[2.5,1.5],'line-opacity':.85}},before);
+    map.addLayer({id:'tpr-metro-c',type:'line',source:src,'source-layer':'transportation',minzoom:9,filter:['all',['in',['get','class'],['literal',['rail','transit']]],isMetro],
+      paint:{'line-color':'#fff','line-width':['interpolate',['linear'],['zoom'],9,3,16,8]}},before);
+    map.addLayer({id:'tpr-metro',type:'line',source:src,'source-layer':'transportation',minzoom:9,filter:['all',['in',['get','class'],['literal',['rail','transit']]],isMetro],
+      paint:{'line-color':['match',['get','subclass'],'light_rail','#8e44ad','monorail','#0f9d8a','tram','#d97706','#1f6feb'],'line-width':['interpolate',['linear'],['zoom'],9,1.6,16,5]}},before);
+    map.addLayer({id:'tpr-sta-c',type:'circle',source:src,'source-layer':'poi',minzoom:11.5,filter:['==',['get','class'],'railway'],
+      paint:{'circle-radius':['interpolate',['linear'],['zoom'],12,3,16,6],'circle-color':'#fff','circle-stroke-color':'#1f6feb','circle-stroke-width':2}},before);
+    map.addLayer({id:'tpr-sta',type:'symbol',source:src,'source-layer':'poi',minzoom:12.5,filter:['==',['get','class'],'railway'],
+      layout:{'text-field':tpLangExpr(tpMapLang()),'text-font':font,'text-size':11,'text-offset':[0,1.1],'text-anchor':'top','text-optional':true},
+      paint:{'text-color':'#1f4fb8','text-halo-color':'#fff','text-halo-width':1.6}},before);
+  }catch(e){}
+}
+var _tpRailLF=null;
+function tpRailLF(map,on){
+  if(_tpRailLF){try{map.removeLayer(_tpRailLF);}catch(e){}_tpRailLF=null;}
+  if(!on)return;
+  _tpRailLF=L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png',{subdomains:'abc',maxZoom:19,opacity:.85,attribution:'© OpenRailwayMap'}).addTo(map);
+}
+function tpRailToggle(){
+  var on=!tpRailOn();try{localStorage.setItem('tp_rail',on?'1':'0');}catch(e){}
+  var b=document.getElementById('tp-railbtn');if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);}
+  if(_tpMl&&_tpMl.isStyleLoaded())tpRailML(_tpMl,on);else if(_tpMap)tpRailLF(_tpMap,on);
+  showToast(on?'🚇 แสดงเส้นทางรถไฟ/รถไฟฟ้า':'ซ่อนเส้นทางรถไฟ');
+}
+// ---------- ปักหมุดบนแผนที่เล็กในหน้าต่างแก้สถานที่ ----------
+var _tpDM=null,_tpDMk=[],_tpDMode=null,_tpDMKind='';
+function tpDlgMapClose(){
+  if(_tpDM){try{_tpDM.remove();}catch(e){}}_tpDM=null;_tpDMk=[];_tpDMode=null;
+  var w=document.getElementById('tps-mapw');if(w)w.hidden=true;
+}
+function tpDlgMapHint(){
+  var h=document.getElementById('tps-maph');if(!h)return;var sp=window._tpSpots||[];
+  h.textContent=_tpDMode&&_tpDMode.row!=null?'แตะแผนที่เพื่อปักตำแหน่ง “'+((sp[_tpDMode.row]||{}).name||'ที่ '+(_tpDMode.row+1))+'”':'แตะแผนที่ตรงที่อยากไป = เพิ่มที่เที่ยวใหม่';
+}
+function tpDlgMap(row){
+  var w=document.getElementById('tps-mapw');if(!w)return;w.hidden=false;
+  _tpDMode=row==null?{add:true}:{row:row};tpDlgMapHint();
+  var sp=window._tpSpots||[],c=null;
+  if(row!=null&&sp[row]&&sp[row].lat!=null)c=[sp[row].lat,sp[row].lng];
+  if(!c){var last=sp.filter(function(x){return x.lat!=null;}).slice(-1)[0];c=last?[last.lat,last.lng]:_tpGeo?[_tpGeo.lat,_tpGeo.lng]:null;}
+  if(_tpDM){tpDlgMapMarks();if(c)tpDlgMapGo(c,14);w.scrollIntoView({block:'nearest',behavior:'smooth'});return;}
+  var el=document.getElementById('tps-map');el.innerHTML='';
+  var z=c?13:5;c=c||[13.75,100.5];
+  function click(lat,lng){tpDlgMapTap(lat,lng);}
+  if(window.maplibregl&&tpWebGL()){
+    _tpDMKind='ml';
+    try{_tpDM=new maplibregl.Map({container:el,style:TP_STYLE,center:[c[1],c[0]],zoom:z,attributionControl:{compact:true}});}catch(e){_tpDM=null;}
+    if(_tpDM){_tpDM.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-left');
+      _tpDM.on('load',function(){tpApplyLang(_tpDM,tpMapLang());if(tpRailOn())tpRailML(_tpDM,true);tpDlgMapMarks();});
+      _tpDM.on('click',function(e){click(e.lngLat.lat,e.lngLat.lng);});setTimeout(function(){w.scrollIntoView({block:'nearest',behavior:'smooth'});},50);return;}
+  }
+  tpLeaflet(function(ok){
+    if(!ok||!document.getElementById('tps-map')){el.innerHTML='<div class="tp-map-msg">โหลดแผนที่ไม่ได้</div>';return;}
+    _tpDMKind='lf';_tpDM=L.map(el).setView(c,z);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(_tpDM);
+    _tpDM.on('click',function(e){click(e.latlng.lat,e.latlng.lng);});tpDlgMapMarks();
+    setTimeout(function(){if(_tpDM)_tpDM.invalidateSize();w.scrollIntoView({block:'nearest',behavior:'smooth'});},120);
+  });
+}
+function tpDlgMapGo(c,z){if(!_tpDM)return;if(_tpDMKind==='ml')_tpDM.jumpTo({center:[c[1],c[0]],zoom:Math.max(_tpDM.getZoom(),z)});else _tpDM.setView(c,Math.max(_tpDM.getZoom(),z));}
+function tpDlgMapMarks(){
+  if(!_tpDM)return;_tpDMk.forEach(function(m){try{m.remove();}catch(e){}});_tpDMk=[];
+  var col=window._tpSpCol||'#6b5cff';
+  (window._tpSpots||[]).forEach(function(x,i){if(x.lat==null)return;
+    var el=document.createElement('div');el.className='tp-mk sp'+(_tpDMode&&_tpDMode.row===i?' hi':'');el.innerHTML='<span style="background:'+col+'">'+(i+1)+'</span>';el.title=x.name||'';
+    if(_tpDMKind==='ml')_tpDMk.push(new maplibregl.Marker({element:el}).setLngLat([x.lng,x.lat]).addTo(_tpDM));
+    else _tpDMk.push(L.marker([x.lat,x.lng],{icon:L.divIcon({className:'tp-lfwrap',html:el,iconSize:null}),title:x.name||''}).addTo(_tpDM));
+  });
+}
+function tpDlgMapTap(lat,lng){
+  var sp=window._tpSpots=window._tpSpots||[],target;
+  if(_tpDMode&&_tpDMode.row!=null&&sp[_tpDMode.row]){target=sp[_tpDMode.row];target.lat=lat;target.lng=lng;_tpDMode={add:true};}
+  else{tpSpotAdd({name:'',lat:lat,lng:lng});target=sp[sp.length-1];var q=document.getElementById('tps-q');if(q)q.blur();}
+  tpSpotRender();tpDlgMapMarks();tpDlgMapHint();
+  if(!String(target.name||'').trim()){
+    fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18&accept-language='+(tpMapLang()==='en'?'en':'th,en')+'&lat='+lat+'&lon='+lng)
+      .then(function(r){return r.json();}).then(function(r){var nm=r&&(r.name||(r.display_name||'').split(',')[0])||'';if(!String(target.name||'').trim()){target.name=nm||'จุดที่ปักไว้';tpSpotRender();tpDlgMapMarks();}})
+      .catch(function(){if(!String(target.name||'').trim()){target.name='จุดที่ปักไว้';tpSpotRender();}});
+  }
+  var i=sp.indexOf(target),inp=document.querySelector('#tps-sl .tp-sp[data-i="'+i+'"] input');if(inp&&!target.name)inp.placeholder='กำลังหาชื่อ… (พิมพ์เองได้)';
+}
 // ---------- actions ----------
 function tpMut(fn){var d=tpLoad(),t=tpCur(d);if(!t)return;fn(t,d);tpStore(d);renderTrip();}
 function tpSwitch(id){var d=tpLoad();d.cur=id;tpStore(d,true);renderTrip();}
@@ -4283,6 +4385,7 @@ function tpToCal(){
 // ---------- stop dialog + ค้นหาตำแหน่ง ----------
 var _tpGeo=null,_tpGeoT=null;
 function tpStopDlg(id){
+  tpDlgMapClose();
   var d=tpLoad(),t=tpCur(d);if(!t)return;
   var s=id?(t.stops||[]).find(function(x){return x.id===id;}):null,st=tpStops(t),last=st[st.length-1];
   var defDate=s?s.date:(last&&last.date?addDays(last.date,+last.days||1):(t.start||''));
@@ -4295,7 +4398,8 @@ function tpStopDlg(id){
     +'</div>'
     +'<div class="fld"><label for="tps-q">สถานที่เที่ยว · ปักหมุดรายวัน</label><div id="tps-sl" class="tp-spl"></div>'
     +'<input id="tps-q" autocomplete="off" placeholder="ค้นหาที่เที่ยว เช่น Taipei 101, ตลาดกลางคืน" oninput="tpSpotSearch(this.value)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();tpSpotAddText();}">'
-    +'<div id="tps-qres" class="tp-geo" role="listbox" aria-label="ผลค้นหาที่เที่ยว"></div><div class="tp-sp-hint">เลือกจากรายการ = ปักหมุดบนแผนที่ · กด Enter = เพิ่มชื่ออย่างเดียว · เลือกวันที่จะไปได้ทีละที่</div>'+tpRudyBoxHtml()+'</div>'
+    +'<div id="tps-qres" class="tp-geo" role="listbox" aria-label="ผลค้นหาที่เที่ยว"></div><div class="tp-sp-q2"><button type="button" class="tp-btn-l" onclick="tpDlgMap()">📍 ปักบนแผนที่</button><span class="tp-sp-hint">ค้นหาแล้วเลือก · หรือแตะแผนที่ · กด Enter = เพิ่มชื่ออย่างเดียว</span></div>'
+    +'<div class="tp-dmap" id="tps-mapw" hidden><div class="tp-dmap-h"><span id="tps-maph"></span><button type="button" class="tp-x" aria-label="ปิดแผนที่" onclick="tpDlgMapClose()">×</button></div><div id="tps-map" class="tp-dmap-m"></div></div>'+tpRudyBoxHtml()+'</div>'
     +'<div class="fld"><label for="tps-x">รายละเอียด / แผน</label><textarea id="tps-x" rows="3" placeholder="ที่เที่ยว ร้านอาหาร ที่พัก">'+tpEsc(s?s.desc:'')+'</textarea></div>'
     +'<div class="fld"><label>ไอคอน</label><div class="tp-icp">'+TP_ICONS.map(function(ic){return '<button type="button" class="tp-icb'+((s&&s.icon)===ic?' on':'')+'" data-ic="'+ic+'" onclick="document.querySelectorAll(\'.tp-icb\').forEach(function(x){x.classList.remove(\'on\')});this.classList.add(\'on\')">'+ic+'</button>';}).join('')+'</div></div>'
     +'<button class="btn-submit" onclick="tpStopSave(\''+(s?s.id:'')+'\')">✓ บันทึก</button>'
@@ -4314,13 +4418,14 @@ function tpSpotRender(){
   var box=document.getElementById('tps-sl');if(!box)return;if(_tpRList&&_tpRList.length&&document.getElementById('tps-rb-l'))setTimeout(tpRudyRender,0);
   var sp=window._tpSpots||[],days=tpSpotDays(),c=window._tpSpCol||'#6b5cff';
   box.innerHTML=sp.map(function(x,i){
-    var opts='<option value="">ไม่ระบุวัน</option>'+days.map(function(ds,j){var dm=tpDM(ds);return '<option value="'+ds+'"'+(x.date===ds?' selected':'')+'>วันที่ '+(j+1)+' · '+dm[0]+' '+dm[1]+'</option>';}).join('');
+    var opts='<option value="">ไม่ระบุวัน</option>'+days.map(function(ds,j){var dm=tpDM(ds);return '<option value="'+ds+'"'+(x.date===ds?' selected':'')+'>'+dm[0]+' '+dm[1]+' · วันที่ '+(j+1)+'</option>';}).join('');
     if(x.date&&days.indexOf(x.date)<0){var dm=tpDM(x.date);opts+='<option value="'+x.date+'" selected>'+dm[0]+' '+dm[1]+' (นอกช่วง)</option>';}
-    return '<div class="tp-sp" data-i="'+i+'"><span class="tp-sp-n'+(x.lat==null?' nopin':'')+'" style="background:'+c+'" title="'+(x.lat==null?'ยังไม่มีหมุด':'ปักหมุดแล้ว')+'">'+(i+1)+'</span>'
+    return '<div class="tp-sp" data-i="'+i+'"><button type="button" class="tp-sp-n'+(x.lat==null?' nopin':'')+'" style="background:'+c+'" title="'+(x.lat==null?'ยังไม่มีหมุด — กดเพื่อปักบนแผนที่':'ปักหมุดแล้ว — กดเพื่อย้ายตำแหน่ง')+'" aria-label="'+(x.lat==null?'ปักหมุด':'ย้ายหมุด')+' '+tpEsc(x.name||'')+'" onclick="tpDlgMap(+this.parentNode.dataset.i)">'+(i+1)+'</button>'
+      +(x.lat==null?'<button type="button" class="tp-sp-pin" onclick="tpDlgMap(+this.parentNode.dataset.i)">📍 ปัก</button>':'')
       +'<input value="'+tpEsc(x.name)+'" aria-label="ชื่อที่เที่ยว '+(i+1)+'" oninput="(window._tpSpots[+this.parentNode.dataset.i]||{}).name=this.value">'
       +'<select aria-label="วันที่ไป" onchange="(window._tpSpots[+this.parentNode.dataset.i]||{}).date=this.value">'+opts+'</select>'
       +'<input type="time" class="tp-sp-tm" value="'+tpEsc(x.time||'')+'" aria-label="เวลา" onchange="(window._tpSpots[+this.parentNode.dataset.i]||{}).time=this.value">'
-      +'<button type="button" class="tp-x" aria-label="เอาออก" onclick="window._tpSpots.splice(+this.parentNode.dataset.i,1);tpSpotRender()">×</button></div>';
+      +'<button type="button" class="tp-x" aria-label="เอาออก" onclick="window._tpSpots.splice(+this.parentNode.dataset.i,1);tpSpotRender();tpDlgMapMarks()">×</button></div>';
   }).join('');
 }
 function tpSpotDefDate(){
@@ -4387,7 +4492,7 @@ function tpStopSave(id){
     days:Math.max(1,parseInt(document.getElementById('tps-k').value,10)||1),
     spots:(window._tpSpots||[]).filter(function(x){return String(x.name||'').trim();}).map(function(x){var o={id:x.id||tpUid(),name:String(x.name).trim(),date:x.date||''};if(x.lat!=null){o.lat=x.lat;o.lng=x.lng;}if(x.note)o.note=x.note;if(x.time)o.time=x.time;if(x.done)o.done=true;return o;}),
     desc:document.getElementById('tps-x').value.trim(),icon:ic?ic.dataset.ic:''};
-  var geo=_tpGeo;closeModal();
+  var geo=_tpGeo;tpDlgMapClose();closeModal();
   tpMut(function(t){
     t.stops=t.stops||[];
     var s=id?t.stops.find(function(x){return x.id===id;}):null;
