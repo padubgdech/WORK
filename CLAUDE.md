@@ -60,6 +60,8 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   2-tap ลบหน้า incl. subpages), title + body contenteditable, autosave 700 ms (`nxFlush`, `nxSanitize` allows tables/todo/nx-link).
   Slash menu (`nxSlashCheck`, `NX_BLOCKS`: table, todo, h2, h3, ul, ol, quote, hr, page) filtered by typed text, ↑↓ Enter Esc.
   Tables: floating `#nx-ttools` (+row/+col/del row/del col/del table) under the table; Tab moves cells (adds a row at the end).
+  Resize (5 Nov): drag a cell's right edge = column width, bottom edge = row height (`nxEdge`, pointer events, 6px / 12px touch) →
+  inline width+min-width / height px on cells (kept by `nxSanitize`). Header colour: `NX_HEAD` swatches in `#nx-ttools` → `nxTable('head',c)`.
   Todo = `ul.nx-todo > li[data-done]`, click the box to toggle. Subpage = `a.nx-link[data-page]` (text refreshed to the page title on render).
   Full-page (5 Nov, "ให้เต็มหน้า คล้ายแบบ 1"): `goTab` toggles `body.nx-full` → hides `#phdr`, no padding/border, `.nx` = 100vh − 60px.
   Format bar `#nx-tb` = floating dark bubble above a text selection on desktop (`nxBubble` on selectionchange), sticky row while
