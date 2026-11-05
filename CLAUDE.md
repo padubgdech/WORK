@@ -143,7 +143,15 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   phone map grows to 540px while the panel is open.
   Expense day (5 Nov "ให้สามารถเลือกวันได้"): `exp[].date` = trip day YYYY-MM-DD | 'pre' (ก่อนเดินทาง) | none; form select `.tp-exf-d` (`tpExpDaySel`,
   default `tpExpDefDay`: last used → today if in trip → 'pre' before the trip; no trip start → date input); row chip select `.tp-ex-d` →
-  `tpExpSetDay`; sort "ตามวัน" groups rows with daily subtotals `.tp-ex-g`. Test: test_expday.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
+  `tpExpSetDay`; sort "ตามวัน" groups rows with daily subtotals `.tp-ex-g`. Test: test_expday.py.
+  Practical pack (5 Nov "เช็คหน้า trip … ปรับเลย"): trip dialog = งบ `t.budget`, currency `t.cur` (`TP_CURS`) + `t.rate` (บาท/หน่วย, "↻ ดึงอัตรา"
+  = open.er-api.com/v6/latest/<CUR>; saving re-converts foreign expenses). Expenses: currency select `.tp-exf-c` → `oa`/`oc` kept, `amt` in THB;
+  budget bar `tpBudgetHtml` (warn ≥85 %, over = red, per-day allowance during the trip); "ใครจ่ายเท่าไร" `tpSplitHtml` (equal split + settle-up moves);
+  tap a row title → `tpExpEdit`. Day plan card `.tp-day` (`tpDayHtml`, `_tpDay`, tabs per trip day + "ไม่ระบุ"): city of the day, Open-Meteo weather
+  (`tpWeather`, only ≤15 days ahead), bookings that day, spots sorted by `time` (time input, done checkbox `spot.done`, "นำทาง" = Google Maps dir link),
+  "🗺 ดูวันนี้บนแผนที่" dims other days' pins (`tpDayDim`, spot markers carry `data-day`) and fits the day. Bookings card `.tp-book` (`t.book`
+  [{id,type TP_BOOK,title,date,time,code,link,note}], `tpBookDlg`, code chip copies). Pack: "＋ ชุดพื้นฐาน" `TP_PACK0`, clear done, progress bar.
+  Head: "📋 คัดลอกแผน" → `tpPlanText` (bookings + day-by-day + budget) to clipboard. Stop dialog spot rows got a time input. Test: test_tpx.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`
