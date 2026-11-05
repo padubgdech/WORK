@@ -125,6 +125,11 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   saved in localStorage `tp_map_lang` (default th). Markers = `maplibregl.Marker` buttons (`_tpMk`), route = geojson line layer
   `tp-route` (`tpRouteGeo`, OSRM for car/bus, dashed otherwise). No WebGL / style fails (12 s guard or error) → `tpMapDrawLeaflet`
   (old Leaflet + OSM raster, local-language labels). Test: test_trip3.py (swiftshader, mocked style).
+  Spots (5 Nov "เพิ่มสถานที่เพื่อปักหมุดในวันนั้นๆ"): `stop.spots=[{id,name,date,lat?,lng?}]` edited in the stop dialog (working copy
+  `window._tpSpots`, `tpSpotRender`; search `tpSpotSearch` = Nominatim biased by viewbox ±0.6° around the stop; Enter = name only, no pin;
+  date select = stop's days `tpSpotDays`). "กี่สถานที่" input removed: `places = spots.length` (`tpSpotCount` falls back to old `places`).
+  Card shows spot chips; map draws small `.tp-mk.sp` pins (`tpSpotPts`, label "1.2 name · วันที่ n (date) — city", click = stop dialog) in both
+  MapLibre and Leaflet, included in fitBounds. Test: test_spots.py.
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`
