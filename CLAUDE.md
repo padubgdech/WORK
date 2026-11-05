@@ -89,6 +89,9 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   `notesSave`/`nxSecsSave` are wrapped to call `nxSyncSoon(4s)`; also on load (+3.5 s), Note tab open, tab visible. Section seeding
   writes localStorage directly so a fresh device never overrides real sections (`rudy_nb_sec_ts`). Status button `#nx-sync` in the
   sidebar footer (click = sync now). Old GAS without noteHtml flag → `_nxSync.off`. Test: scratchpad test_sync.py (2 devices).
+  Block drag (5 Nov): hover a top-level block in `#nx-body` → `#nx-grip` ⋮⋮ (desktop) → drag → `#nx-dropline`; `nxNormalizeTop` wraps loose
+  text runs into divs first. Main quick notes: section `<select>` (`pinQnSec`). Rudy chat note search: AI type `find` (prompt rule) or
+  chip `🔎 ค้น Note` (mode `find`, no AI) → `rcFindNotes` (title ×3, body ×1) → history item `{found:{q,total,items}}` → `rcOpenNote`. Test: test_nx6.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
