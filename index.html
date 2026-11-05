@@ -839,6 +839,15 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
 .nx-tagpre{display:flex;flex-wrap:wrap;gap:5px}
 .nx-tagpre .nx-tag{font-size:12px;padding:3px 8px}
 @media(max-width:760px){.nx-fold{width:28px;height:36px}.nx-icbtn{height:40px}}
+.nx-body img.nx-img{display:block;max-width:100%;height:auto;border-radius:8px;margin:8px 0;cursor:zoom-in}
+.nx-upl{display:inline-block;background:#f1efe9;color:#6b6b6b;border-radius:6px;padding:4px 10px;font-size:13px}
+.nx-body a.nx-ext{color:#2457c5;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.nx-body ul.nx-todo>li[data-task]:after{content:'งานแล้ว';margin-left:8px;font-size:11px;font-weight:600;color:#1f4e79;background:#d3e5ef;border-radius:4px;padding:1px 6px;text-decoration:none;display:inline-block}
+.nx-todotool{position:fixed;z-index:10040;display:none;border:1px solid #d3e5ef;background:#fff;color:#1f4e79;border-radius:7px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.08);font-family:'IBM Plex Sans Thai',sans-serif}
+.nx-todotool:hover{background:#eef4fb}
+.nx-todotool:disabled{color:#6b6b6b;cursor:default;background:#f7f6f3;border-color:#e6e4de}
+.nx-side-ft{margin-top:10px;border-top:1px solid #ecebe7;padding-top:6px}
+.nx-side-ft .nx-trashbtn{margin-top:2px}
 </style>
 </head>
 <body>
@@ -2242,6 +2251,8 @@ var NX_IC={
   quote:'<path d="M5 5v14"></path><path d="M9 8h10M9 12h10M9 16h6"></path>',
   hr:'<path d="M3 12h18"></path>',
   tag:'<path d="M3 12V5a2 2 0 0 1 2-2h7l9 9-9 9z"></path><circle cx="8" cy="8" r="1.5"></circle>',
+  img:'<rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="M21 17l-5-5-9 8"></path>',
+  link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path>',
   page:'<path d="M6 3h9l4 4v14H6z"></path><path d="M14 3v5h5"></path>'
 };
 var NX_BLOCKS=[
@@ -2251,6 +2262,8 @@ var NX_BLOCKS=[
   {k:'h3',g:'บล็อกพื้นฐาน',t:'หัวข้อย่อย',d:'พิมพ์ ## แล้วเว้นวรรคก็ได้',kw:'h3 subheading หัวข้อย่อย'},
   {k:'ul',g:'บล็อกพื้นฐาน',t:'รายการจุด',d:'พิมพ์ - แล้วเว้นวรรคก็ได้',kw:'bullet list ul จุด รายการ'},
   {k:'ol',g:'บล็อกพื้นฐาน',t:'รายการเลข',d:'พิมพ์ 1. แล้วเว้นวรรคก็ได้',kw:'number ol เลข ลำดับ'},
+  {k:'img',g:'สื่อ',t:'รูปภาพ',d:'อัปโหลดรูป · วาง/ลากรูปมาก็ได้',kw:'image img picture photo รูป ภาพ'},
+  {k:'link',g:'สื่อ',t:'ลิงก์เว็บ',d:'ใส่ลิงก์ที่กดเปิดได้',kw:'link url web ลิงก์ เว็บ'},
   {k:'tag',g:'อื่น ๆ',t:'ป้ายสถานะ',d:'ป้ายสี เช่น รอเอกสาร / เสร็จแล้ว',kw:'tag status สถานะ ป้าย label'},
   {k:'quote',g:'อื่น ๆ',t:'กล่องข้อความเด่น',d:'พิมพ์ > แล้วเว้นวรรคก็ได้',kw:'quote callout เด่น อ้าง'},
   {k:'hr',g:'อื่น ๆ',t:'เส้นคั่น',d:'พิมพ์ --- ก็ได้',kw:'divider hr line เส้น'},
@@ -2286,16 +2299,18 @@ function nxAgo(iso){if(!iso)return'';var d=new Date(iso);if(isNaN(d))return'';va
 // ---------- sanitize (ยอมให้ ตาราง / เช็กลิสต์ / ลิงก์หน้าย่อย) ----------
 function nxSanitize(html){
   var box=document.createElement('div');box.innerHTML=html||'';
-  var OK={B:1,STRONG:1,I:1,EM:1,U:1,S:1,STRIKE:1,BR:1,DIV:1,P:1,UL:1,OL:1,LI:1,SPAN:1,FONT:1,H1:1,H2:1,H3:1,MARK:1,TABLE:1,THEAD:1,TBODY:1,TR:1,TH:1,TD:1,HR:1,A:1,BLOCKQUOTE:1};
+  var OK={B:1,STRONG:1,I:1,EM:1,U:1,S:1,STRIKE:1,BR:1,DIV:1,P:1,UL:1,OL:1,LI:1,SPAN:1,FONT:1,H1:1,H2:1,H3:1,MARK:1,TABLE:1,THEAD:1,TBODY:1,TR:1,TH:1,TD:1,HR:1,A:1,BLOCKQUOTE:1,IMG:1};
   (function walk(el){
     Array.prototype.slice.call(el.childNodes).forEach(function(c){
       if(c.nodeType===3)return;
       if(c.nodeType!==1||!OK[c.tagName]){
-        if(c.nodeType===1&&!/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|IMG|SVG|LINK|META|INPUT|BUTTON|TEXTAREA|SELECT)$/.test(c.tagName)){walk(c);while(c.firstChild)el.insertBefore(c.firstChild,c);}
+        if(c.nodeType===1&&!/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|SVG|LINK|META|INPUT|BUTTON|TEXTAREA|SELECT)$/.test(c.tagName)){walk(c);while(c.firstChild)el.insertBefore(c.firstChild,c);}
         el.removeChild(c);return;
       }
       var col=c.style?c.style.color:'',bg=c.style?c.style.backgroundColor:'',fw=c.style?c.style.fontWeight:'',fc=c.getAttribute('color');
       var cls=c.getAttribute('class')||'',done=c.getAttribute('data-done'),pg=c.getAttribute('data-page'),dc=c.getAttribute('data-c');
+      var href=c.getAttribute('href')||'',src=c.getAttribute('src')||'',tk=c.getAttribute('data-task'),iw=c.tagName==='IMG'&&c.style?parseInt(c.style.width,10):0;
+      if(c.tagName==='IMG'&&!/^https:\/\/(lh3\.googleusercontent\.com|drive\.google\.com)\//.test(src)&&!/^data:image\/(png|jpe?g|gif|webp);base64,/.test(src)){el.removeChild(c);return;}
       var cw=(c.tagName==='TD'||c.tagName==='TH')&&c.style?parseInt(c.style.width,10):0,chh=(c.tagName==='TD'||c.tagName==='TH')&&c.style?parseInt(c.style.height,10):0;
       Array.prototype.slice.call(c.attributes).forEach(function(a){c.removeAttribute(a.name);});
       var st='';
@@ -2310,8 +2325,11 @@ function nxSanitize(html){
       if(c.tagName==='TABLE')c.setAttribute('class','nx-tbl');
       if(c.tagName==='SPAN'&&/\bnx-tag\b/.test(cls)&&/^[ygbrpn]$/.test(dc||'')){c.setAttribute('class','nx-tag');c.setAttribute('data-c',dc);c.setAttribute('contenteditable','false');c.removeAttribute('style');}
       if(c.tagName==='LI'&&done==='1')c.setAttribute('data-done','1');
+      if(c.tagName==='LI'&&tk==='1')c.setAttribute('data-task','1');
+      if(c.tagName==='IMG'){c.setAttribute('src',src);c.setAttribute('class','nx-img');c.setAttribute('alt','');if(iw>=60&&iw<=2000)c.setAttribute('style','width:'+iw+'px');else c.removeAttribute('style');}
       if(c.tagName==='A'){
         if(pg&&/^[\w-]{1,40}$/.test(pg)){c.setAttribute('class','nx-link');c.setAttribute('data-page',pg);c.setAttribute('contenteditable','false');c.setAttribute('href','#');}
+        else if(/^https?:\/\/[^\s"<>]+$/i.test(href)){c.setAttribute('class','nx-ext');c.setAttribute('href',href);c.setAttribute('target','_blank');c.setAttribute('rel','noopener noreferrer');}
         else{while(c.firstChild)el.insertBefore(c.firstChild,c);el.removeChild(c);return;}
       }
       walk(c);
@@ -2377,6 +2395,7 @@ function nxSideHtml(notes,secs,cur){
     if(_nxSecMenu===s.id){
       h+='<div class="nx-pop" role="group" aria-label="ตั้งค่าหัวข้อ"><label class="nx-pop-l">ชื่อหัวข้อ<input id="nx-secname" value="'+nxEsc(s.name)+'" data-id="'+s.id+'" onkeydown="if(event.key===\'Enter\'){nxSecRename(this);}if(event.key===\'Escape\'){nxSecMenu(null);}" onblur="nxSecRename(this)"></label>'
         +'<div class="nx-pop-l">สี</div><div class="nx-cols">'+NX_COLORS.map(function(c){return '<button type="button" class="nx-col'+(c===s.color?' on':'')+'" style="background:'+c+'" aria-label="สีหัวข้อ" data-id="'+s.id+'" data-c="'+c+'" onmousedown="event.preventDefault()" onclick="nxSecColor(this)"></button>';}).join('')+'</div>'
+        +'<div style="display:flex;gap:6px"><button type="button" class="nx-btn-light" data-id="'+s.id+'" onmousedown="event.preventDefault()" onclick="nxSecMove(this.dataset.id,-1)">↑ เลื่อนขึ้น</button><button type="button" class="nx-btn-light" data-id="'+s.id+'" onmousedown="event.preventDefault()" onclick="nxSecMove(this.dataset.id,1)">↓ เลื่อนลง</button></div>'
         +(s.id===NX_GEN?'':'<button type="button" class="nx-danger'+(_nxDel==='sec:'+s.id?' arm':'')+'" data-id="'+s.id+'" onmousedown="event.preventDefault()" onclick="nxSecDelete(this.dataset.id)">'+(_nxDel==='sec:'+s.id?'กดอีกครั้งเพื่อลบ (หน้าในหัวข้อย้ายไป "ทั่วไป")':'ลบหัวข้อ')+'</button>')
         +'</div>';
     }
@@ -2385,7 +2404,9 @@ function nxSideHtml(notes,secs,cur){
   });
   h+='<button type="button" class="nx-addsec" onclick="nxSecNew()">+ หัวข้อใหม่</button>';
   var tr=nxTrash();
-  h+='<button type="button" class="nx-trashbtn'+(_nxView==='trash'?' on':'')+'" onclick="nxShowTrash()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>ถังขยะ'+(tr.length?' <span class="nx-cnt">'+tr.length+'</span>':'')+'</button>';
+  h+='<div class="nx-side-ft"><button type="button" class="nx-trashbtn'+(_nxView==='trash'?' on':'')+'" onclick="nxShowTrash()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>ถังขยะ'+(tr.length?' <span class="nx-cnt">'+tr.length+'</span>':'')+'</button>'
+    +'<button type="button" class="nx-trashbtn" onclick="nxBackup()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>ดาวน์โหลดสำรอง</button>'
+    +'<label class="nx-trashbtn" style="cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"></path></svg>นำเข้าไฟล์สำรอง<input type="file" accept="application/json,.json" style="display:none" onchange="nxRestoreFile(this)"></label></div>';
   return h;
 }
 function nxTrashHtml(secs){
@@ -2422,6 +2443,7 @@ function nxPageHtml(notes,secs,cur){
     +'<label class="nx-pop-l">อยู่ในหัวข้อ<select onchange="nxMoveSec(this.value)">'+secs.map(function(x){return '<option value="'+x.id+'"'+(x.id===s.id?' selected':'')+'>'+nxEsc(x.name)+'</option>';}).join('')+'</select></label>'
     +'<div class="nx-pop-l">ไอคอนหน้า</div><div class="nx-icons">'+NX_ICONS.map(function(ic){return '<button type="button" class="nx-icbtn'+(n.icon===ic?' on':'')+'" aria-label="ไอคอน '+ic+'" data-ic="'+ic+'" onclick="nxSetIcon(this.dataset.ic)">'+ic+'</button>';}).join('')+'<button type="button" class="nx-icbtn txt'+(n.icon?'':' on')+'" onclick="nxSetIcon(\'\')" aria-label="ใช้ตัวย่อหัวข้อ">Aa</button></div>'
     +'<div class="nx-pop-l">สีปก</div><div class="nx-cols">'+NX_COVERS.map(function(c){return '<button type="button" class="nx-col'+(c===(n.cover||'')?' on':'')+'" style="background:'+(c||'#fff')+(c?'':';box-shadow:inset 0 0 0 1px #ccc')+'" aria-label="'+(c?'สีปก':'ไม่มีปก')+'" data-c="'+c+'" onclick="nxSetCover(this.dataset.c)"></button>';}).join('')+'</div>'
+    +'<div class="nx-pop-l">ลำดับในแถบซ้าย</div><div style="display:flex;gap:6px"><button type="button" class="nx-btn-light" onclick="nxMovePage(-1)">↑ เลื่อนขึ้น</button><button type="button" class="nx-btn-light" onclick="nxMovePage(1)">↓ เลื่อนลง</button></div>'
     +'<button type="button" class="nx-danger nx-del" onclick="nxDeletePage()">ลบหน้า</button></div>';
   // แถบจัดรูปแบบ: คอม = ลอยเหนือข้อความที่เลือก · มือถือ = แถบติดด้านบนตอนกำลังพิมพ์
   h+='<div class="nx-tb" id="nx-tb" role="toolbar" aria-label="จัดรูปแบบข้อความ">'
@@ -2432,11 +2454,12 @@ function nxPageHtml(notes,secs,cur){
     +NX_TXT.map(function(c){return '<button type="button" class="nx-tc" data-c="foreColor" data-v="'+c[0]+'" aria-label="ตัวอักษรสี'+c[1]+'" title="สี'+c[1]+'" style="color:'+c[0]+';border-bottom-color:'+c[0]+'" onmousedown="event.preventDefault()" onclick="nxFmt(this)">A</button>';}).join('')
     +'<button type="button" data-c="backColor" data-v="#ffe9a8" aria-label="ไฮไลต์" title="ไฮไลต์" onmousedown="event.preventDefault()" onclick="nxFmt(this)"><span style="background:#ffe9a8;color:#1f1e1c;padding:0 4px;border-radius:3px">ไฮไลต์</span></button>'
     +'<button type="button" data-c="removeFormat" aria-label="ล้างรูปแบบ" title="ล้างรูปแบบ" onmousedown="event.preventDefault()" onclick="nxFmt(this)">Tx</button>'
-    +'<span class="sep nx-mob"></span><button type="button" class="nx-mob" onmousedown="event.preventDefault()" onclick="nxInsert(\'table\')">+ ตาราง</button>'
+    +'<button type="button" aria-label="ใส่ลิงก์" title="ใส่ลิงก์" onmousedown="event.preventDefault()" onclick="nxLinkAsk()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">'+NX_IC.link+'</svg></button>'
+    +'<span class="sep nx-mob"></span><button type="button" class="nx-mob" onmousedown="event.preventDefault()" onclick="nxPickImage()">+ รูป</button><button type="button" class="nx-mob" onmousedown="event.preventDefault()" onclick="nxInsert(\'table\')">+ ตาราง</button>'
     +'<button type="button" class="nx-mob" onmousedown="event.preventDefault()" onclick="nxInsert(\'todo\')">+ เช็กลิสต์</button>'
     +'</div>';
   h+='<h1 class="nx-title" id="nx-title" contenteditable="true" role="textbox" aria-label="ชื่อหน้า" data-ph="ไม่มีชื่อ" oninput="nxTitleInput(this)" onkeydown="nxTitleKey(event)" onpaste="nxPastePlain(event)" onblur="nxFlush()">'+nxEsc(n.title||'')+'</h1>';
-  h+='<div class="nx-body" id="nx-body" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหา" data-ph="พิมพ์ / เพื่อแทรก ตาราง · เช็กลิสต์ · หัวข้อ · หน้าย่อย" data-id="'+n.id+'" oninput="nxBodyInput()" onkeydown="nxKey(event)" onclick="nxBodyClick(event)" onpaste="nxPaste(event)" onblur="nxFlush();setTimeout(nxSlashHide,150)">'+(n.html||noteHtmlOf(n))+'</div>';
+  h+='<div class="nx-body" id="nx-body" contenteditable="true" role="textbox" aria-multiline="true" aria-label="เนื้อหา" data-ph="พิมพ์ / เพื่อแทรก ตาราง · เช็กลิสต์ · หัวข้อ · หน้าย่อย" data-id="'+n.id+'" oninput="nxBodyInput()" onkeydown="nxKey(event)" onclick="nxBodyClick(event)" onpaste="nxPaste(event)" ondragover="if(event.dataTransfer&&Array.prototype.indexOf.call(event.dataTransfer.types||[],\'Files\')>=0)event.preventDefault()" ondrop="nxDropFiles(event)" onblur="nxFlush();setTimeout(nxSlashHide,150)">'+(n.html||noteHtmlOf(n))+'</div>';
   var subs=notes.filter(function(x){return x.parent===n.id;});
   h+='<div class="nx-subs"><div class="nx-lbl" style="margin:0 0 6px">หน้าย่อย'+(subs.length?' · '+subs.length:'')+'</div>'
     +subs.map(function(x){return '<a href="#" class="nx-sublink" data-id="'+x.id+'" onclick="event.preventDefault();nxOpen(this.dataset.id)">'+nxEsc(nxTitleOf(x))+'</a>';}).join('')
@@ -2488,6 +2511,114 @@ function nxMoveSec(id){nxFlush();nxPatch(function(n){n.sec=id;n.parent=null;});n
 function nxOpts(b){var p=document.getElementById('nx-opts');if(!p)return;p.hidden=!p.hidden;b.setAttribute('aria-expanded',!p.hidden);}
 document.addEventListener('mousedown',function(e){var p=document.getElementById('nx-opts');if(p&&!p.hidden&&!e.target.closest('#nx-opts,.nx-more')){p.hidden=true;}});
 function nxSetCover(c){nxFlush();nxPatch(function(n){n.cover=c;});nxRender();}
+// ---------- รูปภาพ (อัปขึ้น Drive ด้วย uploadImagePost เดิม) ----------
+function nxPickImage(){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=true;inp.onchange=function(){Array.prototype.slice.call(inp.files||[]).forEach(nxUploadImage);};inp.click();}
+function nxDropFiles(e){var f=Array.prototype.slice.call((e.dataTransfer&&e.dataTransfer.files)||[]).filter(function(x){return /^image\//.test(x.type);});if(!f.length)return;e.preventDefault();
+  var r=document.caretRangeFromPoint?document.caretRangeFromPoint(e.clientX,e.clientY):null;if(r){var s0=window.getSelection();s0.removeAllRanges();s0.addRange(r);}f.forEach(nxUploadImage);}
+function nxUploadImage(file){
+  var ed=document.getElementById('nx-body');if(!ed)return;
+  var sel=window.getSelection();if(!sel.rangeCount||!ed.contains(sel.anchorNode)){ed.focus();pinCaretEnd(ed);}
+  var id='nxup'+Date.now()+Math.floor(Math.random()*999);
+  document.execCommand('insertHTML',false,'<span class="nx-upl" id="'+id+'" contenteditable="false">⏳ กำลังอัปโหลดรูป…</span>&nbsp;');
+  var rd=new FileReader();
+  rd.onload=function(ev){shrinkImage(ev.target.result,1600,0.85,function(b64){
+    uploadImagePost(b64,file.name||'image.jpg',function(d){
+      var ph=document.getElementById(id);if(!ph)return;
+      var img=document.createElement('img');img.className='nx-img';img.alt='';
+      if(d&&d.ok&&d.url){img.src=d.url;}else{img.src=b64;showToast('⚠️ อัปโหลดไม่สำเร็จ — เก็บรูปไว้ในเครื่องนี้แทน');}
+      ph.parentNode.replaceChild(img,ph);_nxTimer=_nxTimer||-1;nxQueue();
+    });
+  });};
+  rd.readAsDataURL(file);
+}
+document.addEventListener('dblclick',function(e){var im=e.target.closest&&e.target.closest('#nx-body img.nx-img');if(!im)return;im.style.width=im.style.width?'':Math.round(im.getBoundingClientRect().width/2)+'px';nxQueue();});
+// ---------- ลิงก์เว็บ ----------
+var _nxLinkRange=null,_nxLinkEl=null;
+function nxLinkAsk(){
+  var sel=window.getSelection();_nxLinkRange=sel.rangeCount?sel.getRangeAt(0).cloneRange():null;_nxLinkEl=null;
+  nxLinkPop('', sel&&!sel.isCollapsed?String(sel):'');
+}
+function nxLinkPop(url,label){
+  var box=document.getElementById('nx-linkpop');
+  if(!box){box=document.createElement('div');box.id='nx-linkpop';box.className='nx-pop nx-tagpop';box.setAttribute('role','dialog');box.setAttribute('aria-label','ใส่ลิงก์');document.body.appendChild(box);}
+  box.innerHTML='<label class="nx-pop-l">ลิงก์ (https://…)<input id="nx-linkurl" type="url" value="'+nxEsc(url)+'" placeholder="https://" onkeydown="if(event.key===\'Enter\'){event.preventDefault();nxLinkSave();}if(event.key===\'Escape\')nxLinkClose();"></label>'
+    +(_nxLinkEl?'':'<label class="nx-pop-l">ข้อความที่แสดง<input id="nx-linktxt" value="'+nxEsc(label)+'" placeholder="เว้นว่าง = ใช้ลิงก์" onkeydown="if(event.key===\'Enter\'){event.preventDefault();nxLinkSave();}"></label>')
+    +'<div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="nx-btn-dark" style="padding:6px 12px;font-size:12px" onclick="nxLinkSave()">บันทึก</button>'
+    +(_nxLinkEl?'<button type="button" class="nx-btn-light" onclick="window.open(_nxLinkEl.href,\'_blank\',\'noopener\');nxLinkClose()">เปิดลิงก์</button><button type="button" class="nx-danger" onclick="nxLinkRemove()">เอาลิงก์ออก</button>':'<button type="button" class="nx-btn-light" onclick="nxLinkClose()">ยกเลิก</button>')+'</div>';
+  var rc=_nxLinkEl?_nxLinkEl.getBoundingClientRect():(_nxLinkRange?_nxLinkRange.getBoundingClientRect():null);
+  box.style.display='flex';var l=rc&&rc.width+rc.height?rc.left:window.innerWidth/2-130,t=rc&&rc.width+rc.height?rc.bottom+6:120;
+  box.style.left=Math.max(8,Math.min(l,window.innerWidth-box.offsetWidth-8))+'px';if(t+box.offsetHeight>window.innerHeight-8)t=Math.max(8,(rc?rc.top:200)-box.offsetHeight-6);box.style.top=t+'px';
+  var u=document.getElementById('nx-linkurl');if(u)u.focus();
+}
+function nxLinkMenu(a){_nxLinkEl=a;_nxLinkRange=null;nxLinkPop(a.getAttribute('href'),a.textContent);}
+function nxLinkSave(){
+  var u=(document.getElementById('nx-linkurl').value||'').trim();if(!u){nxLinkClose();return;}
+  if(!/^https?:\/\//i.test(u))u='https://'+u;
+  if(!/^https?:\/\/[^\s"<>]+$/i.test(u)){showToast('ลิงก์ไม่ถูกต้อง');return;}
+  if(_nxLinkEl){_nxLinkEl.setAttribute('href',u);}
+  else{
+    var t=document.getElementById('nx-linktxt'),lbl=(t&&t.value.trim())||u,ed=document.getElementById('nx-body');ed.focus();
+    var s0=window.getSelection();s0.removeAllRanges();if(_nxLinkRange&&ed.contains(_nxLinkRange.startContainer))s0.addRange(_nxLinkRange);else pinCaretEnd(ed);
+    document.execCommand('insertHTML',false,'<a class="nx-ext" href="'+nxEsc(u)+'" target="_blank" rel="noopener noreferrer">'+nxEsc(lbl)+'</a>&nbsp;');
+  }
+  _nxTimer=_nxTimer||-1;nxQueue();nxLinkClose();
+}
+function nxLinkRemove(){if(_nxLinkEl){var t=document.createTextNode(_nxLinkEl.textContent);_nxLinkEl.parentNode.replaceChild(t,_nxLinkEl);nxQueue();}nxLinkClose();}
+function nxLinkClose(){var b=document.getElementById('nx-linkpop');if(b)b.style.display='none';_nxLinkEl=null;_nxLinkRange=null;}
+document.addEventListener('mousedown',function(e){var b=document.getElementById('nx-linkpop');if(b&&b.style.display==='flex'&&!e.target.closest('#nx-linkpop,a.nx-ext,.nx-tb'))nxLinkClose();});
+// ---------- เช็กลิสต์ → สร้างงานใน Notion ----------
+function nxTodoLi(){var s0=window.getSelection();if(!s0.rangeCount)return null;var n=s0.anchorNode,el=n&&(n.nodeType===1?n:n.parentNode),ed=document.getElementById('nx-body');var li=el&&el.closest&&el.closest('ul.nx-todo > li');return li&&ed&&ed.contains(li)?li:null;}
+function nxTodoTools(){
+  var b=document.getElementById('nx-todotool'),li=nxTodoLi();
+  if(!li||!(li.innerText||'').trim()){if(b)b.style.display='none';return;}
+  if(!b){b=document.createElement('button');b.type='button';b.id='nx-todotool';b.className='nx-todotool';b.onmousedown=function(e){e.preventDefault();};b.onclick=function(){nxTodoToTask();};document.body.appendChild(b);}
+  b.textContent=li.getAttribute('data-task')?'✓ ส่งเป็นงานแล้ว':'＋ ส่งเป็นงานใน Tasks';b.disabled=!!li.getAttribute('data-task');
+  var rc=li.getBoundingClientRect();b.style.display='block';b.style.top=(rc.top+rc.height/2-13)+'px';
+  b.style.left=Math.min(rc.right+8,window.innerWidth-b.offsetWidth-8)+'px';
+  if(rc.right+8+b.offsetWidth>window.innerWidth-8){b.style.top=(rc.bottom+4)+'px';b.style.left=Math.max(8,rc.left+28)+'px';}
+}
+function nxTodoToTask(){
+  var li=nxTodoLi();if(!li||li.getAttribute('data-task'))return;
+  var name=(li.innerText||'').replace(/\s+/g,' ').trim();if(!name)return;
+  var t=document.getElementById('nx-title'),pageT=t?t.innerText.trim():'';
+  li.setAttribute('data-task','1');nxQueue();nxTodoTools();
+  var p={action:'addTask',name:encodeURIComponent(name),priority:'Medium'};if(pageT)p.note=encodeURIComponent('จาก Note: '+pageT);
+  api(p,function(d){
+    if(!d){li.removeAttribute('data-task');nxQueue();showToast('❌ ส่งเป็นงานไม่สำเร็จ ลองใหม่อีกครั้ง');return;}
+    showToast('✅ เพิ่มงาน "'+name+'" ใน Tasks แล้ว');
+    if(typeof loadMonthTasks==='function')loadMonthTasks(true);
+  });
+}
+function nxMovePage(dir){
+  nxFlush();var notes=notesLoad(),secs=nxSecs(),cur=nxCur(notes),me=notes.find(function(x){return x.id===cur;});if(!me)return;
+  var sib=notes.filter(function(x){return nxSecOf(x,secs)===nxSecOf(me,secs)&&(x.parent||null)===(me.parent||null);}).sort(nxSortKids);
+  var i=sib.indexOf(me),j=i+dir;if(j<0||j>=sib.length){showToast(dir<0?'อยู่บนสุดแล้ว':'อยู่ล่างสุดแล้ว');return;}
+  sib.splice(i,1);sib.splice(j,0,me);sib.forEach(function(x,k){x.ord=k;});notesSave(notes);nxRender();
+  var o=document.getElementById('nx-opts');if(o)o.hidden=false;
+}
+function nxSecMove(id,dir){var a=nxSecs(),i=a.findIndex(function(x){return x.id===id;}),j=i+dir;if(i<0||j<0||j>=a.length)return;var t=a[i];a.splice(i,1);a.splice(j,0,t);nxSecsSave(a);nxRender();var inp=document.getElementById('nx-secname');if(inp)inp.focus();}
+// ---------- สำรอง / นำเข้า ----------
+function nxBackup(){
+  nxFlush();
+  var data={app:'KHUMTONE WORK Note',v:1,at:new Date().toISOString(),sections:nxSecs(),pages:notesLoad(),trash:nxTrash()};
+  var blob=new Blob([JSON.stringify(data)],{type:'application/json'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='khumtone-note-'+TODAY_STR+'.json';document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);showToast('⬇ ดาวน์โหลดไฟล์สำรองแล้ว');
+}
+function nxRestoreFile(inp){
+  var f=inp.files&&inp.files[0];if(!f)return;var rd=new FileReader();
+  rd.onload=function(){
+    var d=null;try{d=JSON.parse(rd.result);}catch(e){}
+    if(!d||d.app!=='KHUMTONE WORK Note'||!Array.isArray(d.pages)){showToast('❌ ไฟล์นี้ไม่ใช่ไฟล์สำรอง Note');return;}
+    // รวมกับของเดิม: หน้าที่ id ซ้ำ ใช้ฉบับที่แก้ล่าสุด
+    var notes=notesLoad(),byId={};notes.forEach(function(n){byId[n.id]=n;});var add=0,upd=0;
+    d.pages.forEach(function(n){if(!n||!n.id)return;n.html=nxSanitize(n.html||'');var o=byId[n.id];if(!o){notes.push(n);add++;}else if((n.updatedAt||'')>(o.updatedAt||'')){Object.assign(o,n);upd++;}});
+    notesSave(notes);
+    var secs=nxSecs();(d.sections||[]).forEach(function(s0){if(s0&&s0.id&&!secs.some(function(x){return x.id===s0.id;}))secs.push(s0);});nxSecsSave(secs);
+    nxRender();showToast('✅ นำเข้าแล้ว: ใหม่ '+add+' หน้า · อัปเดต '+upd+' หน้า');
+  };
+  rd.readAsText(f);inp.value='';
+}
 function nxSetIcon(ic){nxFlush();nxPatch(function(n){n.icon=ic||'';});nxRender();}
 function nxToggleFav(){nxFlush();var n=nxPatch(function(n){n.fav=!n.fav;});nxRender();if(n)showToast(n.fav?'★ เพิ่มในหน้าโปรดแล้ว':'เอาออกจากหน้าโปรดแล้ว');}
 function nxFold(id){var notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n)return;n.fold=!n.fold;notesSave(notes);var side=document.querySelector('#nx .nx-side'),st=side?side.scrollTop:0;nxRender();side=document.querySelector('#nx .nx-side');if(side)side.scrollTop=st;}
@@ -2599,6 +2730,10 @@ document.addEventListener('visibilitychange',function(){if(document.hidden){try{
 function nxPastePlain(e){var d=e.clipboardData;if(!d)return;e.preventDefault();document.execCommand('insertText',false,d.getData('text/plain').replace(/\s+/g,' '));}
 function nxPaste(e){
   var d=e.clipboardData;if(!d)return;
+  var files=Array.prototype.slice.call(d.files||[]).filter(function(f){return /^image\//.test(f.type);});
+  if(files.length){e.preventDefault();files.forEach(nxUploadImage);return;}
+  var txt=(d.getData('text/plain')||'').trim();
+  if(/^https?:\/\/\S+$/i.test(txt)){e.preventDefault();var sel=window.getSelection(),label=sel&&!sel.isCollapsed?String(sel):txt;document.execCommand('insertHTML',false,'<a class="nx-ext" href="'+nxEsc(txt)+'" target="_blank" rel="noopener noreferrer">'+nxEsc(label)+'</a>&nbsp;');nxQueue();return;}
   var html=d.getData('text/html');e.preventDefault();
   if(html)document.execCommand('insertHTML',false,nxSanitize(html));
   else document.execCommand('insertText',false,d.getData('text/plain'));
@@ -2632,6 +2767,8 @@ function nxInsert(k){
   else if(k==='ul'){document.execCommand('insertUnorderedList');}
   else if(k==='ol'){document.execCommand('insertOrderedList');}
   else if(k==='hr'){document.execCommand('insertHTML',false,'<hr><p data-nxf><br></p>');nxFocusMarker();}
+  else if(k==='img'){nxPickImage();return;}
+  else if(k==='link'){nxLinkAsk();return;}
   else if(k==='tag'){document.execCommand('insertHTML',false,'<span class="nx-tag" data-c="y" data-nxnew="1" contenteditable="false">รอดำเนินการ</span>&nbsp;');nxQueue();var nt=ed.querySelector('span[data-nxnew]');if(nt){nt.removeAttribute('data-nxnew');setTimeout(function(){nxTagMenu(nt);},20);}return;}
   else if(k==='page'){
     var parent=ed.dataset.id,id='n'+Date.now();
@@ -2692,6 +2829,8 @@ function nxKey(e){
 function nxBodyClick(e){
   var a=e.target.closest&&e.target.closest('a.nx-link');
   if(a){e.preventDefault();var id=a.getAttribute('data-page');if(notesLoad().some(function(n){return n.id===id;}))nxOpen(id);else showToast('หน้านี้ถูกลบไปแล้ว');return;}
+  var ex=e.target.closest&&e.target.closest('a.nx-ext');
+  if(ex){e.preventDefault();nxLinkMenu(ex);return;}
   var tg=e.target.closest&&e.target.closest('span.nx-tag');
   if(tg){e.preventDefault();nxTagMenu(tg);return;}
   var li=e.target.closest&&e.target.closest('ul.nx-todo > li');
@@ -2761,8 +2900,8 @@ function nxBubble(){
   if(top<64)top=rc.bottom+8;
   tb.style.left=left+'px';tb.style.top=top+'px';
 }
-document.addEventListener('selectionchange',function(){nxBubble();var a=document.activeElement;if(a&&a.id==='nx-body'){nxTableTools();nxTbState();}else{var b=document.getElementById('nx-ttools');if(b&&!(a&&a.closest&&a.closest('#nx-ttools')))b.style.display='none';}});
-window.addEventListener('scroll',function(){var b=document.getElementById('nx-ttools');if(b&&b.style.display==='flex')nxTableTools();nxSlashHide();},true);
+document.addEventListener('selectionchange',function(){nxBubble();var a=document.activeElement;if(a&&a.id==='nx-body'){nxTableTools();nxTbState();nxTodoTools();}else{var tt=document.getElementById('nx-todotool');if(tt&&!(a&&a.id==='nx-todotool'))tt.style.display='none';var b=document.getElementById('nx-ttools');if(b&&!(a&&a.closest&&a.closest('#nx-ttools')))b.style.display='none';}});
+window.addEventListener('scroll',function(){var b=document.getElementById('nx-ttools');if(b&&b.style.display==='flex')nxTableTools();var tt=document.getElementById('nx-todotool');if(tt&&tt.style.display==='block')nxTodoTools();nxSlashHide();},true);
 
 function noteShortDate(iso){if(!iso)return'';var d=new Date(iso);if(isNaN(d))return'';var m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return d.getDate()+' '+m[d.getMonth()];}
 // แก้ในการ์ดได้เลย — บันทึกอัตโนมัติ (ไม่ต้องกดบันทึก)

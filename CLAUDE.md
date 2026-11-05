@@ -73,6 +73,12 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   drag & drop rows `.nx-pgrow` (desktop HTML5 DnD: before/after a page = same parent, onto a section row = move to its root; order `n.ord`,
   `nxSortKids`) · trash localStorage `rudy_nb_trash_v1` [{note,at}] 30 days (`nxTrashAdd/nxRestore/nxPurge`, view `_nxView='trash'`;
   Main quick-note deletes go there too). Test: scratchpad test_nx3.py.
+  Media/links/tasks (5 Nov): images `/รูป`, paste or drop → `nxUploadImage` (shrinkImage 1600 + existing `uploadImagePost` → Drive
+  lh3 url; fallback data URL) → `img.nx-img` (sanitizer allows only lh3/drive or data:image src; dblclick halves width). Web links
+  `a.nx-ext` (`nxLinkAsk` / bubble 🔗 / pasted URL; click → `#nx-linkpop` open/edit/remove). Checklist line → `#nx-todotool`
+  "＋ ส่งเป็นงานใน Tasks" → `api addTask` (note "จาก Note: <page>") + `li[data-task]`. Reorder without drag: ⋯ ↑↓ for pages
+  (`nxMovePage`) and sections (`nxSecMove`). Backup JSON download (`nxBackup`) / import-merge (`nxRestoreFile`, newer updatedAt wins).
+  Test: scratchpad test_nx4.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
