@@ -67,6 +67,12 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Format bar `#nx-tb` = floating dark bubble above a text selection on desktop (`nxBubble` on selectionchange), sticky row while
   typing on phone (+ ตาราง / + เช็กลิสต์ there). Page options moved to ⋯ (`nxOpts` → `#nx-opts`: font, section, cover, delete).
   New pages get cover `NX_COVERS[1]`. Phone: list view ↔ page view (`_nxMob`, back button). Test: scratchpad test_nx.py.
+  More (5 Nov "ทำฟังชันต่อ"): markdown shortcuts at line start (`nxMdCheck`: # ## - * 1. [] > ---) · slash menu icons/groups (`NX_IC`, `g`)
+  · status pills `span.nx-tag[data-c=y|g|b|r|p|n]` (`/สถานะ`, click → `#nx-tagpop` text/colour/presets/delete) · page icon `n.icon`
+  (`NX_ICONS`, ⋯ menu) · favourites `n.fav` (☆ in the crumb row, "หน้าโปรด" list in sidebar) · fold children `n.fold` (`nxFold`) ·
+  drag & drop rows `.nx-pgrow` (desktop HTML5 DnD: before/after a page = same parent, onto a section row = move to its root; order `n.ord`,
+  `nxSortKids`) · trash localStorage `rudy_nb_trash_v1` [{note,at}] 30 days (`nxTrashAdd/nxRestore/nxPurge`, view `_nxView='trash'`;
+  Main quick-note deletes go there too). Test: scratchpad test_nx3.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,

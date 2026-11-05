@@ -797,6 +797,48 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
   .nx-tb button{min-width:34px;height:34px;font-size:13px}
   .nx-tb .nx-tc{min-width:28px;width:28px}
 }
+.nx-pgrow{display:flex;align-items:center;border-radius:6px;position:relative}
+.nx-pgrow .nx-pg{flex:1;min-width:0}
+.nx-pgrow.dragging{opacity:.4}
+.nx-pgrow.drop-before{box-shadow:inset 0 2px 0 #2457c5}
+.nx-pgrow.drop-after{box-shadow:inset 0 -2px 0 #2457c5}
+.nx-sec-row.drop-in{background:#dfe7f7;box-shadow:inset 0 0 0 1.5px #2457c5}
+.nx-fold{flex:none;width:18px;height:22px;border:0;background:transparent;color:#8a877f;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.nx-fold:hover{background:#e6e3dc;color:#1f1e1c}
+.nx-fold-sp{flex:none;width:18px;text-align:center;color:#b3afa5;font-size:11px}
+.nx-pg-ic{flex:none;font-size:13px;line-height:1}
+.nx-pg-fav{margin-left:auto;color:#c47a1e;font-size:11px}
+.nx-sq.sm{width:12px;height:12px;border-radius:3px}
+.nx-favs{padding-left:4px}
+.nx-trashbtn{display:flex;align-items:center;gap:8px;width:100%;margin-top:10px;border:0;background:transparent;border-radius:6px;padding:8px;text-align:left;font-size:13px;color:#6b6b6b;cursor:pointer;font-family:inherit}
+.nx-trashbtn:hover,.nx-trashbtn.on{background:#efece5;color:#1f1e1c}
+.nx-trash{display:flex;flex-direction:column;border:1px solid #ecebe7;border-radius:10px;overflow:hidden}
+.nx-trow{display:flex;align-items:center;gap:8px;padding:10px 12px;border-top:1px solid #f0eee9;flex-wrap:wrap}
+.nx-trow:first-child{border-top:0}
+.nx-trow-t{flex:1;min-width:180px;display:flex;flex-direction:column;gap:2px;font-size:14px}
+.nx-trow-t span{font-size:12px;color:#6b6b6b}
+.nx-btn-light{border:1px solid #e0ddd5;background:#fff;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;color:#1f1e1c}
+.nx-btn-light:hover{background:#f6f4ef}
+.nx-favbtn{font-size:16px;color:#8a877f}
+.nx-favbtn.on{color:#c47a1e}
+.nx-icon.emoji{background:#fff;font-size:34px;letter-spacing:0;box-shadow:0 4px 12px rgba(0,0,0,.12),inset 0 0 0 1px #ecebe7}
+.nx-icons{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.nx-icbtn{height:32px;border:1px solid transparent;background:#f7f6f3;border-radius:6px;font-size:17px;cursor:pointer;padding:0;font-family:inherit}
+.nx-icbtn:hover{background:#efece5}
+.nx-icbtn.on{border-color:#1f1e1c;background:#fff}
+.nx-icbtn.txt{font-size:12px;font-weight:700;color:#37352f}
+.nx-slash{width:290px}
+.nx-slash button{flex-direction:row;align-items:center;gap:10px}
+.nx-sl-ic{flex:none;width:32px;height:32px;border:1px solid #e6e4de;border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;color:#37352f}
+.nx-sl-tx{display:flex;flex-direction:column;min-width:0}
+.nx-slash-h{margin-top:4px}
+.nx-tag{display:inline-block;border-radius:5px;padding:1px 8px;font-size:.82em;font-weight:600;line-height:1.6;cursor:pointer;vertical-align:baseline;white-space:nowrap;border:0;font-family:inherit;user-select:none}
+.nx-tag[data-c=y]{background:#fdecc8;color:#7a4b00}.nx-tag[data-c=g]{background:#dbeddb;color:#1c5a2c}.nx-tag[data-c=b]{background:#d3e5ef;color:#1f4e79}
+.nx-tag[data-c=r]{background:#fde2e1;color:#9f1d1d}.nx-tag[data-c=p]{background:#e8deee;color:#5b2a86}.nx-tag[data-c=n]{background:#ececea;color:#4a4a46}
+.nx-tagpop{position:fixed;z-index:10060;width:240px;margin:0;display:none}
+.nx-tagpre{display:flex;flex-wrap:wrap;gap:5px}
+.nx-tagpre .nx-tag{font-size:12px;padding:3px 8px}
+@media(max-width:760px){.nx-fold{width:28px;height:36px}.nx-icbtn{height:40px}}
 </style>
 </head>
 <body>
@@ -2190,17 +2232,34 @@ var NX_COLORS=['#7c2d2d','#2e5d3a','#c47a1e','#2457c5','#7c3aed','#0e7490','#be1
 var NX_COVERS=['','#e9ddd0','#f3dede','#e3ece4','#f6e7cf','#dfe7f7','#ece3f7','#e6e9ef'];
 var NX_FONTS=[['IBM Plex Sans Thai','IBM Plex'],['Sarabun','Sarabun'],['Noto Serif Thai','Serif'],['Mitr','Mitr']];
 var NX_TXT=[['#1d1d1f','ดำ'],['#d70015','แดง'],['#c93400','ส้ม'],['#248a3d','เขียว'],['#0066cc','น้ำเงิน'],['#8944ab','ม่วง']];
+var NX_IC={
+  table:'<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18M9 4v16"></path>',
+  todo:'<rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M8 12l3 3 5-6"></path>',
+  h2:'<path d="M5 5v14M14 5v14M5 12h9"></path><path d="M18 9h2v10"></path>',
+  h3:'<path d="M5 6v12M12 6v12M5 12h7"></path><path d="M16 9h4l-2 3a2.5 2.5 0 1 1-2 4"></path>',
+  ul:'<circle cx="5" cy="7" r="1.3"></circle><circle cx="5" cy="12" r="1.3"></circle><circle cx="5" cy="17" r="1.3"></circle><path d="M9 7h11M9 12h11M9 17h11"></path>',
+  ol:'<path d="M4 6h2v4M4 10h3M4 14h2.5a1 1 0 0 1 0 2H4l3 3H4"></path><path d="M10 7h10M10 12h10M10 17h10"></path>',
+  quote:'<path d="M5 5v14"></path><path d="M9 8h10M9 12h10M9 16h6"></path>',
+  hr:'<path d="M3 12h18"></path>',
+  tag:'<path d="M3 12V5a2 2 0 0 1 2-2h7l9 9-9 9z"></path><circle cx="8" cy="8" r="1.5"></circle>',
+  page:'<path d="M6 3h9l4 4v14H6z"></path><path d="M14 3v5h5"></path>'
+};
 var NX_BLOCKS=[
-  {k:'table',t:'ตาราง',d:'แถว-คอลัมน์ แก้ได้ทุกช่อง',kw:'table ตาราง tb ตร'},
-  {k:'todo',t:'เช็กลิสต์',d:'ติ๊กได้ทีละข้อ',kw:'todo check เช็ก ลิสต์ cl'},
-  {k:'h2',t:'หัวข้อใหญ่',d:'ตัวใหญ่ สำหรับแบ่งส่วน',kw:'h1 h2 heading หัวข้อ'},
-  {k:'h3',t:'หัวข้อย่อย',d:'ตัวกลาง',kw:'h3 subheading หัวข้อย่อย'},
-  {k:'ul',t:'รายการจุด',d:'• ทีละบรรทัด',kw:'bullet list ul จุด รายการ'},
-  {k:'ol',t:'รายการเลข',d:'1. 2. 3.',kw:'number ol เลข ลำดับ'},
-  {k:'quote',t:'กล่องข้อความเด่น',d:'ไว้เน้นเรื่องสำคัญ',kw:'quote callout เด่น อ้าง'},
-  {k:'hr',t:'เส้นคั่น',d:'แบ่งส่วนด้วยเส้น',kw:'divider hr line เส้น'},
-  {k:'page',t:'หน้าย่อย',d:'สร้างหน้าใหม่ไว้ในหน้านี้',kw:'page subpage หน้า ย่อย'}
+  {k:'table',g:'บล็อกพื้นฐาน',t:'ตาราง',d:'แถว-คอลัมน์ แก้ได้ทุกช่อง',kw:'table ตาราง tb ตร'},
+  {k:'todo',g:'บล็อกพื้นฐาน',t:'เช็กลิสต์',d:'ติ๊กได้ทีละข้อ · พิมพ์ [] ก็ได้',kw:'todo check เช็ก ลิสต์ cl'},
+  {k:'h2',g:'บล็อกพื้นฐาน',t:'หัวข้อใหญ่',d:'พิมพ์ # แล้วเว้นวรรคก็ได้',kw:'h1 h2 heading หัวข้อ'},
+  {k:'h3',g:'บล็อกพื้นฐาน',t:'หัวข้อย่อย',d:'พิมพ์ ## แล้วเว้นวรรคก็ได้',kw:'h3 subheading หัวข้อย่อย'},
+  {k:'ul',g:'บล็อกพื้นฐาน',t:'รายการจุด',d:'พิมพ์ - แล้วเว้นวรรคก็ได้',kw:'bullet list ul จุด รายการ'},
+  {k:'ol',g:'บล็อกพื้นฐาน',t:'รายการเลข',d:'พิมพ์ 1. แล้วเว้นวรรคก็ได้',kw:'number ol เลข ลำดับ'},
+  {k:'tag',g:'อื่น ๆ',t:'ป้ายสถานะ',d:'ป้ายสี เช่น รอเอกสาร / เสร็จแล้ว',kw:'tag status สถานะ ป้าย label'},
+  {k:'quote',g:'อื่น ๆ',t:'กล่องข้อความเด่น',d:'พิมพ์ > แล้วเว้นวรรคก็ได้',kw:'quote callout เด่น อ้าง'},
+  {k:'hr',g:'อื่น ๆ',t:'เส้นคั่น',d:'พิมพ์ --- ก็ได้',kw:'divider hr line เส้น'},
+  {k:'page',g:'อื่น ๆ',t:'หน้าย่อย',d:'สร้างหน้าใหม่ไว้ในหน้านี้',kw:'page subpage หน้า ย่อย'}
 ];
+var NX_TAGS={y:['#fdecc8','#7a4b00'],g:['#dbeddb','#1c5a2c'],b:['#d3e5ef','#1f4e79'],r:['#fde2e1','#9f1d1d'],p:['#e8deee','#5b2a86'],n:['#ececea','#4a4a46']};
+var NX_TAG_PRESETS=[['รอดำเนินการ','y'],['กำลังทำ','b'],['เสร็จแล้ว','g'],['ติดปัญหา','r'],['รอเอกสาร','y'],['ยกเลิก','n']];
+var NX_ICONS=['📄','📌','💡','✅','📦','💰','🏦','🛒','📣','✈️','🐾','🌲','🏠','📊','🎯','⭐'];
+var NX_TRASH_KEY='rudy_nb_trash_v1',_nxView='page',_nxDrag=null;
 var _nxTimer=null,_nxMob='list',_nxSecMenu=null,_nxQ='',_nxSlash=null,_nxDel=null;
 function nxSecsSave(a){try{localStorage.setItem(NX_SEC_KEY,JSON.stringify(a));}catch(e){}}
 function nxSecs(){
@@ -2236,7 +2295,7 @@ function nxSanitize(html){
         el.removeChild(c);return;
       }
       var col=c.style?c.style.color:'',bg=c.style?c.style.backgroundColor:'',fw=c.style?c.style.fontWeight:'',fc=c.getAttribute('color');
-      var cls=c.getAttribute('class')||'',done=c.getAttribute('data-done'),pg=c.getAttribute('data-page');
+      var cls=c.getAttribute('class')||'',done=c.getAttribute('data-done'),pg=c.getAttribute('data-page'),dc=c.getAttribute('data-c');
       var cw=(c.tagName==='TD'||c.tagName==='TH')&&c.style?parseInt(c.style.width,10):0,chh=(c.tagName==='TD'||c.tagName==='TH')&&c.style?parseInt(c.style.height,10):0;
       Array.prototype.slice.call(c.attributes).forEach(function(a){c.removeAttribute(a.name);});
       var st='';
@@ -2249,6 +2308,7 @@ function nxSanitize(html){
       if(st)c.setAttribute('style',st);
       if(c.tagName==='UL'&&/\bnx-todo\b/.test(cls))c.setAttribute('class','nx-todo');
       if(c.tagName==='TABLE')c.setAttribute('class','nx-tbl');
+      if(c.tagName==='SPAN'&&/\bnx-tag\b/.test(cls)&&/^[ygbrpn]$/.test(dc||'')){c.setAttribute('class','nx-tag');c.setAttribute('data-c',dc);c.setAttribute('contenteditable','false');c.removeAttribute('style');}
       if(c.tagName==='LI'&&done==='1')c.setAttribute('data-done','1');
       if(c.tagName==='A'){
         if(pg&&/^[\w-]{1,40}$/.test(pg)){c.setAttribute('class','nx-link');c.setAttribute('data-page',pg);c.setAttribute('contenteditable','false');c.setAttribute('href','#');}
@@ -2266,22 +2326,27 @@ function nxRender(focusId){
   var notes=notesLoad(),secs=nxSecs();
   if(focusId&&notes.some(function(n){return n.id===focusId;})){nxSetCur(focusId);_nxMob='page';}
   var cur=nxCur(notes);
-  root.className='nx '+(_nxMob==='page'&&cur?'mob-page':'mob-list');
+  root.className='nx '+(_nxMob==='page'&&(cur||_nxView==='trash')?'mob-page':'mob-list');
   root.innerHTML='<aside class="nx-side" aria-label="หัวข้อและหน้า">'+nxSideHtml(notes,secs,cur)+'</aside><main class="nx-main" id="nx-main">'+nxPageHtml(notes,secs,cur)+'</main>';
   // ลิงก์หน้าย่อยในเนื้อหา → แสดงชื่อหน้าล่าสุด
   root.querySelectorAll('#nx-body a.nx-link').forEach(function(a){var t=notes.find(function(x){return x.id===a.getAttribute('data-page');});a.textContent=t?nxTitleOf(t):'(หน้าถูกลบ)';});
 }
+function nxSortKids(a,b){var ha=a.ord!=null,hb=b.ord!=null;if(ha&&hb)return a.ord-b.ord;if(ha)return -1;if(hb)return 1;return nxCreated(a)<nxCreated(b)?-1:1;}
+function nxPgIcon(p){return p.icon?'<span class="nx-pg-ic" aria-hidden="true">'+nxEsc(p.icon)+'</span>':'';}
 function nxTree(pages,parent,depth,cur){
-  var kids=pages.filter(function(p){return (p.parent||null)===parent;}).sort(function(a,b){return nxCreated(a)<nxCreated(b)?-1:1;});
+  var kids=pages.filter(function(p){return (p.parent||null)===parent;}).sort(nxSortKids);
   var h='';
   kids.forEach(function(p){
-    h+='<button type="button" class="nx-pg'+(p.id===cur?' on':'')+'" style="padding-left:'+(10+depth*14)+'px" data-id="'+p.id+'" onclick="nxOpen(this.dataset.id)">'
-      +(depth?'<span class="nx-pg-sub" aria-hidden="true">└</span>':'')+'<span class="nx-pg-t" id="nxl-'+p.id+'">'+nxEsc(nxTitleOf(p))+'</span></button>';
-    if(depth<4)h+=nxTree(pages,p.id,depth+1,cur);
+    var has=pages.some(function(x){return x.parent===p.id;});
+    h+='<div class="nx-pgrow'+(p.id===cur?' on':'')+'" style="padding-left:'+(depth*14)+'px" draggable="true" data-id="'+p.id+'" ondragstart="nxDragStart(event)" ondragover="nxDragOver(event)" ondragleave="nxDragLeave(event)" ondrop="nxDrop(event)" ondragend="nxDragEnd()">'
+      +(has?'<button type="button" class="nx-fold" aria-label="'+(p.fold?'แสดงหน้าย่อย':'ซ่อนหน้าย่อย')+'" aria-expanded="'+!p.fold+'" data-id="'+p.id+'" onclick="nxFold(this.dataset.id)"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'+(p.fold?'<path d="M8 5l9 7-9 7z"></path>':'<path d="M5 8l7 9 7-9z"></path>')+'</svg></button>':'<span class="nx-fold-sp" aria-hidden="true">'+(depth?'└':'')+'</span>')
+      +'<button type="button" class="nx-pg'+(p.id===cur?' on':'')+'" data-id="'+p.id+'" onclick="nxOpen(this.dataset.id)">'+nxPgIcon(p)+'<span class="nx-pg-t" id="nxl-'+p.id+'">'+nxEsc(nxTitleOf(p))+'</span>'+(p.fav?'<span class="nx-pg-fav" aria-label="หน้าโปรด">★</span>':'')+'</button></div>';
+    if(depth<4&&!p.fold)h+=nxTree(pages,p.id,depth+1,cur);
   });
   return h;
 }
 function nxSideHtml(notes,secs,cur){
+  if(_nxView==='trash')cur=null;
   var caretD='<svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 8l7 9 7-9z"></path></svg>';
   var caretR='<svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l9 7-9 7z"></path></svg>';
   var dots='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>';
@@ -2295,11 +2360,18 @@ function nxSideHtml(notes,secs,cur){
       h+='<button type="button" class="nx-pg'+(p.id===cur?' on':'')+'" data-id="'+p.id+'" onclick="nxOpen(this.dataset.id)"><span class="nx-sq" style="background:'+s.color+'"></span><span class="nx-pg-t">'+nxEsc(nxTitleOf(p))+'</span></button>';});
     return h;
   }
+  var favs=notes.filter(function(n){return n.fav;});
+  if(favs.length){
+    h+='<div class="nx-lbl">หน้าโปรด</div><div class="nx-pages nx-favs">';
+    favs.forEach(function(p){var s0=secs.find(function(x){return x.id===nxSecOf(p,secs);});
+      h+='<button type="button" class="nx-pg'+(p.id===cur&&_nxView==='page'?' on':'')+'" data-id="'+p.id+'" onclick="nxOpen(this.dataset.id)">'+(p.icon?nxPgIcon(p):'<span class="nx-sq sm" style="background:'+s0.color+'"></span>')+'<span class="nx-pg-t">'+nxEsc(nxTitleOf(p))+'</span></button>';});
+    h+='</div>';
+  }
   h+='<div class="nx-lbl">หัวข้อ</div>';
   secs.forEach(function(s){
     var pages=notes.filter(function(n){return nxSecOf(n,secs)===s.id;});
     var open=s.open!==false||(curNote&&nxSecOf(curNote,secs)===s.id);
-    h+='<div class="nx-sec"><div class="nx-sec-row"><button type="button" class="nx-sec-h" aria-expanded="'+open+'" data-id="'+s.id+'" onclick="nxSecToggle(this.dataset.id)">'+(open?caretD:caretR)
+    h+='<div class="nx-sec"><div class="nx-sec-row" data-sec="'+s.id+'" ondragover="nxDragOver(event)" ondragleave="nxDragLeave(event)" ondrop="nxDrop(event)"><button type="button" class="nx-sec-h" aria-expanded="'+open+'" data-id="'+s.id+'" onclick="nxSecToggle(this.dataset.id)">'+(open?caretD:caretR)
       +'<span class="nx-sq" style="background:'+s.color+'"></span><span class="nx-sec-n">'+nxEsc(s.name)+'</span><span class="nx-cnt">'+pages.length+'</span></button>'
       +'<button type="button" class="nx-sec-more" aria-label="ตั้งค่าหัวข้อ '+nxEsc(s.name)+'" data-id="'+s.id+'" onclick="nxSecMenu(this.dataset.id)">'+dots+'</button></div>';
     if(_nxSecMenu===s.id){
@@ -2312,9 +2384,25 @@ function nxSideHtml(notes,secs,cur){
     h+='</div>';
   });
   h+='<button type="button" class="nx-addsec" onclick="nxSecNew()">+ หัวข้อใหม่</button>';
+  var tr=nxTrash();
+  h+='<button type="button" class="nx-trashbtn'+(_nxView==='trash'?' on':'')+'" onclick="nxShowTrash()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>ถังขยะ'+(tr.length?' <span class="nx-cnt">'+tr.length+'</span>':'')+'</button>';
+  return h;
+}
+function nxTrashHtml(secs){
+  var tr=nxTrash();
+  var h='<div class="nx-doc" style="padding-top:34px"><div class="nx-crumb"><button type="button" class="nx-back" onclick="nxBack()" aria-label="กลับไปรายการหน้า"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button><span>Note</span><span aria-hidden="true">/</span><span class="nx-crumb-me">ถังขยะ</span></div>'
+    +'<h1 class="nx-title" style="outline:none">ถังขยะ</h1><p style="color:#6b6b6b;font-size:14px;margin:0 0 16px">หน้าที่ลบจะอยู่ที่นี่ 30 วัน แล้วลบทิ้งเอง กู้คืนได้ทุกเมื่อก่อนครบกำหนด</p>';
+  if(!tr.length)return h+'<div class="nx-empty" style="padding:40px 0;text-align:left;color:#6b6b6b">ถังขยะว่าง</div></div>';
+  h+='<div class="nx-trash">';
+  tr.forEach(function(x,i){var n=x.note,s0=secs.find(function(q){return q.id===nxSecOf(n,secs);}),left=Math.max(0,30-Math.floor((Date.now()-x.at)/864e5));
+    h+='<div class="nx-trow"><div class="nx-trow-t"><b>'+(n.icon?nxEsc(n.icon)+' ':'')+nxEsc(nxTitleOf(n))+'</b><span>'+nxEsc(s0?s0.name:'ทั่วไป')+' · ลบเมื่อ '+noteShortDate(new Date(x.at).toISOString())+' · เหลือ '+left+' วัน</span></div>'
+      +'<button type="button" class="nx-btn-light" data-i="'+i+'" onclick="nxRestore(+this.dataset.i)">กู้คืน</button>'
+      +'<button type="button" class="nx-danger'+(_nxDel==='tr:'+i?' arm':'')+'" data-i="'+i+'" onclick="nxPurge(+this.dataset.i)">'+(_nxDel==='tr:'+i?'ยืนยันลบถาวร':'ลบถาวร')+'</button></div>';});
+  h+='</div><button type="button" class="nx-danger'+(_nxDel==='tr:all'?' arm':'')+'" style="margin-top:14px" onclick="nxPurge(-1)">'+(_nxDel==='tr:all'?'กดอีกครั้งเพื่อล้างทั้งหมด':'ล้างถังขยะ')+'</button></div>';
   return h;
 }
 function nxPageHtml(notes,secs,cur){
+  if(_nxView==='trash')return nxTrashHtml(secs);
   var n=notes.find(function(x){return x.id===cur;});
   if(!n)return '<div class="nx-empty"><div style="font-size:15px;font-weight:600;margin-bottom:6px">ยังไม่มีหน้า</div><div style="color:#6b6b6b;font-size:13px;margin-bottom:14px">เลือกหัวข้อทางซ้าย แล้วกด "+ เพิ่มหน้า"</div><button type="button" class="nx-btn-dark" onclick="nxNewPage(\''+NX_GEN+'\',null)">+ หน้าใหม่</button></div>';
   var s=secs.find(function(x){return x.id===nxSecOf(n,secs);});
@@ -2322,15 +2410,17 @@ function nxPageHtml(notes,secs,cur){
   var crumbs=[],p=n,guard=0;while(p&&p.parent&&guard++<6){p=notes.find(function(x){return x.id===p.parent;});if(p)crumbs.unshift(p);}
   var h='<div class="nx-cover'+(n.cover?'':' none')+'" style="background:'+(n.cover||'transparent')+'"></div>';
   h+='<div class="nx-doc'+(n.cover?'':' nocover')+'" style="font-family:\''+font+'\',\'IBM Plex Sans Thai\',sans-serif">';
-  h+='<div class="nx-icon" style="background:'+s.color+'" aria-hidden="true">'+nxEsc(nxInit2(s.name))+'</div>';
+  h+=n.icon?'<div class="nx-icon emoji" aria-hidden="true">'+nxEsc(n.icon)+'</div>':'<div class="nx-icon" style="background:'+s.color+'" aria-hidden="true">'+nxEsc(nxInit2(s.name))+'</div>';
   h+='<div class="nx-crumb"><button type="button" class="nx-back" onclick="nxBack()" aria-label="กลับไปรายการหน้า"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>'
     +'<span>'+nxEsc(s.name)+'</span>'+crumbs.map(function(c){return '<span aria-hidden="true">/</span><a href="#" data-id="'+c.id+'" onclick="event.preventDefault();nxOpen(this.dataset.id)">'+nxEsc(nxTitleOf(c))+'</a>';}).join('')
     +'<span aria-hidden="true">/</span><span class="nx-crumb-me" id="nx-crumb-me">'+nxEsc(nxTitleOf(n))+'</span>'
     +'<span class="nx-st" id="nx-st">แก้ไขล่าสุด '+nxAgo(n.updatedAt)+'</span>'
+    +'<button type="button" class="nx-more nx-favbtn'+(n.fav?' on':'')+'" aria-label="'+(n.fav?'เอาออกจากหน้าโปรด':'ปักเป็นหน้าโปรด')+'" aria-pressed="'+!!n.fav+'" title="หน้าโปรด" onclick="nxToggleFav()">'+(n.fav?'★':'☆')+'</button>'
     +'<button type="button" class="nx-more" aria-label="ตัวเลือกหน้า" aria-expanded="false" onclick="nxOpts(this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button></div>';
   // ตัวเลือกหน้า (⋯): ฟอนต์ · หัวข้อ · สีปก · ลบหน้า
   h+='<div class="nx-pop nx-opts" id="nx-opts" hidden><label class="nx-pop-l">ฟอนต์ของหน้านี้<select onchange="nxSetFont(this.value)">'+NX_FONTS.map(function(f){return '<option value="'+f[0]+'"'+(f[0]===font?' selected':'')+' style="font-family:\''+f[0]+'\'">'+f[1]+'</option>';}).join('')+'</select></label>'
     +'<label class="nx-pop-l">อยู่ในหัวข้อ<select onchange="nxMoveSec(this.value)">'+secs.map(function(x){return '<option value="'+x.id+'"'+(x.id===s.id?' selected':'')+'>'+nxEsc(x.name)+'</option>';}).join('')+'</select></label>'
+    +'<div class="nx-pop-l">ไอคอนหน้า</div><div class="nx-icons">'+NX_ICONS.map(function(ic){return '<button type="button" class="nx-icbtn'+(n.icon===ic?' on':'')+'" aria-label="ไอคอน '+ic+'" data-ic="'+ic+'" onclick="nxSetIcon(this.dataset.ic)">'+ic+'</button>';}).join('')+'<button type="button" class="nx-icbtn txt'+(n.icon?'':' on')+'" onclick="nxSetIcon(\'\')" aria-label="ใช้ตัวย่อหัวข้อ">Aa</button></div>'
     +'<div class="nx-pop-l">สีปก</div><div class="nx-cols">'+NX_COVERS.map(function(c){return '<button type="button" class="nx-col'+(c===(n.cover||'')?' on':'')+'" style="background:'+(c||'#fff')+(c?'':';box-shadow:inset 0 0 0 1px #ccc')+'" aria-label="'+(c?'สีปก':'ไม่มีปก')+'" data-c="'+c+'" onclick="nxSetCover(this.dataset.c)"></button>';}).join('')+'</div>'
     +'<button type="button" class="nx-danger nx-del" onclick="nxDeletePage()">ลบหน้า</button></div>';
   // แถบจัดรูปแบบ: คอม = ลอยเหนือข้อความที่เลือก · มือถือ = แถบติดด้านบนตอนกำลังพิมพ์
@@ -2356,7 +2446,7 @@ function nxPageHtml(notes,secs,cur){
 }
 
 // ---------- navigation / sections / pages ----------
-function nxOpen(id){nxFlush();_nxDel=null;nxSetCur(id);_nxMob='page';nxRender();var m=document.getElementById('nx-main');if(m)m.scrollTop=0;if(window.innerWidth<=760)window.scrollTo(0,0);}
+function nxOpen(id){nxFlush();_nxDel=null;_nxView='page';nxSetCur(id);_nxMob='page';nxRender();var m=document.getElementById('nx-main');if(m)m.scrollTop=0;if(window.innerWidth<=760)window.scrollTo(0,0);}
 function nxBack(){nxFlush();_nxMob='list';nxRender();}
 function nxSearch(v){_nxQ=v;var side=document.querySelector('#nx .nx-side');if(!side)return;var notes=notesLoad();side.innerHTML=nxSideHtml(notes,nxSecs(),nxCur(notes));var q=document.getElementById('nx-q');if(q){q.focus();q.setSelectionRange(v.length,v.length);}}
 function nxSecToggle(id){var a=nxSecs();a.forEach(function(s){if(s.id===id)s.open=s.open===false;});nxSecsSave(a);nxRender();}
@@ -2371,7 +2461,7 @@ function nxSecDelete(id){
   nxSecsSave(nxSecs().filter(function(s){return s.id!==id;}));nxRender();showToast('🗑 ลบหัวข้อแล้ว · หน้าย้ายไป "ทั่วไป"');
 }
 function nxNewPage(sec,parent){
-  nxFlush();
+  nxFlush();_nxView='page';
   var notes=notesLoad(),now=new Date().toISOString();
   if(parent){var pp=notes.find(function(x){return x.id===parent;});sec=pp?nxSecOf(pp):NX_GEN;}
   var n={id:'n'+Date.now(),title:'',body:'',html:'',tag:'📌 ทั่วไป',sec:sec||NX_GEN,parent:parent||null,cover:NX_COVERS[1],createdAt:now,updatedAt:now};
@@ -2388,8 +2478,9 @@ function nxDeletePage(){
   var kill={};kill[cur]=1;var grew=true;while(grew){grew=false;notes.forEach(function(n){if(n.parent&&kill[n.parent]&&!kill[n.id]){kill[n.id]=1;grew=true;}});}
   var me=notes.find(function(n){return n.id===cur;}),up=me&&me.parent;
   var cnt=Object.keys(kill).length;
+  nxTrashAdd(notes.filter(function(n){return kill[n.id];}));
   notesSave(notes.filter(function(n){return !kill[n.id];}));
-  nxSetCur(up||'');_nxMob=up?'page':'list';nxRender();showToast('🗑 ลบแล้ว'+(cnt>1?' ('+cnt+' หน้า รวมหน้าย่อย)':''));
+  nxSetCur(up||'');_nxMob=up?'page':'list';nxRender();showToast('🗑 ย้ายไปถังขยะแล้ว'+(cnt>1?' ('+cnt+' หน้า รวมหน้าย่อย)':'')+' · กู้คืนได้ 30 วัน');
 }
 function nxPatch(fn){var notes=notesLoad(),cur=nxCur(notes),n=notes.find(function(x){return x.id===cur;});if(!n)return null;fn(n);n.updatedAt=new Date().toISOString();notesSave(notes);return n;}
 function nxSetFont(f){nxFlush();nxPatch(function(n){n.font=f;});var d=document.querySelector('#nx .nx-doc');if(d)d.style.fontFamily="'"+f+"','IBM Plex Sans Thai',sans-serif";}
@@ -2397,12 +2488,101 @@ function nxMoveSec(id){nxFlush();nxPatch(function(n){n.sec=id;n.parent=null;});n
 function nxOpts(b){var p=document.getElementById('nx-opts');if(!p)return;p.hidden=!p.hidden;b.setAttribute('aria-expanded',!p.hidden);}
 document.addEventListener('mousedown',function(e){var p=document.getElementById('nx-opts');if(p&&!p.hidden&&!e.target.closest('#nx-opts,.nx-more')){p.hidden=true;}});
 function nxSetCover(c){nxFlush();nxPatch(function(n){n.cover=c;});nxRender();}
+function nxSetIcon(ic){nxFlush();nxPatch(function(n){n.icon=ic||'';});nxRender();}
+function nxToggleFav(){nxFlush();var n=nxPatch(function(n){n.fav=!n.fav;});nxRender();if(n)showToast(n.fav?'★ เพิ่มในหน้าโปรดแล้ว':'เอาออกจากหน้าโปรดแล้ว');}
+function nxFold(id){var notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n)return;n.fold=!n.fold;notesSave(notes);var side=document.querySelector('#nx .nx-side'),st=side?side.scrollTop:0;nxRender();side=document.querySelector('#nx .nx-side');if(side)side.scrollTop=st;}
+// ---------- ถังขยะ (30 วัน) ----------
+function nxTrash(){var a=[];try{a=JSON.parse(localStorage.getItem(NX_TRASH_KEY)||'[]');}catch(e){}var lim=Date.now()-30*864e5,b=a.filter(function(x){return x&&x.note&&x.at>lim;});if(b.length!==a.length)nxTrashSave(b);return b;}
+function nxTrashSave(a){try{localStorage.setItem(NX_TRASH_KEY,JSON.stringify(a));}catch(e){showToast('⚠️ ถังขยะเต็ม — ล้างถังขยะก่อน');}}
+function nxTrashAdd(list){var a=nxTrash(),now=Date.now();list.forEach(function(n){a.unshift({note:n,at:now});});nxTrashSave(a.slice(0,300));}
+function nxShowTrash(){nxFlush();_nxView='trash';_nxMob='page';_nxDel=null;nxRender();}
+function nxRestore(i){
+  var a=nxTrash(),x=a[i];if(!x)return;
+  var notes=notesLoad(),n=x.note;
+  if(n.parent&&!notes.some(function(q){return q.id===n.parent;})&&!a.some(function(q,j){return j!==i&&q.note.id===n.parent;}))n.parent=null;
+  if(!notes.some(function(q){return q.id===n.id;}))notes.unshift(n);
+  notesSave(notes);a.splice(i,1);nxTrashSave(a);
+  // หน้าแม่ยังอยู่ในถังขยะ → หน้าย่อยนี้ไปอยู่ระดับบนก่อน
+  if(n.parent&&!notes.some(function(q){return q.id===n.parent;})){n.parent=null;notesSave(notes);}
+  _nxDel=null;nxRender();showToast('↩ กู้คืน "'+nxTitleOf(n)+'" แล้ว');
+}
+function nxPurge(i){
+  var key=i<0?'tr:all':'tr:'+i;
+  if(_nxDel!==key){_nxDel=key;nxRender();setTimeout(function(){if(_nxDel===key){_nxDel=null;if(_nxView==='trash')nxRender();}},3500);return;}
+  _nxDel=null;var a=nxTrash();if(i<0)a=[];else a.splice(i,1);nxTrashSave(a);nxRender();showToast('ลบถาวรแล้ว');
+}
+// ---------- ลากเรียงหน้า (คอม) ----------
+function nxIsDesc(notes,id,anc){var n=notes.find(function(x){return x.id===id;}),g=0;while(n&&n.parent&&g++<10){if(n.parent===anc)return true;n=notes.find(function(x){return x.id===n.parent;});}return false;}
+function nxDragStart(e){var row=e.currentTarget;_nxDrag=row.dataset.id;try{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',_nxDrag);}catch(err){}row.classList.add('dragging');}
+function nxDragOver(e){
+  if(!_nxDrag)return;var t=e.currentTarget;
+  if(t.dataset.id===_nxDrag)return;
+  e.preventDefault();
+  document.querySelectorAll('#nx .drop-before,#nx .drop-after,#nx .drop-in').forEach(function(x){x.classList.remove('drop-before','drop-after','drop-in');});
+  if(t.dataset.sec){t.classList.add('drop-in');return;}
+  var rc=t.getBoundingClientRect();t.classList.add(e.clientY<rc.top+rc.height/2?'drop-before':'drop-after');
+}
+function nxDragLeave(e){e.currentTarget.classList.remove('drop-before','drop-after','drop-in');}
+function nxDragEnd(){_nxDrag=null;document.querySelectorAll('#nx .dragging,#nx .drop-before,#nx .drop-after,#nx .drop-in').forEach(function(x){x.classList.remove('dragging','drop-before','drop-after','drop-in');});}
+function nxDrop(e){
+  e.preventDefault();var t=e.currentTarget,id=_nxDrag;if(!id)return;
+  var after=t.classList.contains('drop-after');nxDragEnd();nxFlush();
+  var notes=notesLoad(),secs=nxSecs(),me=notes.find(function(x){return x.id===id;});if(!me)return;
+  if(t.dataset.sec){ // วางบนหัวข้อ = ย้ายไปท้ายหัวข้อนั้น
+    me.sec=t.dataset.sec;me.parent=null;
+    var sib=notes.filter(function(x){return x!==me&&nxSecOf(x,secs)===me.sec&&!x.parent;}).sort(nxSortKids);sib.push(me);sib.forEach(function(x,k){x.ord=k;});
+  }else{
+    var tg=notes.find(function(x){return x.id===t.dataset.id;});if(!tg||tg.id===id||nxIsDesc(notes,tg.id,id))return;
+    me.sec=nxSecOf(tg,secs);me.parent=tg.parent||null;
+    var sib2=notes.filter(function(x){return x!==me&&nxSecOf(x,secs)===me.sec&&(x.parent||null)===me.parent;}).sort(nxSortKids);
+    var at=sib2.indexOf(tg)+(after?1:0);sib2.splice(at,0,me);sib2.forEach(function(x,k){x.ord=k;});
+    // ย้ายหน้าย่อยตามไปหัวข้อใหม่
+    notes.forEach(function(x){if(nxIsDesc(notes,x.id,me.id))x.sec=me.sec;});
+  }
+  notesSave(notes);var a=nxSecs();a.forEach(function(s0){if(s0.id===me.sec)s0.open=true;});nxSecsSave(a);nxRender();
+}
 
 // ---------- editing / saving ----------
 function nxStatus(t){var s=document.getElementById('nx-st');if(s)s.textContent=t;}
 function nxTitleInput(el){var notes=notesLoad(),cur=nxCur(notes),t=el.innerText.trim()||'ไม่มีชื่อ';var l=document.getElementById('nxl-'+cur);if(l)l.textContent=t;var c=document.getElementById('nx-crumb-me');if(c)c.textContent=t;nxQueue();}
 function nxTitleKey(e){if(e.key==='Enter'){e.preventDefault();var b=document.getElementById('nx-body');if(b){b.focus();pinCaretEnd(b);}}}
-function nxBodyInput(){nxSlashCheck();nxQueue();}
+function nxBodyInput(){if(!nxMdCheck())nxSlashCheck();nxQueue();}
+// ทางลัดแบบ Notion: พิมพ์ที่ต้นบรรทัดแล้วเว้นวรรค — #  ##  -  *  1.  []  >  ---
+function nxMdCheck(){
+  var sel=window.getSelection();if(!sel.rangeCount||!sel.isCollapsed)return false;
+  var r=sel.getRangeAt(0),node=r.startContainer;if(node.nodeType!==3)return false;
+  var el=node.parentNode;if(el.closest&&el.closest('td,th,li,h2,h3,blockquote'))return false;
+  var prev=node.previousSibling;while(prev&&prev.nodeType===3&&!prev.textContent)prev=prev.previousSibling;
+  if(prev&&prev.nodeName!=='BR'&&prev.nodeName!=='DIV'&&prev.nodeName!=='P')return false;
+  var before=node.textContent.slice(0,r.startOffset),m=before.match(/^(#{1,3}|[-*]|1\.|\[\s?\]|>|---)[ \u00a0]$/);
+  if(!m&&before==='---')m=[before,'---'];
+  if(!m)return false;
+  var rr=document.createRange();rr.setStart(node,0);rr.setEnd(node,r.startOffset);sel.removeAllRanges();sel.addRange(rr);document.execCommand('delete');
+  var k=m[1];
+  if(k==='#')nxInsert('h2');else if(k==='##'||k==='###')nxInsert('h3');
+  else if(k==='-'||k==='*')nxInsert('ul');else if(k==='1.')nxInsert('ol');
+  else if(k==='>')nxInsert('quote');else if(k==='---')nxInsert('hr');else nxInsert('todo');
+  nxSlashHide();return true;
+}
+// ---------- ป้ายสถานะ ----------
+function nxTagMenu(tg){
+  var box=document.getElementById('nx-tagpop');
+  if(!box){box=document.createElement('div');box.id='nx-tagpop';box.className='nx-pop nx-tagpop';box.setAttribute('role','dialog');box.setAttribute('aria-label','แก้ป้ายสถานะ');document.body.appendChild(box);}
+  _nxTagEl=tg;
+  box.innerHTML='<label class="nx-pop-l">ข้อความ<input id="nx-tagtxt" value="'+nxEsc(tg.textContent)+'" onkeydown="if(event.key===\'Enter\'){event.preventDefault();nxTagSet(null,this.value);nxTagClose();}if(event.key===\'Escape\')nxTagClose();" oninput="nxTagSet(null,this.value)"></label>'
+    +'<div class="nx-pop-l">สี</div><div class="nx-cols">'+Object.keys(NX_TAGS).map(function(c){return '<button type="button" class="nx-col'+(tg.getAttribute('data-c')===c?' on':'')+'" style="background:'+NX_TAGS[c][0]+';box-shadow:0 0 0 1px '+NX_TAGS[c][1]+'55" aria-label="สีป้าย" data-c="'+c+'" onclick="nxTagSet(this.dataset.c)"></button>';}).join('')+'</div>'
+    +'<div class="nx-pop-l">ตัวเลือกด่วน</div><div class="nx-tagpre">'+NX_TAG_PRESETS.map(function(x){return '<button type="button" class="nx-tag" data-c="'+x[1]+'" onclick="nxTagSet(\''+x[1]+'\',\''+x[0]+'\');nxTagClose()">'+x[0]+'</button>';}).join('')+'</div>'
+    +'<button type="button" class="nx-danger" onclick="nxTagDel()">ลบป้าย</button>';
+  var rc=tg.getBoundingClientRect();box.style.display='flex';
+  box.style.left=Math.max(8,Math.min(rc.left,window.innerWidth-box.offsetWidth-8))+'px';
+  var top=rc.bottom+6;if(top+box.offsetHeight>window.innerHeight-8)top=Math.max(8,rc.top-box.offsetHeight-6);box.style.top=top+'px';
+  var inp=document.getElementById('nx-tagtxt');if(inp){inp.focus();inp.select();}
+}
+var _nxTagEl=null;
+function nxTagSet(c,txt){if(!_nxTagEl)return;if(c){_nxTagEl.setAttribute('data-c',c);var b=document.getElementById('nx-tagpop');if(b)b.querySelectorAll('.nx-cols .nx-col').forEach(function(x){x.classList.toggle('on',x.dataset.c===c);});}if(txt!=null){_nxTagEl.textContent=String(txt).trim()||'สถานะ';}_nxTimer=_nxTimer||-1;nxQueue();}
+function nxTagDel(){if(_nxTagEl&&_nxTagEl.parentNode)_nxTagEl.parentNode.removeChild(_nxTagEl);nxQueue();nxTagClose();}
+function nxTagClose(){var b=document.getElementById('nx-tagpop');if(b)b.style.display='none';_nxTagEl=null;nxFlush();}
+document.addEventListener('mousedown',function(e){var b=document.getElementById('nx-tagpop');if(b&&b.style.display==='flex'&&!e.target.closest('#nx-tagpop,span.nx-tag'))nxTagClose();});
 function nxQueue(){nxStatus('กำลังพิมพ์…');clearTimeout(_nxTimer);_nxTimer=setTimeout(nxFlush,700);}
 function nxFlush(){
   if(_nxTimer===null)return;clearTimeout(_nxTimer);_nxTimer=null;
@@ -2452,6 +2632,7 @@ function nxInsert(k){
   else if(k==='ul'){document.execCommand('insertUnorderedList');}
   else if(k==='ol'){document.execCommand('insertOrderedList');}
   else if(k==='hr'){document.execCommand('insertHTML',false,'<hr><p data-nxf><br></p>');nxFocusMarker();}
+  else if(k==='tag'){document.execCommand('insertHTML',false,'<span class="nx-tag" data-c="y" data-nxnew="1" contenteditable="false">รอดำเนินการ</span>&nbsp;');nxQueue();var nt=ed.querySelector('span[data-nxnew]');if(nt){nt.removeAttribute('data-nxnew');setTimeout(function(){nxTagMenu(nt);},20);}return;}
   else if(k==='page'){
     var parent=ed.dataset.id,id='n'+Date.now();
     document.execCommand('insertHTML',false,'<a class="nx-link" contenteditable="false" href="#" data-page="'+id+'">หน้าย่อยใหม่</a>&nbsp;');
@@ -2474,7 +2655,11 @@ function nxSlashCheck(){
   if(_nxSlash.idx>=items.length)_nxSlash.idx=0;
   var box=document.getElementById('nx-slash');
   if(!box){box=document.createElement('div');box.id='nx-slash';box.className='nx-slash';box.setAttribute('role','listbox');box.setAttribute('aria-label','แทรกบล็อก');document.body.appendChild(box);}
-  box.innerHTML='<div class="nx-slash-h">แทรกบล็อก</div>'+items.map(function(b,i){return '<button type="button" role="option" aria-selected="'+(i===_nxSlash.idx)+'" class="'+(i===_nxSlash.idx?'on':'')+'" data-k="'+b.k+'" onmousedown="event.preventDefault()" onclick="nxSlashPick(this.dataset.k)"><b>'+b.t+'</b><span>'+b.d+'</span></button>';}).join('');
+  var lastG='';
+  box.innerHTML=items.map(function(b,i){var hd=b.g!==lastG?'<div class="nx-slash-h">'+b.g+'</div>':'';lastG=b.g;
+    return hd+'<button type="button" role="option" aria-selected="'+(i===_nxSlash.idx)+'" class="'+(i===_nxSlash.idx?'on':'')+'" data-k="'+b.k+'" onmousedown="event.preventDefault()" onclick="nxSlashPick(this.dataset.k)">'
+      +'<span class="nx-sl-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+NX_IC[b.k]+'</svg></span><span class="nx-sl-tx"><b>'+b.t+'</b><span>'+b.d+'</span></span></button>';}).join('');
+  var onb=box.querySelector('button.on');if(onb&&onb.scrollIntoView)onb.scrollIntoView({block:'nearest'});
   var rc=r.getBoundingClientRect();if(!rc||(!rc.top&&!rc.left)){rc=node.parentNode.getBoundingClientRect();}
   var top=rc.bottom+6,left=Math.min(rc.left,window.innerWidth-280);
   box.style.display='block';box.style.left=Math.max(8,left)+'px';
@@ -2507,6 +2692,8 @@ function nxKey(e){
 function nxBodyClick(e){
   var a=e.target.closest&&e.target.closest('a.nx-link');
   if(a){e.preventDefault();var id=a.getAttribute('data-page');if(notesLoad().some(function(n){return n.id===id;}))nxOpen(id);else showToast('หน้านี้ถูกลบไปแล้ว');return;}
+  var tg=e.target.closest&&e.target.closest('span.nx-tag');
+  if(tg){e.preventDefault();nxTagMenu(tg);return;}
   var li=e.target.closest&&e.target.closest('ul.nx-todo > li');
   if(li&&e.target===li){var rc=li.getBoundingClientRect();if(e.clientX-rc.left<26){if(li.getAttribute('data-done'))li.removeAttribute('data-done');else li.setAttribute('data-done','1');nxQueue();}}
 }
@@ -3991,7 +4178,8 @@ function pinQnDel(btn){
     setTimeout(function(){if(btn.isConnected&&btn.classList.contains('arm'))renderPinned();},3000);return;
   }
   clearTimeout(_pqTimers[id]);delete _pqTimers[id];
-  notesSave(notesLoad().filter(function(x){return x.id!==id;}));
+  var all=notesLoad(),gone=all.filter(function(x){return x.id===id;});if(!empty&&typeof nxTrashAdd==='function')nxTrashAdd(gone);
+  notesSave(all.filter(function(x){return x.id!==id;}));
   renderPinned();if(!empty)showToast('🗑 ลบ note แล้ว');
 }
 window.addEventListener('beforeunload',function(){Object.keys(_pqTimers).forEach(function(id){pinQnFlush(id,true);});});
