@@ -36,7 +36,9 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Quick notes (4 Nov, Dech: "เพิ่ม tap note ใหม่" in the empty band space): `.pin-qadd` tile "+ Note ใหม่" → `pinQnNew` creates a
   `rudy_notes` entry with `main:true` (also shows in the Note tab) → `.pin-qn` sticky (light cream bg like the add tile, 3px top bar `--qc`; colour dots `PIN_QN_COLS` on hover/focus → `pinQnColor`, stored `n.bar`), editor `#pqn-<id>` autosave 800 ms
   (`pinQnInput`/`pinQnFlush`, noteSanitize), delete = 2-tap trash (`pinQnDel`, no confirm() in LINE). Band shows if pinned tasks OR
-  quick notes exist; `showPage('main')` re-renders the band. (The earlier "+" inside the task note box was removed at his request.) Note: 21 of 25 active tasks had no date (Tasks backlog) — that's why pinning is an explicit checkbox,
+  quick notes exist; `showPage('main')` re-renders the band. (The earlier "+" inside the task note box was removed at his request.)
+  Formatting (5 Nov): both pin editors show `pinToolbar()` while focused (B / I / U / 6 text colours `NRT_COLORS` / Tx) → `pinFmt`
+  (execCommand, fires input → autosave; Tx with no selection turns formats off for what's typed next); `pinTbState` marks active B/I/U. Note: 21 of 25 active tasks had no date (Tasks backlog) — that's why pinning is an explicit checkbox,
   not "no date". Main sidebar NOTE notebook was removed (29 Oct) at Dech's request.
 - Note tab (`renderNotes`, localStorage `rudy_notes`): cards + detail panel restyled to Apple frosted single colour (design "การ์ด 5" on the canvas,
   29 Oct). Per-note colour picker removed from the panel (n.color still stored, just unused). Selected card = blue ring (`.note-card.sel`).

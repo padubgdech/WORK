@@ -365,6 +365,14 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .pin-qadd:hover{background:#FFF4CC;border-color:#D7AE64}
 .pin-qadd span{font-size:11px;font-weight:500;color:#B39A5A}
 @media(max-width:760px){.pin-qadd{min-height:56px;flex-direction:row}.pin-qn .pin-nedit{max-height:140px}}
+.pin-tb{display:none;align-items:center;gap:2px;flex-wrap:wrap;margin:2px 0 3px;padding-bottom:4px;border-bottom:1px dashed #EAD9A8}
+.pin-qn:focus-within .pin-tb,.pin-nwrap:focus-within .pin-tb{display:flex}
+.pin-tb button{border:1px solid #EAD9A8;background:#fff;border-radius:5px;min-width:20px;height:21px;padding:0 4px;font-size:12px;line-height:1;color:#3f3a30;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center}
+.pin-tb button:hover{background:#FFF4CC;border-color:#D7AE64}
+.pin-tb button.on{background:#3f3a30;color:#fff;border-color:#3f3a30}
+.pin-tb .ptc{width:16px;min-width:16px;padding:0;font-weight:800;font-size:11px;border-bottom-width:3px}
+.pin-tb .sep{width:1px;height:14px;background:#EAD9A8;margin:0 1px}
+@media(max-width:760px){.pin-tb button{min-width:30px;height:30px;font-size:14px}.pin-tb .ptc{width:26px;min-width:26px}}
 .pin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px;margin-top:8px}
 .pin-band.collapsed .pin-grid{display:none}
 .pin-card{background:#fff;border:.5px solid #ECDCB8;border-top:3px solid;border-radius:8px;padding:7px 8px 7px 10px;display:flex;flex-direction:column;gap:5px;min-width:0}
@@ -3368,7 +3376,7 @@ function renderPinned(){
     h+='<button type="button" class="pin-x" aria-label="ถอดหมุด" title="ถอดหมุด" data-id="'+t.id+'" onclick="togglePin(this.dataset.id)">'+xSvg+'</button></div></div>';
     // จด note สั้น ๆ ได้ตรงนี้เลย — บันทึกเองหลังหยุดพิมพ์ / คลิกออก
     var penSvg='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>';
-    h+='<div class="pin-nwrap" onclick="var e=this.querySelector(\'.pin-nedit\');if(event.target!==e){e.focus();pinCaretEnd(e);}"><div class="pin-nlbl">'+penSvg+'<span>NOTE · พิมพ์ได้เลย</span><span class="pin-nst" id="pns-'+t.id+'"></span></div>';
+    h+='<div class="pin-nwrap" onclick="var e=this.querySelector(\'.pin-nedit\');if(!e.contains(event.target)&&!event.target.closest(\'.pin-tb\')){e.focus();pinCaretEnd(e);}"><div class="pin-nlbl">'+penSvg+'<span>NOTE · พิมพ์ได้เลย</span><span class="pin-nst" id="pns-'+t.id+'"></span></div>'+pinToolbar();
     h+='<div class="pin-nedit" contenteditable="true" role="textbox" aria-multiline="true" aria-label="note ของ '+nm+'" data-ph="แตะเพื่อจด note…" data-id="'+t.id+'" id="pne-'+t.id+'" oninput="pinNoteInput(this)" onblur="pinNoteFlush(this.dataset.id)" onpaste="pinNotePaste(event)" onkeydown="if(event.key===\'Escape\')this.blur()">'+pinNoteHtml(t)+'</div></div>';
     h+='</div>';
   });
@@ -3378,7 +3386,7 @@ function renderPinned(){
     h+='<div class="pin-qn" data-qn="'+n.id+'" style="--qc:'+qc+'"><div class="pin-qn-hd"><span>📝 NOTE</span><span class="pin-qn-cols" role="group" aria-label="สีแถบบน">'
       +PIN_QN_COLS.map(function(c){return '<button type="button" class="pin-qn-col'+(c===qc?' on':'')+'" style="background:'+c+'" aria-label="สีแถบ" aria-pressed="'+(c===qc)+'" data-id="'+n.id+'" data-c="'+c+'" onmousedown="event.preventDefault()" onclick="pinQnColor(this)"></button>';}).join('')
       +'</span><span class="pin-nst" id="pqs-'+n.id+'"></span>';
-    h+='<button type="button" class="pin-qn-del" aria-label="ลบ note" title="ลบ note" data-id="'+n.id+'" onmousedown="event.preventDefault()" onclick="pinQnDel(this)">'+trSvg+'</button></div>';
+    h+='<button type="button" class="pin-qn-del" aria-label="ลบ note" title="ลบ note" data-id="'+n.id+'" onmousedown="event.preventDefault()" onclick="pinQnDel(this)">'+trSvg+'</button></div>'+pinToolbar();
     h+='<div class="pin-nedit" contenteditable="true" role="textbox" aria-multiline="true" aria-label="note" data-ph="จด note…" data-id="'+n.id+'" id="pqn-'+n.id+'" oninput="pinQnInput(this)" onblur="pinQnFlush(this.dataset.id)" onpaste="pinNotePaste(event)" onkeydown="if(event.key===\'Escape\')this.blur()">'+(n.html||String(n.body||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>'))+'</div></div>';
   });
   h+='<button type="button" class="pin-qadd" onclick="pinQnNew()">+ Note ใหม่<span>จดสั้น ๆ ไว้หน้าแรก</span></button>';
@@ -3387,6 +3395,37 @@ function renderPinned(){
 }
 /* ===== Note ด่วนบนแถบปักหมุด — เก็บใน rudy_notes (เห็นในหน้า NOTE ด้วย) ติดธง main:true ===== */
 var _pqTimers={};
+// แถบจัดรูปแบบเล็ก ๆ (โผล่ตอนกำลังพิมพ์): ตัวหนา / เอียง / ขีดเส้นใต้ / สีตัวอักษร / ล้างรูปแบบ
+function pinToolbar(){
+  var h='<div class="pin-tb" role="toolbar" aria-label="จัดรูปแบบตัวอักษร">';
+  h+='<button type="button" data-c="bold" title="ตัวหนา (⌘B)" aria-label="ตัวหนา" onmousedown="event.preventDefault()" onclick="pinFmt(this)"><b>B</b></button>';
+  h+='<button type="button" data-c="italic" title="ตัวเอียง (⌘I)" aria-label="ตัวเอียง" onmousedown="event.preventDefault()" onclick="pinFmt(this)"><i style="font-family:Georgia,serif">I</i></button>';
+  h+='<button type="button" data-c="underline" title="ขีดเส้นใต้ (⌘U)" aria-label="ขีดเส้นใต้" onmousedown="event.preventDefault()" onclick="pinFmt(this)"><u>U</u></button><span class="sep"></span>';
+  NRT_COLORS.forEach(function(c){h+='<button type="button" class="ptc" data-c="foreColor" data-v="'+c[0]+'" title="สี'+c[1]+'" aria-label="ตัวอักษรสี'+c[1]+'" style="color:'+c[0]+';border-bottom-color:'+c[0]+'" onmousedown="event.preventDefault()" onclick="pinFmt(this)">A</button>';});
+  h+='<span class="sep"></span><button type="button" data-c="removeFormat" title="ล้างรูปแบบ" aria-label="ล้างรูปแบบ" onmousedown="event.preventDefault()" onclick="pinFmt(this)">Tx</button></div>';
+  return h;
+}
+function pinFmt(b){
+  var box=b.closest('.pin-qn,.pin-nwrap'),ed=box&&box.querySelector('.pin-nedit');if(!ed)return;
+  if(!ed.contains(document.activeElement)&&document.activeElement!==ed){ed.focus();pinCaretEnd(ed);}
+  try{document.execCommand('styleWithCSS',false,false);}catch(e){}
+  document.execCommand(b.dataset.c,false,b.dataset.v||null);
+  if(b.dataset.c==='removeFormat'){
+    var sel=window.getSelection();
+    if(sel&&sel.isCollapsed){ // ไม่ได้เลือกข้อความ → ปิดรูปแบบสำหรับตัวที่จะพิมพ์ต่อ
+      ['bold','italic','underline'].forEach(function(c){try{if(document.queryCommandState(c))document.execCommand(c);}catch(e){}});
+      document.execCommand('foreColor',false,'#3f3a30');
+    }
+  }
+  ed.dispatchEvent(new Event('input',{bubbles:true}));pinTbState(ed);
+}
+function pinTbState(ed){
+  var box=ed.closest('.pin-qn,.pin-nwrap');if(!box)return;
+  box.querySelectorAll('.pin-tb button[data-c=bold],.pin-tb button[data-c=italic],.pin-tb button[data-c=underline]').forEach(function(x){
+    var on=false;try{on=document.queryCommandState(x.dataset.c);}catch(e){}x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);
+  });
+}
+document.addEventListener('selectionchange',function(){var a=document.activeElement;if(a&&a.classList&&a.classList.contains('pin-nedit'))pinTbState(a);});
 var PIN_QN_COLS=['#D7AE64','#C8363D','#E07A2E','#2E7D4F','#2457C5','#7C3AED'];
 function pinQnColor(b){ // เปลี่ยนสีแถบบนของ note (เก็บใน n.bar)
   var id=b.dataset.id,c=b.dataset.c,notes=notesLoad(),n=notes.find(function(x){return x.id===id;});if(!n)return;
