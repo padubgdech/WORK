@@ -998,7 +998,9 @@ li:hover>.tp-x,.tp-x:focus-visible{opacity:1}.tp-x:hover{background:#fde6e8;colo
 .tp-none{color:#8a90a6;font-size:12.5px;padding:10px 2px}.tp-none.big{background:#fff;border:1px dashed #d7d9e6;border-radius:16px;padding:28px 18px;text-align:center;font-size:13.5px}
 .tp-exf{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
 .tp-exf select,.tp-exf input,.tp-pkf input{border:1px solid #e4e6ef;border-radius:10px;padding:8px 10px;font-size:13px;font-family:inherit;min-width:0;background:#fff}
-.tp-exf select{grid-column:1/-1}.tp-exf input[name=note]{grid-column:1/-1}.tp-exf .tp-btn-d{grid-column:1/-1}
+.tp-exf select{grid-column:1/-1}.tp-exf .tp-exf-d{grid-column:1/-1}
+.tp-ex-d{display:block;margin-top:3px;border:1px solid #e4e6ef;background:#f7f7fb;border-radius:999px;padding:2px 6px;font-size:11px;font-family:inherit;color:#4b5168;max-width:150px;cursor:pointer}
+.tp-ex-g{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:700;color:#4b5168;background:#f3f2fb;border-radius:8px;padding:5px 10px;margin-top:6px}.tp-ex-g b{color:#1d2033}.tp-exf input[name=note]{grid-column:1/-1}.tp-exf .tp-btn-d{grid-column:1/-1}
 .tp-cnt{margin-left:auto;font-size:12px;color:#8a90a6;font-weight:600}
 .tp-pkl li{display:flex;align-items:center;gap:6px;padding:4px 0}.tp-pkl label{flex:1;display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer}
 .tp-pkl input{width:17px;height:17px;accent-color:#7c6cf0}.tp-pkl .dn{text-decoration:line-through;color:#a0a5b8}
@@ -3554,21 +3556,39 @@ function tpNextHtml(t){
 function tpExpHtml(t){
   var ex=t.exp||[],tot=ex.reduce(function(a,x){return a+(+x.amt||0);},0);
   var list=ex.filter(function(x){return _tpFilter==='all'||x.cat===_tpFilter;});
-  list.sort(_tpSort==='amt'?function(a,b){return (b.amt||0)-(a.amt||0);}:function(a,b){return (b.at||0)-(a.at||0);});
+  var dkey=function(x){return x.date==='pre'?'0':(x.date||'9');};
+  list.sort(_tpSort==='amt'?function(a,b){return (b.amt||0)-(a.amt||0);}:_tpSort==='day'?function(a,b){return dkey(a)<dkey(b)?-1:dkey(a)>dkey(b)?1:(a.at||0)-(b.at||0);}:function(a,b){return (b.at||0)-(a.at||0);});
+  var days=tpExpDays(t);
   var who={};ex.forEach(function(x){if(x.who)who[x.who]=1;});
-  var h='<section class="tp-card tp-exp" aria-label="ค่าใช้จ่าย"><div class="tp-card-h">ค่าใช้จ่าย<span class="tp-avs">'+Object.keys(who).slice(0,4).map(function(w){return '<i title="'+tpEsc(w)+'">'+tpEsc(w.charAt(0))+'</i>';}).join('')+'</span></div>'
+  var h='<section class="tp-card tp-exp" aria-label="ค่าใช้จ่าย"><div class="tp-card-h">ค่าใช้จ่าย<span class="tp-avs">'+Object.keys(who).slice(0,4).map(function(w){return '<i title="'+tpEsc(w)+'">'+tpEsc(tpIni(w))+'</i>';}).join('')+'</span></div>'
     +'<div class="tp-tot"><b>ค่าใช้จ่ายรวม</b><span class="tp-tot-v">'+tpMoney(tot)+'</span></div>'
     +'<div class="tp-chips" role="group" aria-label="หมวดค่าใช้จ่าย"><button type="button" class="tp-chip'+(_tpFilter==='all'?' on':'')+'" onclick="tpFilt(\'all\')">ทั้งหมด</button>'
     +TP_CATS.map(function(c){var sum=ex.filter(function(x){return x.cat===c[0];}).reduce(function(a,x){return a+(+x.amt||0);},0);return '<button type="button" class="tp-chip'+(_tpFilter===c[0]?' on':'')+'" onclick="tpFilt(\''+c[0]+'\')">'+c[2]+' '+c[1]+(sum?' · '+tpMoney(sum):'')+'</button>';}).join('')+'</div>'
-    +'<div class="tp-sort"><label>เรียง <select onchange="_tpSort=this.value;renderTrip()"><option value="late"'+(_tpSort==='late'?' selected':'')+'>ล่าสุด</option><option value="amt"'+(_tpSort==='amt'?' selected':'')+'>มากสุด</option></select></label></div>';
+    +'<div class="tp-sort"><label>เรียง <select onchange="_tpSort=this.value;renderTrip()"><option value="late"'+(_tpSort==='late'?' selected':'')+'>ล่าสุด</option><option value="amt"'+(_tpSort==='amt'?' selected':'')+'>มากสุด</option><option value="day"'+(_tpSort==='day'?' selected':'')+'>ตามวัน</option></select></label></div>';
+  var lastG=null;
   h+='<ul class="tp-exl">'+(list.length?list.map(function(x){var c=TP_CATS.find(function(q){return q[0]===x.cat;})||TP_CATS[6];
-      return '<li><i class="tp-av">'+tpEsc((x.who||'?').charAt(0))+'</i><div class="tp-ex-t"><b>'+tpEsc(x.note||c[1])+'</b><small>'+c[2]+' '+c[1]+(x.who?' · '+tpEsc(x.who):'')+'</small></div><span class="tp-ex-a">'+tpMoney(x.amt)+'</span>'
+      var g='';if(_tpSort==='day'){var k=x.date||'';if(k!==lastG){lastG=k;var sub=list.filter(function(y){return (y.date||'')===k;}).reduce(function(a,y){return a+(+y.amt||0);},0);g='<li class="tp-ex-g"><span>'+tpEsc(tpExpDayLabel(t,k))+'</span><b>'+tpMoney(sub)+'</b></li>';}}
+      return g+'<li><i class="tp-av">'+tpEsc(tpIni(x.who))+'</i><div class="tp-ex-t"><b>'+tpEsc(x.note||c[1])+'</b><small>'+c[2]+' '+c[1]+(x.who?' · '+tpEsc(x.who):'')+'</small>'+tpExpDaySel(t,days,x.date||'','tp-ex-d',' data-id="'+x.id+'" onchange="tpExpSetDay(this.dataset.id,this.value)" aria-label="วันที่ของรายการ"')+'</div><span class="tp-ex-a">'+tpMoney(x.amt)+'</span>'
       +'<button type="button" class="tp-x" aria-label="ลบรายการ" data-id="'+x.id+'" onclick="tpExpDel(this.dataset.id)">×</button></li>';}).join(''):'<li class="tp-none">ยังไม่มีรายการ'+(_tpFilter!=='all'?'ในหมวดนี้':'')+'</li>')+'</ul>';
   h+='<form class="tp-exf" onsubmit="event.preventDefault();tpExpAdd(this)"><select name="cat" aria-label="หมวด">'+TP_CATS.map(function(c){return '<option value="'+c[0]+'"'+((_tpFilter===c[0])?' selected':'')+'>'+c[2]+' '+c[1]+'</option>';}).join('')+'</select>'
     +'<input name="note" placeholder="รายการ เช่น โรงแรมคืนแรก" aria-label="รายการ"><input name="who" placeholder="ใครจ่าย" aria-label="ใครจ่าย" value="'+tpEsc(t.lastWho||'เดช')+'"><input name="amt" type="number" inputmode="decimal" min="0" step="any" placeholder="บาท" aria-label="จำนวนเงิน" required>'
+    +(days.length?tpExpDaySel(t,days,tpExpDefDay(t,days),'tp-exf-d',' name="date" aria-label="วันที่จ่าย"'):'<input name="date" type="date" class="tp-exf-d" aria-label="วันที่จ่าย" value="'+(_tpExpDay&&_tpExpDay!=='pre'?_tpExpDay:'')+'">')
     +'<button type="submit" class="tp-btn-d">+ เพิ่ม</button></form></section>';
   return h;
 }
+// วันของค่าใช้จ่าย: วันในทริป (start..end) + "ก่อนเดินทาง" (จองล่วงหน้า) + ไม่ระบุ
+var _tpExpDay=null;
+function tpIni(w){w=String(w||'?').trim();var m=w.match(/^[เแโใไ]?(.)/);return m?m[1]:'?';} // อักษรแรกของชื่อ (ข้ามสระหน้า เ แ โ ใ ไ)
+function tpExpDays(t){var o=[];if(!t.start)return o;var e=t.end&&t.end>=t.start?t.end:t.start;for(var d=t.start,i=0;d<=e&&i<60;d=addDays(d,1),i++)o.push(d);return o;}
+function tpExpDayLabel(t,k){if(!k)return 'ไม่ระบุวัน';if(k==='pre')return 'ก่อนเดินทาง';var dm=tpDM(k),i=t.start?Math.round((new Date(k)-new Date(t.start))/864e5)+1:0;return (i>0&&(!t.end||k<=t.end)?'วันที่ '+i+' · ':'')+dm[0]+' '+dm[1];}
+function tpExpDefDay(t,days){if(_tpExpDay!=null&&(_tpExpDay===''||_tpExpDay==='pre'||days.indexOf(_tpExpDay)>=0))return _tpExpDay;if(days.indexOf(TODAY_STR)>=0)return TODAY_STR;return TODAY_STR<days[0]?'pre':'';}
+function tpExpDaySel(t,days,v,cls,attrs){
+  var o='<option value="">ไม่ระบุวัน</option><option value="pre"'+(v==='pre'?' selected':'')+'>ก่อนเดินทาง</option>'
+    +days.map(function(d){return '<option value="'+d+'"'+(d===v?' selected':'')+'>'+tpEsc(tpExpDayLabel(t,d))+'</option>';}).join('');
+  if(v&&v!=='pre'&&days.indexOf(v)<0)o+='<option value="'+v+'" selected>'+tpEsc(tpExpDayLabel(t,v))+'</option>';
+  return '<select class="'+cls+'"'+attrs+'>'+o+'</select>';
+}
+function tpExpSetDay(id,v){tpMut(function(t){var x=(t.exp||[]).find(function(y){return y.id===id;});if(x){if(v)x.date=v;else delete x.date;}});}
 function tpPackHtml(t){
   var pk=t.pack||[],done=pk.filter(function(x){return x.done;}).length;
   return '<section class="tp-card tp-pack" aria-label="ของที่ต้องเตรียม"><div class="tp-card-h">ของที่ต้องเตรียม<span class="tp-cnt">'+done+'/'+pk.length+'</span></div>'
@@ -4009,8 +4029,8 @@ function tpMut(fn){var d=tpLoad(),t=tpCur(d);if(!t)return;fn(t,d);tpStore(d);ren
 function tpSwitch(id){var d=tpLoad();d.cur=id;tpStore(d,true);renderTrip();}
 function tpSetTrans(k){tpMut(function(t){t.transport=k;});}
 function tpFilt(k){_tpFilter=k;renderTrip();}
-function tpExpAdd(f){var a=parseFloat(f.amt.value);if(!(a>=0))return;var who=f.who.value.trim(),cat=f.cat.value;
-  tpMut(function(t){t.exp=t.exp||[];t.exp.push({id:tpUid(),cat:cat,who:who,amt:a,note:f.note.value.trim(),at:Date.now()});if(who)t.lastWho=who;});
+function tpExpAdd(f){var a=parseFloat(f.amt.value);if(!(a>=0))return;var who=f.who.value.trim(),cat=f.cat.value,dt=f.date?f.date.value:'';_tpExpDay=dt;
+  tpMut(function(t){t.exp=t.exp||[];var o={id:tpUid(),cat:cat,who:who,amt:a,note:f.note.value.trim(),at:Date.now()};if(dt)o.date=dt;t.exp.push(o);if(who)t.lastWho=who;});
   var nf=document.querySelector('#tp .tp-exf input[name=note]');if(nf)nf.focus();}
 function tpExpDel(id){tpMut(function(t){t.exp=(t.exp||[]).filter(function(x){return x.id!==id;});});}
 function tpPackAdd(f){var v=f.t.value.trim();if(!v)return;tpMut(function(t){t.pack=t.pack||[];v.split(/[,\n]/).map(function(x){return x.trim();}).filter(String).forEach(function(x){t.pack.push({id:tpUid(),t:x,done:false});});});var i=document.querySelector('#tp .tp-pkf input');if(i)i.focus();}

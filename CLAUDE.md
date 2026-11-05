@@ -140,7 +140,10 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   (`tpPinToggle`, crosshair, click → `tpPinAt` temp marker + Nominatim reverse for the name). Panel `#tp-mpan` (`tpPan`, events don't reach
   the map): list → item (image, Wikipedia link, stop select = nearest stop or "＋ เมืองใหม่" → opens stop dialog with coords, day buttons
   `tpPanDays`) → `tpPanSave` adds the spot WITHOUT redrawing the map (re-renders only `.tp-mid`, adds a `.tp-mk.sp` marker). Panel max 58 % of map;
-  phone map grows to 540px while the panel is open. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
+  phone map grows to 540px while the panel is open.
+  Expense day (5 Nov "ให้สามารถเลือกวันได้"): `exp[].date` = trip day YYYY-MM-DD | 'pre' (ก่อนเดินทาง) | none; form select `.tp-exf-d` (`tpExpDaySel`,
+  default `tpExpDefDay`: last used → today if in trip → 'pre' before the trip; no trip start → date input); row chip select `.tp-ex-d` →
+  `tpExpSetDay`; sort "ตามวัน" groups rows with daily subtotals `.tp-ex-g`. Test: test_expday.py. Test: test_sug.py (Leaflet, mocks askRudy/wiki/overpass/reverse), test_sug_ml.py (MapLibre).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,
   startTime, endTime, priority, location, note, queryDate, reply}. Confirm card (ยืนยัน/แก้ไข) then calls existing `addTask`
