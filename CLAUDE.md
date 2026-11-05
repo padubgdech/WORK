@@ -82,6 +82,13 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Cover/icon images (5 Nov "ให้สามารถเพื่มรูปได้"): cover hover buttons `.nx-cov-acts` (top-right) → `nxPickCover` (1800px → Drive) →
   `n.coverImg` + `n.coverPos` (0–100 %, "↕ จัดตำแหน่ง" = drag `#nx-cover.repos`); icon is a button → `#nx-iconpop` (upload `n.iconImg`
   256px, emoji `n.icon`, Aa = section initials). Phone format bar shows only while title/body focused (`.nx-tb.mob-on`). Test: test_nx5.py.
+  SYNC (5 Nov): no new GAS — reuses note-html-sync `saveNoteHtml`/`getNoteHtml` as a key→text store (49k/key, newer ts wins).
+  Keys: `nx__idx` = {pages:{id:ts}, dead:{id:ts} (60 d), secs, secsTs}, `nx_<pageId>` = page JSON (data: images stripped).
+  `nxSync()`: read idx → merge with local (`rudy_nb_synced` = ids known at last sync → missing locally = deleted → dead) → push newer
+  local pages → pull newer remote pages (skip the page being typed) → kill dead ones (into local trash) → write merged idx.
+  `notesSave`/`nxSecsSave` are wrapped to call `nxSyncSoon(4s)`; also on load (+3.5 s), Note tab open, tab visible. Section seeding
+  writes localStorage directly so a fresh device never overrides real sections (`rudy_nb_sec_ts`). Status button `#nx-sync` in the
+  sidebar footer (click = sync now). Old GAS without noteHtml flag → `_nxSync.off`. Test: scratchpad test_sync.py (2 devices).
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Rudy chat (3 Nov, design "แชท Rudy 1" on the canvas): floating `#rudy-fab` bottom-right (mobile: above tab bar) → `#rudy-chat` panel.
   No new GAS code: `askRudy` (existing, Gemini 2.5 Flash) only classifies/extracts → JSON {type task|event|note|query|chat, name, date,

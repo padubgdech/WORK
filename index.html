@@ -864,6 +864,9 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
 .nx-iconpop{position:absolute;left:44px;z-index:10047;width:250px;margin-top:6px}
 .nx-btn-light{display:inline-flex;align-items:center;gap:6px}
 @media(max-width:760px){.nx-cover.img{height:150px}.nx-iconpop{left:16px;right:16px;width:auto}}
+.nx-sync{display:block;width:100%;text-align:left;border:0;background:transparent;font-size:11.5px;color:#6b6b6b;padding:6px 8px;border-radius:6px;cursor:pointer;font-family:inherit}
+.nx-sync:hover{background:#efece5}
+.nx-sync.busy{color:#2457c5}.nx-sync.err{color:#b42318}.nx-sync.ok{color:#2e7d4f}
 </style>
 </head>
 <body>
@@ -2209,7 +2212,7 @@ function goTab(p,btn){
   document.querySelectorAll('.tab').forEach(function(b){b.className='tab';});btn.className='tab active';
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('show');});document.getElementById('page-'+p).classList.add('show');
   var m=tabMeta[p];document.getElementById('ph-title').textContent=m.title;document.getElementById('ph-stats').style.display=m.stats?'flex':'none';
-  document.body.classList.toggle('nx-full',p==='note'); // หน้า Note แบบเต็มจอ (ซ่อนหัวหน้า + ไม่มีขอบ)
+  document.body.classList.toggle('nx-full',p==='note');if(p==='note'&&typeof nxSyncSoon==='function')nxSyncSoon(300); // หน้า Note แบบเต็มจอ (ซ่อนหัวหน้า + ไม่มีขอบ)
   if(p==='main')renderPinned();if(p==='tasks')renderNDTasks();if(p==='history')renderHistory();if(p==='summary')renderSummary();if(p==='cal')renderCal();if(p==='note')renderNotes();
   try{localStorage.setItem('rudyLastTab',p);}catch(err){}
 }
@@ -2293,8 +2296,8 @@ var _nxTimer=null,_nxMob='list',_nxSecMenu=null,_nxQ='',_nxSlash=null,_nxDel=nul
 function nxSecsSave(a){try{localStorage.setItem(NX_SEC_KEY,JSON.stringify(a));}catch(e){}}
 function nxSecs(){
   var a=null;try{a=JSON.parse(localStorage.getItem(NX_SEC_KEY)||'null');}catch(e){}
-  if(!a||!a.length){a=[{id:NX_GEN,name:'ทั่วไป',color:'#6b6b6b',open:true},{id:'s_kt',name:'KHUMTONE',color:'#7c2d2d'},{id:'s_sf',name:'STILL FOREST',color:'#2e5d3a'},{id:'s_pz',name:'PETZATO',color:'#c47a1e'}];nxSecsSave(a);}
-  if(!a.some(function(s){return s.id===NX_GEN;})){a.unshift({id:NX_GEN,name:'ทั่วไป',color:'#6b6b6b'});nxSecsSave(a);}
+  if(!a||!a.length){a=[{id:NX_GEN,name:'ทั่วไป',color:'#6b6b6b',open:true},{id:'s_kt',name:'KHUMTONE',color:'#7c2d2d'},{id:'s_sf',name:'STILL FOREST',color:'#2e5d3a'},{id:'s_pz',name:'PETZATO',color:'#c47a1e'}];try{localStorage.setItem(NX_SEC_KEY,JSON.stringify(a));}catch(e){}}
+  if(!a.some(function(s){return s.id===NX_GEN;})){a.unshift({id:NX_GEN,name:'ทั่วไป',color:'#6b6b6b'});try{localStorage.setItem(NX_SEC_KEY,JSON.stringify(a));}catch(e){}}
   return a;
 }
 function nxEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -2357,6 +2360,7 @@ function nxSanitize(html){
 // ---------- render ----------
 function nxRender(focusId){
   var root=document.getElementById('nx');if(!root)return;
+  ['nx-ttools','nx-todotool','nx-tagpop','nx-linkpop','nx-slash'].forEach(function(i){var x=document.getElementById(i);if(x)x.style.display='none';});
   var notes=notesLoad(),secs=nxSecs();
   if(focusId&&notes.some(function(n){return n.id===focusId;})){nxSetCur(focusId);_nxMob='page';}
   var cur=nxCur(notes);
@@ -2420,7 +2424,7 @@ function nxSideHtml(notes,secs,cur){
   });
   h+='<button type="button" class="nx-addsec" onclick="nxSecNew()">+ หัวข้อใหม่</button>';
   var tr=nxTrash();
-  h+='<div class="nx-side-ft"><button type="button" class="nx-trashbtn'+(_nxView==='trash'?' on':'')+'" onclick="nxShowTrash()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>ถังขยะ'+(tr.length?' <span class="nx-cnt">'+tr.length+'</span>':'')+'</button>'
+  h+='<div class="nx-side-ft"><button type="button" id="nx-sync" class="nx-sync" title="กดเพื่อซิงก์ตอนนี้" onclick="nxSync()">'+nxSyncLabel()+'</button><button type="button" class="nx-trashbtn'+(_nxView==='trash'?' on':'')+'" onclick="nxShowTrash()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>ถังขยะ'+(tr.length?' <span class="nx-cnt">'+tr.length+'</span>':'')+'</button>'
     +'<button type="button" class="nx-trashbtn" onclick="nxBackup()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>ดาวน์โหลดสำรอง</button>'
     +'<label class="nx-trashbtn" style="cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"></path></svg>นำเข้าไฟล์สำรอง<input type="file" accept="application/json,.json" style="display:none" onchange="nxRestoreFile(this)"></label></div>';
   return h;
@@ -2683,7 +2687,7 @@ function nxTrashAdd(list){var a=nxTrash(),now=Date.now();list.forEach(function(n
 function nxShowTrash(){nxFlush();_nxView='trash';_nxMob='page';_nxDel=null;nxRender();}
 function nxRestore(i){
   var a=nxTrash(),x=a[i];if(!x)return;
-  var notes=notesLoad(),n=x.note;
+  var notes=notesLoad(),n=x.note;n.updatedAt=new Date().toISOString();
   if(n.parent&&!notes.some(function(q){return q.id===n.parent;})&&!a.some(function(q,j){return j!==i&&q.note.id===n.parent;}))n.parent=null;
   if(!notes.some(function(q){return q.id===n.id;}))notes.unshift(n);
   notesSave(notes);a.splice(i,1);nxTrashSave(a);
@@ -2956,6 +2960,140 @@ function nxBubble(){
 }
 document.addEventListener('selectionchange',function(){nxBubble();var a=document.activeElement;if(a&&a.id==='nx-body'){nxTableTools();nxTbState();nxTodoTools();}else{var tt=document.getElementById('nx-todotool');if(tt&&!(a&&a.id==='nx-todotool'))tt.style.display='none';var b=document.getElementById('nx-ttools');if(b&&!(a&&a.closest&&a.closest('#nx-ttools')))b.style.display='none';}});
 window.addEventListener('scroll',function(){var b=document.getElementById('nx-ttools');if(b&&b.style.display==='flex')nxTableTools();var tt=document.getElementById('nx-todotool');if(tt&&tt.style.display==='block')nxTodoTools();nxSlashHide();},true);
+
+/* ===== ซิงก์ Note ข้ามเครื่อง (5 พ.ย.) — ใช้ saveNoteHtml/getNoteHtml (note-html-sync.gs ที่ติดตั้งแล้ว) เป็นที่เก็บ key→ข้อความ
+   nx__idx = สารบัญ {pages:{id:ts}, dead:{id:ts}, secs, secsTs} · nx_<id> = หน้า 1 หน้า (JSON) · ฉบับที่ ts ใหม่กว่าชนะ
+   ลบในเครื่อง = id ที่เคยซิงก์ (rudy_nb_synced) แต่หายไปจากเครื่อง → บันทึกเป็น dead ให้เครื่องอื่นลบตาม */
+var NX_SYNCED_KEY='rudy_nb_synced',NX_SECTS_KEY='rudy_nb_sec_ts',NX_SYNCAT_KEY='rudy_nb_sync_at';
+var _nxSync={busy:false,again:false,t:null,off:false,state:'',at:0};
+function nxTs(n){var t=Date.parse(n&&n.updatedAt||'');return isNaN(t)?0:t;}
+function nxSyncSoon(ms){if(_nxSync.off||_nxSync.pulling)return;clearTimeout(_nxSync.t);_nxSync.t=setTimeout(nxSync,ms||4000);}
+function nxSyncStatus(st,msg){
+  _nxSync.state=st;var el=document.getElementById('nx-sync');if(!el)return;
+  el.className='nx-sync '+st;el.textContent=msg||nxSyncLabel();
+}
+function nxSyncLabel(){
+  if(_nxSync.off)return '☁ ซิงก์ยังไม่พร้อม (ใช้ได้เฉพาะเครื่องนี้)';
+  if(_nxSync.state==='busy')return '☁ กำลังซิงก์…';
+  if(_nxSync.state==='err')return '☁ ซิงก์ไม่สำเร็จ — จะลองใหม่';
+  var at=Number(_ls(NX_SYNCAT_KEY)||0);return at?'☁ ซิงก์แล้ว '+nxAgo(new Date(at).toISOString()):'☁ ยังไม่เคยซิงก์';
+}
+function nxGetKeys(keys,cb){ // อ่านหลาย key ทีละ 15
+  var out={},i=0;
+  (function next(){
+    if(i>=keys.length){cb('ok',out);return;}
+    var batch=keys.slice(i,i+15);i+=15;
+    jsonpSend({action:'getNoteHtml',ids:batch.join(',')},function(st,d){
+      if((st==='ok'||(st==='fail'&&d))&&(!d||d.noteHtml!==true)){cb('unsupported');return;}
+      if(st!=='ok'||!d||d.ok===false){cb('fail');return;}
+      var n=d.notes||{};Object.keys(n).forEach(function(k){out[k]=n[k];});next();
+    });
+  })();
+}
+function nxPutKey(key,str,ts,cb){
+  var token=ts+'_'+Math.floor(Math.random()*1e6),hc=_chunks(str,700);
+  _sendChunks(hc.map(function(c,i){return {action:'saveNoteHtml',id:key,html:c,chunkIdx:i,chunkTotal:hc.length,ts:ts,token:token};}),function(st){cb(st);});
+}
+function nxPagePayload(n){
+  var c={};Object.keys(n).forEach(function(k){c[k]=n[k];});
+  c.html=String(c.html||'').replace(/<img[^>]+src=["']data:[^"']*["'][^>]*>/gi,''); // รูปที่ยังไม่ได้อัปขึ้น Drive ส่งผ่าน URL ไม่ได้
+  if(/^data:/.test(c.coverImg||''))c.coverImg='';if(/^data:/.test(c.iconImg||''))c.iconImg='';
+  return JSON.stringify(c);
+}
+function nxSync(){
+  if(_nxSync.off)return;
+  if(_nxSync.busy){_nxSync.again=true;return;}
+  _nxSync.busy=true;nxSyncStatus('busy');
+  function fin(st){
+    _nxSync.busy=false;
+    if(st==='unsupported'){_nxSync.off=true;nxSyncStatus('off');return;}
+    if(st!=='ok'){nxSyncStatus('err');clearTimeout(_nxSync.t);_nxSync.t=setTimeout(nxSync,30000);return;}
+    try{localStorage.setItem(NX_SYNCAT_KEY,String(Date.now()));}catch(e){}
+    nxSyncStatus('ok');
+    if(_nxSync.again){_nxSync.again=false;nxSyncSoon(800);}
+  }
+  try{nxFlush();}catch(e){}
+  nxGetKeys(['nx__idx'],function(st,got){
+    if(st!=='ok'){fin(st);return;}
+    var S={pages:{},dead:{},secs:null,secsTs:0};
+    try{if(got.nx__idx&&got.nx__idx.html)S=Object.assign(S,JSON.parse(got.nx__idx.html));}catch(e){}
+    var notes=notesLoad(),L={},K={},now=Date.now();
+    notes.forEach(function(n){L[n.id]=nxTs(n)||1;});
+    try{K=JSON.parse(_ls(NX_SYNCED_KEY)||'{}')||{};}catch(e){}
+    var dead={};Object.keys(S.dead||{}).forEach(function(id){if(now-S.dead[id]<60*864e5)dead[id]=S.dead[id];});
+    Object.keys(K).forEach(function(id){if(!L[id]&&!(dead[id]>=now))dead[id]=Math.max(dead[id]||0,now);}); // ลบในเครื่องนี้
+    var push=[],pull=[],kill=[],pages={};
+    var ids={};Object.keys(S.pages||{}).forEach(function(id){ids[id]=1;});Object.keys(L).forEach(function(id){ids[id]=1;});
+    Object.keys(ids).forEach(function(id){
+      var sT=(S.pages||{})[id]||0,lT=L[id]||0,dT=dead[id]||0;
+      if(dT&&dT>=Math.max(sT,lT)){if(lT)kill.push(id);return;}
+      delete dead[id];
+      if(lT>sT){push.push(id);pages[id]=lT;}
+      else if(sT>lT){pull.push(id);pages[id]=sT;}
+      else pages[id]=lT;
+    });
+    // หัวข้อ: ฉบับที่แก้ล่าสุดชนะ
+    var lSecTs=Number(_ls(NX_SECTS_KEY)||0),secs=nxSecs(),secsTs=lSecTs,secsChanged=false;
+    if(S.secs&&S.secs.length&&(S.secsTs||0)>lSecTs){secs=S.secs;secsTs=S.secsTs;secsChanged=true;}
+    var byId={};notes.forEach(function(n){byId[n.id]=n;});
+    var tooBig=[];
+    // 1) ส่งหน้าที่ในเครื่องใหม่กว่า
+    var pi=0;
+    (function pushNext(){
+      if(pi>=push.length){pullAll();return;}
+      var id=push[pi++],str=nxPagePayload(byId[id]);
+      if(str.length>48000){tooBig.push(id);delete pages[id];pushNext();return;}
+      nxPutKey('nx_'+id,str,L[id],function(st2){if(st2!=='ok'){fin(st2==='unsupported'?'unsupported':'fail');return;}setTimeout(pushNext,60);});
+    })();
+    // 2) ดึงหน้าที่เครื่องอื่นแก้ใหม่กว่า
+    function pullAll(){
+      nxGetKeys(pull.map(function(id){return 'nx_'+id;}),function(st3,got2){
+        if(st3!=='ok'){fin(st3);return;}
+        var cur=notesLoad(),map={},changed=false,openId=(document.getElementById('nx-body')||{}).dataset;openId=openId&&openId.id;
+        var editing=_nxTimer!==null&&_nxTimer!==undefined;
+        cur.forEach(function(n,i){map[n.id]=i;});
+        pull.forEach(function(id){
+          var r=got2['nx_'+id];if(!r||!r.html)return;var n=null;try{n=JSON.parse(r.html);}catch(e){}
+          if(!n||!n.id)return;
+          if(editing&&id===openId){pages[id]=L[id]||0;return;} // กำลังพิมพ์หน้านี้อยู่ → ไม่ทับ รอบหน้าค่อยดู
+          n.html=nxSanitize(n.html||'');
+          if(map[id]!=null)cur[map[id]]=n;else cur.push(n);changed=true;
+        });
+        if(kill.length){var gone=cur.filter(function(n){return kill.indexOf(n.id)>=0;});if(gone.length&&typeof nxTrashAdd==='function')nxTrashAdd(gone);cur=cur.filter(function(n){return kill.indexOf(n.id)<0;});changed=true;}
+        _nxSync.pulling=true;
+        try{
+          if(changed)localStorage.setItem('rudy_notes',JSON.stringify(cur));
+          if(secsChanged){localStorage.setItem(NX_SEC_KEY,JSON.stringify(secs));localStorage.setItem(NX_SECTS_KEY,String(secsTs));}
+        }catch(e){}
+        _nxSync.pulling=false;
+        // 3) ส่งสารบัญที่รวมแล้ว
+        var idx={pages:pages,dead:dead,secs:secs,secsTs:secsTs||Date.now()};
+        nxPutKey('nx__idx',JSON.stringify(idx),Date.now(),function(st4){
+          if(st4!=='ok'){fin(st4==='unsupported'?'unsupported':'fail');return;}
+          try{localStorage.setItem(NX_SYNCED_KEY,JSON.stringify(pages));}catch(e){}
+          if(tooBig.length)showToast('⚠️ มี '+tooBig.length+' หน้าที่ยาวเกินจะซิงก์ (เก็บในเครื่องนี้)');
+          if((changed||secsChanged)){
+            var pageVis=document.getElementById('page-note');
+            var a=document.activeElement,typing=a&&(a.id==='nx-body'||a.id==='nx-title');
+            var openPulled=openId&&pull.indexOf(openId)>=0&&!(editing);
+            if(pageVis&&pageVis.classList.contains('show')&&(!typing||openPulled))nxRender(); // หน้าที่เปิดอยู่ถูกแก้จากอีกเครื่อง → โหลดใหม่ (ไม่มีอะไรค้างพิมพ์)
+            else if(pageVis&&pageVis.classList.contains('show')){var sd=document.querySelector('#nx .nx-side');if(sd){var nl=notesLoad();sd.innerHTML=nxSideHtml(nl,nxSecs(),nxCur(nl));}} // กำลังพิมพ์ → อัปเดตแค่แถบซ้าย
+            else if(typeof renderPinned==='function'&&!typing)renderPinned();
+            if(pull.length)showToast('☁ อัปเดต Note จากเครื่องอื่น '+pull.length+' หน้า');
+          }
+          fin('ok');
+        });
+      });
+    }
+  });
+}
+// บันทึกเมื่อไหร่ → ซิงก์ตามหลัง 4 วิ · เปิดแอป / กลับมาที่แท็บ / เปิดหน้า Note → ดึงของใหม่
+(function(){
+  var _ns=notesSave;notesSave=function(arr){_ns(arr);nxSyncSoon();};
+  var _ss=nxSecsSave;nxSecsSave=function(a){_ss(a);if(!_nxSync.pulling){try{localStorage.setItem(NX_SECTS_KEY,String(Date.now()));}catch(e){}nxSyncSoon();}};
+})();
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')nxSyncSoon(1500);else if(_nxSync.t){clearTimeout(_nxSync.t);nxSync();}});
+setTimeout(function(){nxSyncSoon(10);},3500);
 
 function noteShortDate(iso){if(!iso)return'';var d=new Date(iso);if(isNaN(d))return'';var m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return d.getDate()+' '+m[d.getMonth()];}
 // แก้ในการ์ดได้เลย — บันทึกอัตโนมัติ (ไม่ต้องกดบันทึก)
