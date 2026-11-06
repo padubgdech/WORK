@@ -180,6 +180,11 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   `around`, results cached in IndexedDB `khum_trip_cache` 30 days (`tpCacheGet/Set`; empty results never cached). While OSM loads, fast
   Wikipedia geosearch POIs (`tpPoiWiki`, category guessed from the title `tpPoiGuessCat`) show at once; `tpPoiMerge` lets OSM replace them.
   Status pill `.tp-poi-st` in the chips row.
+  Booking ↔ expense (6 Nov "ใส่การจองแต่ไม่มีราคา … ให้พิมพ์ราคาห้องพักเอง"): `exp.bk` = booking id (AI save sets it; old rows match by note=title,
+  `tpBkExp`). Booking dialog has ราคา `#tpb-p` (+ currency `#tpb-u` when trip has `cur`) → `tpBkSetPrice` creates/updates the linked expense
+  (cat via `TP_AI_CAT`, date 'pre' before the trip). Expense card shows "การจองที่ยังไม่ใส่ราคา" `.tp-bkp` (`tpBkPending`: not check-out
+  `b.co`/title "เช็กเอาต์…", not type other, not `b.noPrice`) with a price input + บันทึก / × (= no cost). Booking rows show a price chip
+  `.tp-bk-pr`; deleting a booking deletes its linked expense. Test: test_bkp.py.
   Declutter (6 Nov, checked live on Taipei: 375 OSM + Wikipedia POIs): cache key v2, place_of_worship needs `wikipedia`, Christian/Muslim/Jewish
   worship places skipped unless tourism, places with neither name:th/name:en nor wikipedia skipped; max pins 30 / 45 (z≥13) / 90 (z≥15),
   gap 54/44 px, labels only on the top 25 below z15.
