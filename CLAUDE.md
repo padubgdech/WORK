@@ -22,7 +22,8 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Installed 29 Oct 2026, `setupRepeatProperty` run (property created). `USE_MAIN_DATA=true` in index.html.
   Pinned tasks (same file): Notion checkbox "Pinned" (`setupPinnedProperty` run). `getMainData` returns `pinned:[{id,created}]`
   (+ their subtasks); actions `getPinned`, `setPinned` (id, pinned=true|false); `addTask` with `pin=1` → pins the new task.
-  Dashboard deployment = **version 195** (3 Nov 2026: + addAllDayEvent, getRangeEvents).
+  Dashboard deployment = **version 196** (6 Nov 2026: + readBooking AI; 195 = addAllDayEvent, getRangeEvents).
+  NOTE: installed dashboard-upload.gs has NO authGuard_ line (auth not installed yet); the repo copy has it — add it when installing auth.
 - Frontend pinned band (design "D compact", canvas artifact "ปักหมุดงาน — 4 แบบ"): `#main-pinned` above the Main grid.
   Shows every Pinned task that is still active (`allActiveTasks`+today+overdue; done ones drop out) — dated or not (Dech: "ปักได้ทุกงาน").
   Undated: age badge (days since Notion created_time) + "วันนี้"; setting a date auto-unpins. Dated: "เริ่ม <date>" badge, stays pinned
@@ -166,7 +167,7 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   subway/light_rail/monorail/tram + stations via Overpass (20 km around each stop, sequential, cache `_tpMetroMem` + sessionStorage `tp_metro_v1_*`)
   with the line's real `colour`; MapLibre layers `tpr-osm-line(-c)`/`tpr-osm-sta(-c)` (`tpMetroML`, click line = toast name), Leaflet group
   `_tpMetroLF` (`tpMetroLF`, tooltips) + faint OpenRailwayMap. Toggle = same 🚇 button. Test: test_metro.py.
-  AI booking reader (5 Nov, Dech chose canvas page "Trip · AI อ่านใบจอง" แบบ 1–3): NEW GAS `gas/dashboard-ai.gs` (NOT yet installed) —
+  AI booking reader (5 Nov, Dech chose canvas page "Trip · AI อ่านใบจอง" แบบ 1–3): GAS `gas/dashboard-ai.gs` (installed 6 Nov, deployment **version 196**; live test OK ~4.5 s, key found in CONFIG.GEMINI_API_KEY) —
   POST `?action=readBooking` {image dataURL, ctx} → Gemini 2.5 Flash (inline image, responseMimeType JSON) → {ok, items:[{type,title,date,time,
   endDate,endTime,from,to,code,people,price,currency,address,note,uncertain}]}; key = Script Property `GEMINI_API_KEY` else any CONFIG key named
   *gemini*. Routed from `handleDashboardPost_` (dashboard-upload.gs, also updated → paste the new version too). Frontend: bookings card button
@@ -214,7 +215,6 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   NOTE: once enforced, anything else calling the dashboard deployment's doGet without a session breaks (only the dashboard is known to).
 
 ## Pending
-0. Install `gas/dashboard-ai.gs` + updated `gas/dashboard-upload.gs` (readBooking route) → deploy new version of the dashboard deployment. Check the Gemini key name in รหัส.gs CONFIG or set Script Property GEMINI_API_KEY.
 1. Security: login step above (in progress). Tokens (LINE/Notion/Gemini) are hard-coded in `รหัส.gs` CONFIG → move to Script Properties;
    rotating them also needs the LINE-bot webhook deployment updated (it runs an old pinned version with the old tokens).
 2. Separate HR/employee app: profile "แก้ไขข้อมูล" opens the first-login modal (only "ออกจากระบบ", no ✕, save button stuck on "กำลังบันทึก..."). Location of that code unknown — ask Dech.
