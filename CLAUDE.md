@@ -167,6 +167,14 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   subway/light_rail/monorail/tram + stations via Overpass (20 km around each stop, sequential, cache `_tpMetroMem` + sessionStorage `tp_metro_v1_*`)
   with the line's real `colour`; MapLibre layers `tpr-osm-line(-c)`/`tpr-osm-sta(-c)` (`tpMetroML`, click line = toast name), Leaflet group
   `_tpMetroLF` (`tpMetroLF`, tooltips) + faint OpenRailwayMap. Toggle = same 🚇 button. Test: test_metro.py.
+  POI layer (6 Nov, canvas "Trip · ที่น่าเที่ยวบนแผนที่" แบบ 1 + icon style A from "Trip · ไอคอนที่น่าเที่ยว"): button "🏛 ที่น่าเที่ยว" REPLACED
+  "✨ ที่น่าสนใจ" (tpSug* code kept, unused). Overpass 12 km around each stop (`tpPoiOne`, notable = wikidata; viewpoints/markets by name;
+  cache `tp_poi_v1_*`), 6 categories `TP_POI` (view/museum/temple/food/park/shop: label, colour, white line-icon SVG) via `tpPoiCatOf`;
+  `tpPoiDraw` draws only in-view POIs as solid circles `.tp-poi` (score-ordered greedy declutter 44px → "+n" badge, click badge group = zoom in;
+  top 3 bigger below z13; labels ≥ z13.3; ✓ = already a spot) and redraws on moveend (engine adapters got project/bounds/onMove).
+  Chips `#tp-poicats` (top of map, bottom on phone) filter by category. Click → existing panel `tpPan({item})` + nearest metro station
+  "🚇 X · เดิน n นาที" (`tpPoiNearSta`, from metro cache) + Wikipedia REST summary image/extract. localStorage `tp_poi` (default on).
+  Names: Thai → English → local (also `tpLangExpr` for our layers). Test: test_poi.py.
   AI booking reader (5 Nov, Dech chose canvas page "Trip · AI อ่านใบจอง" แบบ 1–3): GAS `gas/dashboard-ai.gs` (installed 6 Nov, deployment **version 196**; live test OK ~4.5 s, key found in CONFIG.GEMINI_API_KEY) —
   POST `?action=readBooking` {image dataURL, ctx} → Gemini 2.5 Flash (inline image, responseMimeType JSON) → {ok, items:[{type,title,date,time,
   endDate,endTime,from,to,code,people,price,currency,address,note,uncertain}]}; key = Script Property `GEMINI_API_KEY` else any CONFIG key named

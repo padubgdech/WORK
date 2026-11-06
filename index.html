@@ -1133,6 +1133,22 @@ button.tp-sp-n{border:0;padding:0;cursor:pointer;font-family:inherit}button.tp-s
 .rc-att{flex:0 0 auto;width:38px;height:38px;border:0;border-radius:10px;background:#f0eeea;cursor:pointer;font-size:16px}
 .rc-ai{display:flex;flex-direction:column;gap:6px}.rc-ai-i{background:#fff;border:1px solid #ece9e2;border-radius:10px;padding:7px 9px;display:flex;flex-direction:column}
 .rc-ai-i small{font-size:11px;color:#666}.rc-ai-i b{font-size:13px}.rc-ai-acts{display:flex;gap:6px}.rc-ai-done{font-size:12px;color:#1a7f37}
+.tp-poi{position:relative;border:0;background:transparent;padding:0;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+.tp-poi-ic{width:30px;height:30px;border-radius:50%;background:var(--pc);border:2.5px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;box-sizing:border-box;transition:transform .12s}
+.tp-poi.top{width:40px;height:40px}.tp-poi.top .tp-poi-ic{width:38px;height:38px}
+.tp-poi:hover .tp-poi-ic,.tp-poi:focus-visible .tp-poi-ic{transform:scale(1.15)}
+.tp-poi-lb{position:absolute;top:calc(100% + 1px);left:50%;transform:translateX(-50%);font-size:11px;font-weight:600;color:#fff;background:rgba(29,32,51,.86);border-radius:6px;padding:1px 6px;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+.tp-poi-n{position:absolute;top:-6px;right:-10px;font-style:normal;font-size:10px;font-weight:700;color:#1d2033;background:#fff;border-radius:99px;padding:0 5px;box-shadow:0 1px 4px rgba(0,0,0,.25);line-height:16px}
+.tp-poi-ok{position:absolute;bottom:-3px;right:-4px;width:15px;height:15px;border-radius:50%;background:#1f9d55;color:#fff;font-size:9px;font-style:normal;display:flex;align-items:center;justify-content:center;border:1.5px solid #fff}
+.tp-poi.done .tp-poi-ic{opacity:.85}
+.tp-lfwrap .tp-poi{transform:translate(-50%,-50%)}
+.tp-poicats{position:absolute;left:48px;top:10px;right:150px;z-index:999;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding:2px}
+.tp-poicats[hidden]{display:none}.tp-poicats::-webkit-scrollbar{display:none}
+.tp-poicats button{flex:0 0 auto;display:flex;align-items:center;gap:5px;border:0;background:#fff;border-radius:99px;padding:5px 10px 5px 6px;font:600 11.5px 'IBM Plex Sans Thai',sans-serif;color:#3d4258;box-shadow:0 2px 8px rgba(0,0,0,.14);cursor:pointer;min-height:30px}
+.tp-poicats button:first-child{padding-left:10px}.tp-poicats button.on{background:#1d2033;color:#fff}
+.tp-poicats i{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.tp-mp-d{white-space:pre-line}
+@media(max-width:760px){.tp-poicats{left:6px;right:6px;top:auto;bottom:8px}}
 .tp-mtools{position:absolute;top:52px;right:10px;z-index:1000;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
 .tp-mtools button{border:0;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:0 12px;min-height:36px;font:600 12.5px 'IBM Plex Sans Thai',sans-serif;color:#1d2033;cursor:pointer}
 .tp-mtools button.on{background:#1d2033;color:#fff}
@@ -3781,6 +3797,7 @@ function tpSetLang(lang){
   try{localStorage.setItem('tp_map_lang',lang);}catch(e){}
   document.querySelectorAll('#tp-map .tp-lang button').forEach(function(b){var on=b.dataset.l===lang;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});
   if(_tpMl&&_tpMl.isStyleLoaded())tpApplyLang(_tpMl,lang);
+  tpPoiDraw();
 }
 function tpLangCtl(el){
   var lang=tpMapLang(),d=document.createElement('div');d.className='tp-lang';d.setAttribute('role','group');d.setAttribute('aria-label','ภาษาบนแผนที่');
@@ -3869,6 +3886,9 @@ function tpEngML(map){
     center:function(){var c=map.getCenter();return {lat:c.lat,lng:c.lng};},zoom:function(){return map.getZoom();},
     fly:function(lat,lng,z){map.jumpTo({center:[lng,lat],zoom:z==null?map.getZoom():z});},
     onClick:function(fn){map.on('click',function(e){fn(e.lngLat.lat,e.lngLat.lng);});},
+    project:function(lat,lng){var p=map.project([lng,lat]);return {x:p.x,y:p.y};},
+    bounds:function(){var b=map.getBounds();return [b.getSouth(),b.getWest(),b.getNorth(),b.getEast()];},
+    onMove:function(fn){map.on('moveend',fn);},
     alive:function(){return _tpMl===map;}};
 }
 function tpEngLF(map,layer){
@@ -3879,19 +3899,25 @@ function tpEngLF(map,layer){
     fly:function(lat,lng,z){map.setView([lat,lng],z==null?map.getZoom():z);},
     fit:function(pts,pad){map.fitBounds(L.latLngBounds(pts),{paddingTopLeft:[pad.left,pad.top],paddingBottomRight:[pad.right,pad.bottom],maxZoom:15});},
     onClick:function(fn){map.on('click',function(e){fn(e.latlng.lat,e.latlng.lng);});},
+    project:function(lat,lng){var p=map.latLngToContainerPoint([lat,lng]);return {x:p.x,y:p.y};},
+    bounds:function(){var b=map.getBounds();return [b.getSouth(),b.getWest(),b.getNorth(),b.getEast()];},
+    onMove:function(fn){map.on('moveend',fn);},
     alive:function(){return _tpMap===map;}};
 }
 // ปุ่มบนแผนที่ + แผงล่าง (กดในแผงไม่ทะลุไปที่แผนที่)
 function tpMapTools(el,eng){
   _tpE=eng;_tpSugMk=[];_tpTmpMk=null;_tpPanItem=null;
   var bar=document.createElement('div');bar.className='tp-mtools';bar.setAttribute('role','group');bar.setAttribute('aria-label','เครื่องมือแผนที่');
-  bar.innerHTML='<button type="button" id="tp-sugbtn" aria-pressed="'+_tpSugOn+'" class="'+(_tpSugOn?'on':'')+'" onclick="tpSugToggle()">✨ ที่น่าสนใจ</button>'
+  bar.innerHTML='<button type="button" id="tp-poibtn" aria-pressed="'+_tpPoiOn+'" class="'+(_tpPoiOn?'on':'')+'" onclick="tpPoiToggle()">🏛 ที่น่าเที่ยว</button>'
     +'<button type="button" id="tp-pinbtn" aria-pressed="false" onclick="tpPinToggle()">📍 ปักเอง</button>'
     +'<button type="button" id="tp-railbtn" aria-pressed="'+tpRailOn()+'" class="'+(tpRailOn()?'on':'')+'" onclick="tpRailToggle()">🚇 รถไฟฟ้า</button>';
   var pan=document.createElement('div');pan.className='tp-mpan';pan.id='tp-mpan';pan.hidden=true;
-  [bar,pan].forEach(function(x){['click','dblclick','mousedown','pointerdown','touchstart','wheel','contextmenu'].forEach(function(ev){x.addEventListener(ev,function(e){e.stopPropagation();},{passive:true});});el.appendChild(x);});
-  _tpPinOn=false;
+  var cats=document.createElement('div');cats.className='tp-poicats';cats.id='tp-poicats';cats.setAttribute('role','group');cats.setAttribute('aria-label','หมวดที่น่าเที่ยว');cats.hidden=!_tpPoiOn;cats.innerHTML=tpPoiCatsHtml();
+  [bar,pan,cats].forEach(function(x){['click','dblclick','mousedown','pointerdown','touchstart','wheel','contextmenu'].forEach(function(ev){x.addEventListener(ev,function(e){e.stopPropagation();},{passive:true});});el.appendChild(x);});
+  _tpPinOn=false;_tpPoiMk=[];
   eng.onClick(function(lat,lng){if(_tpPinOn)tpPinAt(lat,lng);});
+  if(eng.onMove)eng.onMove(tpPoiSoon);
+  if(_tpPoiOn)setTimeout(function(){if(_tpPoiAll.length)tpPoiDraw();else tpPoiLoad();},400);
   if(_tpSugOn)setTimeout(function(){tpSugLoad(true);},300);
 }
 function tpPinToggle(force){
@@ -4056,6 +4082,7 @@ function tpPanSave(asHotel){
   if(it.sug!=null){var m=_tpSugMk[it.sug];if(m&&_tpE)_tpE.rm(m);_tpSugList.splice(it.sug,1);_tpSugMk.splice(it.sug,1);}
   if(_tpTmpMk&&_tpE){_tpE.rm(_tpTmpMk);_tpTmpMk=null;}
   showToast('📍 ปัก “'+name+'” ใน '+s.name+(sp.date?' วันที่ '+(Math.round((new Date(sp.date)-new Date(s.date))/864e5)+1):''));
+  if(it.poi)setTimeout(tpPoiDraw,50);
   if(it.manual){_tpPanItem=null;tpPinToggle(false);}else tpPanBack();
 }
 // ---------- Rudy แนะนำที่เที่ยวในหน้าต่างแก้สถานที่ (askRudy เดิม → JSON) ----------
@@ -4284,7 +4311,7 @@ function tpCopyPlan(){var t=tpCur(tpLoad());if(t)tpCopy(tpPlanText(t),'📋 ค�
 // ---------- เส้นทางรถไฟ / รถไฟฟ้า บนแผนที่ (MapLibre: ชั้น transportation ของ OpenFreeMap · Leaflet: OpenRailwayMap) ----------
 function tpRailOn(){try{return localStorage.getItem('tp_rail')!=='0';}catch(e){return true;}}
 var TP_METRO=['subway','light_rail','monorail','tram'];
-function tpLangExpr(lang){return lang==='en'?['coalesce',['get','name:en'],['get','name_en'],['get','name:latin'],['get','name']]:['coalesce',['get','name:th'],['get','name_th'],['get','name'],['get','name:latin']];}
+function tpLangExpr(lang){return lang==='en'?['coalesce',['get','name:en'],['get','name_en'],['get','name:latin'],['get','name']]:['coalesce',['get','name:th'],['get','name_th'],['get','name:en'],['get','name'],['get','name:latin']];}
 function tpRailML(map,on){
   ['tpr-sta','tpr-sta-c','tpr-metro','tpr-metro-c','tpr-rail'].forEach(function(id){try{if(map.getLayer(id))map.removeLayer(id);}catch(e){}});
   if(!on){tpMetroML(map,false);return;}
@@ -4645,6 +4672,102 @@ function rcAiHtml(a,i){
 }
 function rcAiSave(i){var log=rcLoad(),m=log[i];if(!m||!m.ai||m.ai.saved)return;_tpA={imgs:[],items:m.ai.items.map(function(x){var y=JSON.parse(JSON.stringify(x));y.on=true;return y;})};tpAiSave(true);m.ai.saved=true;rcSave(log);rcRender();}
 function rcAiEdit(i){var log=rcLoad(),m=log[i];if(!m||!m.ai)return;m.ai.saved=true;rcSave(log);rcRender();tpAiDlg(m.ai.items.map(function(x){return JSON.parse(JSON.stringify(x));}));}
+// ========== ที่น่าเที่ยวบนแผนที่ (6 พ.ย., แบบ 1 + ไอคอนแบบ A: วงกลมสีทึบ + ไอคอนเส้นขาว) — OSM Overpass รอบแต่ละเมือง ==========
+var TP_POI={
+  view:['จุดชมวิว / แลนด์มาร์ก','#7c4dff','<path d="M3 19l6-8 4 5 3-4 5 7z"/><circle cx="17" cy="6" r="2.2"/>'],
+  museum:['พิพิธภัณฑ์','#2f6fd6','<path d="M3 9l9-5 9 5"/><path d="M5 10v7M9.5 10v7M14.5 10v7M19 10v7"/><path d="M3 20h18"/>'],
+  temple:['วัด / ศาลเจ้า','#e0592a','<path d="M3 6c3 1 15 1 18 0"/><path d="M5 9.5h14"/><path d="M7 6.8V20M17 6.8V20"/>'],
+  food:['ตลาด / ของกิน','#e5484d','<path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M8 4l3 6M13 3l1 7"/>'],
+  park:['สวน / ธรรมชาติ','#1f9d55','<path d="M12 3l5 7h-3l4 6H6l4-6H7z"/><path d="M12 16v5"/>'],
+  shop:['ช้อปปิ้ง','#c99400','<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 0 1 6 0"/>']};
+var _tpPoiOn=(function(){try{return localStorage.getItem('tp_poi')!=='0';}catch(e){return true;}})(),_tpPoiCat='',_tpPoiAll=[],_tpPoiMk=[],_tpPoiMem={},_tpPoiT=null;
+function tpPoiSvg(k,s){return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+TP_POI[k][2]+'</svg>';}
+function tpPoiCatOf(tg){
+  var nm=String(tg.name||'')+' '+String(tg['name:en']||'');
+  if(tg.amenity==='marketplace'||/night market|夜市|ตลาด/i.test(nm))return 'food';
+  if(tg.tourism==='museum'||tg.tourism==='gallery')return 'museum';
+  if(tg.amenity==='place_of_worship'||tg.historic==='temple'||tg.building==='temple'||tg.building==='shrine')return 'temple';
+  if(tg.leisure==='park'||tg.leisure==='garden'||tg.tourism==='zoo'||tg.natural)return 'park';
+  if(tg.shop)return 'shop';
+  return 'view';
+}
+function tpPoiOne(p){
+  var key='tp_poi_v1_'+p[0].toFixed(1)+','+p[1].toFixed(1);
+  if(_tpPoiMem[key])return Promise.resolve(_tpPoiMem[key]);
+  try{var c=sessionStorage.getItem(key);if(c){_tpPoiMem[key]=JSON.parse(c);return Promise.resolve(_tpPoiMem[key]);}}catch(e){}
+  var a='(around:12000,'+p[0].toFixed(4)+','+p[1].toFixed(4)+')';
+  var q='[out:json][timeout:40];('
+    +'nwr["tourism"~"^(attraction|museum|gallery|zoo|theme_park)$"]["wikidata"]'+a+';'
+    +'nwr["tourism"="viewpoint"]["name"]'+a+';'
+    +'nwr["amenity"="place_of_worship"]["wikidata"]'+a+';'
+    +'nwr["historic"]["wikidata"]["name"]'+a+';'
+    +'nwr["amenity"="marketplace"]["name"]'+a+';'
+    +'nwr["leisure"~"^(park|garden)$"]["wikidata"]'+a+';'
+    +'nwr["shop"~"^(mall|department_store)$"]["wikidata"]'+a+';'
+    +');out center tags 600;';
+  return _tpPoiMem[key]=fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}})
+    .then(function(r){return r.json();}).catch(function(e){delete _tpPoiMem[key];throw e;}).then(function(j){
+      var out=[],seen={};
+      (j.elements||[]).forEach(function(e){var tg=e.tags||{},lat=e.lat!=null?e.lat:e.center&&e.center.lat,lng=e.lon!=null?e.lon:e.center&&e.center.lon;
+        if(lat==null||!(tg.name||tg['name:en']))return;var id=e.type[0]+e.id;if(seen[id])return;seen[id]=1;
+        var sc=(tg.wikidata?3:0)+(tg.wikipedia?3:0)+(tg['name:th']?1:0)+(tg['name:en']?1:0)+(tg.tourism==='attraction'||tg.tourism==='museum'?1:0);
+        out.push({id:id,c:tpPoiCatOf(tg),y:Math.round(lat*1e5)/1e5,x:Math.round(lng*1e5)/1e5,th:tg['name:th']||'',en:tg['name:en']||'',n:tg.name||'',wp:tg.wikipedia||'',s:sc});});
+      out.sort(function(a,b){return b.s-a.s;});_tpPoiMem[key]=out;try{sessionStorage.setItem(key,JSON.stringify(out));}catch(e){}return out;
+    });
+}
+function tpPoiLoad(){
+  var cs=tpMetroCenters();if(!cs.length)return;var all=[],seen={};
+  cs.reduce(function(pr,p){return pr.then(function(){return tpPoiOne(p).catch(function(){return [];}).then(function(r){r.forEach(function(x){if(!seen[x.id]){seen[x.id]=1;all.push(x);}});});});},Promise.resolve())
+    .then(function(){all.sort(function(a,b){return b.s-a.s;});_tpPoiAll=all;tpPoiDraw();});
+}
+function tpPoiName(x){return tpMapLang()==='en'?(x.en||x.n||x.th):(x.th||x.en||x.n);} // ไม่มีชื่อไทย → ใช้อังกฤษก่อนภาษาท้องถิ่น
+function tpPoiDone(x){return tpAllSpots().some(function(h){return Math.abs(h.lat-x.y)<0.0007&&Math.abs(h.lng-x.x)<0.0007;});}
+function tpPoiClear(){if(_tpE)_tpPoiMk.forEach(function(m){_tpE.rm(m);});_tpPoiMk=[];}
+// วาดหมุดเฉพาะในจอ · ทับกัน (ห่าง < 44px) = รวมใต้หมุดที่ดังกว่า พร้อมตัวเลข
+function tpPoiDraw(){
+  tpPoiClear();if(!_tpPoiOn||!_tpE||!_tpE.alive()||!_tpE.project||!_tpPoiAll.length)return;
+  var b=_tpE.bounds(),z=_tpE.zoom(),placed=[],showLb=z>=13.3,max=z>=14?120:70;
+  var list=_tpPoiAll.filter(function(x){return (!_tpPoiCat||x.c===_tpPoiCat)&&x.y>=b[0]&&x.y<=b[2]&&x.x>=b[1]&&x.x<=b[3];});
+  list.forEach(function(x){
+    if(placed.length>=max)return;var p=_tpE.project(x.y,x.x),hit=null;
+    for(var i=0;i<placed.length;i++){var q=placed[i];if(Math.abs(q.p.x-p.x)<44&&Math.abs(q.p.y-p.y)<(showLb?52:44)){hit=q;break;}}
+    if(hit){hit.n++;return;}placed.push({x:x,p:p,n:0});
+  });
+  placed.forEach(function(o,i){
+    var x=o.x,k=TP_POI[x.c],el=document.createElement('button');el.type='button';
+    var nm=tpPoiName(x),done=tpPoiDone(x);
+    el.className='tp-poi'+(i<3&&z<13?' top':'')+(done?' done':'');el.style.setProperty('--pc',k[1]);
+    el.innerHTML='<span class="tp-poi-ic">'+tpPoiSvg(x.c,i<3&&z<13?19:15)+'</span>'+(o.n?'<i class="tp-poi-n">+'+o.n+'</i>':'')+(done?'<i class="tp-poi-ok" aria-hidden="true">✓</i>':'')+(showLb?'<span class="tp-poi-lb">'+tpEsc(nm)+'</span>':'');
+    el.setAttribute('aria-label',k[0]+': '+nm+(o.n?' และอีก '+o.n+' ที่ใกล้ ๆ':'')+(done?' (ปักแล้ว)':''));
+    _tpPoiMk.push(_tpE.addMk(x.y,x.x,el,nm,function(){tpPoiOpen(x,o.n);}));
+  });
+}
+function tpPoiSoon(){clearTimeout(_tpPoiT);_tpPoiT=setTimeout(tpPoiDraw,120);}
+function tpPoiNearSta(x){ // สถานีรถไฟฟ้าที่ใกล้ที่สุด (จากข้อมูลเส้นรถไฟฟ้าที่โหลดไว้)
+  var best=null,bd=1e9;Object.keys(_tpMetroMem).forEach(function(k){var r=_tpMetroMem[k];if(!r||!r.sta)return;r.sta.forEach(function(s){var dy=(s.y-x.y)*111000,dx=(s.x-x.x)*111000*Math.cos(x.y*Math.PI/180),d=Math.sqrt(dx*dx+dy*dy);if(d<bd){bd=d;best=s;}});});
+  if(!best||bd>1500)return '';var nm=tpMapLang()==='en'?(best.en||best.n):(best.th||best.en||best.n);return '🚇 '+nm+' · เดิน '+Math.max(1,Math.round(bd/75))+' นาที';
+}
+function tpPoiOpen(x,more){
+  if(more&&_tpE.zoom()<15){_tpE.fly(x.y,x.x,Math.min(17,_tpE.zoom()+2));return;} // กลุ่ม → ซูมเข้า
+  var k=TP_POI[x.c],it={name:tpPoiName(x),lat:x.y,lng:x.x,desc:[k[0],tpPoiNearSta(x)].filter(String).join(' · '),src:'OpenStreetMap',poi:x.id};
+  tpPan({item:it});
+  if(x.wp){var m=String(x.wp).match(/^([a-z-]+):(.+)$/);if(m){
+    fetch('https://'+m[1]+'.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(m[2].replace(/ /g,'_'))).then(function(r){return r.json();}).then(function(j){
+      if(_tpPanItem!==it)return;it.img=j.thumbnail&&j.thumbnail.source||'';it.url=j.content_urls&&j.content_urls.desktop&&j.content_urls.desktop.page||'';
+      var ex=String(j.extract||'');it.desc=[it.desc,ex.length>160?ex.slice(0,160)+'…':ex].filter(String).join('\n');tpPan({item:it});
+    }).catch(function(){});}}
+}
+function tpPoiToggle(){
+  _tpPoiOn=!_tpPoiOn;try{localStorage.setItem('tp_poi',_tpPoiOn?'1':'0');}catch(e){}
+  var b=document.getElementById('tp-poibtn');if(b){b.classList.toggle('on',_tpPoiOn);b.setAttribute('aria-pressed',_tpPoiOn);}
+  var c=document.getElementById('tp-poicats');if(c)c.hidden=!_tpPoiOn;
+  if(_tpPoiOn){if(_tpPoiAll.length)tpPoiDraw();else tpPoiLoad();}else tpPoiClear();
+}
+function tpPoiSetCat(c){_tpPoiCat=c;document.querySelectorAll('#tp-poicats button').forEach(function(b){var on=b.dataset.c===c;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});tpPoiDraw();}
+function tpPoiCatsHtml(){
+  return '<button type="button" data-c="" class="'+(_tpPoiCat?'':'on')+'" aria-pressed="'+!_tpPoiCat+'" onclick="tpPoiSetCat(this.dataset.c)">ทั้งหมด</button>'
+    +Object.keys(TP_POI).map(function(k){var on=_tpPoiCat===k;return '<button type="button" data-c="'+k+'" class="'+(on?'on':'')+'" aria-pressed="'+on+'" onclick="tpPoiSetCat(this.dataset.c)"><i style="background:'+TP_POI[k][1]+'">'+tpPoiSvg(k,11)+'</i>'+TP_POI[k][0]+'</button>';}).join('');
+}
 // ---------- actions ----------
 function tpMut(fn){var d=tpLoad(),t=tpCur(d);if(!t)return;fn(t,d);tpStore(d);renderTrip();}
 function tpSwitch(id){var d=tpLoad();d.cur=id;tpStore(d,true);renderTrip();}
