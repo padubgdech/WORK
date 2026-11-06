@@ -185,6 +185,15 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   (cat via `TP_AI_CAT`, date 'pre' before the trip). Expense card shows "การจองที่ยังไม่ใส่ราคา" `.tp-bkp` (`tpBkPending`: not check-out
   `b.co`/title "เช็กเอาต์…", not type other, not `b.noPrice`) with a price input + บันทึก / × (= no cost). Booking rows show a price chip
   `.tp-bk-pr`; deleting a booking deletes its linked expense. Test: test_bkp.py.
+  Zone explorer (6 Nov "พิมพ์ประเทศ/จังหวัดใน map ให้เลือก zone พร้อมรายละเอียด"): map tool "🔎 ประเทศ / จังหวัด" → `tpZoneOpen` (panel `#tp-mpan`)
+  → `tpZoneSearch` = 2 Nominatim queries (plain + 'จังหวัด<q>' for Thai text / featuretype=state otherwise), ranked country > province > city
+  → `tpZoneShow(r)`: boundary via Nominatim lookup polygon_geojson (threshold 0.005) drawn by engine `shape(geojson)` (ML layers `tp-zone-f/-l`,
+  Leaflet L.geoJSON), map fits bbox clear of the panel (`tpZonePad`); Wikipedia summary + photo via Wikidata sitelinks (th first, flags/maps
+  skipped as cover); Wikidata SPARQL `tpSparql` (cache IDB `tp_zone_v2_<QID>`): sub-zones P150 (Thai/English labels, coords, population,
+  sorted by population) + facts (capital P36, languages P37, currency ISO P38/P498 + live rate open.er-api, driving side P1622, calling code
+  P474, population P1082, flag P41, plugs P2853, emergency P2852/P1329). restcountries.com is unreachable from Dech's browser → not used.
+  Click a sub-zone chip → `tpZoneSub` (drill down; ‹ back via `_tpZStack`); "＋ เพิ่มเป็นจุดหมายในทริป" → `tpZoneAdd` opens the stop dialog
+  prefilled (name, country, coords). Verified live: ญี่ปุ่น (47 prefectures, JPY rate, NEMA plugs, 110/119) → โอซากะ; เชียงใหม่ (25 อำเภอ).
   Declutter (6 Nov, checked live on Taipei: 375 OSM + Wikipedia POIs): cache key v2, place_of_worship needs `wikipedia`, Christian/Muslim/Jewish
   worship places skipped unless tourism, places with neither name:th/name:en nor wikipedia skipped; max pins 30 / 45 (z≥13) / 90 (z≥15),
   gap 54/44 px, labels only on the top 25 below z15.
