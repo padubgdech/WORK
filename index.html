@@ -1155,6 +1155,17 @@ button.tp-sp-n{border:0;padding:0;cursor:pointer;font-family:inherit}button.tp-s
 .tp-bkp-r input{width:116px;border:1px solid #e3e5ee;border-radius:8px;padding:7px 8px;font-size:13px;font-family:inherit}.tp-bkp-r select{border:1px solid #e3e5ee;border-radius:8px;padding:6px 4px;font-size:12px;font-family:inherit;background:#fff}
 .tp-bkp-u{font-size:12px;color:#6b7189}.tp-bkp-r .tp-btn-d{padding:6px 12px;font-size:12px;box-shadow:none;min-height:34px}
 .tp-bk-pr{flex:0 0 auto;font-size:12px;font-weight:700;color:#3d4258;background:#fff;border-radius:8px;padding:5px 8px;border:1px solid #e4e6ef}
+.tp-zres{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow-y:auto}
+.tp-z-crumb{display:flex;padding-right:34px}.tp-z-crumb .tp-btn-l{padding:4px 10px;font-size:12px;min-height:30px}
+.tp-z-flag{width:24px;height:16px;object-fit:cover;border-radius:3px;vertical-align:-2px;margin-right:6px;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+.tp-z-kind{font-size:11.5px;color:#6b7189;font-weight:400}.tp-z-sum{max-height:96px;overflow-y:auto}
+.tp-z-facts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0}.tp-z-facts div{background:#f7f7fc;border-radius:9px;padding:6px 8px;min-width:0}
+.tp-z-facts dt{font-size:10.5px;color:#6b7189}.tp-z-facts dd{margin:1px 0 0;font-size:12.5px;font-weight:600;color:#1d2033;overflow-wrap:anywhere}
+.tp-z-acts{justify-content:stretch}.tp-z-acts .tp-btn-d{flex:1}
+.tp-z-subh{display:flex;justify-content:space-between;align-items:baseline;margin-top:2px}.tp-z-subh small{font-size:11px;color:#6b7189}
+.tp-z-subs{display:flex;flex-wrap:wrap;gap:5px;max-height:170px;overflow-y:auto}
+.tp-z-sub{border:1px solid #e4e6ef;background:#fff;border-radius:10px;padding:5px 9px;font-size:12px;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;color:#1d2033;text-align:left}
+.tp-z-sub small{font-size:10px;color:#6b7189}.tp-z-sub:hover{border-color:#7c6cf0;background:#f5f4fe}
 .tp-mtools{position:absolute;top:52px;right:10px;z-index:1000;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
 .tp-mtools button{border:0;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.15);padding:0 12px;min-height:36px;font:600 12.5px 'IBM Plex Sans Thai',sans-serif;color:#1d2033;cursor:pointer}
 .tp-mtools button.on{background:#1d2033;color:#fff}
@@ -3893,6 +3904,9 @@ function tpEngML(map){
     fly:function(lat,lng,z){map.jumpTo({center:[lng,lat],zoom:z==null?map.getZoom():z});},
     onClick:function(fn){map.on('click',function(e){fn(e.lngLat.lat,e.lngLat.lng);});},
     project:function(lat,lng){var p=map.project([lng,lat]);return {x:p.x,y:p.y};},
+    shape:function(g){try{['tp-zone-l','tp-zone-f'].forEach(function(i){if(map.getLayer(i))map.removeLayer(i);});if(map.getSource('tp-zone'))map.removeSource('tp-zone');
+      if(!g)return;map.addSource('tp-zone',{type:'geojson',data:{type:'Feature',properties:{},geometry:g}});var bf=map.getLayer('tpr-osm-line-c')?'tpr-osm-line-c':(map.getLayer('tp-route')?'tp-route':undefined);
+      map.addLayer({id:'tp-zone-f',type:'fill',source:'tp-zone',paint:{'fill-color':'#7c6cf0','fill-opacity':.08}},bf);map.addLayer({id:'tp-zone-l',type:'line',source:'tp-zone',paint:{'line-color':'#6b5cff','line-width':2.5,'line-dasharray':[2,1]}},bf);}catch(e){}},
     bounds:function(){var b=map.getBounds();return [b.getSouth(),b.getWest(),b.getNorth(),b.getEast()];},
     onMove:function(fn){map.on('moveend',fn);},
     alive:function(){return _tpMl===map;}};
@@ -3906,6 +3920,7 @@ function tpEngLF(map,layer){
     fit:function(pts,pad){map.fitBounds(L.latLngBounds(pts),{paddingTopLeft:[pad.left,pad.top],paddingBottomRight:[pad.right,pad.bottom],maxZoom:15});},
     onClick:function(fn){map.on('click',function(e){fn(e.latlng.lat,e.latlng.lng);});},
     project:function(lat,lng){var p=map.latLngToContainerPoint([lat,lng]);return {x:p.x,y:p.y};},
+    shape:function(g){if(this._z){try{map.removeLayer(this._z);}catch(e){}this._z=null;}if(g)this._z=L.geoJSON(g,{style:{color:'#6b5cff',weight:2.5,dashArray:'6 4',fillColor:'#7c6cf0',fillOpacity:.08},interactive:false}).addTo(map);},
     bounds:function(){var b=map.getBounds();return [b.getSouth(),b.getWest(),b.getNorth(),b.getEast()];},
     onMove:function(fn){map.on('moveend',fn);},
     alive:function(){return _tpMap===map;}};
@@ -3915,6 +3930,7 @@ function tpMapTools(el,eng){
   _tpE=eng;_tpSugMk=[];_tpTmpMk=null;_tpPanItem=null;
   var bar=document.createElement('div');bar.className='tp-mtools';bar.setAttribute('role','group');bar.setAttribute('aria-label','เครื่องมือแผนที่');
   bar.innerHTML='<button type="button" id="tp-poibtn" aria-pressed="'+_tpPoiOn+'" class="'+(_tpPoiOn?'on':'')+'" onclick="tpPoiToggle()">🏛 ที่น่าเที่ยว</button>'
+    +'<button type="button" id="tp-zonebtn" onclick="tpZoneOpen()">🔎 ประเทศ / จังหวัด</button>'
     +'<button type="button" id="tp-pinbtn" aria-pressed="false" onclick="tpPinToggle()">📍 ปักเอง</button>'
     +'<button type="button" id="tp-railbtn" aria-pressed="'+tpRailOn()+'" class="'+(tpRailOn()?'on':'')+'" onclick="tpRailToggle()">🚇 รถไฟฟ้า</button>';
   var pan=document.createElement('div');pan.className='tp-mpan';pan.id='tp-mpan';pan.hidden=true;
@@ -4841,6 +4857,114 @@ function tpPoiSetCat(c){_tpPoiCat=c;document.querySelectorAll('#tp-poicats butto
 function tpPoiCatsHtml(){
   return '<button type="button" data-c="" class="'+(_tpPoiCat?'':'on')+'" aria-pressed="'+!_tpPoiCat+'" onclick="tpPoiSetCat(this.dataset.c)">ทั้งหมด</button>'
     +Object.keys(TP_POI).map(function(k){var on=_tpPoiCat===k;return '<button type="button" data-c="'+k+'" class="'+(on?'on':'')+'" aria-pressed="'+on+'" onclick="tpPoiSetCat(this.dataset.c)"><i style="background:'+TP_POI[k][1]+'">'+tpPoiSvg(k,11)+'</i>'+TP_POI[k][0]+'</button>';}).join('');
+}
+// ========== 🔎 ค้นประเทศ / จังหวัด บนแผนที่ → เส้นขอบ + ข้อมูลน่ารู้ + เลือกโซนย่อย (6 พ.ย.) ==========
+// Nominatim (ขอบเขต polygon) · Wikidata SPARQL (โซนย่อย P150, ปลั๊ก, เบอร์ฉุกเฉิน) · restcountries (เมืองหลวง สกุลเงิน ภาษา เวลา) · Wikipedia (สรุป)
+var _tpZ=null,_tpZT=null,_tpZStack=[];
+function tpZoneOpen(){
+  var p=document.getElementById('tp-mpan');if(!p)return;tpPinToggle(false);_tpPanItem=null;p.hidden=false;
+  p.innerHTML='<button type="button" class="tp-mp-x" aria-label="ปิด" onclick="tpZoneClose()">×</button>'
+    +'<label class="tp-mp-lb" for="tp-zq">ค้นประเทศ / จังหวัด / เมือง</label><input id="tp-zq" class="tp-mp-in" autocomplete="off" placeholder="เช่น ญี่ปุ่น, Hokkaido, เชียงใหม่" oninput="tpZoneSearch(this.value)">'
+    +'<div id="tp-zres" class="tp-zres" role="listbox" aria-label="ผลค้นหา"></div>';
+  setTimeout(function(){var i=document.getElementById('tp-zq');if(i)i.focus();},30);
+}
+function tpZoneClose(){_tpZ=null;_tpZStack=[];if(_tpE&&_tpE.shape)_tpE.shape(null);tpPanClose();}
+function tpZoneSearch(q){
+  clearTimeout(_tpZT);var box=document.getElementById('tp-zres');if(!box)return;if(String(q).trim().length<2){box.innerHTML='';return;}
+  _tpZT=setTimeout(function(){box.innerHTML='<div class="tp-mp-hint">กำลังค้นหา…</div>';
+    fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&extratags=1&addressdetails=1&accept-language=th,en&q='+encodeURIComponent(q))
+      .then(function(r){return r.json();}).then(function(a){
+        a=(a||[]).filter(function(r){return r.osm_type==='relation'||/country|state|province|city|region|county/.test(r.addresstype||r.type||'');});
+        if(!document.getElementById('tp-zres'))return;window._tpZRes=a;
+        box.innerHTML=a.length?a.map(function(r,i){return '<button type="button" class="tp-mp-li" data-i="'+i+'" onclick="tpZonePick(+this.dataset.i)"><span><b>'+tpEsc(r.name||r.display_name.split(',')[0])+'</b><small>'+tpEsc(tpZoneKind(r)+' · '+r.display_name)+'</small></span></button>';}).join(''):'<div class="tp-mp-hint">ไม่พบ — ลองพิมพ์ภาษาอังกฤษ</div>';
+      }).catch(function(){box.innerHTML='<div class="tp-mp-hint">ค้นหาไม่ได้ตอนนี้</div>';});
+  },500);
+}
+function tpZoneKind(r){var t=r.addresstype||r.type||'';return {country:'ประเทศ',state:'รัฐ / จังหวัด',province:'จังหวัด',region:'ภูมิภาค',city:'เมือง',county:'เขต / อำเภอ',municipality:'เทศบาล',suburb:'ย่าน'}[t]||'พื้นที่';}
+function tpZonePick(i){var r=(window._tpZRes||[])[i];if(!r)return;_tpZStack=[];tpZoneShow(r);}
+// แสดงโซน r (ผล Nominatim) : ขอบเขต + ข้อมูล + โซนย่อย
+function tpZoneShow(r){
+  var z={name:r.name||r.display_name.split(',')[0],kind:tpZoneKind(r),type:r.addresstype||r.type,lat:+r.lat,lng:+r.lon,bb:r.boundingbox,qid:r.extratags&&r.extratags.wikidata||'',
+    cc:(r.address&&r.address.country_code||'').toUpperCase(),country:r.address&&r.address.country||'',wp:r.extratags&&r.extratags.wikipedia||'',info:null,subs:null,sum:null};
+  z._r=r;_tpZ=z;tpZoneRender();
+  if(_tpE){if(r.geojson&&_tpE.shape)_tpE.shape(r.geojson);if(z.bb&&_tpE.fit)try{_tpE.fit([[+z.bb[0],+z.bb[2]],[+z.bb[1],+z.bb[3]]],tpZonePad());}catch(e){}}
+  if(!r.geojson)fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&polygon_geojson=1&polygon_threshold=0.005&q='+encodeURIComponent(r.display_name)).then(function(x){return x.json();}).then(function(a){if(_tpZ===z&&a&&a[0]&&a[0].geojson&&_tpE&&_tpE.shape)_tpE.shape(a[0].geojson);}).catch(function(){});
+  else fetch('https://nominatim.openstreetmap.org/lookup?format=json&polygon_geojson=1&polygon_threshold=0.005&osm_ids='+r.osm_type[0].toUpperCase()+r.osm_id).then(function(x){return x.json();}).then(function(a){if(_tpZ===z&&a&&a[0]&&a[0].geojson&&_tpE&&_tpE.shape)_tpE.shape(a[0].geojson);}).catch(function(){});
+  // สรุปจาก Wikipedia (ไทยก่อน)
+  tpZoneSummary(z);
+  if(z.type==='country'&&z.cc)fetch('https://restcountries.com/v3.1/alpha/'+z.cc+'?fields=capital,currencies,languages,population,timezones,car,idd,flags,subregion').then(function(x){return x.json();}).then(function(j){if(_tpZ!==z)return;z.rc=Array.isArray(j)?j[0]:j;tpZoneRender();tpZoneRate(z);}).catch(function(){});
+  if(z.qid)tpZoneWd(z);
+}
+function tpZonePad(){var pm=document.getElementById('tp-mpan'),mp=document.getElementById('tp-map'),pad={top:50,right:40,bottom:30,left:30};if(pm&&mp){if(pm.offsetWidth>mp.offsetWidth*0.6)pad.bottom=Math.min(pm.offsetHeight+20,mp.offsetHeight*0.6);else pad.left=pm.offsetWidth+30;}return pad;}
+function tpZoneSummary(z){
+  var tries=[];if(z.qid)tries.push(['th',null]);if(z.wp){var m=String(z.wp).match(/^([a-z-]+):(.+)$/);if(m)tries.push([m[1],m[2]]);}
+  // หา title ภาษาไทยจาก Wikidata sitelinks ก่อน
+  var go=function(lang,title){return fetch('https://'+lang+'.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(title.replace(/ /g,'_'))).then(function(x){if(!x.ok)throw 0;return x.json();});};
+  var p=z.qid?fetch('https://www.wikidata.org/wiki/Special:EntityData/'+z.qid+'.json').then(function(x){return x.json();}).then(function(j){var e=j.entities[z.qid],sl=e&&e.sitelinks||{};z.th=(e&&e.labels&&e.labels.th&&e.labels.th.value)||'';
+      if(sl.thwiki)return go('th',sl.thwiki.title);if(sl.enwiki)return go('en',sl.enwiki.title);throw 0;}):Promise.reject(0);
+  p.catch(function(){var m=String(z.wp).match(/^([a-z-]+):(.+)$/);return m?go(m[1],m[2]):null;}).then(function(j){if(!j||_tpZ!==z)return;z.sum={t:String(j.extract||''),img:j.thumbnail&&j.thumbnail.source||'',url:j.content_urls&&j.content_urls.desktop&&j.content_urls.desktop.page||''};tpZoneRender();}).catch(function(){});
+}
+function tpZoneRate(z){var c=z.rc&&z.rc.currencies&&Object.keys(z.rc.currencies)[0];if(!c||c==='THB')return;fetch('https://open.er-api.com/v6/latest/'+c).then(function(x){return x.json();}).then(function(j){if(_tpZ!==z)return;var v=j&&j.rates&&j.rates.THB;if(v){z.rate={c:c,v:v};tpZoneRender();}}).catch(function(){});}
+function tpSparql(q){return fetch('https://query.wikidata.org/sparql?format=json&query='+encodeURIComponent(q),{headers:{'Accept':'application/sparql-results+json'}}).then(function(x){return x.json();}).then(function(j){return j.results.bindings;});}
+function tpZoneWd(z){
+  var key='tp_zone_v1_'+z.qid;
+  tpCacheGet(key).then(function(c){if(c){if(_tpZ===z){z.subs=c.subs;z.extra=c.extra;tpZoneRender();}return;}
+    var q='SELECT ?i ?th ?en ?c ?p WHERE { wd:'+z.qid+' wdt:P150 ?i . OPTIONAL{?i wdt:P625 ?c} OPTIONAL{?i wdt:P1082 ?p} OPTIONAL{?i rdfs:label ?th FILTER(lang(?th)="th")} OPTIONAL{?i rdfs:label ?en FILTER(lang(?en)="en")} } LIMIT 400';
+    var q2='SELECT ?plugL ?em ?drive WHERE { OPTIONAL{wd:'+z.qid+' wdt:P2853 ?plug . ?plug rdfs:label ?plugL FILTER(lang(?plugL)="en")} OPTIONAL{wd:'+z.qid+' wdt:P2852 ?e . ?e wdt:P1329 ?em} } LIMIT 20';
+    Promise.all([tpSparql(q).catch(function(){return [];}),z.type==='country'?tpSparql(q2).catch(function(){return [];}):Promise.resolve([])]).then(function(r){
+      var by={};r[0].forEach(function(b){var id=b.i.value.split('/').pop(),o=by[id]||(by[id]={q:id,th:'',en:'',p:0});if(b.th)o.th=b.th.value;if(b.en)o.en=b.en.value;if(b.p&&+b.p.value>o.p)o.p=+b.p.value;
+        if(b.c&&!o.lat){var m=b.c.value.match(/Point\(([-\d.]+) ([-\d.]+)\)/);if(m){o.lng=+m[1];o.lat=+m[2];}}});
+      var subs=Object.keys(by).map(function(k){return by[k];}).filter(function(o){return o.th||o.en;}).sort(function(a,b){return b.p-a.p;});
+      var ex={plug:[],em:[]};r[1].forEach(function(b){if(b.plugL&&ex.plug.indexOf(b.plugL.value)<0)ex.plug.push(b.plugL.value);if(b.em&&ex.em.indexOf(b.em.value)<0)ex.em.push(b.em.value);});
+      tpCacheSet(key,{subs:subs,extra:ex});if(_tpZ===z){z.subs=subs;z.extra=ex;tpZoneRender();}
+    });
+  });
+}
+function tpZoneTz(tz){ // "UTC+09:00" → เทียบกับไทย
+  var m=String(tz||'').match(/UTC([+-])(\d\d):(\d\d)/);if(!m)return tz||'';var h=(m[1]==='-'?-1:1)*(+m[2]+m[3]/60)-7;
+  return h===0?'เท่ากับไทย':(h>0?'เร็วกว่าไทย ':'ช้ากว่าไทย ')+Math.abs(h)+' ชม.';
+}
+function tpZoneRender(){
+  var p=document.getElementById('tp-mpan'),z=_tpZ;if(!p||!z)return;p.hidden=false;
+  var h='<button type="button" class="tp-mp-x" aria-label="ปิด" onclick="tpZoneClose()">×</button>';
+  if(z.sum&&z.sum.img)h+='<img class="tp-mp-img" src="'+tpEsc(z.sum.img)+'" alt="" onerror="this.remove()">';
+  h+='<div class="tp-z-crumb">'+(_tpZStack.length?'<button type="button" class="tp-btn-l" onclick="tpZoneBack()">‹ '+tpEsc(_tpZStack[_tpZStack.length-1].name)+'</button>':'<button type="button" class="tp-btn-l" onclick="tpZoneOpen()">🔎 ค้นใหม่</button>')+'</div>';
+  var flag=z.rc&&z.rc.flags&&z.rc.flags.svg?'<img class="tp-z-flag" src="'+tpEsc(z.rc.flags.svg)+'" alt="">':'';
+  h+='<div class="tp-mp-t">'+flag+'<b>'+tpEsc(z.th||z.name)+'</b> <small class="tp-z-kind">'+tpEsc(z.kind)+(z.country&&z.type!=='country'?' · '+tpEsc(z.country):'')+'</small>'+(z.sum&&z.sum.url?' <a href="'+tpEsc(z.sum.url)+'" target="_blank" rel="noopener">อ่านต่อ ↗</a>':'')+'</div>';
+  if(z.sum&&z.sum.t)h+='<p class="tp-mp-d tp-z-sum">'+tpEsc(z.sum.t.length>260?z.sum.t.slice(0,260)+'…':z.sum.t)+'</p>';
+  var f=[];var rc=z.rc;
+  if(rc){if(rc.capital&&rc.capital[0])f.push(['🏛','เมืองหลวง',rc.capital[0]]);
+    var cu=rc.currencies&&Object.keys(rc.currencies)[0];if(cu)f.push(['💱','สกุลเงิน',cu+' '+(rc.currencies[cu].symbol||'')+(z.rate?' · 1 '+cu+' ≈ '+(Math.round(z.rate.v*1000)/1000)+' บาท':'')]);
+    if(rc.languages)f.push(['🗣','ภาษา',Object.keys(rc.languages).map(function(k){return rc.languages[k];}).slice(0,3).join(', ')]);
+    if(rc.timezones&&rc.timezones[0])f.push(['🕐','เวลา',tpZoneTz(rc.timezones[0])+(rc.timezones.length>1?' (มี '+rc.timezones.length+' โซนเวลา)':'')]);
+    if(rc.car&&rc.car.side)f.push(['🚗','ขับรถ',rc.car.side==='left'?'ชิดซ้าย (เหมือนไทย)':'ชิดขวา (ต่างจากไทย)']);
+    if(rc.idd&&rc.idd.root)f.push(['📞','รหัสโทร',rc.idd.root+(rc.idd.suffixes&&rc.idd.suffixes.length===1?rc.idd.suffixes[0]:'')]);
+    if(rc.population)f.push(['👥','ประชากร',(rc.population/1e6).toFixed(1)+' ล้านคน']);}
+  if(z.extra){if(z.extra.plug.length)f.push(['🔌','ปลั๊กไฟ',z.extra.plug.join(', ').replace(/AC power plugs and sockets: /g,'')]);if(z.extra.em.length)f.push(['🚨','เบอร์ฉุกเฉิน',z.extra.em.join(' / ')]);}
+  if(f.length)h+='<dl class="tp-z-facts">'+f.map(function(x){return '<div><dt>'+x[0]+' '+x[1]+'</dt><dd>'+tpEsc(x[2])+'</dd></div>';}).join('')+'</dl>';
+  h+='<div class="tp-mp-acts tp-z-acts"><button type="button" class="tp-btn-d" onclick="tpZoneAdd()">＋ เพิ่มเป็นจุดหมายในทริป</button></div>';
+  if(z.subs==null&&z.qid)h+='<div class="tp-mp-hint">กำลังโหลดโซนย่อย…</div>';
+  else if(z.subs&&z.subs.length){h+='<div class="tp-z-subh"><b>เลือกโซน</b><small>'+z.subs.length+' โซน · เรียงตามจำนวนคน</small></div><div class="tp-z-subs">'
+    +z.subs.slice(0,80).map(function(s,i){return '<button type="button" class="tp-z-sub" data-i="'+i+'" onclick="tpZoneSub(+this.dataset.i)">'+tpEsc(s.th||s.en)+(s.th&&s.en&&s.th!==s.en?'<small>'+tpEsc(s.en)+'</small>':'')+'</button>';}).join('')+'</div>';}
+  p.innerHTML=h;
+}
+function tpZoneBack(){var r=_tpZStack.pop();if(r){_tpZ=null;tpZoneShow(r.r);_tpZStack=_tpZStack;}}
+function tpZoneSub(i){
+  var z=_tpZ,s=z&&z.subs&&z.subs[i];if(!s)return;
+  var q=(s.en||s.th)+(z.type==='country'?', '+(z.name):', '+(z.country||z.name));
+  if(s.lat!=null&&_tpE)_tpE.fly(s.lat,s.lng,Math.max(_tpE.zoom(),z.type==='country'?7:10));
+  fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&extratags=1&addressdetails=1&polygon_geojson=1&polygon_threshold=0.003&accept-language=th,en&q='+encodeURIComponent(q))
+    .then(function(x){return x.json();}).then(function(a){
+      var r=a&&a[0];if(!r){showToast('หาขอบเขตของ “'+(s.th||s.en)+'” ไม่เจอ');return;}
+      _tpZStack.push({name:z.th||z.name,r:z._r});
+      if(!r.extratags)r.extratags={};if(!r.extratags.wikidata)r.extratags.wikidata=s.q;
+      tpZoneShow(r);
+    }).catch(function(){showToast('โหลดโซนไม่ได้');});
+}
+function tpZoneAdd(){
+  var z=_tpZ;if(!z)return;var nm=z.th||z.name,ctry=z.type==='country'?'':(z.country||'');
+  tpZoneClose();tpStopDlg();var i=document.getElementById('tps-n');if(i)i.value=nm;var c=document.getElementById('tps-c');if(c&&ctry)c.value=ctry;
+  _tpGeo={lat:z.lat,lng:z.lng};var p=document.getElementById('tps-pos');if(p)p.textContent='📍 ปักหมุดแล้ว ('+z.lat.toFixed(3)+', '+z.lng.toFixed(3)+')';
 }
 // ---------- actions ----------
 function tpMut(fn){var d=tpLoad(),t=tpCur(d);if(!t)return;fn(t,d);tpStore(d);renderTrip();}
