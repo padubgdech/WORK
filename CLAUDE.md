@@ -108,6 +108,14 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Delete pages anywhere (5 Nov "กดลบ page ได้"): trash button `.nx-pg-del` on sidebar rows and bottom subpage list (`nxDelBtn`, 2 taps);
   hover bar `#nx-linkbar` over inline subpage links (เปิด / ลบลิงก์ `nxLinkUnlink` / ลบหน้า). `nxDeletePageId(id)` = shared delete (with
   subpages, into trash) and also strips `a.nx-link` pointing at deleted pages from other pages. Test: test_del.py.
+  Notion-trip blocks (6 Nov, from Dech's Notion page TAIWAN, "เพิ่มฟีเจอร์ให้ Note"): columns `div.nx-cols[data-n=2|3] > div.nx-column`
+  (class is nx-column because `.nx-col` = colour swatch buttons!) · link card `div.nx-card[data-href,data-t,data-p,data-note]` contenteditable=false,
+  saved EMPTY, inner (google s2 favicon, title default `nxUrlTitle`, host, price chip) rebuilt by `nxCardFill` on render/paste; click → `#nx-cardpop`
+  (`nxCardPop/Save/Del`); pasted URL → chip `#nx-cardoffer` → `nxLinkToCard` · table `data-sum="1"` → live `tfoot` Σ row (`nxSumTable/nxSumAll/nxSumSoon`,
+  column summed when >½ of non-empty cells are one number `nxNum`; tfoot is never saved — sanitizer drops TFOOT); toggle = "Σ รวม" in `#nx-ttools`;
+  `/ค่าใช้จ่าย` inserts a sum table · timeline `div.nx-tl > .nx-tl-i > .nx-tl-t + .nx-tl-b > .nx-tl-h + .nx-tl-d` (`nxTlKey` Enter: time→title→desc,
+  Enter on empty desc = new item prefilled with previous end time `nxTlNext`). Toolbar `#nx-btools` (`nxBlockTools`/`nxBlk`: +col/del col/unwrap,
+  +slot/sort by time/del slot/del timeline). Sanitizer keeps only `NX_DIVC` classes on DIVs. Test: scratchpad test_nxblk.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Trip tab (5 Nov, from a travel-dashboard image Dech sent): tab `trip` between Calendar and Tasks → `#page-trip > #tp`, `renderTrip()`,
   all code prefixed `tp`. Data localStorage `rudy_trips_v1` {trips:[{id,name,start,end,transport,calAdded,stops:[{id,name,country,date,
