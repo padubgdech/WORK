@@ -4892,7 +4892,6 @@ function tpZoneShow(r){
   else fetch('https://nominatim.openstreetmap.org/lookup?format=json&polygon_geojson=1&polygon_threshold=0.005&osm_ids='+r.osm_type[0].toUpperCase()+r.osm_id).then(function(x){return x.json();}).then(function(a){if(_tpZ===z&&a&&a[0]&&a[0].geojson&&_tpE&&_tpE.shape)_tpE.shape(a[0].geojson);}).catch(function(){});
   // สรุปจาก Wikipedia (ไทยก่อน)
   tpZoneSummary(z);
-  if(z.type==='country'&&z.cc)fetch('https://restcountries.com/v3.1/alpha/'+z.cc+'?fields=capital,currencies,languages,population,timezones,car,idd,flags,subregion').then(function(x){return x.json();}).then(function(j){if(_tpZ!==z)return;z.rc=Array.isArray(j)?j[0]:j;tpZoneRender();tpZoneRate(z);}).catch(function(){});
   if(z.qid)tpZoneWd(z);
 }
 function tpZonePad(){var pm=document.getElementById('tp-mpan'),mp=document.getElementById('tp-map'),pad={top:50,right:40,bottom:30,left:30};if(pm&&mp){if(pm.offsetWidth>mp.offsetWidth*0.6)pad.bottom=Math.min(pm.offsetHeight+20,mp.offsetHeight*0.6);else pad.left=pm.offsetWidth+30;}return pad;}
@@ -4904,19 +4903,23 @@ function tpZoneSummary(z){
       if(sl.thwiki)return go('th',sl.thwiki.title);if(sl.enwiki)return go('en',sl.enwiki.title);throw 0;}):Promise.reject(0);
   p.catch(function(){var m=String(z.wp).match(/^([a-z-]+):(.+)$/);return m?go(m[1],m[2]):null;}).then(function(j){if(!j||_tpZ!==z)return;z.sum={t:String(j.extract||''),img:j.thumbnail&&j.thumbnail.source||'',url:j.content_urls&&j.content_urls.desktop&&j.content_urls.desktop.page||''};tpZoneRender();}).catch(function(){});
 }
-function tpZoneRate(z){var c=z.rc&&z.rc.currencies&&Object.keys(z.rc.currencies)[0];if(!c||c==='THB')return;fetch('https://open.er-api.com/v6/latest/'+c).then(function(x){return x.json();}).then(function(j){if(_tpZ!==z)return;var v=j&&j.rates&&j.rates.THB;if(v){z.rate={c:c,v:v};tpZoneRender();}}).catch(function(){});}
+function tpZoneRate(z){var c=z.extra&&z.extra.cur;if(!c||c==='THB'||z.rate)return;fetch('https://open.er-api.com/v6/latest/'+c).then(function(x){return x.json();}).then(function(j){if(_tpZ!==z)return;var v=j&&j.rates&&j.rates.THB;if(v){z.rate={c:c,v:v};tpZoneRender();}}).catch(function(){});}
 function tpSparql(q){return fetch('https://query.wikidata.org/sparql?format=json&query='+encodeURIComponent(q),{headers:{'Accept':'application/sparql-results+json'}}).then(function(x){return x.json();}).then(function(j){return j.results.bindings;});}
 function tpZoneWd(z){
-  var key='tp_zone_v1_'+z.qid;
-  tpCacheGet(key).then(function(c){if(c){if(_tpZ===z){z.subs=c.subs;z.extra=c.extra;tpZoneRender();}return;}
+  var key='tp_zone_v2_'+z.qid;
+  tpCacheGet(key).then(function(c){if(c){if(_tpZ===z){z.subs=c.subs;z.extra=c.extra;tpZoneRender();tpZoneRate(z);}return;}
     var q='SELECT ?i ?th ?en ?c ?p WHERE { wd:'+z.qid+' wdt:P150 ?i . OPTIONAL{?i wdt:P625 ?c} OPTIONAL{?i wdt:P1082 ?p} OPTIONAL{?i rdfs:label ?th FILTER(lang(?th)="th")} OPTIONAL{?i rdfs:label ?en FILTER(lang(?en)="en")} } LIMIT 400';
-    var q2='SELECT ?plugL ?em ?drive WHERE { OPTIONAL{wd:'+z.qid+' wdt:P2853 ?plug . ?plug rdfs:label ?plugL FILTER(lang(?plugL)="en")} OPTIONAL{wd:'+z.qid+' wdt:P2852 ?e . ?e wdt:P1329 ?em} } LIMIT 20';
-    Promise.all([tpSparql(q).catch(function(){return [];}),z.type==='country'?tpSparql(q2).catch(function(){return [];}):Promise.resolve([])]).then(function(r){
+    var W='wd:'+z.qid,L=function(v,p){return 'OPTIONAL{'+W+' wdt:'+p+' ?'+v+'_ . OPTIONAL{?'+v+'_ rdfs:label ?'+v+'th FILTER(lang(?'+v+'th)="th")} OPTIONAL{?'+v+'_ rdfs:label ?'+v+'en FILTER(lang(?'+v+'en)="en")}}';};
+    var q2='SELECT * WHERE { '+L('cap','P36')+L('lang','P37')+L('drv','P1622')+'OPTIONAL{'+W+' wdt:P38 ?cu_ . ?cu_ wdt:P498 ?cur}OPTIONAL{'+W+' wdt:P1082 ?pop}OPTIONAL{'+W+' wdt:P474 ?tel}OPTIONAL{'+W+' wdt:P41 ?flag}'
+      +'OPTIONAL{'+W+' wdt:P2853 ?plug . ?plug rdfs:label ?plugL FILTER(lang(?plugL)="en")} OPTIONAL{'+W+' wdt:P2852 ?e . ?e wdt:P1329 ?em} } LIMIT 300';
+    Promise.all([tpSparql(q).catch(function(){return [];}),tpSparql(q2).catch(function(){return [];})]).then(function(r){
       var by={};r[0].forEach(function(b){var id=b.i.value.split('/').pop(),o=by[id]||(by[id]={q:id,th:'',en:'',p:0});if(b.th)o.th=b.th.value;if(b.en)o.en=b.en.value;if(b.p&&+b.p.value>o.p)o.p=+b.p.value;
         if(b.c&&!o.lat){var m=b.c.value.match(/Point\(([-\d.]+) ([-\d.]+)\)/);if(m){o.lng=+m[1];o.lat=+m[2];}}});
       var subs=Object.keys(by).map(function(k){return by[k];}).filter(function(o){return o.th||o.en;}).sort(function(a,b){return b.p-a.p;});
-      var ex={plug:[],em:[]};r[1].forEach(function(b){if(b.plugL&&ex.plug.indexOf(b.plugL.value)<0)ex.plug.push(b.plugL.value);if(b.em&&ex.em.indexOf(b.em.value)<0)ex.em.push(b.em.value);});
-      tpCacheSet(key,{subs:subs,extra:ex});if(_tpZ===z){z.subs=subs;z.extra=ex;tpZoneRender();}
+      var ex={plug:[],em:[],lang:[],cap:'',cur:'',pop:0,tel:'',flag:'',drv:''},add=function(a,v){if(v&&a.indexOf(v)<0)a.push(v);},V=function(b,k){return b[k]?b[k].value:'';};
+      r[1].forEach(function(b){add(ex.plug,V(b,'plugL'));add(ex.em,V(b,'em'));add(ex.lang,V(b,'langth')||V(b,'langen'));if(!ex.cap)ex.cap=V(b,'capth')||V(b,'capen');if(!ex.cur)ex.cur=V(b,'cur');
+        if(+V(b,'pop')>ex.pop)ex.pop=+V(b,'pop');if(!ex.tel)ex.tel=V(b,'tel');if(!ex.flag)ex.flag=V(b,'flag');if(!ex.drv)ex.drv=V(b,'drven');});
+      tpCacheSet(key,{subs:subs,extra:ex});if(_tpZ===z){z.subs=subs;z.extra=ex;tpZoneRender();tpZoneRate(z);}
     });
   });
 }
@@ -4929,18 +4932,18 @@ function tpZoneRender(){
   var h='<button type="button" class="tp-mp-x" aria-label="ปิด" onclick="tpZoneClose()">×</button>';
   if(z.sum&&z.sum.img)h+='<img class="tp-mp-img" src="'+tpEsc(z.sum.img)+'" alt="" onerror="this.remove()">';
   h+='<div class="tp-z-crumb">'+(_tpZStack.length?'<button type="button" class="tp-btn-l" onclick="tpZoneBack()">‹ '+tpEsc(_tpZStack[_tpZStack.length-1].name)+'</button>':'<button type="button" class="tp-btn-l" onclick="tpZoneOpen()">🔎 ค้นใหม่</button>')+'</div>';
-  var flag=z.rc&&z.rc.flags&&z.rc.flags.svg?'<img class="tp-z-flag" src="'+tpEsc(z.rc.flags.svg)+'" alt="">':'';
+  var ex=z.extra||{},flag=ex.flag?'<img class="tp-z-flag" src="'+tpEsc(String(ex.flag).replace(/^http:/,'https:'))+'?width=48" alt="">':'';
   h+='<div class="tp-mp-t">'+flag+'<b>'+tpEsc(z.th||z.name)+'</b> <small class="tp-z-kind">'+tpEsc(z.kind)+(z.country&&z.type!=='country'?' · '+tpEsc(z.country):'')+'</small>'+(z.sum&&z.sum.url?' <a href="'+tpEsc(z.sum.url)+'" target="_blank" rel="noopener">อ่านต่อ ↗</a>':'')+'</div>';
   if(z.sum&&z.sum.t)h+='<p class="tp-mp-d tp-z-sum">'+tpEsc(z.sum.t.length>260?z.sum.t.slice(0,260)+'…':z.sum.t)+'</p>';
-  var f=[];var rc=z.rc;
-  if(rc){if(rc.capital&&rc.capital[0])f.push(['🏛','เมืองหลวง',rc.capital[0]]);
-    var cu=rc.currencies&&Object.keys(rc.currencies)[0];if(cu)f.push(['💱','สกุลเงิน',cu+' '+(rc.currencies[cu].symbol||'')+(z.rate?' · 1 '+cu+' ≈ '+(Math.round(z.rate.v*1000)/1000)+' บาท':'')]);
-    if(rc.languages)f.push(['🗣','ภาษา',Object.keys(rc.languages).map(function(k){return rc.languages[k];}).slice(0,3).join(', ')]);
-    if(rc.timezones&&rc.timezones[0])f.push(['🕐','เวลา',tpZoneTz(rc.timezones[0])+(rc.timezones.length>1?' (มี '+rc.timezones.length+' โซนเวลา)':'')]);
-    if(rc.car&&rc.car.side)f.push(['🚗','ขับรถ',rc.car.side==='left'?'ชิดซ้าย (เหมือนไทย)':'ชิดขวา (ต่างจากไทย)']);
-    if(rc.idd&&rc.idd.root)f.push(['📞','รหัสโทร',rc.idd.root+(rc.idd.suffixes&&rc.idd.suffixes.length===1?rc.idd.suffixes[0]:'')]);
-    if(rc.population)f.push(['👥','ประชากร',(rc.population/1e6).toFixed(1)+' ล้านคน']);}
-  if(z.extra){if(z.extra.plug.length)f.push(['🔌','ปลั๊กไฟ',z.extra.plug.join(', ').replace(/AC power plugs and sockets: /g,'')]);if(z.extra.em.length)f.push(['🚨','เบอร์ฉุกเฉิน',z.extra.em.join(' / ')]);}
+  var f=[];
+  if(ex.cap)f.push(['🏛',z.type==='country'?'เมืองหลวง':'ศูนย์กลาง',ex.cap]);
+  if(ex.cur)f.push(['💱','สกุลเงิน',ex.cur+(z.rate?' · 1 '+ex.cur+' ≈ '+(Math.round(z.rate.v*1000)/1000)+' บาท':'')]);
+  if(ex.lang&&ex.lang.length)f.push(['🗣','ภาษา',ex.lang.slice(0,3).join(', ')]);
+  if(ex.drv)f.push(['🚗','ขับรถ',/left/i.test(ex.drv)?'ชิดซ้าย (เหมือนไทย)':'ชิดขวา (ต่างจากไทย)']);
+  if(ex.tel)f.push(['📞','รหัสโทร',(/^\+/.test(ex.tel)?'':'+')+ex.tel]);
+  if(ex.pop)f.push(['👥','ประชากร',ex.pop>=1e6?(ex.pop/1e6).toFixed(1)+' ล้านคน':Math.round(ex.pop).toLocaleString('th-TH')+' คน']);
+  if(ex.plug&&ex.plug.length)f.push(['🔌','ปลั๊กไฟ',ex.plug.slice(0,4).join(', ')+(ex.plug.some(function(x){return /NEMA|Type A|Type B/.test(x);})?' (ขาแบน — ปลั๊กไทยแบบขาแบนเสียบได้)':'')]);
+  if(ex.em&&ex.em.length)f.push(['🚨','เบอร์ฉุกเฉิน',ex.em.slice(0,4).join(' / ')]);
   if(f.length)h+='<dl class="tp-z-facts">'+f.map(function(x){return '<div><dt>'+x[0]+' '+x[1]+'</dt><dd>'+tpEsc(x[2])+'</dd></div>';}).join('')+'</dl>';
   h+='<div class="tp-mp-acts tp-z-acts"><button type="button" class="tp-btn-d" onclick="tpZoneAdd()">＋ เพิ่มเป็นจุดหมายในทริป</button></div>';
   if(z.subs==null&&z.qid)h+='<div class="tp-mp-hint">กำลังโหลดโซนย่อย…</div>';
