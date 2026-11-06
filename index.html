@@ -4930,7 +4930,7 @@ function tpZoneTz(tz){ // "UTC+09:00" → เทียบกับไทย
 function tpZoneRender(){
   var p=document.getElementById('tp-mpan'),z=_tpZ;if(!p||!z)return;p.hidden=false;
   var h='<button type="button" class="tp-mp-x" aria-label="ปิด" onclick="tpZoneClose()">×</button>';
-  if(z.sum&&z.sum.img)h+='<img class="tp-mp-img" src="'+tpEsc(z.sum.img)+'" alt="" onerror="this.remove()">';
+  if(z.sum&&z.sum.img&&!/Flag_of|Flag%20of|Coat_of_arms|Emblem|Seal_of|_Flag|Location|locator|map/i.test(z.sum.img))h+='<img class="tp-mp-img" src="'+tpEsc(z.sum.img)+'" alt="" onerror="this.remove()">';
   h+='<div class="tp-z-crumb">'+(_tpZStack.length?'<button type="button" class="tp-btn-l" onclick="tpZoneBack()">‹ '+tpEsc(_tpZStack[_tpZStack.length-1].name)+'</button>':'<button type="button" class="tp-btn-l" onclick="tpZoneOpen()">🔎 ค้นใหม่</button>')+'</div>';
   var ex=z.extra||{},flag=ex.flag?'<img class="tp-z-flag" src="'+tpEsc(String(ex.flag).replace(/^http:/,'https:'))+'?width=48" alt="">':'';
   h+='<div class="tp-mp-t">'+flag+'<b>'+tpEsc(z.th||z.name)+'</b> <small class="tp-z-kind">'+tpEsc(z.kind)+(z.country&&z.type!=='country'?' · '+tpEsc(z.country):'')+'</small>'+(z.sum&&z.sum.url?' <a href="'+tpEsc(z.sum.url)+'" target="_blank" rel="noopener">อ่านต่อ ↗</a>':'')+'</div>';
