@@ -175,6 +175,11 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Chips `#tp-poicats` (top of map, bottom on phone) filter by category. Click → existing panel `tpPan({item})` + nearest metro station
   "🚇 X · เดิน n นาที" (`tpPoiNearSta`, from metro cache) + Wikipedia REST summary image/extract. localStorage `tp_poi` (default on).
   Names: Thai → English → local (also `tpLangExpr` for our layers). Test: test_poi.py.
+  Live (6 Nov): overpass-api.de is SLOW (metro ≈50 s, POI ≈57 s) and returns 429 when >2 requests run at once; kumi mirror was slower.
+  So: all metro/POI Overpass calls go through one queue `tpOvp` (retry ×3 on 429/504/remark), POI query uses a bbox (±0.08°/±0.09°) not
+  `around`, results cached in IndexedDB `khum_trip_cache` 30 days (`tpCacheGet/Set`; empty results never cached). While OSM loads, fast
+  Wikipedia geosearch POIs (`tpPoiWiki`, category guessed from the title `tpPoiGuessCat`) show at once; `tpPoiMerge` lets OSM replace them.
+  Status pill `.tp-poi-st` in the chips row.
   AI booking reader (5 Nov, Dech chose canvas page "Trip · AI อ่านใบจอง" แบบ 1–3): GAS `gas/dashboard-ai.gs` (installed 6 Nov, deployment **version 196**; live test OK ~4.5 s, key found in CONFIG.GEMINI_API_KEY) —
   POST `?action=readBooking` {image dataURL, ctx} → Gemini 2.5 Flash (inline image, responseMimeType JSON) → {ok, items:[{type,title,date,time,
   endDate,endTime,from,to,code,people,price,currency,address,note,uncertain}]}; key = Script Property `GEMINI_API_KEY` else any CONFIG key named
