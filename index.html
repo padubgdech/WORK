@@ -4723,7 +4723,7 @@ function tpPoiCatOf(tg){
   return 'view';
 }
 function tpPoiOne(p){
-  var key='tp_poi_v1_'+p[0].toFixed(1)+','+p[1].toFixed(1);
+  var key='tp_poi_v2_'+p[0].toFixed(1)+','+p[1].toFixed(1);
   if(_tpPoiMem[key])return Promise.resolve(_tpPoiMem[key]);
   return _tpPoiMem[key]=tpCacheGet(key).then(function(c){if(c&&c.length){_tpPoiMem[key]=c;return c;}return tpPoiNet(p,key);});
 }
@@ -4732,7 +4732,7 @@ function tpPoiNet(p,key){
   var q='[out:json][timeout:90][bbox:'+bb+'];('
     +'nwr["tourism"~"^(attraction|museum|gallery|zoo|theme_park)$"]["wikidata"];'
     +'nwr["tourism"="viewpoint"]["name"];'
-    +'nwr["amenity"="place_of_worship"]["wikidata"];'
+    +'nwr["amenity"="place_of_worship"]["wikipedia"];'
     +'nwr["amenity"="marketplace"]["name"];'
     +'nwr["leisure"~"^(park|garden)$"]["wikidata"];'
     +'nwr["shop"~"^(mall|department_store)$"]["wikidata"];'
@@ -4741,6 +4741,8 @@ function tpPoiNet(p,key){
       var out=[],seen={};
       (j.elements||[]).forEach(function(e){var tg=e.tags||{},lat=e.lat!=null?e.lat:e.center&&e.center.lat,lng=e.lon!=null?e.lon:e.center&&e.center.lon;
         if(lat==null||!(tg.name||tg['name:en']))return;var id=e.type[0]+e.id;if(seen[id])return;seen[id]=1;
+        if(tg.amenity==='place_of_worship'&&/christian|muslim|jewish/.test(tg.religion||'')&&!tg.tourism)return; // โบสถ์/มัสยิดทั่วไป ไม่ใช่ที่เที่ยวหลัก
+        if(!tg['name:th']&&!tg['name:en']&&!tg.wikipedia)return; // ไม่มีชื่อที่อ่านออก + ไม่ดัง → ข้าม
         var sc=(tg.wikidata?3:0)+(tg.wikipedia?3:0)+(tg['name:th']?1:0)+(tg['name:en']?1:0)+(tg.tourism==='attraction'||tg.tourism==='museum'?1:0);
         out.push({id:id,c:tpPoiCatOf(tg),y:Math.round(lat*1e5)/1e5,x:Math.round(lng*1e5)/1e5,th:tg['name:th']||'',en:tg['name:en']||'',n:tg.name||'',wp:tg.wikipedia||'',s:sc});});
       out.sort(function(a,b){return b.s-a.s;});_tpPoiMem[key]=out;if(out.length)tpCacheSet(key,out);else delete _tpPoiMem[key];return out;
@@ -4762,18 +4764,18 @@ function tpPoiClear(){if(_tpE)_tpPoiMk.forEach(function(m){_tpE.rm(m);});_tpPoiM
 // วาดหมุดเฉพาะในจอ · ทับกัน (ห่าง < 44px) = รวมใต้หมุดที่ดังกว่า พร้อมตัวเลข
 function tpPoiDraw(){
   tpPoiClear();if(!_tpPoiOn||!_tpE||!_tpE.alive()||!_tpE.project||!_tpPoiAll.length)return;
-  var b=_tpE.bounds(),z=_tpE.zoom(),placed=[],showLb=z>=13.3,max=z>=14?120:70;
+  var b=_tpE.bounds(),z=_tpE.zoom(),placed=[],showLb=z>=13.3,max=z>=15?90:z>=13?45:30,gap=z>=15?44:54;
   var list=_tpPoiAll.filter(function(x){return (!_tpPoiCat||x.c===_tpPoiCat)&&x.y>=b[0]&&x.y<=b[2]&&x.x>=b[1]&&x.x<=b[3];});
   list.forEach(function(x){
     if(placed.length>=max)return;var p=_tpE.project(x.y,x.x),hit=null;
-    for(var i=0;i<placed.length;i++){var q=placed[i];if(Math.abs(q.p.x-p.x)<44&&Math.abs(q.p.y-p.y)<(showLb?52:44)){hit=q;break;}}
+    for(var i=0;i<placed.length;i++){var q=placed[i];if(Math.abs(q.p.x-p.x)<(showLb?gap+40:gap)&&Math.abs(q.p.y-p.y)<(showLb?gap+6:gap)){hit=q;break;}}
     if(hit){hit.n++;return;}placed.push({x:x,p:p,n:0});
   });
   placed.forEach(function(o,i){
     var x=o.x,k=TP_POI[x.c],el=document.createElement('button');el.type='button';
     var nm=tpPoiName(x),done=tpPoiDone(x);
     el.className='tp-poi'+(i<3&&z<13?' top':'')+(done?' done':'');el.style.setProperty('--pc',k[1]);
-    el.innerHTML='<span class="tp-poi-ic">'+tpPoiSvg(x.c,i<3&&z<13?19:15)+'</span>'+(o.n?'<i class="tp-poi-n">+'+o.n+'</i>':'')+(done?'<i class="tp-poi-ok" aria-hidden="true">✓</i>':'')+(showLb?'<span class="tp-poi-lb">'+tpEsc(nm)+'</span>':'');
+    el.innerHTML='<span class="tp-poi-ic">'+tpPoiSvg(x.c,i<3&&z<13?19:15)+'</span>'+(o.n?'<i class="tp-poi-n">+'+o.n+'</i>':'')+(done?'<i class="tp-poi-ok" aria-hidden="true">✓</i>':'')+(showLb&&(i<25||z>=15)?'<span class="tp-poi-lb">'+tpEsc(nm)+'</span>':'');
     el.setAttribute('aria-label',k[0]+': '+nm+(o.n?' และอีก '+o.n+' ที่ใกล้ ๆ':'')+(done?' (ปักแล้ว)':''));
     _tpPoiMk.push(_tpE.addMk(x.y,x.x,el,nm,function(){tpPoiOpen(x,o.n);}));
   });
