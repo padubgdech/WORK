@@ -4873,7 +4873,7 @@ function tpZoneSearch(q){
   clearTimeout(_tpZT);var box=document.getElementById('tp-zres');if(!box)return;if(String(q).trim().length<2){box.innerHTML='';return;}
   _tpZT=setTimeout(function(){box.innerHTML='<div class="tp-mp-hint">กำลังค้นหา…</div>';
     var u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&extratags=1&addressdetails=1&accept-language=th,en&q='+encodeURIComponent(q);
-    Promise.all([fetch(u).then(function(r){return r.json();}).catch(function(){return [];}),fetch(u+'&featuretype=state').then(function(r){return r.json();}).catch(function(){return [];})])
+    Promise.all([fetch(u).then(function(r){return r.json();}).catch(function(){return [];}),fetch(/[\u0E00-\u0E7F]/.test(q)&&!/^(จังหวัด|ประเทศ)/.test(q.trim())?u.replace(/&q=.*$/,'&q='+encodeURIComponent('จังหวัด'+q.trim())):u+'&featuretype=state').then(function(r){return r.json();}).catch(function(){return [];})])
       .then(function(rr){var seen={},rank={country:0,state:1,province:1,region:2,city:3,county:4};
         var a=rr[1].concat(rr[0]).filter(function(r){var k=r.osm_type+r.osm_id;if(seen[k])return false;seen[k]=1;return r.osm_type==='relation'||/country|state|province|city|region|county/.test(r.addresstype||r.type||'');})
           .sort(function(x,y){var rx=rank[x.addresstype||x.type],ry=rank[y.addresstype||y.type];return (rx==null?5:rx)-(ry==null?5:ry);}).slice(0,8);
