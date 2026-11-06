@@ -180,6 +180,9 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   `around`, results cached in IndexedDB `khum_trip_cache` 30 days (`tpCacheGet/Set`; empty results never cached). While OSM loads, fast
   Wikipedia geosearch POIs (`tpPoiWiki`, category guessed from the title `tpPoiGuessCat`) show at once; `tpPoiMerge` lets OSM replace them.
   Status pill `.tp-poi-st` in the chips row.
+  Declutter (6 Nov, checked live on Taipei: 375 OSM + Wikipedia POIs): cache key v2, place_of_worship needs `wikipedia`, Christian/Muslim/Jewish
+  worship places skipped unless tourism, places with neither name:th/name:en nor wikipedia skipped; max pins 30 / 45 (z≥13) / 90 (z≥15),
+  gap 54/44 px, labels only on the top 25 below z15.
   AI booking reader (5 Nov, Dech chose canvas page "Trip · AI อ่านใบจอง" แบบ 1–3): GAS `gas/dashboard-ai.gs` (installed 6 Nov, deployment **version 196**; live test OK ~4.5 s, key found in CONFIG.GEMINI_API_KEY) —
   POST `?action=readBooking` {image dataURL, ctx} → Gemini 2.5 Flash (inline image, responseMimeType JSON) → {ok, items:[{type,title,date,time,
   endDate,endTime,from,to,code,people,price,currency,address,note,uncertain}]}; key = Script Property `GEMINI_API_KEY` else any CONFIG key named
