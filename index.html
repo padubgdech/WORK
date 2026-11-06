@@ -763,6 +763,8 @@ body.nx-full .nx-side,body.nx-full .nx-main{max-height:none;height:100%}
 .nx-title:empty:before,.nx-body:empty:before{content:attr(data-ph);color:#b3afa5;font-weight:inherit}
 .nx-body{min-height:240px;font-size:16px;line-height:1.75;outline:none;word-break:break-word;padding-bottom:20px}
 .nx-body p,.nx-body div{margin:0}
+.nx-body .nx-fs-s{font-size:13px}.nx-body .nx-fs-m{font-size:16px}.nx-body .nx-fs-l{font-size:21px;line-height:1.5}
+.nx-tb button.nx-fsb.on{background:rgba(255,255,255,.18)}
 .nx-body h2{font-size:24px;margin:18px 0 6px;line-height:1.35}
 .nx-body h3{font-size:19px;margin:14px 0 4px;line-height:1.4}
 .nx-body h1{font-size:28px;margin:18px 0 6px}
@@ -2729,6 +2731,7 @@ function nxSanitize(html){
         if(dk==='nx-card'){if(!/^https?:\/\/[^\s"<>]+$/i.test(dhr)){el.removeChild(c);return;}c.innerHTML='';c.setAttribute('class','nx-card');c.setAttribute('contenteditable','false');c.setAttribute('data-href',dhr);if(dtt)c.setAttribute('data-t',dtt.slice(0,200));if(dpp)c.setAttribute('data-p',dpp.slice(0,60));if(dno)c.setAttribute('data-note',dno.slice(0,200));c.removeAttribute('style');return;}
         if(dk){c.setAttribute('class',dk);if(dk==='nx-cols')c.setAttribute('data-n',dn==='3'?'3':'2');}}
       if(c.tagName==='SPAN'&&/\bnx-tag\b/.test(cls)&&/^[ygbrpn]$/.test(dc||'')){c.setAttribute('class','nx-tag');c.setAttribute('data-c',dc);c.setAttribute('contenteditable','false');c.removeAttribute('style');}
+      if(c.tagName==='SPAN'&&/\bnx-fs-[sml]\b/.test(cls))c.setAttribute('class',cls.match(/\bnx-fs-[sml]\b/)[0]);
       if(c.tagName==='LI'&&done==='1')c.setAttribute('data-done','1');
       if(c.tagName==='LI'&&tk==='1')c.setAttribute('data-task','1');
       if(c.tagName==='IMG'){c.setAttribute('src',src);c.setAttribute('class','nx-img');c.setAttribute('alt','');if(iw>=60&&iw<=2000)c.setAttribute('style','width:'+iw+'px');else c.removeAttribute('style');}
@@ -2880,6 +2883,9 @@ function nxPageHtml(notes,secs,cur){
     +'<button type="button" data-c="italic" aria-label="ตัวเอียง" title="ตัวเอียง (⌘I)" onmousedown="event.preventDefault()" onclick="nxFmt(this)"><i style="font-family:Georgia,serif">I</i></button>'
     +'<button type="button" data-c="underline" aria-label="ขีดเส้นใต้" title="ขีดเส้นใต้ (⌘U)" onmousedown="event.preventDefault()" onclick="nxFmt(this)"><u>U</u></button>'
     +'<button type="button" data-c="strikeThrough" aria-label="ขีดฆ่า" title="ขีดฆ่า" onmousedown="event.preventDefault()" onclick="nxFmt(this)"><s>S</s></button><span class="sep"></span>'
+    +'<button type="button" class="nx-fsb" data-fs="s" aria-label="ตัวอักษรเล็ก" title="ตัวเล็ก" onmousedown="event.preventDefault()" onclick="nxSize(\'s\')"><span style="font-size:11px">ก</span></button>'
+    +'<button type="button" class="nx-fsb" data-fs="m" aria-label="ตัวอักษรกลาง" title="ขนาดกลาง (ปกติ)" onmousedown="event.preventDefault()" onclick="nxSize(\'m\')"><span style="font-size:14px">ก</span></button>'
+    +'<button type="button" class="nx-fsb" data-fs="l" aria-label="ตัวอักษรใหญ่" title="ตัวใหญ่" onmousedown="event.preventDefault()" onclick="nxSize(\'l\')"><span style="font-size:18px;font-weight:600">ก</span></button><span class="sep"></span>'
     +NX_TXT.map(function(c){return '<button type="button" class="nx-tc" data-c="foreColor" data-v="'+c[0]+'" aria-label="ตัวอักษรสี'+c[1]+'" title="สี'+c[1]+'" style="color:'+c[0]+';border-bottom-color:'+c[0]+'" onmousedown="event.preventDefault()" onclick="nxFmt(this)">A</button>';}).join('')
     +'<button type="button" data-c="backColor" data-v="#ffe9a8" aria-label="ไฮไลต์" title="ไฮไลต์" onmousedown="event.preventDefault()" onclick="nxFmt(this)"><span style="background:#ffe9a8;color:#1f1e1c;padding:0 4px;border-radius:3px">ไฮไลต์</span></button>'
     +'<button type="button" data-c="removeFormat" aria-label="ล้างรูปแบบ" title="ล้างรูปแบบ" onmousedown="event.preventDefault()" onclick="nxFmt(this)">Tx</button>'
@@ -3353,7 +3359,28 @@ function nxFmt(b){
   if(b.dataset.c==='removeFormat'&&sel.isCollapsed){['bold','italic','underline','strikeThrough'].forEach(function(c){try{if(document.queryCommandState(c))document.execCommand(c);}catch(e){}});document.execCommand('foreColor',false,'#1d1d1f');}
   nxQueue();nxTbState();
 }
-function nxTbState(){document.querySelectorAll('#nx .nx-tb button[data-c=bold],#nx .nx-tb button[data-c=italic],#nx .nx-tb button[data-c=underline],#nx .nx-tb button[data-c=strikeThrough]').forEach(function(x){var on=false;try{on=document.queryCommandState(x.dataset.c);}catch(e){}x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);});}
+function nxSize(z){ // ขนาดตัวอักษร: s เล็ก · m กลาง (ปกติ) · l ใหญ่ — เก็บเป็น span.nx-fs-s / span.nx-fs-l
+  var ed=document.getElementById('nx-body'),sel=window.getSelection();
+  if(!ed||!sel.rangeCount||!ed.contains(sel.anchorNode)){showToast('เลือกข้อความในหน้าก่อน');return;}
+  if(sel.isCollapsed){showToast('ลากเลือกข้อความที่จะปรับขนาดก่อน');return;}
+  try{document.execCommand('styleWithCSS',false,false);}catch(e){}
+  document.execCommand('fontSize',false,'7');
+  var last=null;
+  ed.querySelectorAll('font[size="7"]').forEach(function(f){
+    f.querySelectorAll('span.nx-fs-s,span.nx-fs-m,span.nx-fs-l').forEach(function(x){while(x.firstChild)x.parentNode.insertBefore(x.firstChild,x);x.parentNode.removeChild(x);});
+    var inSz=f.parentNode&&f.parentNode.closest&&f.parentNode.closest('span.nx-fs-s,span.nx-fs-l');
+    if(inSz&&inSz.textContent===f.textContent){while(inSz.firstChild)inSz.parentNode.insertBefore(inSz.firstChild,inSz);inSz.parentNode.removeChild(inSz);inSz=null;}
+    var sp=document.createElement('span');
+    if(z==='m'&&!inSz){while(f.firstChild)f.parentNode.insertBefore(f.firstChild,f);f.parentNode.removeChild(f);return;}
+    sp.className='nx-fs-'+z;while(f.firstChild)sp.appendChild(f.firstChild);f.parentNode.replaceChild(sp,f);last=sp;
+  });
+  ed.querySelectorAll('span.nx-fs-s:empty,span.nx-fs-m:empty,span.nx-fs-l:empty').forEach(function(x){x.parentNode.removeChild(x);});
+  if(last){var r=document.createRange();r.selectNodeContents(last);sel.removeAllRanges();sel.addRange(r);}
+  nxQueue();nxTbState();
+}
+function nxTbState(){
+  var se=window.getSelection(),an=se&&se.anchorNode,ae=an&&(an.nodeType===1?an:an.parentNode),fz=ae&&ae.closest&&ae.closest('#nx-body span.nx-fs-s,#nx-body span.nx-fs-m,#nx-body span.nx-fs-l');
+  var cur=fz?fz.className.slice(-1):'m';document.querySelectorAll('#nx .nx-tb button.nx-fsb').forEach(function(x){var on=x.dataset.fs===cur;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);});document.querySelectorAll('#nx .nx-tb button[data-c=bold],#nx .nx-tb button[data-c=italic],#nx .nx-tb button[data-c=underline],#nx .nx-tb button[data-c=strikeThrough]').forEach(function(x){var on=false;try{on=document.queryCommandState(x.dataset.c);}catch(e){}x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);});}
 
 // ---------- blocks ----------
 function nxFocusMarker(){

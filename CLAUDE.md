@@ -116,6 +116,9 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   `/ค่าใช้จ่าย` inserts a sum table · timeline `div.nx-tl > .nx-tl-i > .nx-tl-t + .nx-tl-b > .nx-tl-h + .nx-tl-d` (`nxTlKey` Enter: time→title→desc,
   Enter on empty desc = new item prefilled with previous end time `nxTlNext`). Toolbar `#nx-btools` (`nxBlockTools`/`nxBlk`: +col/del col/unwrap,
   +slot/sort by time/del slot/del timeline). Sanitizer keeps only `NX_DIVC` classes on DIVs. Test: scratchpad test_nxblk.py.
+  Font size (6 Nov "ปรับขนาดตัวอักษร เล็ก/กลาง/ใหญ่"): 3 buttons ก ก ก `.nx-fsb[data-fs=s|m|l]` in `#nx-tb` → `nxSize(z)` (execCommand fontSize 7 as marker →
+  `span.nx-fs-s` 13px / unwrap for medium (16px default) / `span.nx-fs-l` 21px; nested size spans removed); sanitizer keeps those classes; active size
+  marked in `nxTbState`. Test: test_fs.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Trip tab (5 Nov, from a travel-dashboard image Dech sent): tab `trip` between Calendar and Tasks → `#page-trip > #tp`, `renderTrip()`,
   all code prefixed `tp`. Data localStorage `rudy_trips_v1` {trips:[{id,name,start,end,transport,calAdded,stops:[{id,name,country,date,
