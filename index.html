@@ -333,6 +333,62 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .tcol-band.p-med{--c1:#D7AE64;--c2:#F1DEB2;--soft:#F8EFDD;--ink:#6E4D12;--dot:#B8862F}
 .tcol-band.p-low{--c1:#86B79A;--c2:#CFE3D5;--soft:#E7F1EA;--ink:#2F5B44;--dot:#4E8B6A}
 .tcol-band-row{display:flex;align-items:center;justify-content:space-between}
+.jr{max-width:1240px;margin:0 auto}
+.jr-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.jr-ic{font-size:34px;line-height:1}.jr-h1{font-size:26px;margin:6px 0 2px}.jr-sub{margin:0;font-size:13px;color:#8a857b}
+.jr-new{border:0;background:#1f1e1c;color:#fff;border-radius:10px;min-height:40px;padding:0 16px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+.jr-lay{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.jr-main{background:#fff;border:1px solid #eeebe4;border-radius:14px;padding:14px}
+.jr-mh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}.jr-mh>b{font-size:16px}
+.jr-vt{display:flex;gap:2px;background:#f1efea;border-radius:9px;padding:3px}
+.jr-vb{border:0;background:transparent;border-radius:7px;min-height:32px;padding:0 10px;font:inherit;font-size:12.5px;color:#6d685e;cursor:pointer}
+.jr-vb.on{background:#fff;color:#2b2925;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.jr-q{margin-left:auto;display:flex;align-items:center;gap:6px;border:1px solid #e3dfd6;border-radius:9px;padding:0 9px;min-height:34px;font-size:12.5px}
+.jr-q input{border:0;outline:0;font:inherit;font-size:12.5px;width:150px;background:transparent}
+.jr-grp{margin-bottom:12px}.jr-gh{font-size:13px;margin:8px 2px;color:#55534e}.jr-gh span{color:#a8a399;font-weight:500;margin-left:4px}
+.jr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.jr-card{background:var(--jb);border-radius:12px;transition:transform .15s,box-shadow .15s}
+.jr-card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.07)}
+.jr-cbtn{width:100%;border:0;background:transparent;text-align:left;font:inherit;padding:12px 13px;display:flex;flex-direction:column;gap:6px;cursor:pointer;color:#2b2925;border-radius:12px}
+.jr-cbtn:focus-visible{outline:2px solid #2b2925;outline-offset:2px}
+.jr-cd{font-size:12px;color:#6d685e;font-weight:600}.jr-ct{font-size:14px}
+.jr-cb{font-size:12.8px;line-height:1.55;color:#3d3b37;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
+.jr-cf{display:flex;gap:4px;flex-wrap:wrap}.jr-tag,.jr-mood{font-style:normal;font-size:11px;background:rgba(255,255,255,.75);border-radius:6px;padding:2px 7px}
+.jr-mood{box-shadow:inset 3px 0 0 var(--mc)}
+.jr-empty{padding:28px 12px;text-align:center;color:#8a857b;font-size:13.5px}
+.jr-add2{width:100%;border:1px dashed #dcd8cf;background:transparent;border-radius:10px;min-height:40px;color:#8a857b;font:inherit;font-size:13px;cursor:pointer;margin-top:4px}
+.jr-side{display:flex;flex-direction:column;gap:12px}
+.jr-box{background:#fff;border:1px solid #eeebe4;border-radius:14px;padding:12px 14px}
+.jr-bh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.jr-bh b{font-size:14px}
+.jr-sel{font:inherit;font-size:12px;border:1px solid #e3dfd6;border-radius:8px;padding:4px 6px;background:#fff}
+.jr-donut{display:flex;justify-content:center}
+.jr-legs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px}
+.jr-leg{border:0;background:transparent;font:inherit;font-size:12px;display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:7px;cursor:pointer;text-align:left;color:#3d3b37;min-height:30px}
+.jr-leg i{width:9px;height:9px;border-radius:50%}.jr-leg b{margin-left:auto;font-weight:600}.jr-leg.on{background:#f1efea}
+.jr-clr{border:0;background:transparent;color:#3a2fb8;font:inherit;font-size:12px;cursor:pointer;margin-top:4px}
+.jr-quote{display:flex;gap:6px;align-items:flex-start;border-left:3px solid #e3dfd6;padding:4px 0 4px 10px;margin:6px 0;font-size:13px;color:#3d3b37}
+.jr-quote.today{border-left-color:#2b2925;font-weight:600}.jr-quote span{flex:1}
+.jr-x{border:0;background:transparent;color:#b3aea4;font-size:16px;cursor:pointer;width:28px;height:28px;flex:0 0 auto;border-radius:6px}.jr-x:hover{background:#f6f5f1;color:#55534e}
+.jr-rem{display:flex;gap:8px;align-items:center;font-size:13px;padding:2px 0}.jr-rem span{flex:1}.jr-rem.done span{text-decoration:line-through;color:#a8a399}
+.jr-rck{width:20px;height:20px;border:1.6px solid #bdb6a8;border-radius:5px;background:#fff;font-size:12px;line-height:1;cursor:pointer;color:#fff;flex:0 0 auto;padding:0}
+.jr-rem.done .jr-rck{background:#2f6b3a;border-color:#2f6b3a}
+.jr-addf input{width:100%;box-sizing:border-box;border:0;border-top:1px solid #f1eee8;padding:8px 2px 2px;font:inherit;font-size:12.5px;outline:0;background:transparent;margin-top:4px}
+.jr-ed{display:flex;flex-direction:column;gap:12px}
+.jr-er{display:flex;gap:10px;flex-wrap:wrap}
+.jr-lb{display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:#6d685e;flex:1;min-width:140px}
+.jr-lb input,.jr-lb textarea{font:inherit;font-size:14px;border:1px solid #e3dfd6;border-radius:9px;padding:9px 10px;color:#2b2925;background:#fff;resize:vertical}
+.jr-moods{display:flex;gap:6px;flex-wrap:wrap}
+.jr-mb{border:1.5px solid #ece9e2;background:#fff;border-radius:10px;min-height:44px;padding:0 10px;font:inherit;font-size:12.5px;display:flex;align-items:center;gap:6px;cursor:pointer;color:#3d3b37}
+.jr-mb span{font-size:17px}.jr-mb.on{background:var(--mb);border-color:var(--mc);font-weight:600}
+.jr-tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.jr-tb{border:1px solid #e3dfd6;background:#fff;border-radius:999px;min-height:32px;padding:0 11px;font:inherit;font-size:12.5px;cursor:pointer;color:#3d3b37}
+.jr-tb.on{background:#1f1e1c;color:#fff;border-color:#1f1e1c}
+.jr-tnew{border:1px dashed #d5d0c6!important;border-radius:999px!important;min-height:32px;padding:0 11px!important;font-size:12.5px!important;width:150px}
+.jr-ea{display:flex;gap:8px;justify-content:space-between}
+.jr-save{border:0;background:#1f1e1c;color:#fff;border-radius:10px;min-height:44px;padding:0 22px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.jr-del{border:0;background:transparent;color:#c2553f;font:inherit;font-size:13px;cursor:pointer;min-height:44px}
+@media(max-width:900px){.jr-lay{grid-template-columns:1fr}.jr-side{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}}
+@media(max-width:760px){.jr-q{margin-left:0;flex:1 1 100%}.jr-q input{width:100%}.jr-grid{grid-template-columns:1fr}.jr-side{display:flex}}
 #tv-board[hidden],#tv-alt[hidden]{display:none!important}
 .tv-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
 .tv-sw{display:flex;gap:2px;background:#ebe8e1;border-radius:11px;padding:3px;overflow-x:auto;scrollbar-width:none;max-width:100%}
@@ -1382,6 +1438,13 @@ button.tp-sp-n{border:0;padding:0;cursor:pointer;font-family:inherit}button.tp-s
       </svg>
       Note
     </div>
+    <div class="tab" data-tab="journal" onclick="goTab('journal',this)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5V4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5"/>
+        <path d="M8 7h8M8 11h6"/>
+      </svg>
+      Journal
+    </div>
     <div class="tab" data-tab="summary" onclick="goTab('summary',this)">
       <svg width="15" height="15" viewBox="0 0 24 24">
         <rect x="4" y="13" width="4" height="8" rx="1" fill="currentColor" opacity=".4"/>
@@ -1521,6 +1584,7 @@ button.tp-sp-n{border:0;padding:0;cursor:pointer;font-family:inherit}button.tp-s
 <div id="page-note" class="page">
   <div id="nx" class="nx"></div>
 </div>
+<div id="page-journal" class="page"><div id="jr" class="jr"></div></div>
 <div id="page-summary" class="page">
   <div class="grid2">
     <div>
@@ -2688,15 +2752,123 @@ function submitAdd(){
 }
 function showModal(html){var ov=document.getElementById('overlay');ov.innerHTML='<div class="modal" onclick="event.stopPropagation()"><div id="modal-body">'+html+'</div></div>';ov.classList.add('open');}
 function closeModal(){var ov=document.getElementById('overlay');ov.classList.remove('open');ov.innerHTML='';}
-var tabMeta={main:{title:'งานวันนี้',stats:true},cal:{title:'Calendar',stats:false},trip:{title:'Trip',stats:false},tasks:{title:'Tasks',stats:false},history:{title:'ประวัติงาน',stats:false},note:{title:'Note',stats:false},summary:{title:'Summary',stats:false}};
+var tabMeta={main:{title:'งานวันนี้',stats:true},cal:{title:'Calendar',stats:false},trip:{title:'Trip',stats:false},tasks:{title:'Tasks',stats:false},history:{title:'ประวัติงาน',stats:false},note:{title:'Note',stats:false},journal:{title:'Journal',stats:false},summary:{title:'Summary',stats:false}};
 function goTab(p,btn){
   document.querySelectorAll('.tab').forEach(function(b){b.className='tab';});btn.className='tab active';
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('show');});document.getElementById('page-'+p).classList.add('show');
   var m=tabMeta[p];document.getElementById('ph-title').textContent=m.title;document.getElementById('ph-stats').style.display=m.stats?'flex':'none';
   document.body.classList.toggle('nx-full',p==='note');if(p==='note'&&typeof nxSyncSoon==='function')nxSyncSoon(300); // หน้า Note แบบเต็มจอ (ซ่อนหัวหน้า + ไม่มีขอบ)
-  if(p==='main')renderPinned();if(p==='tasks')renderNDTasks();if(p==='history')renderHistory();if(p==='summary')renderSummary();if(p==='cal')renderCal();if(p==='trip')renderTrip();if(p==='note')renderNotes();
+  if(p==='main')renderPinned();if(p==='tasks')renderNDTasks();if(p==='history')renderHistory();if(p==='summary')renderSummary();if(p==='cal')renderCal();if(p==='trip')renderTrip();if(p==='note')renderNotes();if(p==='journal')renderJournal();
   try{localStorage.setItem('rudyLastTab',p);}catch(err){}
 }
+// ---------- JOURNAL (7 พ.ย. — จากภาพ Notion "Daily Journal" ที่ Dech ส่งมา) ----------
+// localStorage rudy_journal_v1 {entries:[{id,date,title,body,mood,tags,at,upd}],quotes:[],rem:[{id,t,done}],ts} · sync key journal__all
+var JR_KEY='rudy_journal_v1';
+var JR_MOODS=[['energized','⚡','มีพลัง','#F2C94C','#FFF6DA'],['content','😊','พอใจ','#6FCF97','#E6F6EC'],['calm','😌','สงบ','#56CCF2','#E3F4FB'],['tired','😴','เหนื่อย','#BDB6A8','#F1EFEA'],['anxious','😟','กังวล','#F2994A','#FDEBDD'],['overwhelmed','😵','ล้น','#BB6BD9','#F4E6FA']];
+var JR_TAGS=['💼 งาน','🤝 ลูกค้า','📦 สินค้า','💡 ไอเดีย','📈 ยอดขาย','⚙️ ระบบ','🧘 สุขภาพ','👨‍👩‍👧 ครอบครัว','✅ Productivity'];
+var JR_Q0=['ทีละวัน หรือวันเดียว — เราเลือกเอง','สิ่งที่ทำทุกวันสำคัญกว่าสิ่งที่ทำนาน ๆ ครั้ง','ไม่ต้องเห็นทั้งบันได แค่ก้าวขั้นแรก'];
+var JR_R0=['ทำให้เสร็จ ดีกว่าทำให้เพอร์เฟกต์','ขอบคุณสิ่งเล็ก ๆ วันนี้','ใจดีกับตัวเอง','ฉลองความสำเร็จเล็ก ๆ'];
+var _jrView='month',_jrQ='',_jrMoodMo='',_jrMoodF='';
+try{_jrView=localStorage.getItem('jr_view')||'month';}catch(e){}
+function jrLoad(){var o=null;try{o=JSON.parse(localStorage.getItem(JR_KEY)||'null');}catch(e){}
+  if(!o||!Array.isArray(o.entries))o={entries:[],quotes:JR_Q0.slice(),rem:JR_R0.map(function(t,i){return {id:'r'+i,t:t,done:false};}),ts:0};
+  if(!Array.isArray(o.quotes))o.quotes=[];if(!Array.isArray(o.rem))o.rem=[];return o;}
+var _jrPushT=null;
+function jrSave(o){o.ts=Date.now();try{localStorage.setItem(JR_KEY,JSON.stringify(o));}catch(e){showToast('เครื่องเต็ม บันทึกไม่ได้');}clearTimeout(_jrPushT);_jrPushT=setTimeout(jrPush,3000);}
+function jrPush(){if(typeof nxPutKey!=='function'||(typeof _nxSync!=='undefined'&&_nxSync.off))return;var d=jrLoad();try{nxPutKey('journal__all',JSON.stringify(d),d.ts||Date.now(),function(){});}catch(e){}}
+var _jrPulled=0;
+function jrPull(){if(Date.now()-_jrPulled<15000||typeof nxGetKeys!=='function'||(typeof _nxSync!=='undefined'&&_nxSync.off))return;_jrPulled=Date.now();
+  try{nxGetKeys(['journal__all'],function(st,got){if(st!=='ok'||!got||!got.journal__all||!got.journal__all.html)return;var r=null;try{r=JSON.parse(got.journal__all.html);}catch(e){}
+    var l=jrLoad();if(!r||!Array.isArray(r.entries))return;
+    if((r.ts||0)>(l.ts||0)){try{localStorage.setItem(JR_KEY,JSON.stringify(r));}catch(e){}var pg=document.getElementById('page-journal');if(pg&&pg.classList.contains('show')&&!document.querySelector('#overlay.open'))renderJournal();}
+    else if((l.ts||0)>(r.ts||0))jrPush();});}catch(e){}}
+function jrMood(k){return JR_MOODS.filter(function(m){return m[0]===k;})[0]||null;}
+var JR_MO=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+function jrMoLabel(ym){var y=+ym.slice(0,4),m=+ym.slice(5,7);return JR_MO[m-1]+' '+(y+543);}
+function jrWeekKey(d){var dt=new Date(d+'T00:00:00+07:00'),wd=(dt.getDay()+6)%7;return addDays(d,-wd);}
+function jrStreak(es){var set={};es.forEach(function(e){set[e.date]=1;});var n=0,d=TODAY_STR;if(!set[d])d=addDays(d,-1);while(set[d]){n++;d=addDays(d,-1);}return n;}
+function jrSetView(v){_jrView=v;try{localStorage.setItem('jr_view',v);}catch(e){}renderJournal();}
+var _jrQT=null;function jrSearch(q){_jrQ=q;clearTimeout(_jrQT);_jrQT=setTimeout(function(){var el=document.getElementById('jr-list');if(el)el.innerHTML=jrListHtml(jrLoad());},180);}
+function jrCard(e){var m=jrMood(e.mood),bg=m?m[4]:'#F6F5F1';
+  return '<article class="jr-card" style="--jb:'+bg+'"><button type="button" class="jr-cbtn" data-id="'+e.id+'" onclick="jrEdit(this.dataset.id)" aria-label="เปิดบันทึก '+escH(fmtThai(e.date))+'">'
+    +'<span class="jr-cd">📄 @'+escH(fmtThai(e.date))+'</span>'+(e.title?'<b class="jr-ct">'+escH(e.title)+'</b>':'')
+    +'<span class="jr-cb">'+escH(e.body||'')+'</span>'
+    +'<span class="jr-cf">'+(e.tags||[]).map(function(t){return '<i class="jr-tag">'+escH(t)+'</i>';}).join('')+(m?'<i class="jr-mood" style="--mc:'+m[3]+'">'+m[1]+' '+m[2]+'</i>':'')+'</span></button></article>';}
+function jrListHtml(o){
+  var es=o.entries.slice().filter(function(e){if(_jrMoodF&&e.mood!==_jrMoodF)return false;if(!_jrQ)return true;var q=_jrQ.toLowerCase();return ((e.title||'')+' '+(e.body||'')+' '+(e.tags||[]).join(' ')).toLowerCase().indexOf(q)>=0;})
+    .sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:(b.at||0)-(a.at||0);});
+  if(!es.length)return '<div class="jr-empty">'+(o.entries.length?'ไม่พบบันทึกที่ตรงกับตัวกรอง':'ยังไม่มีบันทึก — กด “+ เขียนวันนี้” เพื่อเริ่มบันทึกงานวันแรก ✍️')+'</div>';
+  var groups=[],gmap={};
+  es.forEach(function(e){var k,lbl;
+    if(_jrView==='week'){k=jrWeekKey(e.date);lbl='สัปดาห์ '+fmtShort(k)+' – '+fmtShort(addDays(k,6));}
+    else if(_jrView==='mood'){var m=jrMood(e.mood);k=e.mood||'zz';lbl=m?m[1]+' '+m[2]:'ไม่ระบุอารมณ์';}
+    else{k=e.date.slice(0,7);lbl=jrMoLabel(k);}
+    if(!gmap[k]){gmap[k]={k:k,lbl:lbl,items:[]};groups.push(gmap[k]);}gmap[k].items.push(e);});
+  if(_jrView==='mood')groups.sort(function(a,b){var ia=JR_MOODS.findIndex(function(m){return m[0]===a.k;}),ib=JR_MOODS.findIndex(function(m){return m[0]===b.k;});return (ia<0?99:ia)-(ib<0?99:ib);});
+  return groups.map(function(g){return '<section class="jr-grp"><h3 class="jr-gh">▾ '+escH(g.lbl)+' <span>'+g.items.length+'</span></h3><div class="jr-grid">'+g.items.map(jrCard).join('')+'</div></section>';}).join('');
+}
+function jrDonut(o){
+  var months={};o.entries.forEach(function(e){months[e.date.slice(0,7)]=1;});var ml=Object.keys(months).sort().reverse();var cur=TODAY_STR.slice(0,7);if(ml.indexOf(cur)<0)ml.unshift(cur);
+  if(!_jrMoodMo||ml.indexOf(_jrMoodMo)<0)_jrMoodMo=cur;
+  var es=o.entries.filter(function(e){return e.date.slice(0,7)===_jrMoodMo&&e.mood;}),tot=es.length,cnt={};es.forEach(function(e){cnt[e.mood]=(cnt[e.mood]||0)+1;});
+  var R=52,C=2*Math.PI*R,off=0,arcs='';
+  if(tot)JR_MOODS.forEach(function(m){var n=cnt[m[0]]||0;if(!n)return;var len=C*n/tot;arcs+='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="'+m[3]+'" stroke-width="18" stroke-dasharray="'+Math.max(0,len-2)+' '+(C-len+2)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90 70 70)"><title>'+m[2]+' '+n+'</title></circle>';off+=len;});
+  else arcs='<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="#eeebe4" stroke-width="18"></circle>';
+  var sel='<select class="jr-sel" aria-label="เลือกเดือน" onchange="_jrMoodMo=this.value;renderJournal()">'+ml.map(function(k){return '<option value="'+k+'"'+(k===_jrMoodMo?' selected':'')+'>'+jrMoLabel(k)+'</option>';}).join('')+'</select>';
+  var leg=JR_MOODS.map(function(m){var n=cnt[m[0]]||0,on=_jrMoodF===m[0];return '<button type="button" class="jr-leg'+(on?' on':'')+'" aria-pressed="'+on+'" data-k="'+m[0]+'" onclick="jrMoodFilter(this.dataset.k)"><i style="background:'+m[3]+'"></i>'+m[1]+' '+m[2]+' <b>'+n+'</b></button>';}).join('');
+  return '<section class="jr-box" aria-label="Mood Board"><div class="jr-bh"><b>Mood Board</b>'+sel+'</div><div class="jr-donut"><svg viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="อารมณ์ '+tot+' วัน">'+arcs+'<text x="70" y="70" text-anchor="middle" font-size="30" font-weight="700" fill="#2b2925" dy=".1em">'+tot+'</text><text x="70" y="92" text-anchor="middle" font-size="11" fill="#8a857b">วันที่บันทึก</text></svg></div><div class="jr-legs">'+leg+'</div>'+(_jrMoodF?'<button type="button" class="jr-clr" onclick="jrMoodFilter(\'\')">ล้างตัวกรองอารมณ์</button>':'')+'</section>';
+}
+function jrMoodFilter(k){_jrMoodF=_jrMoodF===k?'':k;renderJournal();}
+function renderJournal(){
+  var root=document.getElementById('jr');if(!root)return;var o=jrLoad(),es=o.entries,mo=TODAY_STR.slice(0,7);
+  var monthN=es.filter(function(e){return e.date.slice(0,7)===mo;}).length,st=jrStreak(es),hasToday=es.some(function(e){return e.date===TODAY_STR;});
+  var tabs=[['month','ตามเดือน'],['week','ตามสัปดาห์'],['mood','ตามอารมณ์']].map(function(v){var on=v[0]===_jrView;return '<button type="button" role="tab" aria-selected="'+on+'" class="jr-vb'+(on?' on':'')+'" onclick="jrSetView(\''+v[0]+'\')">'+v[1]+'</button>';}).join('');
+  var qi=o.quotes.length?Math.floor((Date.now()/864e5))%o.quotes.length:-1;
+  var h='<div class="jr-head"><div><div class="jr-ic" aria-hidden="true">📓</div><h2 class="jr-h1">Work Journal</h2><p class="jr-sub">บันทึกงานรายวัน · เดือนนี้ '+monthN+' วัน · เขียนต่อเนื่อง '+st+' วัน'+(st>=3?' 🔥':'')+'</p></div>'
+    +'<button type="button" class="jr-new" onclick="jrEdit(\'\')">'+(hasToday?'+ เพิ่มบันทึก':'+ เขียนวันนี้')+'</button></div>';
+  h+='<div class="jr-lay"><section class="jr-main" aria-label="บันทึกของฉัน"><div class="jr-mh"><b>My Journals</b><div class="jr-vt" role="tablist" aria-label="จัดกลุ่ม">'+tabs+'</div>'
+    +'<label class="jr-q"><span aria-hidden="true">🔎</span><input type="search" placeholder="ค้นหาบันทึก" aria-label="ค้นหาบันทึก" value="'+escH(_jrQ)+'" oninput="jrSearch(this.value)"></label></div>'
+    +'<div id="jr-list">'+jrListHtml(o)+'</div><button type="button" class="jr-add2" onclick="jrEdit(\'\')">+ หน้าใหม่</button></section>';
+  h+='<aside class="jr-side">'+jrDonut(o)
+    +'<section class="jr-box" aria-label="Daily Quotes"><div class="jr-bh"><b>❝ Daily Quotes</b></div>'+o.quotes.map(function(q,i){return '<div class="jr-quote'+(i===qi?' today':'')+'"><span>'+escH(q)+'</span><button type="button" class="jr-x" aria-label="ลบคำคม" data-i="'+i+'" onclick="jrQDel(+this.dataset.i)">×</button></div>';}).join('')
+    +'<form class="jr-addf" onsubmit="event.preventDefault();jrQAdd(this)"><input name="t" placeholder="+ เพิ่มคำคม" aria-label="เพิ่มคำคม"></form></section>'
+    +'<section class="jr-box" aria-label="Daily Reminders"><div class="jr-bh"><b>☑ Daily Reminders</b></div>'+o.rem.map(function(r){return '<div class="jr-rem'+(r.done?' done':'')+'"><button type="button" class="jr-rck" role="checkbox" aria-checked="'+!!r.done+'" aria-label="'+escH(r.t)+'" data-id="'+r.id+'" onclick="jrRemTog(this.dataset.id)">'+(r.done?'✓':'')+'</button><span>'+escH(r.t)+'</span><button type="button" class="jr-x" aria-label="ลบ" data-id="'+r.id+'" onclick="jrRemDel(this.dataset.id)">×</button></div>';}).join('')
+    +'<form class="jr-addf" onsubmit="event.preventDefault();jrRemAdd(this)"><input name="t" placeholder="+ เพิ่มสิ่งที่อยากเตือนตัวเอง" aria-label="เพิ่มข้อเตือนใจ"></form></section></aside></div>';
+  root.innerHTML=h;jrPull();
+}
+function jrQAdd(f){var t=(f.t.value||'').trim();if(!t)return;var o=jrLoad();o.quotes.push(t.slice(0,200));jrSave(o);renderJournal();}
+function jrQDel(i){var o=jrLoad();o.quotes.splice(i,1);jrSave(o);renderJournal();}
+function jrRemAdd(f){var t=(f.t.value||'').trim();if(!t)return;var o=jrLoad();o.rem.push({id:'r'+Date.now().toString(36),t:t.slice(0,200),done:false});jrSave(o);renderJournal();}
+function jrRemTog(id){var o=jrLoad();o.rem.forEach(function(r){if(r.id===id)r.done=!r.done;});jrSave(o);renderJournal();}
+function jrRemDel(id){var o=jrLoad();o.rem=o.rem.filter(function(r){return r.id!==id;});jrSave(o);renderJournal();}
+// editor
+var _jrEd=null;
+function jrEdit(id){
+  var o=jrLoad(),e=id?o.entries.filter(function(x){return x.id===id;})[0]:null;
+  _jrEd=e?JSON.parse(JSON.stringify(e)):{id:'',date:TODAY_STR,title:'',body:'',mood:'',tags:[]};
+  var tags=JR_TAGS.slice();o.entries.forEach(function(x){(x.tags||[]).forEach(function(t){if(tags.indexOf(t)<0)tags.push(t);});});
+  var h='<div class="modal-title">'+(e?'แก้บันทึก':'บันทึกงานวันนี้')+' <button class="modal-x" onclick="closeModal()" aria-label="ปิด">×</button></div>'
+    +'<div class="jr-ed"><div class="jr-er"><label class="jr-lb">วันที่<input type="date" id="jre-d" value="'+_jrEd.date+'"></label><label class="jr-lb" style="flex:2">หัวข้อ (ไม่ใส่ก็ได้)<input id="jre-t" maxlength="120" value="'+escH(_jrEd.title)+'" placeholder="เช่น ปิดดีลลูกค้า B2B ได้"></label></div>'
+    +'<div class="jr-lb">วันนี้รู้สึกยังไง<div class="jr-moods" role="radiogroup" aria-label="อารมณ์">'+JR_MOODS.map(function(m){var on=_jrEd.mood===m[0];return '<button type="button" role="radio" aria-checked="'+on+'" class="jr-mb'+(on?' on':'')+'" style="--mc:'+m[3]+';--mb:'+m[4]+'" data-k="'+m[0]+'" onclick="jrEdMood(this)"><span>'+m[1]+'</span>'+m[2]+'</button>';}).join('')+'</div></div>'
+    +'<label class="jr-lb">เกิดอะไรขึ้นบ้าง<textarea id="jre-b" rows="7" placeholder="งานที่ทำวันนี้ · ปัญหาที่เจอ · สิ่งที่ได้เรียนรู้ · พรุ่งนี้จะทำอะไร">'+escH(_jrEd.body)+'</textarea></label>'
+    +'<div class="jr-lb">แท็ก<div class="jr-tags" id="jre-tags">'+tags.map(function(t){var on=_jrEd.tags.indexOf(t)>=0;return '<button type="button" class="jr-tb'+(on?' on':'')+'" aria-pressed="'+on+'" data-t="'+escH(t)+'" onclick="jrEdTag(this)">'+escH(t)+'</button>';}).join('')
+    +'<input class="jr-tnew" placeholder="+ แท็กใหม่ (Enter)" aria-label="แท็กใหม่" onkeydown="if(event.key===\'Enter\'){event.preventDefault();jrEdTagNew(this)}"></div></div>'
+    +'<div class="jr-ea"><button type="button" class="jr-save" onclick="jrEdSave()">บันทึก</button>'+(e?'<button type="button" class="jr-del" onclick="jrEdDel(this)">ลบบันทึกนี้</button>':'')+'</div></div>';
+  showModal(h);setTimeout(function(){var b=document.getElementById('jre-b');if(b&&!e)b.focus();},60);
+}
+function jrEdMood(b){_jrEd.mood=_jrEd.mood===b.dataset.k?'':b.dataset.k;document.querySelectorAll('.jr-mb').forEach(function(x){var on=x.dataset.k===_jrEd.mood;x.classList.toggle('on',on);x.setAttribute('aria-checked',on);});}
+function jrEdTag(b){var t=b.dataset.t,i=_jrEd.tags.indexOf(t);if(i>=0)_jrEd.tags.splice(i,1);else _jrEd.tags.push(t);var on=i<0;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);}
+function jrEdTagNew(inp){var t=(inp.value||'').trim().slice(0,30);if(!t)return;if(_jrEd.tags.indexOf(t)<0)_jrEd.tags.push(t);var b=document.createElement('button');b.type='button';b.className='jr-tb on';b.dataset.t=t;b.setAttribute('aria-pressed','true');b.textContent=t;b.onclick=function(){jrEdTag(b);};inp.parentNode.insertBefore(b,inp);inp.value='';}
+function jrEdSave(){
+  var d=(document.getElementById('jre-d').value||TODAY_STR),t=(document.getElementById('jre-t').value||'').trim(),body=(document.getElementById('jre-b').value||'').trim();
+  if(!body&&!t){showToast('พิมพ์บันทึกก่อนนะ');return;}
+  var o=jrLoad(),now=Date.now();
+  if(_jrEd.id){o.entries.forEach(function(x){if(x.id===_jrEd.id){x.date=d;x.title=t;x.body=body;x.mood=_jrEd.mood;x.tags=_jrEd.tags;x.upd=now;}});}
+  else o.entries.push({id:'j'+now.toString(36)+Math.floor(Math.random()*1e4),date:d,title:t,body:body,mood:_jrEd.mood,tags:_jrEd.tags,at:now,upd:now});
+  jrSave(o);closeModal();renderJournal();showToast('📓 บันทึกแล้ว');
+}
+function jrEdDel(b){if(!b.dataset.arm){b.dataset.arm='1';b.textContent='กดอีกครั้งเพื่อลบ';setTimeout(function(){if(b.isConnected){delete b.dataset.arm;b.textContent='ลบบันทึกนี้';}},2500);return;}
+  var o=jrLoad();o.entries=o.entries.filter(function(x){return x.id!==_jrEd.id;});jrSave(o);closeModal();renderJournal();showToast('🗑 ลบบันทึกแล้ว');}
 /* ========================= NOTES (Post-it Masonry) ========================= */
 var NOTE_COLORS=['#FFF8D6','#FFE3E0','#E3F0FF','#E3F8E8','#F0E3FF','#FFF0E3'];
 var NOTE_TAGS=[{label:'💡 ไอเดีย',color:'#BA7517'},{label:'👤 ลูกค้า',color:'#D6453D'},{label:'📦 สต็อก',color:'#1A73E8'},{label:'🎵 Content',color:'#1D9E75'},{label:'⚙️ ระบบ',color:'#534AB7'},{label:'📌 ทั่วไป',color:'#888'}];

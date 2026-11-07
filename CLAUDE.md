@@ -251,6 +251,12 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   back to "none") · Cards `tvCardHtml` (CSS columns, filter chips `_tvCardF`) · Focus `tvFocusHtml` (3 picks/day localStorage `khum_focus_v1`
   {d,ids,done,ts}, synced key `ui__focus`; pool = overdue + today + Tasks list; ✨ auto-pick). Title click → `tvOpen` (tcCard in a modal).
   `#tv-board[hidden]` needs `display:none!important` (grid3 CSS). Test: test_tv.py.
+- Journal tab (7 Nov, from a Notion "Daily Journal" screenshot, Dech: "เพิ่ม tab Journal work"): tab `journal` after Note → `#page-journal > #jr`,
+  `renderJournal()`, prefix `jr`. Data localStorage `rudy_journal_v1` {entries:[{id,date,title,body(plain),mood,tags,at,upd}], quotes:[], rem:[{id,t,done}], ts}
+  synced whole as key `journal__all` (`jrPush` 3 s after `jrSave`, `jrPull` on render ≥15 s, newer ts wins). Moods `JR_MOODS` (6, colour + pastel card bg),
+  tags `JR_TAGS` + custom. Main = "My Journals" grouped ตามเดือน/ตามสัปดาห์/ตามอารมณ์ (`_jrView`, localStorage `jr_view`) + search; cards → `jrEdit` modal
+  (date, title, mood radios, body textarea, tags, 2-tap delete). Side: Mood Board SVG donut per month (`jrDonut`, legend click = filter `_jrMoodF`),
+  Daily Quotes (quote of the day = day index % n), Daily Reminders checklist. Header: entries this month + writing streak `jrStreak`. Test: test_jr.py.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 - LINE login (3 Nov code, installed + enforced 7 Nov — see Pending 1): `gas/dashboard-auth.gs` + frontend `authBoot/authLogin/authLost` (index.html, top of script).
