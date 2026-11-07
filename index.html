@@ -3013,12 +3013,12 @@ var NX_BLOCKS=[
   {k:'cols2',g:'จัดหน้า',t:'2 คอลัมน์',d:'วางรูป/ข้อความคู่กัน',kw:'column cols คอลัมน์ 2 แบ่ง'},
   {k:'cols3',g:'จัดหน้า',t:'3 คอลัมน์',d:'แบ่งเป็น 3 ช่อง',kw:'column cols คอลัมน์ 3 แบ่ง'},
   {k:'tl',g:'จัดหน้า',t:'ตารางเวลา',d:'09:00 - 11:30 | ที่ไหน + รายละเอียด',kw:'timeline schedule itinerary เวลา ตารางเวลา แผน'},
-  {k:'dash',g:'Dashboard',t:'แม่แบบ Dashboard',d:'ปฏิทินคอนเทนต์ + คลังไอเดีย + บอร์ดขั้นตอน + ตัวชี้วัด',kw:'dashboard แดชบอร์ด template แม่แบบ home content'},
   {k:'panel',g:'Dashboard',t:'กล่องสี',d:'กล่องพื้นสีมีหัวข้อ วางในคอลัมน์ได้',kw:'panel box callout กล่อง สี dashboard การ์ด'},
   {k:'kb',g:'Dashboard',t:'บอร์ดขั้นตอน',d:'คอลัมน์ขั้นตอน + การ์ดลากย้ายได้',kw:'board kanban pipeline บอร์ด ขั้นตอน สถานะ'},
   {k:'gal',g:'Dashboard',t:'แกลเลอรี',d:'การ์ดรูป + แท็ก (คลังไอเดีย)',kw:'gallery แกลเลอรี รูป ไอเดีย idea'},
   {k:'lst',g:'Dashboard',t:'รายการพร้อมรูป',d:'รูปย่อ + ชื่อ + สถานะ (ปฏิทินคอนเทนต์)',kw:'list รายการ รูป สถานะ calendar ปฏิทิน โพสต์ content'},
   {k:'met',g:'Dashboard',t:'ตัวชี้วัด',d:'แถบความคืบหน้า + ตัวเลข',kw:'metric kpi ตัวชี้วัด เป้า progress ยอด'},
+  {k:'dash',g:'Dashboard',t:'แม่แบบ Dashboard',d:'ปฏิทินคอนเทนต์ + คลังไอเดีย + บอร์ดขั้นตอน + ตัวชี้วัด',kw:'dashboard แดชบอร์ด template แม่แบบ home content'},
   {k:'cost',g:'จัดหน้า',t:'ตารางค่าใช้จ่าย',d:'ตาราง + แถว Σ รวมอัตโนมัติ',kw:'cost expense sum budget ค่าใช้จ่าย รวม งบ ตาราง'},
   {k:'tag',g:'อื่น ๆ',t:'ป้ายสถานะ',d:'ป้ายสี เช่น รอเอกสาร / เสร็จแล้ว',kw:'tag status สถานะ ป้าย label'},
   {k:'quote',g:'อื่น ๆ',t:'กล่องข้อความเด่น',d:'พิมพ์ > แล้วเว้นวรรคก็ได้',kw:'quote callout เด่น อ้าง'},
@@ -4151,7 +4151,7 @@ function nxGalItem(b){var el=nxWEl(b),j=nxWGet(el),x=j.items.filter(function(c){
   nxWPop(b,'แก้การ์ดแกลเลอรี',[{k:'t',label:'ชื่อ',v:x.t},{k:'d',label:'รายละเอียด',type:'area',v:x.d},{k:'tags',label:'แท็ก (คั่นด้วย ,)',v:(x.tags||[]).join(', ')},{k:'img',type:'img',v:nxWImg(x.img)}],
     function(v,img){x.t=(v('t')||'').trim().slice(0,120);x.d=(v('d')||'').trim().slice(0,400);x.tags=(v('tags')||'').split(',').map(function(s){return s.trim().slice(0,24);}).filter(String).slice(0,5);x.img=img||'';nxWSet(el,j);},
     function(){j.items=j.items.filter(function(c){return c!==x;});nxWSet(el,j);});}
-function nxGalAdd(b){var el=nxWEl(b),j=nxWGet(el),x={id:'w'+Date.now().toString(36),t:'',d:'',tags:[]};j.items.push(x);nxWSet(el,j);var nb=el.querySelector('.nxgal-i[data-id="'+x.id+'"]');if(nb)nxGalItem(nb);}
+function nxGalAdd(b){var el=nxWEl(b),j=nxWGet(el),x={id:'w'+Date.now().toString(36),t:'',d:'',tags:[]};j.items.push(x);nxWSet(el,j);var nb=el.querySelector('.nxgal-body[data-id="'+x.id+'"]');if(nb)nxGalItem(nb);}
 // รายการพร้อมรูป + สถานะ
 function nxLstItem(b){var el=nxWEl(b),j=nxWGet(el),x=j.items.filter(function(c){return c.id===b.dataset.id;})[0];if(!x)return;
   nxWPop(b,'แก้รายการ',[{k:'t',label:'ชื่อ',v:x.t},{k:'d',label:'รายละเอียด / วันที่',v:x.d},{k:'st',label:'สถานะ',type:'select',opts:Object.keys(NX_WST).map(function(k){return [k,NX_WST[k][0]];}),v:x.st||'plan'},{k:'img',type:'img',v:nxWImg(x.img)}],
