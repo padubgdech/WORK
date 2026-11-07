@@ -22,8 +22,7 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Installed 29 Oct 2026, `setupRepeatProperty` run (property created). `USE_MAIN_DATA=true` in index.html.
   Pinned tasks (same file): Notion checkbox "Pinned" (`setupPinnedProperty` run). `getMainData` returns `pinned:[{id,created}]`
   (+ their subtasks); actions `getPinned`, `setPinned` (id, pinned=true|false); `addTask` with `pin=1` → pins the new task.
-  Dashboard deployment = **version 196** (6 Nov 2026: + readBooking AI; 195 = addAllDayEvent, getRangeEvents).
-  NOTE: installed dashboard-upload.gs has NO authGuard_ line (auth not installed yet); the repo copy has it — add it when installing auth.
+  Dashboard deployment = **version 197** (7 Nov 2026: auth installed but OFF + secrets from Script Properties; 196 = readBooking AI).
 - Frontend pinned band (design "D compact", canvas artifact "ปักหมุดงาน — 4 แบบ"): `#main-pinned` above the Main grid.
   Shows every Pinned task that is still active (`allActiveTasks`+today+overdue; done ones drop out) — dated or not (Dech: "ปักได้ทุกงาน").
   Undated: age badge (days since Notion created_time) + "วันนี้"; setting a date auto-unpins. Dated: "เริ่ม <date>" badge, stays pinned
@@ -256,8 +255,13 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   NOTE: once enforced, anything else calling the dashboard deployment's doGet without a session breaks (only the dashboard is known to).
 
 ## Pending
-1. Security: login step above (in progress). Tokens (LINE/Notion/Gemini) are hard-coded in `รหัส.gs` CONFIG → move to Script Properties;
-   rotating them also needs the LINE-bot webhook deployment updated (it runs an old pinned version with the old tokens).
+1. Security: login rollout — steps (2) done 7 Nov (dashboard-auth.gs file + doGet hook `if (typeof authGuard_ === 'function') {…}` first line of doGet
+   + guard line in dashboard-upload `handleDashboardPost_`, deployed v197, AUTH_ENFORCE unset = open). Left: LIFF app, AUTH_LIFF_CHANNEL, LIFF_ID, authStartSetup, authEnable.
+   Secrets DONE 7 Nov: CONFIG.LINE_ACCESS_TOKEN / LINE_CHANNEL_SECRET / GEMINI_API_KEY / NOTION_TOKEN = `secretProp_('KEY')` (Script Properties,
+   cached per execution; helper + `moveSecretsToProps`/`checkSecrets` at the end of รหัส.gs); 3 extra hard-coded Notion tokens (`var token = …`
+   ~line 1871/1901/1934) → `CONFIG.NOTION_TOKEN`. Old values still exist in GAS version history + the pinned LINE-bot deployments →
+   real fix = rotate (re-issue) the tokens in LINE/Notion/Google consoles, update the Script Properties, and update the bot webhook deployment.
+   LINE_CHANNEL_SECRET value is only 11 chars (a placeholder, apparently unused).
 2. Separate HR/employee app: profile "แก้ไขข้อมูล" opens the first-login modal (only "ออกจากระบบ", no ✕, save button stuck on "กำลังบันทึก..."). Location of that code unknown — ask Dech.
 
 ## Working notes (learned the hard way)
