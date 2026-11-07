@@ -241,7 +241,7 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   (`pinQnMove`; always visible on touch). `pinQnOrder` bumps updatedAt so the order syncs with the notes.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
-- LINE login (3 Nov, code written, NOT yet installed): `gas/dashboard-auth.gs` + frontend `authBoot/authLogin/authLost` (index.html, top of script).
+- LINE login (3 Nov code, installed + enforced 7 Nov — see Pending 1): `gas/dashboard-auth.gs` + frontend `authBoot/authLogin/authLost` (index.html, top of script).
   Once per device: LIFF ID token → `?action=authLine` → GAS verifies at api.line.me/oauth2/v2.1/verify (client_id = Script Property
   `AUTH_LIFF_CHANNEL`), sub must be in `AUTH_OWNER_SUBS` → session key (64 chars, stored hashed as Script Property `ses_<sha256>`,
   30 days, auto-renewed when <7 days left, CacheService 10 min) → localStorage `khum_sess_v1` → every request sends `_s`.
@@ -255,8 +255,11 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   NOTE: once enforced, anything else calling the dashboard deployment's doGet without a session breaks (only the dashboard is known to).
 
 ## Pending
-1. Security: login rollout — steps (2) done 7 Nov (dashboard-auth.gs file + doGet hook `if (typeof authGuard_ === 'function') {…}` first line of doGet
-   + guard line in dashboard-upload `handleDashboardPost_`, deployed v197, AUTH_ENFORCE unset = open). Left: LIFF app, AUTH_LIFF_CHANNEL, LIFF_ID, authStartSetup, authEnable.
+1. Security: LINE login is LIVE and ENFORCED since 7 Nov 2026 10:22 (AUTH_ENFORCE=1, 1 owner = Dech). LIFF app "KHUMTONE WORK Dashboard"
+   `2010672874-XBO6g9Zh` (Full, scope openid, add-friend off) in LINE Login channel "KHUMTONE Login" 2010672874 (provider KHUMTONE BOT,
+   status Developing → only channel admins/testers can log in, which is fine). AUTH_LIFF_CHANNEL=2010672874 (`authSetChannel`). doGet hook =
+   `if (typeof authGuard_ === 'function') {…}` first line of doGet; guard line in dashboard-upload `handleDashboardPost_`; deployed v197.
+   Emergency unlock: run `authDisable` in the editor. Add another device: just log in with the same LINE account (same sub per provider).
    Secrets DONE 7 Nov: CONFIG.LINE_ACCESS_TOKEN / LINE_CHANNEL_SECRET / GEMINI_API_KEY / NOTION_TOKEN = `secretProp_('KEY')` (Script Properties,
    cached per execution; helper + `moveSecretsToProps`/`checkSecrets` at the end of รหัส.gs); 3 extra hard-coded Notion tokens (`var token = …`
    ~line 1871/1901/1934) → `CONFIG.NOTION_TOKEN`. Old values still exist in GAS version history + the pinned LINE-bot deployments →
