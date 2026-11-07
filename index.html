@@ -947,6 +947,43 @@ body.nx-rz-row,body.nx-rz-row *{cursor:row-resize!important;user-select:none!imp
 .nx-slash button b{font-size:13px;font-weight:600}
 .nx-slash button span{font-size:11.5px;color:#6b6b6b}
 .nx-slash button.on,.nx-slash button:hover{background:#f1efe9}
+.nx-doc.wide{max-width:1240px}
+.nx-body .nx-panel{border-radius:14px;padding:12px 16px 10px;margin:8px 0;background:#FDEBDD;position:relative}
+.nx-body .nx-panel[data-c="mint"]{background:#E3F4EC}.nx-body .nx-panel[data-c="lilac"]{background:#EFE7FA}.nx-body .nx-panel[data-c="sky"]{background:#E3F1FB}
+.nx-body .nx-panel[data-c="sand"]{background:#F6F0E2}.nx-body .nx-panel[data-c="rose"]{background:#FBE6EA}.nx-body .nx-panel[data-c="none"]{background:#fff;box-shadow:inset 0 0 0 1px #ebe8e1}
+.nx-body .nx-panel>h3:first-child{margin-top:2px;font-size:13px;letter-spacing:.6px;text-transform:uppercase}
+.nx-body .nx-column>.nx-panel{margin-top:0}
+.nxpn-c{width:24px!important;min-width:24px!important;height:24px!important;border-radius:50%!important;padding:0!important;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.nxpn-c.on{box-shadow:0 0 0 2px #2383e2}
+.nx-body .nx-w{margin:8px 0;user-select:none;-webkit-user-select:none}
+.nxkb{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;align-items:flex-start}
+.nxkb-col{flex:1 0 190px;max-width:280px;background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.05);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:7px;transition:background .12s}
+.nxkb-col.over{background:#eef4ff;border-color:#2383e2}
+.nxkb-h{display:flex;align-items:center;gap:6px}.nxkb-h span{font-size:11.5px;color:#8a857b}
+.nxkb-ht{border:0;border-radius:6px;padding:3px 9px;font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.nxkb-card{position:relative;background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.nxkb-card.src{opacity:.35}.nxkb-ghost{position:fixed;z-index:10050;pointer-events:none;box-shadow:0 10px 26px rgba(0,0,0,.18)}
+.nxkb-grip{position:absolute;right:4px;top:4px;cursor:grab;color:#c4bfb5;padding:2px 4px;font-size:13px;touch-action:none;z-index:1;background:rgba(255,255,255,.85);border-radius:5px}
+.nxkb-cb{width:100%;border:0;background:transparent;text-align:left;font:inherit;padding:9px 10px;display:flex;flex-direction:column;gap:4px;cursor:pointer;color:#2b2925;border-radius:10px}
+.nxkb-cb img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:7px}
+.nxkb-cb b{font-size:13px;padding-right:18px}.nxkb-cb span{font-size:11.5px;color:#6d685e;white-space:pre-wrap}
+.nxkb-cb i{font-style:normal;font-size:10.5px;background:#f1efea;border-radius:5px;padding:1px 6px;align-self:flex-start}
+.nxw-add{border:0;background:transparent;color:#8a857b;font:inherit;font-size:12.5px;text-align:left;padding:4px 6px;cursor:pointer;border-radius:6px;min-height:30px}.nxw-add:hover{background:rgba(0,0,0,.04)}
+.nxkb-addcol{flex:0 0 auto;border:1px dashed #d5d0c6;background:transparent;border-radius:12px;min-height:44px;padding:0 14px;font:inherit;font-size:12.5px;color:#8a857b;cursor:pointer}
+.nxgal{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.nxgal-i{border:0;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:0 0 9px;text-align:left;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:5px;overflow:hidden;color:#2b2925}
+.nxgal-im{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;font-size:26px;opacity:.95}.nxgal-im img{width:100%;height:100%;object-fit:cover}
+.nxgal-i b{font-size:13px;padding:0 10px}.nxgal-d{font-size:11.5px;color:#6d685e;padding:0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nxgal-tg{display:flex;gap:4px;flex-wrap:wrap;padding:0 10px}.nxgal-tg i{font-style:normal;font-size:10.5px;background:#f1efea;border-radius:5px;padding:1px 6px}
+.nxgal-add{border:1px dashed #d5d0c6;background:transparent;border-radius:12px;min-height:120px;font:inherit;font-size:12.5px;color:#8a857b;cursor:pointer}
+.nxmet{display:flex;flex-direction:column;gap:4px}
+.nxmet-r{border:0;background:transparent;font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:6px 4px;border-radius:8px;color:#2b2925}
+.nxmet-r:hover{background:rgba(0,0,0,.035)}.nxmet-t{font-size:13px}.nxmet-v{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}.nxmet-v small{font-weight:500;color:#8a857b}
+.nxmet-bar{grid-column:1/-1;height:6px;border-radius:99px;background:rgba(0,0,0,.07);overflow:hidden}.nxmet-bar i{display:block;height:100%;background:#4E8B6A;border-radius:99px}
+.nx-w.ro button{cursor:default}
+.nxwp-cols{display:flex;gap:5px;flex-wrap:wrap}.nxwp-c{width:28px;height:28px;border:0;border-radius:7px;font-weight:700;cursor:pointer}.nxwp-c.on{box-shadow:0 0 0 2px #2383e2}
+.nxwp-img{border:1px dashed #d5d0c6;border-radius:8px;min-height:60px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8a857b;overflow:hidden}.nxwp-img img{width:100%;max-height:140px;object-fit:cover}
+@media(max-width:760px){.nxkb-col{flex-basis:78%}.nxgal{grid-template-columns:1fr 1fr}}
 .nx-body .nx-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:8px 0}
 .nx-body .nx-cols[data-n="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}
 .nx-body .nx-column{min-width:0;border-radius:6px;padding:2px 4px;margin:0 -4px;outline:1px dashed transparent;transition:outline-color .15s}
@@ -2930,7 +2967,12 @@ var NX_IC={
   cols3:'<rect x="2.5" y="4" width="5.5" height="16" rx="1.2"></rect><rect x="9.25" y="4" width="5.5" height="16" rx="1.2"></rect><rect x="16" y="4" width="5.5" height="16" rx="1.2"></rect>',
   card:'<rect x="3" y="6" width="18" height="12" rx="2.5"></rect><rect x="6" y="9.5" width="5" height="5" rx="1"></rect><path d="M14 10.5h4M14 13.5h3"></path>',
   tl:'<circle cx="6" cy="6" r="2"></circle><circle cx="6" cy="18" r="2"></circle><path d="M6 8v8M11 6h9M11 18h9M11 9h6M11 21h5"></path>',
-  cost:'<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 15h18M14 4v16"></path><path d="M6 18h4"></path>'
+  cost:'<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 15h18M14 4v16"></path><path d="M6 18h4"></path>',
+  dash:'<rect x="3" y="3" width="8" height="10" rx="1.5"></rect><rect x="13" y="3" width="8" height="6" rx="1.5"></rect><rect x="13" y="11" width="8" height="10" rx="1.5"></rect><rect x="3" y="15" width="8" height="6" rx="1.5"></rect>',
+  panel:'<rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M7 9h7"></path>',
+  kb:'<rect x="3" y="4" width="5" height="16" rx="1.5"></rect><rect x="10" y="4" width="5" height="11" rx="1.5"></rect><rect x="17" y="4" width="4" height="7" rx="1.5"></rect>',
+  gal:'<rect x="3" y="3" width="8" height="8" rx="1.5"></rect><rect x="13" y="3" width="8" height="8" rx="1.5"></rect><rect x="3" y="13" width="8" height="8" rx="1.5"></rect><rect x="13" y="13" width="8" height="8" rx="1.5"></rect>',
+  met:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path>'
 };
 var NX_BLOCKS=[
   {k:'table',g:'บล็อกพื้นฐาน',t:'ตาราง',d:'แถว-คอลัมน์ แก้ได้ทุกช่อง',kw:'table ตาราง tb ตร'},
@@ -2945,6 +2987,11 @@ var NX_BLOCKS=[
   {k:'cols2',g:'จัดหน้า',t:'2 คอลัมน์',d:'วางรูป/ข้อความคู่กัน',kw:'column cols คอลัมน์ 2 แบ่ง'},
   {k:'cols3',g:'จัดหน้า',t:'3 คอลัมน์',d:'แบ่งเป็น 3 ช่อง',kw:'column cols คอลัมน์ 3 แบ่ง'},
   {k:'tl',g:'จัดหน้า',t:'ตารางเวลา',d:'09:00 - 11:30 | ที่ไหน + รายละเอียด',kw:'timeline schedule itinerary เวลา ตารางเวลา แผน'},
+  {k:'dash',g:'Dashboard',t:'แม่แบบ Dashboard',d:'ปฏิทินคอนเทนต์ + คลังไอเดีย + บอร์ดขั้นตอน + ตัวชี้วัด',kw:'dashboard แดชบอร์ด template แม่แบบ home content'},
+  {k:'panel',g:'Dashboard',t:'กล่องสี',d:'กล่องพื้นสีมีหัวข้อ วางในคอลัมน์ได้',kw:'panel box callout กล่อง สี dashboard การ์ด'},
+  {k:'kb',g:'Dashboard',t:'บอร์ดขั้นตอน',d:'คอลัมน์ขั้นตอน + การ์ดลากย้ายได้',kw:'board kanban pipeline บอร์ด ขั้นตอน สถานะ'},
+  {k:'gal',g:'Dashboard',t:'แกลเลอรี',d:'การ์ดรูป + แท็ก (คลังไอเดีย)',kw:'gallery แกลเลอรี รูป ไอเดีย idea'},
+  {k:'met',g:'Dashboard',t:'ตัวชี้วัด',d:'แถบความคืบหน้า + ตัวเลข',kw:'metric kpi ตัวชี้วัด เป้า progress ยอด'},
   {k:'cost',g:'จัดหน้า',t:'ตารางค่าใช้จ่าย',d:'ตาราง + แถว Σ รวมอัตโนมัติ',kw:'cost expense sum budget ค่าใช้จ่าย รวม งบ ตาราง'},
   {k:'tag',g:'อื่น ๆ',t:'ป้ายสถานะ',d:'ป้ายสี เช่น รอเอกสาร / เสร็จแล้ว',kw:'tag status สถานะ ป้าย label'},
   {k:'quote',g:'อื่น ๆ',t:'กล่องข้อความเด่น',d:'พิมพ์ > แล้วเว้นวรรคก็ได้',kw:'quote callout เด่น อ้าง'},
@@ -2990,7 +3037,7 @@ function nxSanitize(html){
         el.removeChild(c);return;
       }
       var col=c.style?c.style.color:'',bg=c.style?c.style.backgroundColor:'',fw=c.style?c.style.fontWeight:'',fc=c.getAttribute('color');
-      var cls=c.getAttribute('class')||'',dsum=c.getAttribute('data-sum'),dn=c.getAttribute('data-n'),dhr=c.getAttribute('data-href')||'',dtt=c.getAttribute('data-t'),dpp=c.getAttribute('data-p'),dno=c.getAttribute('data-note'),done=c.getAttribute('data-done'),pg=c.getAttribute('data-page'),dc=c.getAttribute('data-c');
+      var cls=c.getAttribute('class')||'',pw=c.getAttribute('data-w'),pj=c.getAttribute('data-j'),pcl=c.getAttribute('data-c'),dsum=c.getAttribute('data-sum'),dn=c.getAttribute('data-n'),dhr=c.getAttribute('data-href')||'',dtt=c.getAttribute('data-t'),dpp=c.getAttribute('data-p'),dno=c.getAttribute('data-note'),done=c.getAttribute('data-done'),pg=c.getAttribute('data-page'),dc=c.getAttribute('data-c');
       var href=c.getAttribute('href')||'',src=c.getAttribute('src')||'',tk=c.getAttribute('data-task'),iw=c.tagName==='IMG'&&c.style?parseInt(c.style.width,10):0;
       if(c.tagName==='IMG'&&!/^https:\/\/(lh3\.googleusercontent\.com|drive\.google\.com)\//.test(src)&&!/^data:image\/(png|jpe?g|gif|webp);base64,/.test(src)){el.removeChild(c);return;}
       var cw=(c.tagName==='TD'||c.tagName==='TH')&&c.style?parseInt(c.style.width,10):0,chh=(c.tagName==='TD'||c.tagName==='TH')&&c.style?parseInt(c.style.height,10):0;
@@ -3007,7 +3054,9 @@ function nxSanitize(html){
       if(c.tagName==='TABLE'){c.setAttribute('class','nx-tbl');if(dsum==='1')c.setAttribute('data-sum','1');}
       if(c.tagName==='DIV'){var dk=cls.split(/\s+/).filter(function(x){return NX_DIVC[x];})[0];
         if(dk==='nx-card'){if(!/^https?:\/\/[^\s"<>]+$/i.test(dhr)){el.removeChild(c);return;}c.innerHTML='';c.setAttribute('class','nx-card');c.setAttribute('contenteditable','false');c.setAttribute('data-href',dhr);if(dtt)c.setAttribute('data-t',dtt.slice(0,200));if(dpp)c.setAttribute('data-p',dpp.slice(0,60));if(dno)c.setAttribute('data-note',dno.slice(0,200));c.removeAttribute('style');return;}
-        if(dk){c.setAttribute('class',dk);if(dk==='nx-cols')c.setAttribute('data-n',dn==='3'?'3':'2');}}
+        if(dk==='nx-w'){var okj=false;try{okj=/^(kb|gal|met)$/.test(pw||'')&&pj&&pj.length<40000&&typeof JSON.parse(pj)==='object';}catch(e){}
+          if(!okj){el.removeChild(c);return;}c.innerHTML='';c.setAttribute('class','nx-w');c.setAttribute('contenteditable','false');c.setAttribute('data-w',pw);c.setAttribute('data-j',pj);return;}
+        if(dk){c.setAttribute('class',dk);if(dk==='nx-cols')c.setAttribute('data-n',dn==='3'?'3':'2');if(dk==='nx-panel')c.setAttribute('data-c',NX_PANEL.some(function(x){return x[0]===pcl;})?pcl:'peach');}}
       if(c.tagName==='SPAN'&&/\bnx-tag\b/.test(cls)&&/^[ygbrpn]$/.test(dc||'')){c.setAttribute('class','nx-tag');c.setAttribute('data-c',dc);c.setAttribute('contenteditable','false');c.removeAttribute('style');}
       if(c.tagName==='SPAN'&&/\bnx-fs-[sml]\b/.test(cls))c.setAttribute('class',cls.match(/\bnx-fs-[sml]\b/)[0]);
       if(c.tagName==='LI'&&done==='1')c.setAttribute('data-done','1');
@@ -3027,7 +3076,7 @@ function nxSanitize(html){
 // ---------- render ----------
 function nxRender(focusId){
   var root=document.getElementById('nx');if(!root)return;
-  nxHoverHide();['nx-ttools','nx-todotool','nx-tagpop','nx-linkpop','nx-slash','nx-grip','nx-linkbar','nx-btools','nx-cardpop','nx-cardoffer'].forEach(function(i){var x=document.getElementById(i);if(x)x.style.display='none';});
+  nxHoverHide();['nx-ttools','nx-todotool','nx-tagpop','nx-linkpop','nx-slash','nx-grip','nx-linkbar','nx-btools','nx-cardpop','nx-cardoffer','nx-wpop'].forEach(function(i){var x=document.getElementById(i);if(x)x.style.display='none';});
   var notes=notesLoad(),secs=nxSecs();
   if(focusId&&notes.some(function(n){return n.id===focusId;})){nxSetCur(focusId);_nxMob='page';}
   var cur=nxCur(notes);
@@ -3044,7 +3093,7 @@ function nxRender(focusId){
   // ลิงก์หน้าย่อยในเนื้อหา → แสดงชื่อหน้าล่าสุด
   root.querySelectorAll('a.nx-link,a.nx-sublink').forEach(function(a){a.setAttribute('draggable','false');});
   root.querySelectorAll('a.nx-link').forEach(function(a){var t=notes.find(function(x){return x.id===a.getAttribute('data-page');});a.innerHTML=t?nxPgIcon2(t)+'<span>'+nxEsc(nxTitleOf(t))+'</span>':'(หน้าถูกลบ)';});
-  nxCardFill(root);nxSumAll(root);
+  nxCardFill(root);nxSumAll(root);nxWFill(root);
 }
 function nxSortKids(a,b){var ha=a.ord!=null,hb=b.ord!=null;if(ha&&hb)return a.ord-b.ord;if(ha)return -1;if(hb)return 1;return nxCreated(a)<nxCreated(b)?-1:1;}
 function nxPgIcon(p){if(p.iconImg)return '<img class="nx-pg-ic img" src="'+nxEsc(p.iconImg)+'" alt="" aria-hidden="true">';return p.icon?'<span class="nx-pg-ic" aria-hidden="true">'+nxEsc(p.icon)+'</span>':'';}
@@ -3135,7 +3184,7 @@ function nxPageHtml(notes,secs,cur){
     +'<button type="button" onclick="nxPickCover()">'+'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+NX_IC.img+'</svg>'+(n.coverImg?'เปลี่ยนรูปปก':'เพิ่มรูปปก')+'</button>'
     +(n.coverImg?'<button type="button" id="nx-cov-pos" onclick="nxCoverReposition()">↕ จัดตำแหน่ง</button><button type="button" onclick="nxCoverRemoveImg()">เอารูปออก</button>':'')
     +'</div></div>';
-  h+='<div class="nx-doc'+(n.cover?'':' nocover')+'" style="font-family:\''+font+'\',\'IBM Plex Sans Thai\',sans-serif">';
+  h+='<div class="nx-doc'+(n.cover?'':' nocover')+(n.wide?' wide':'')+'" style="font-family:\''+font+'\',\'IBM Plex Sans Thai\',sans-serif">';
   var icIn=n.iconImg?'<img src="'+nxEsc(n.iconImg)+'" alt="">':n.icon?nxEsc(n.icon):nxEsc(nxInit2(s.name));
   h+='<button type="button" class="nx-icon'+(n.iconImg?' pic':n.icon?' emoji':'')+'" style="'+(n.iconImg||n.icon?'':'background:'+s.color)+'" aria-label="เปลี่ยนไอคอนหน้า" aria-haspopup="true" onclick="nxIconMenu(this)">'+icIn+'</button>';
   h+='<div class="nx-pop nx-iconpop" id="nx-iconpop" hidden><div class="nx-pop-l">ไอคอนหน้า</div>'
@@ -3150,6 +3199,7 @@ function nxPageHtml(notes,secs,cur){
     +'<button type="button" class="nx-more" aria-label="ตัวเลือกหน้า" aria-expanded="false" onclick="nxOpts(this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button></div>';
   // ตัวเลือกหน้า (⋯): ฟอนต์ · หัวข้อ · สีปก · ลบหน้า
   h+='<div class="nx-pop nx-opts" id="nx-opts" hidden><label class="nx-pop-l">ฟอนต์ของหน้านี้<select onchange="nxSetFont(this.value)">'+NX_FONTS.map(function(f){return '<option value="'+f[0]+'"'+(f[0]===font?' selected':'')+' style="font-family:\''+f[0]+'\'">'+f[1]+'</option>';}).join('')+'</select></label>'
+    +'<label class="nx-pop-l" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox"'+(n.wide?' checked':'')+' onchange="nxSetWide(this.checked)"> เต็มความกว้าง (เหมาะกับ Dashboard)</label>'
     +'<label class="nx-pop-l">อยู่ในหัวข้อ<select onchange="nxMoveSec(this.value)">'+secs.map(function(x){return '<option value="'+x.id+'"'+(x.id===s.id?' selected':'')+'>'+nxEsc(x.name)+'</option>';}).join('')+'</select></label>'
     +'<button type="button" class="nx-btn-light" style="justify-content:flex-start" onclick="nxPickCover()">'+'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+NX_IC.img+'</svg>'+' '+(n.coverImg?'เปลี่ยนรูปปก':'อัปโหลดรูปปก')+'</button>'
     +'<div class="nx-pop-l">สีปก</div><div class="nx-cols">'+NX_COVERS.map(function(c){return '<button type="button" class="nx-col'+(c===(n.cover||'')?' on':'')+'" style="background:'+(c||'#fff')+(c?'':';box-shadow:inset 0 0 0 1px #ccc')+'" aria-label="'+(c?'สีปก':'ไม่มีปก')+'" data-c="'+c+'" onclick="nxSetCover(this.dataset.c)"></button>';}).join('')+'</div>'
@@ -3239,6 +3289,7 @@ function nxDeletePageId(cur){
   nxRender();showToast('🗑 ย้ายไปถังขยะแล้ว'+(cnt>1?' ('+cnt+' หน้า รวมหน้าย่อย)':'')+' · กู้คืนได้ 30 วัน');
 }
 function nxPatch(fn){var notes=notesLoad(),cur=nxCur(notes),n=notes.find(function(x){return x.id===cur;});if(!n)return null;fn(n);n.updatedAt=new Date().toISOString();notesSave(notes);return n;}
+function nxSetWide(on){nxFlush();nxPatch(function(n){n.wide=!!on;});var d=document.querySelector('#nx .nx-doc:not(.nx-static)');document.querySelectorAll('#nx .nx-doc').forEach(function(x){if(x.querySelector('#nx-body'))x.classList.toggle('wide',!!on);});}
 function nxSetFont(f){nxFlush();nxPatch(function(n){n.font=f;});var d=document.querySelector('#nx .nx-doc');if(d)d.style.fontFamily="'"+f+"','IBM Plex Sans Thai',sans-serif";}
 function nxMoveSec(id){nxFlush();nxPatch(function(n){n.sec=id;n.parent=null;});nxRender();showToast('ย้ายหน้าแล้ว');}
 function nxOpts(b){var p=document.getElementById('nx-opts');if(!p)return;p.hidden=!p.hidden;b.setAttribute('aria-expanded',!p.hidden);}
@@ -3625,7 +3676,7 @@ function nxPaste(e){
   var txt=(d.getData('text/plain')||'').trim();
   if(/^https?:\/\/\S+$/i.test(txt)){e.preventDefault();var sel=window.getSelection(),label=sel&&!sel.isCollapsed?String(sel):txt;document.execCommand('insertHTML',false,'<a class="nx-ext" data-nxnew="1" href="'+nxEsc(txt)+'" target="_blank" rel="noopener noreferrer">'+nxEsc(label)+'</a>&nbsp;');var na=document.querySelector('#nx-body a[data-nxnew]');if(na){na.removeAttribute('data-nxnew');nxCardOffer(na);}nxQueue();return;}
   var html=d.getData('text/html');e.preventDefault();
-  if(html){document.execCommand('insertHTML',false,nxSanitize(html));var eb=document.getElementById('nx-body');if(eb){nxCardFill(eb);nxSumAll(eb);}}
+  if(html){document.execCommand('insertHTML',false,nxSanitize(html));var eb=document.getElementById('nx-body');if(eb){nxCardFill(eb);nxSumAll(eb);nxWFill(eb);}}
   else document.execCommand('insertText',false,d.getData('text/plain'));
 }
 function nxFmt(b){
@@ -3680,6 +3731,16 @@ function nxInsert(k){
   else if(k==='hr'){document.execCommand('insertHTML',false,'<hr><p data-nxf><br></p>');nxFocusMarker();}
   else if(k==='img'){nxPickImage();return;}
   else if(k==='card'){nxCardAsk();return;}
+  else if(k==='dash'){var W=function(w,j){return '<div class="nx-w" data-w="'+w+'" data-j="'+nxEsc(JSON.stringify(j))+'"></div>';};
+    var kbj={cols:[{id:'c1',t:'เขียนสคริปต์',c:'orange'},{id:'c2',t:'ถ่ายทำ',c:'yellow'},{id:'c3',t:'ตัดต่อ',c:'blue'},{id:'c4',t:'ตรวจ/รอโพสต์',c:'green'}],cards:[{id:'k'+Date.now(),col:'c1',t:'คลิปแรก',d:'กดเพื่อแก้ · ลาก ⠿ ย้ายขั้นตอน',tag:'TikTok'}]};
+    document.execCommand('insertHTML',false,'<div class="nx-cols" data-n="2"><div class="nx-column"><div class="nx-panel" data-c="sky"><h3>📅 ปฏิทินคอนเทนต์</h3><ul class="nx-todo"><li data-done="0" data-nxf>โพสต์ YouTube — วันจันทร์</li><li data-done="0">โพสต์ IG — วันพุธ</li><li data-done="0">โพสต์ TikTok — วันศุกร์</li></ul></div></div>'
+      +'<div class="nx-column"><div class="nx-panel" data-c="peach"><h3>💡 คลังไอเดีย</h3>'+W('gal',nxWDefault('gal'))+'</div></div></div>'
+      +'<div class="nx-panel" data-c="sand"><h3>🎬 ขั้นตอนผลิต</h3>'+W('kb',kbj)+'</div>'
+      +'<div class="nx-cols" data-n="2"><div class="nx-column"><div class="nx-panel" data-c="mint"><h3>📈 ตัวชี้วัดเดือนนี้</h3>'+W('met',nxWDefault('met'))+'</div></div>'
+      +'<div class="nx-column"><div class="nx-panel" data-c="lilac"><h3>🤝 แบรนด์ที่ร่วมงาน</h3><p>พิมพ์ / แล้วเลือก “ตาราง” หรือ “สถานะ” เพื่อติดตามดีล</p></div></div></div><p><br></p>');
+    nxFocusMarker();nxWFill(ed);nxQueue();setTimeout(function(){nxSetWide(true);},50);}
+  else if(k==='panel'){document.execCommand('insertHTML',false,'<div class="nx-panel" data-c="peach"><h3>หัวข้อกล่อง</h3><p data-nxf><br></p></div><p><br></p>');nxFocusMarker();}
+  else if(k==='kb'||k==='gal'||k==='met'){document.execCommand('insertHTML',false,'<div class="nx-w" data-w="'+k+'" data-j="'+nxEsc(JSON.stringify(nxWDefault(k)))+'"></div><p><br></p>');nxWFill(ed);}
   else if(k==='cols2'||k==='cols3'){var nc=k==='cols3'?3:2,ch='';for(var ci=0;ci<nc;ci++)ch+='<div class="nx-column"><p'+(ci?'':' data-nxf')+'><br></p></div>';document.execCommand('insertHTML',false,'<div class="nx-cols" data-n="'+nc+'">'+ch+'</div><p><br></p>');nxFocusMarker();}
   else if(k==='tl'){document.execCommand('insertHTML',false,'<div class="nx-tl" data-nxnew="1">'+nxTlItemHtml('09:00 - 11:30','','')+'</div><p><br></p>');var tl0=ed.querySelector('div.nx-tl[data-nxnew]');if(tl0){tl0.removeAttribute('data-nxnew');var tt0=tl0.querySelector('.nx-tl-t'),r0=document.createRange();r0.selectNodeContents(tt0);var s1=window.getSelection();s1.removeAllRanges();s1.addRange(r0);}}
   else if(k==='cost'){var W2=' style="width:200px;min-width:200px"',W3=' style="width:130px;min-width:130px"';document.execCommand('insertHTML',false,'<table class="nx-tbl" data-sum="1"><tbody><tr><th'+W2+'>รายการ</th><th'+W3+'>ราคา (บาท)</th><th'+W2+'>หมายเหตุ</th></tr><tr><td data-nxf><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr></tbody></table><p><br></p>');nxFocusMarker();nxSumAll(ed);}
@@ -3812,7 +3873,7 @@ function nxTableTools(){
   var top=rc.bottom+6;if(top+36>window.innerHeight-70)top=Math.max(8,rc.top-38);bar.style.top=top+'px';bar.style.left=Math.max(8,Math.min(rc.left,window.innerWidth-bar.offsetWidth-8))+'px';
 }
 // ---------- บล็อกแบบหน้า Notion ทริป (6 พ.ย.): คอลัมน์ · การ์ดลิงก์ · Σ รวมในตาราง · ตารางเวลา ----------
-var NX_DIVC={'nx-cols':1,'nx-column':1,'nx-tl':1,'nx-tl-i':1,'nx-tl-t':1,'nx-tl-b':1,'nx-tl-h':1,'nx-tl-d':1,'nx-card':1};
+var NX_DIVC={'nx-panel':1,'nx-w':1,'nx-cols':1,'nx-column':1,'nx-tl':1,'nx-tl-i':1,'nx-tl-t':1,'nx-tl-b':1,'nx-tl-h':1,'nx-tl-d':1,'nx-card':1};
 function nxCaretIn(el,end){if(!el)return;var r=document.createRange();r.selectNodeContents(el);r.collapse(!end);var s=window.getSelection();s.removeAllRanges();s.addRange(r);}
 function nxSelEl(){var s=window.getSelection();if(!s.rangeCount)return null;var n=s.anchorNode;var el=n&&(n.nodeType===1?n:n.parentNode);var ed=document.getElementById('nx-body');return el&&ed&&ed.contains(el)?el:null;}
 // --- การ์ดลิงก์ ---
@@ -3936,10 +3997,13 @@ function nxBlk(op){
   nxQueue();nxBlockTools();
 }
 function nxBlockTools(){
-  var bar=document.getElementById('nx-btools'),el=nxSelEl(),col=el&&!nxCell()&&el.closest('.nx-column'),it=el&&el.closest('.nx-tl-i');
-  if(!col&&!it){if(bar)bar.style.display='none';return;}
+  var bar=document.getElementById('nx-btools'),el=nxSelEl(),col=el&&!nxCell()&&el.closest('.nx-column'),it=el&&el.closest('.nx-tl-i'),pn=el&&!nxCell()&&!col&&!it&&el.closest('.nx-panel');
+  if(!col&&!it&&!pn){if(bar)bar.style.display='none';return;}
   if(!bar){bar=document.createElement('div');bar.id='nx-btools';bar.className='nx-ttools';bar.setAttribute('role','toolbar');document.body.appendChild(bar);}
   var B=function(op,t){return '<button type="button" data-op="'+op+'" onmousedown="event.preventDefault()" onclick="nxBlk(this.dataset.op)">'+t+'</button>';};
+  if(pn){var pk='pn'+pn.getAttribute('data-c');if(!bar)return;if(bar.dataset.k!==pk){bar.dataset.k=pk;bar.setAttribute('aria-label','เครื่องมือกล่องสี');
+      bar.innerHTML=NX_PANEL.map(function(c){return '<button type="button" class="nxpn-c'+(pn.getAttribute('data-c')===c[0]?' on':'')+'" title="'+c[2]+'" aria-label="สี'+c[2]+'" style="background:'+c[1]+'" onmousedown="event.preventDefault()" onclick="nxPanelSet(\''+c[0]+'\')"></button>';}).join('')+'<button type="button" onmousedown="event.preventDefault()" onclick="nxPanelUnwrap()">เลิกกล่อง</button>';}
+    var pr=pn.getBoundingClientRect();bar.style.display='flex';var pt=pr.bottom+6;if(pt+36>window.innerHeight-70)pt=Math.max(8,pr.top-38);bar.style.top=pt+'px';bar.style.left=Math.max(8,Math.min(pr.left,window.innerWidth-bar.offsetWidth-8))+'px';return;}
   var box=it?it.parentNode:col.parentNode,key=it?'tl':'col'+box.querySelectorAll(':scope > .nx-column').length;
   if(bar.dataset.k!==key){bar.dataset.k=key;bar.setAttribute('aria-label',it?'เครื่องมือตารางเวลา':'เครื่องมือคอลัมน์');
     bar.innerHTML=it?B('tladd','+ ช่วงเวลา')+B('tlsort','เรียงตามเวลา')+B('tldel','ลบช่วงนี้')+B('tlrm','ลบตารางเวลา')
@@ -3949,6 +4013,117 @@ function nxBlockTools(){
 }
 document.addEventListener('selectionchange',function(){var a=document.activeElement;if(a&&a.id==='nx-body')nxBlockTools();else{var b=document.getElementById('nx-btools');if(b&&!(a&&a.closest&&a.closest('#nx-btools')))b.style.display='none';}});
 window.addEventListener('scroll',function(){var b=document.getElementById('nx-btools');if(b&&b.style.display==='flex')nxBlockTools();},true);
+// ---------- Note แบบ Dashboard (7 พ.ย. — จากภาพ Notion "Home Dashboard"): กล่องสี · บอร์ดขั้นตอน · แกลเลอรี · ตัวชี้วัด ----------
+// กล่องสี = div.nx-panel[data-c] (แก้ข้อความได้ปกติ) · วิดเจ็ต = div.nx-w[data-w=kb|gal|met][data-j=JSON] contenteditable=false บันทึกแค่ JSON แล้ววาดใหม่ทุกครั้ง
+var NX_PANEL=[['peach','#FDEBDD','ส้มพีช'],['mint','#E3F4EC','เขียวมินต์'],['lilac','#EFE7FA','ม่วงไลแลค'],['sky','#E3F1FB','ฟ้า'],['sand','#F6F0E2','ครีม'],['rose','#FBE6EA','ชมพู'],['none','#ffffff','ขาว']];
+var NX_WCOL={grey:['#EEEDEA','#55534e'],orange:['#FBE4D2','#9a4a0b'],yellow:['#FBF0CC','#7a5a00'],green:['#DDEFE2','#2f6b3a'],blue:['#DCEBFA','#1d4f91'],purple:['#ECE2F8','#5b2e91'],red:['#FADCDA','#a3261d']};
+function nxWDefault(w){
+  var id=function(){return 'w'+Date.now().toString(36)+Math.floor(Math.random()*1e4);};
+  if(w==='kb')return {cols:[{id:'c1',t:'ไอเดีย',c:'grey'},{id:'c2',t:'กำลังทำ',c:'orange'},{id:'c3',t:'ตรวจ',c:'blue'},{id:'c4',t:'เสร็จ',c:'green'}],cards:[{id:id(),col:'c1',t:'การ์ดแรก',d:'กดการ์ดเพื่อแก้ · ลาก ⠿ เพื่อย้ายขั้นตอน',tag:''}]};
+  if(w==='gal')return {items:[{id:id(),t:'ไอเดียแรก',d:'กดเพื่อแก้ ใส่รูปได้',tags:['ไอเดีย']}]};
+  return {rows:[{id:id(),t:'ยอดขาย Shopee',v:72,max:100,u:'%'},{id:id(),t:'ผู้ติดตาม TikTok',v:1250,max:2000,u:''}]};
+}
+function nxWGet(el){try{var j=JSON.parse(el.getAttribute('data-j')||'null');if(j&&typeof j==='object')return j;}catch(e){}return nxWDefault(el.getAttribute('data-w'));}
+function nxWSet(el,j){el.setAttribute('data-j',JSON.stringify(j));nxWFill(el.parentNode||el);_nxTimer=_nxTimer||-1;nxQueue();}
+function nxWImg(u){return /^https:\/\/(lh3\.googleusercontent\.com|drive\.google\.com)\//.test(u||'')?u:'';}
+function nxWFill(root){
+  (root||document).querySelectorAll('div.nx-w').forEach(function(el){
+    var w=el.getAttribute('data-w'),j=nxWGet(el),ed=!!el.closest('#nx-body');
+    el.setAttribute('contenteditable','false');el.classList.toggle('ro',!ed);
+    el.innerHTML=w==='kb'?nxKbHtml(j,ed):w==='gal'?nxGalHtml(j,ed):nxMetHtml(j,ed);
+  });
+}
+function nxWEl(b){return b.closest('div.nx-w');}
+function nxKbHtml(j,ed){
+  return '<div class="nxkb" role="list" aria-label="บอร์ดขั้นตอน">'+j.cols.map(function(c){var col=NX_WCOL[c.c]||NX_WCOL.grey,cards=j.cards.filter(function(x){return x.col===c.id;});
+    return '<section class="nxkb-col" data-col="'+escH(c.id)+'" role="listitem"><div class="nxkb-h"><button type="button" class="nxkb-ht" style="background:'+col[0]+';color:'+col[1]+'"'+(ed?' data-col="'+escH(c.id)+'" onclick="nxKbCol(this)"':' disabled')+'>'+escH(c.t)+'</button><span>'+cards.length+'</span></div>'
+      +cards.map(function(x){var im=nxWImg(x.img);return '<div class="nxkb-card" data-id="'+escH(x.id)+'">'+(ed?'<span class="nxkb-grip" aria-hidden="true" title="ลากเพื่อย้าย">⠿</span>':'')
+        +'<button type="button" class="nxkb-cb"'+(ed?' data-id="'+escH(x.id)+'" onclick="nxKbCard(this)"':' disabled')+'>'+(im?'<img src="'+escH(im)+'" alt="">':'')+'<b>'+escH(x.t||'ไม่มีชื่อ')+'</b>'+(x.d?'<span>'+escH(x.d)+'</span>':'')+(x.tag?'<i>'+escH(x.tag)+'</i>':'')+'</button></div>';}).join('')
+      +(ed?'<button type="button" class="nxw-add" data-col="'+escH(c.id)+'" onclick="nxKbAdd(this)">+ เพิ่ม</button>':'')+'</section>';}).join('')
+    +(ed?'<button type="button" class="nxkb-addcol" onclick="nxKbAddCol(this)" aria-label="เพิ่มขั้นตอน">+ ขั้นตอน</button>':'')+'</div>';
+}
+function nxGalHtml(j,ed){
+  return '<div class="nxgal">'+j.items.map(function(x,i){var im=nxWImg(x.img),pc=['#FDEBDD','#E3F4EC','#EFE7FA','#E3F1FB','#F6F0E2','#FBE6EA'][i%6];
+    return '<button type="button" class="nxgal-i"'+(ed?' data-id="'+escH(x.id)+'" onclick="nxGalItem(this)"':' disabled')+'><span class="nxgal-im" style="background:'+pc+'">'+(im?'<img src="'+escH(im)+'" alt="">':'<span aria-hidden="true">🖼</span>')+'</span><b>'+escH(x.t||'ไม่มีชื่อ')+'</b>'+(x.d?'<span class="nxgal-d">'+escH(x.d)+'</span>':'')
+      +((x.tags||[]).length?'<span class="nxgal-tg">'+x.tags.map(function(t){return '<i>'+escH(t)+'</i>';}).join('')+'</span>':'')+'</button>';}).join('')
+    +(ed?'<button type="button" class="nxgal-add" onclick="nxGalAdd(this)">+ เพิ่มการ์ด</button>':'')+'</div>';
+}
+function nxMetHtml(j,ed){
+  var fmt=function(v){return (Math.round(v*100)/100).toLocaleString('en-US');};
+  return '<div class="nxmet">'+j.rows.map(function(r){var pc=r.max>0?Math.max(0,Math.min(100,r.v/r.max*100)):0;
+    return '<button type="button" class="nxmet-r"'+(ed?' data-id="'+escH(r.id)+'" onclick="nxMetRow(this)"':' disabled')+'><span class="nxmet-t">'+escH(r.t)+'</span><span class="nxmet-v">'+fmt(r.v)+escH(r.u||'')+(r.max&&r.u!=='%'?' <small>/ '+fmt(r.max)+'</small>':'')+'</span><span class="nxmet-bar"><i style="width:'+pc.toFixed(1)+'%"></i></span></button>';}).join('')
+    +(ed?'<button type="button" class="nxw-add" onclick="nxMetAdd(this)">+ เพิ่มตัวชี้วัด</button>':'')+'</div>';
+}
+// ป๊อปอัปแก้ไขกลาง (ใช้ร่วมทุกวิดเจ็ต)
+var _nxWP=null;
+function nxWPop(anchor,title,fields,onSave,onDel){
+  _nxWP={save:onSave,del:onDel,img:null};var box=document.getElementById('nx-wpop');
+  if(!box){box=document.createElement('div');box.id='nx-wpop';box.className='nx-pop nx-tagpop';box.setAttribute('role','dialog');document.body.appendChild(box);}
+  box.setAttribute('aria-label',title);box.style.width='300px';
+  var h='<b style="font-size:13px">'+escH(title)+'</b>';
+  fields.forEach(function(f){
+    if(f.type==='select')h+='<label class="nx-pop-l">'+f.label+'<select id="nxwp-'+f.k+'">'+f.opts.map(function(o){return '<option value="'+escH(o[0])+'"'+(o[0]===f.v?' selected':'')+'>'+escH(o[1])+'</option>';}).join('')+'</select></label>';
+    else if(f.type==='color')h+='<div class="nx-pop-l">'+f.label+'<div class="nxwp-cols" id="nxwp-'+f.k+'" data-v="'+escH(f.v)+'">'+Object.keys(NX_WCOL).map(function(c){return '<button type="button" class="nxwp-c'+(c===f.v?' on':'')+'" style="background:'+NX_WCOL[c][0]+';color:'+NX_WCOL[c][1]+'" data-c="'+c+'" aria-label="'+c+'" onclick="this.parentNode.dataset.v=this.dataset.c;this.parentNode.querySelectorAll(\'.nxwp-c\').forEach(function(x){x.classList.toggle(\'on\',x===this)},this)">A</button>';}).join('')+'</div></div>';
+    else if(f.type==='img'){_nxWP.img=f.v||'';h+='<div class="nx-pop-l">รูป<div class="nxwp-img" id="nxwp-imgw">'+(f.v?'<img src="'+escH(f.v)+'" alt="">':'<span>ยังไม่มีรูป</span>')+'</div><div style="display:flex;gap:6px"><button type="button" class="nx-btn-light" onclick="nxWPickImg()">เลือกรูป…</button>'+(f.v?'<button type="button" class="nx-btn-light" onclick="_nxWP.img=\'\';document.getElementById(\'nxwp-imgw\').innerHTML=\'<span>ไม่มีรูป</span>\'">เอารูปออก</button>':'')+'</div></div>';}
+    else h+='<label class="nx-pop-l">'+f.label+'<'+(f.type==='area'?'textarea rows="3"':'input'+(f.type==='num'?' type="number" step="any"':''))+' id="nxwp-'+f.k+'"'+(f.ph?' placeholder="'+escH(f.ph)+'"':'')+(f.type==='area'?'>'+escH(f.v||'')+'</textarea>':' value="'+escH(f.v==null?'':f.v)+'">')+'</label>';
+  });
+  h+='<div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="nx-btn-dark" style="padding:6px 12px;font-size:12px" onclick="nxWPSave()">บันทึก</button><button type="button" class="nx-btn-light" onclick="nxWPClose()">ยกเลิก</button>'+(onDel?'<button type="button" class="nx-danger" onclick="nxWPDel(this)">ลบ</button>':'')+'</div>';
+  box.innerHTML=h;box.style.display='flex';
+  var rc=anchor.getBoundingClientRect(),l=rc.left,t=rc.bottom+6;
+  box.style.left=Math.max(8,Math.min(l,window.innerWidth-box.offsetWidth-8))+'px';if(t+box.offsetHeight>window.innerHeight-8)t=Math.max(8,rc.top-box.offsetHeight-6);box.style.top=t+'px';
+  var f0=box.querySelector('input,textarea');if(f0)f0.focus();
+  box.onkeydown=function(e){if(e.key==='Escape')nxWPClose();if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();nxWPSave();}};
+}
+function nxWPVal(k){var el=document.getElementById('nxwp-'+k);if(!el)return undefined;return el.dataset&&el.dataset.v!==undefined&&el.classList.contains('nxwp-cols')?el.dataset.v:el.value;}
+function nxWPSave(){if(_nxWP&&_nxWP.save)_nxWP.save(nxWPVal,_nxWP.img);nxWPClose();}
+function nxWPDel(b){if(!b.dataset.arm){b.dataset.arm='1';b.textContent='กดอีกครั้งเพื่อลบ';return;}if(_nxWP&&_nxWP.del)_nxWP.del();nxWPClose();}
+function nxWPClose(){var b=document.getElementById('nx-wpop');if(b)b.style.display='none';_nxWP=null;}
+document.addEventListener('mousedown',function(e){var b=document.getElementById('nx-wpop');if(b&&b.style.display==='flex'&&!e.target.closest('#nx-wpop,div.nx-w'))nxWPClose();});
+function nxWPickImg(){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=function(){var f=inp.files&&inp.files[0];if(!f)return;var w=document.getElementById('nxwp-imgw');if(w)w.innerHTML='<span>⏳ กำลังอัปโหลด…</span>';
+  var rd=new FileReader();rd.onload=function(ev){shrinkImage(ev.target.result,900,0.82,function(b64){uploadImagePost(b64,f.name||'image.jpg',function(d){var w2=document.getElementById('nxwp-imgw');
+    if(d&&d.ok&&d.url&&nxWImg(d.url)){if(_nxWP)_nxWP.img=d.url;if(w2)w2.innerHTML='<img src="'+escH(d.url)+'" alt="">';}else{if(w2)w2.innerHTML='<span>อัปโหลดไม่สำเร็จ</span>';showToast('⚠️ อัปโหลดรูปไม่สำเร็จ');}});});};rd.readAsDataURL(f);};inp.click();}
+// บอร์ด
+function nxKbColOpts(j){return j.cols.map(function(c){return [c.id,c.t];});}
+function nxKbCard(b){var el=nxWEl(b),j=nxWGet(el),x=j.cards.filter(function(c){return c.id===b.dataset.id;})[0];if(!x)return;
+  nxWPop(b,'แก้การ์ด',[{k:'t',label:'ชื่อ',v:x.t},{k:'d',label:'รายละเอียด',type:'area',v:x.d},{k:'tag',label:'ป้าย',v:x.tag,ph:'เช่น TikTok · ด่วน'},{k:'col',label:'ขั้นตอน',type:'select',opts:nxKbColOpts(j),v:x.col},{k:'img',type:'img',v:nxWImg(x.img)}],
+    function(v,img){x.t=(v('t')||'').trim().slice(0,120);x.d=(v('d')||'').trim().slice(0,400);x.tag=(v('tag')||'').trim().slice(0,30);x.col=v('col')||x.col;x.img=img||'';nxWSet(el,j);},
+    function(){j.cards=j.cards.filter(function(c){return c!==x;});nxWSet(el,j);});}
+function nxKbAdd(b){var el=nxWEl(b),j=nxWGet(el),x={id:'w'+Date.now().toString(36),col:b.dataset.col,t:'',d:'',tag:''};j.cards.push(x);nxWSet(el,j);
+  var nb=el.querySelector('.nxkb-cb[data-id="'+x.id+'"]');if(nb)nxKbCard(nb);}
+function nxKbCol(b){var el=nxWEl(b),j=nxWGet(el),c=j.cols.filter(function(x){return x.id===b.dataset.col;})[0];if(!c)return;
+  nxWPop(b,'แก้ขั้นตอน',[{k:'t',label:'ชื่อขั้นตอน',v:c.t},{k:'c',label:'สี',type:'color',v:c.c||'grey'}],
+    function(v){c.t=(v('t')||'').trim().slice(0,40)||c.t;c.c=v('c')||c.c;nxWSet(el,j);},
+    j.cols.length>1?function(){var to=j.cols.filter(function(x){return x!==c;})[0];j.cards.forEach(function(x){if(x.col===c.id)x.col=to.id;});j.cols=j.cols.filter(function(x){return x!==c;});nxWSet(el,j);showToast('ย้ายการ์ดไปที่ “'+to.t+'” แล้ว');}:null);}
+function nxKbAddCol(b){var el=nxWEl(b),j=nxWGet(el);if(j.cols.length>=8){showToast('ได้สูงสุด 8 ขั้นตอน');return;}var c={id:'c'+Date.now().toString(36),t:'ขั้นตอนใหม่',c:'purple'};j.cols.push(c);nxWSet(el,j);var nb=el.querySelector('.nxkb-ht[data-col="'+c.id+'"]');if(nb)nxKbCol(nb);}
+var _nxKbD=null;
+document.addEventListener('pointerdown',function(e){var g=e.target.closest&&e.target.closest('#nx-body .nxkb-grip');if(!g)return;var cd=g.closest('.nxkb-card');e.preventDefault();
+  var r=cd.getBoundingClientRect(),gh=cd.cloneNode(true);gh.className='nxkb-card nxkb-ghost';gh.style.width=r.width+'px';gh.style.left=r.left+'px';gh.style.top=r.top+'px';document.body.appendChild(gh);cd.classList.add('src');
+  _nxKbD={el:nxWEl(cd),id:cd.dataset.id,gh:gh,cd:cd,ox:e.clientX-r.left,oy:e.clientY-r.top};});
+document.addEventListener('pointermove',function(e){if(!_nxKbD)return;_nxKbD.gh.style.left=(e.clientX-_nxKbD.ox)+'px';_nxKbD.gh.style.top=(e.clientY-_nxKbD.oy)+'px';
+  var col=document.elementsFromPoint(e.clientX,e.clientY).filter(function(x){return x.classList&&x.classList.contains('nxkb-col');})[0];
+  _nxKbD.el.querySelectorAll('.nxkb-col.over').forEach(function(x){if(x!==col)x.classList.remove('over');});if(col&&_nxKbD.el.contains(col))col.classList.add('over');});
+document.addEventListener('pointerup',function(e){if(!_nxKbD)return;var d=_nxKbD;_nxKbD=null;d.gh.remove();d.cd.classList.remove('src');
+  var col=d.el.querySelector('.nxkb-col.over');d.el.querySelectorAll('.nxkb-col.over').forEach(function(x){x.classList.remove('over');});if(!col)return;
+  var j=nxWGet(d.el),x=j.cards.filter(function(c){return c.id===d.id;})[0];if(!x||x.col===col.dataset.col)return;
+  // วางตามตำแหน่ง Y ในคอลัมน์
+  var after=null;Array.prototype.slice.call(col.querySelectorAll('.nxkb-card')).forEach(function(c){var r=c.getBoundingClientRect();if(e.clientY>r.top+r.height/2)after=c.dataset.id;});
+  j.cards=j.cards.filter(function(c){return c!==x;});x.col=col.dataset.col;
+  var idx=after?j.cards.findIndex(function(c){return c.id===after;})+1:j.cards.findIndex(function(c){return c.col===x.col;});if(idx<0)idx=j.cards.length;j.cards.splice(idx,0,x);nxWSet(d.el,j);});
+// แกลเลอรี
+function nxGalItem(b){var el=nxWEl(b),j=nxWGet(el),x=j.items.filter(function(c){return c.id===b.dataset.id;})[0];if(!x)return;
+  nxWPop(b,'แก้การ์ดแกลเลอรี',[{k:'t',label:'ชื่อ',v:x.t},{k:'d',label:'รายละเอียด',type:'area',v:x.d},{k:'tags',label:'แท็ก (คั่นด้วย ,)',v:(x.tags||[]).join(', ')},{k:'img',type:'img',v:nxWImg(x.img)}],
+    function(v,img){x.t=(v('t')||'').trim().slice(0,120);x.d=(v('d')||'').trim().slice(0,400);x.tags=(v('tags')||'').split(',').map(function(s){return s.trim().slice(0,24);}).filter(String).slice(0,5);x.img=img||'';nxWSet(el,j);},
+    function(){j.items=j.items.filter(function(c){return c!==x;});nxWSet(el,j);});}
+function nxGalAdd(b){var el=nxWEl(b),j=nxWGet(el),x={id:'w'+Date.now().toString(36),t:'',d:'',tags:[]};j.items.push(x);nxWSet(el,j);var nb=el.querySelector('.nxgal-i[data-id="'+x.id+'"]');if(nb)nxGalItem(nb);}
+// ตัวชี้วัด
+function nxMetRow(b){var el=nxWEl(b),j=nxWGet(el),r=j.rows.filter(function(c){return c.id===b.dataset.id;})[0];if(!r)return;
+  nxWPop(b,'แก้ตัวชี้วัด',[{k:'t',label:'ชื่อ',v:r.t},{k:'v',label:'ค่าปัจจุบัน',type:'num',v:r.v},{k:'max',label:'เป้าหมาย (เต็มหลอด)',type:'num',v:r.max},{k:'u',label:'หน่วย',v:r.u,ph:'%, บาท, คน'}],
+    function(v){r.t=(v('t')||'').trim().slice(0,60)||r.t;r.v=parseFloat(v('v'))||0;r.max=parseFloat(v('max'))||0;r.u=(v('u')||'').trim().slice(0,10);nxWSet(el,j);},
+    function(){j.rows=j.rows.filter(function(c){return c!==r;});nxWSet(el,j);});}
+function nxMetAdd(b){var el=nxWEl(b),j=nxWGet(el),r={id:'w'+Date.now().toString(36),t:'ตัวชี้วัดใหม่',v:0,max:100,u:'%'};j.rows.push(r);nxWSet(el,j);var nb=el.querySelector('.nxmet-r[data-id="'+r.id+'"]');if(nb)nxMetRow(nb);}
+// กล่องสี: แถบเครื่องมือ (สี / เลิกกล่อง)
+function nxPanelSet(c){var el=nxSelEl(),p=el&&el.closest('.nx-panel');if(!p)return;p.setAttribute('data-c',c);nxQueue();nxBlockTools();}
+function nxPanelUnwrap(){var el=nxSelEl(),p=el&&el.closest('.nx-panel');if(!p)return;var last=null;while(p.firstChild){last=p.firstChild;p.parentNode.insertBefore(p.firstChild,p);}p.parentNode.removeChild(p);if(last&&last.nodeType===1)nxCaretIn(last,true);nxQueue();nxBlockTools();}
 function nxBubble(){
   var tb=document.getElementById('nx-tb');if(!tb||window.innerWidth<=760)return;
   var sel=window.getSelection(),a=document.activeElement;

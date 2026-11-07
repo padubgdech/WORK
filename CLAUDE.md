@@ -118,6 +118,14 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Font size (6 Nov "ปรับขนาดตัวอักษร เล็ก/กลาง/ใหญ่"): 3 buttons ก ก ก `.nx-fsb[data-fs=s|m|l]` in `#nx-tb` → `nxSize(z)` (execCommand fontSize 7 as marker →
   `span.nx-fs-s` 13px / unwrap for medium (16px default) / `span.nx-fs-l` 21px; nested size spans removed); sanitizer keeps those classes; active size
   marked in `nxTbState`. Test: test_fs.py.
+  Dashboard blocks (7 Nov, from a Notion "Home Dashboard" image, Dech: "ให้ tab note สามารถทำแบบนี้ได้"): `/กล่องสี` `div.nx-panel[data-c]` (`NX_PANEL`
+  peach/mint/lilac/sky/sand/rose/none; editable inside, panel tools in `#nx-btools`: colour dots `nxPanelSet` + เลิกกล่อง `nxPanelUnwrap`) ·
+  widgets `div.nx-w[data-w=kb|gal|met][data-j=JSON]` contenteditable=false, saved EMPTY (sanitizer keeps only data-w/data-j, JSON <40k), drawn by
+  `nxWFill` on render/paste (read-only `.ro` outside #nx-body): board `nxKbHtml` (cols {id,t,c NX_WCOL} + cards {id,col,t,d,tag,img}; pointer drag ⠿ between
+  columns; popups `nxKbCard/nxKbCol/nxKbAddCol`), gallery `nxGalHtml` (items {t,d,tags,img}), metrics `nxMetHtml` (rows {t,v,max,u}, bar = v/max).
+  Shared edit popup `#nx-wpop` (`nxWPop` fields text/area/num/select/color/img; images → `uploadImagePost` Drive lh3 only, `nxWImg` filters src).
+  `/แม่แบบ Dashboard` (k 'dash') inserts the whole layout + turns on page option "เต็มความกว้าง" (`n.wide` → `.nx-doc.wide` 1240px, `nxSetWide`,
+  checkbox in ⋯). Test: test_nxw.py, test_dash.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Trip tab (5 Nov, from a travel-dashboard image Dech sent): tab `trip` between Calendar and Tasks → `#page-trip > #tp`, `renderTrip()`,
   all code prefixed `tp`. Data localStorage `rudy_trips_v1` {trips:[{id,name,start,end,transport,calAdded,stops:[{id,name,country,date,
