@@ -333,6 +333,21 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .tcol-band.p-med{--c1:#D7AE64;--c2:#F1DEB2;--soft:#F8EFDD;--ink:#6E4D12;--dot:#B8862F}
 .tcol-band.p-low{--c1:#86B79A;--c2:#CFE3D5;--soft:#E7F1EA;--ink:#2F5B44;--dot:#4E8B6A}
 .tcol-band-row{display:flex;align-items:center;justify-content:space-between}
+.tcol-hd{--main:#C2553F;--ink:#7A2E21;--soft:#FBEDE8;padding:16px 16px 14px;background:#fff;border-top:4px solid var(--main);border-bottom:1px solid #f0ede6}
+.tcol-hd.p-med{--main:#B8862F;--ink:#6E4D12;--soft:#FBF3E2}
+.tcol-hd.p-low{--main:#4E8B6A;--ink:#2F5B44;--soft:#EAF4EE}
+.tcol-hd-row{display:flex;align-items:center;gap:10px}
+.tcol-ic{width:34px;height:34px;border-radius:10px;background:var(--soft);color:var(--main);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.tcol-ttl{flex:1;min-width:0;line-height:1.3}
+.tcol-en{font-size:12px;font-weight:700;letter-spacing:1.6px;color:var(--ink)}
+.tcol-th{font-size:12px;color:#8a857b}
+.tcol-num{font-size:26px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:700}
+.tcol-hd .tcol-add-btn{width:40px;height:40px;padding:0;border-radius:12px;border:1px solid #ebe7de;background:#fff;color:var(--main);display:flex;align-items:center;justify-content:center;margin-left:4px;cursor:pointer;transition:background .15s,transform .15s,border-color .15s}
+.tcol-hd .tcol-add-btn:hover{background:var(--soft);border-color:var(--main);transform:translateY(-1px)}
+.tcol-hd .tcol-add-btn:focus-visible{outline:2px solid var(--main);outline-offset:2px}
+.tcol-bar{margin-top:12px;height:6px;border-radius:99px;background:#f1eee8;overflow:hidden}
+.tcol-bar i{display:block;height:100%;width:0;background:var(--main);border-radius:99px;transition:width .5s ease}
+.tcol-meta{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:#8a857b;margin-top:6px}
 .rep-btns{display:flex;flex-wrap:wrap;gap:6px}
 .rep-btn{padding:6px 12px;border-radius:16px;border:1px solid var(--border);background:#f7f6f3;color:#666;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit}
 .rep-btn.on{background:#111;color:#fff;border-color:#111}
@@ -1363,33 +1378,42 @@ button.tp-sp-n{border:0;padding:0;cursor:pointer;font-family:inherit}button.tp-s
 <div id="page-tasks" class="page">
   <div class="grid3">
     <div class="tcol">
-      <div class="tcol-band p-high">
-        <div class="tcol-band-row">
-          <div class="tcol-band-title"><span class="tcol-dot"></span>HIGH</div>
-          <button class="tcol-add-btn" onclick="openAddND('High')">+ เพิ่ม</button>
+      <header class="tcol-hd p-high">
+        <div class="tcol-hd-row">
+          <span class="tcol-ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"></path><path d="M5 4h11l-2 4 2 4H5"></path></svg></span>
+          <div class="tcol-ttl"><div class="tcol-en">HIGH</div><div class="tcol-th">ด่วน</div></div>
+          <b class="tcol-num" id="nd-count-high" aria-label="จำนวนงาน">–</b>
+          <button type="button" class="tcol-add-btn" onclick="openAddND('High')" aria-label="เพิ่มงาน HIGH" title="เพิ่มงาน"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
         </div>
-        <div class="tcol-count" id="nd-count-high">กำลังโหลด...</div>
-      </div>
+        <div class="tcol-bar" aria-hidden="true"><i id="nd-bar-high"></i></div>
+        <div class="tcol-meta"><span id="nd-sub-high">กำลังโหลด...</span><span id="nd-pct-high"></span></div>
+      </header>
       <div class="tcol-body" id="nd-high"><div class="ld">⏳</div></div>
     </div>
     <div class="tcol">
-      <div class="tcol-band p-med">
-        <div class="tcol-band-row">
-          <div class="tcol-band-title"><span class="tcol-dot"></span>MEDIUM</div>
-          <button class="tcol-add-btn" onclick="openAddND('Medium')">+ เพิ่ม</button>
+      <header class="tcol-hd p-med">
+        <div class="tcol-hd-row">
+          <span class="tcol-ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v4l3 2"></path></svg></span>
+          <div class="tcol-ttl"><div class="tcol-en">MEDIUM</div><div class="tcol-th">ปานกลาง</div></div>
+          <b class="tcol-num" id="nd-count-med" aria-label="จำนวนงาน">–</b>
+          <button type="button" class="tcol-add-btn" onclick="openAddND('Medium')" aria-label="เพิ่มงาน MEDIUM" title="เพิ่มงาน"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
         </div>
-        <div class="tcol-count" id="nd-count-med">กำลังโหลด...</div>
-      </div>
+        <div class="tcol-bar" aria-hidden="true"><i id="nd-bar-med"></i></div>
+        <div class="tcol-meta"><span id="nd-sub-med">กำลังโหลด...</span><span id="nd-pct-med"></span></div>
+      </header>
       <div class="tcol-body" id="nd-med"><div class="ld">⏳</div></div>
     </div>
     <div class="tcol">
-      <div class="tcol-band p-low">
-        <div class="tcol-band-row">
-          <div class="tcol-band-title"><span class="tcol-dot"></span>LOW</div>
-          <button class="tcol-add-btn" onclick="openAddND('Low')">+ เพิ่ม</button>
+      <header class="tcol-hd p-low">
+        <div class="tcol-hd-row">
+          <span class="tcol-ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c4-8 12-8 16 0"></path><path d="M4 12c4 8 12 8 16 0"></path><circle cx="12" cy="12" r="2.2"></circle></svg></span>
+          <div class="tcol-ttl"><div class="tcol-en">LOW</div><div class="tcol-th">ไม่รีบ</div></div>
+          <b class="tcol-num" id="nd-count-low" aria-label="จำนวนงาน">–</b>
+          <button type="button" class="tcol-add-btn" onclick="openAddND('Low')" aria-label="เพิ่มงาน LOW" title="เพิ่มงาน"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
         </div>
-        <div class="tcol-count" id="nd-count-low">กำลังโหลด...</div>
-      </div>
+        <div class="tcol-bar" aria-hidden="true"><i id="nd-bar-low"></i></div>
+        <div class="tcol-meta"><span id="nd-sub-low">กำลังโหลด...</span><span id="nd-pct-low"></span></div>
+      </header>
       <div class="tcol-body" id="nd-low"><div class="ld">⏳</div></div>
     </div>
   </div>
@@ -6261,6 +6285,7 @@ function ndShouldShow(t){
   // มีวันแล้ว -> โชว์เฉพาะที่ "ยังไม่ถึง" (upcoming) เท่านั้น เพราะ overdue/ongoing/วันนี้ ไปอยู่หน้า Main แล้ว ไม่ต้องซ้ำ
   return getStatus(t)==='upcoming';
 }
+var _ndCnt={high:0,med:0,low:0};
 function renderNDColumnsFromCache(){
   ['High','Medium','Low'].forEach(function(pri){
     var id=pri==='High'?'nd-high':pri==='Medium'?'nd-med':'nd-low';
@@ -6279,8 +6304,13 @@ function renderNDColumnsFromCache(){
     var el=document.getElementById(id);
     if(el)el.innerHTML=h;
     var ce=document.getElementById(countId);
-    if(ce)ce.textContent=list.length+' งาน';
+    if(ce)ce.textContent=list.length;
+    var k=countId.slice(9),nd=list.filter(function(t){return !t.actionDate;}).length;
+    var sb=document.getElementById('nd-sub-'+k);if(sb)sb.textContent=list.length?('ไม่มีวันที่ '+nd+' · มีวันที่ '+(list.length-nd)):'ไม่มีงาน';
+    _ndCnt[k]=list.length;
   });
+  var tot=_ndCnt.high+_ndCnt.med+_ndCnt.low;
+  ['high','med','low'].forEach(function(k){var pc=tot?Math.round(_ndCnt[k]*100/tot):0,b=document.getElementById('nd-bar-'+k),pe=document.getElementById('nd-pct-'+k);if(b)b.style.width=pc+'%';if(pe)pe.textContent=tot?pc+'% ของงานทั้งหมด':'';});
   attachNDDragOnce();
 }
 function renderNDTasks(){

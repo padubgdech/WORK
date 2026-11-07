@@ -239,6 +239,10 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
 - Quick-note order on the pinned band (5 Nov, "เลื่อนจัดอันดับ note ได้"): `n.qord` (pinQuickNotes sorts by it; new notes get min-1 = first);
   drag the ⋮⋮ grip `.pin-qn-grip` (desktop HTML5 DnD, `pinQnDragStart/Over/Drop`, left/right drop indicator) or ‹ › `.pin-qn-mv` in the footer
   (`pinQnMove`; always visible on touch). `pinQnOrder` bumps updatedAt so the order syncs with the notes.
+- Tasks column headers (7 Nov, Dech chose canvas page "Tasks · หัวคอลัมน์" แบบ A): `header.tcol-hd.p-high|p-med|p-low` (white, 4px top border
+  `--main`, icon tile `.tcol-ic`, EN `.tcol-en` + Thai `.tcol-th` ด่วน/ปานกลาง/ไม่รีบ, big count `#nd-count-<k>`, 40px + button `.tcol-add-btn`,
+  share bar `#nd-bar-<k>` + `#nd-sub-<k>` "ไม่มีวันที่ n · มีวันที่ m" + `#nd-pct-<k>` % of all Tasks-page tasks) filled in
+  `renderNDColumnsFromCache` (`_ndCnt`). Old `.tcol-band*` CSS is unused. Test: test_thdr.py (seeds `khum_sess_v1` because LIFF_ID is set).
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 - LINE login (3 Nov code, installed + enforced 7 Nov — see Pending 1): `gas/dashboard-auth.gs` + frontend `authBoot/authLogin/authLost` (index.html, top of script).
