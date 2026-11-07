@@ -333,6 +333,86 @@ div.note-card{cursor:text}div.note-card:hover{transform:none}
 .tcol-band.p-med{--c1:#D7AE64;--c2:#F1DEB2;--soft:#F8EFDD;--ink:#6E4D12;--dot:#B8862F}
 .tcol-band.p-low{--c1:#86B79A;--c2:#CFE3D5;--soft:#E7F1EA;--ink:#2F5B44;--dot:#4E8B6A}
 .tcol-band-row{display:flex;align-items:center;justify-content:space-between}
+#tv-board[hidden],#tv-alt[hidden]{display:none!important}
+.tv-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.tv-sw{display:flex;gap:2px;background:#ebe8e1;border-radius:11px;padding:3px;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.tv-sb{display:flex;align-items:center;gap:6px;border:0;border-radius:9px;min-height:36px;padding:0 12px;font:inherit;font-size:13px;font-weight:500;background:transparent;color:#6d685e;cursor:pointer;white-space:nowrap}
+.tv-sb.on{background:#fff;color:#2b2925;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.tv-sb:focus-visible,.tv-a:focus-visible,.tv-cfb:focus-visible{outline:2px solid #2b2925;outline-offset:2px}
+.tv-q{margin-left:auto;display:flex;align-items:center;gap:6px;border:1px solid #e3dfd6;background:#fff;border-radius:10px;padding:0 10px;min-height:38px;font-size:13px}
+.tv-q input{border:0;outline:0;font:inherit;font-size:13px;width:170px;background:transparent}
+.tv-tag{font-size:11px;background:#f1eff9;color:#4a3fb0;border-radius:6px;padding:2px 7px;white-space:nowrap}
+.p-high{--m:#C2553F;--k:#7A2E21;--s:#FBEDE8}.p-med{--m:#B8862F;--k:#6E4D12;--s:#FBF3E2}.p-low{--m:#4E8B6A;--k:#2F5B44;--s:#EAF4EE}
+.tv-acts{display:flex;gap:4px;justify-content:flex-end}
+.tv-a{min-width:32px;height:32px;border:1px solid #ece9e2;background:#fff;border-radius:8px;font-size:13px;cursor:pointer;padding:0 6px;color:#55534e}
+.tv-a:hover{background:#f6f5f1}.tv-a.ok{color:#2f6b3a;font-weight:700}.tv-a.on{background:#fff4d6;border-color:#f0d98b}.tv-a.arm{background:#e5484d;color:#fff;border-color:#e5484d;font-size:12px}
+.tv-list{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.05)}
+.tv-lh,.tv-lr{display:grid;grid-template-columns:26px minmax(0,1fr) 200px 110px 156px;gap:10px;align-items:center;padding:8px 14px}
+.tv-lh{font-size:11.5px;color:#8a857b;font-weight:600;background:#faf9f6;border-bottom:1px solid #eeebe4}.tv-lh .r{text-align:right}
+.tv-lg{display:flex;align-items:center;gap:10px;padding:6px 14px;background:var(--s);border-top:3px solid var(--m)}
+.tv-lgb{display:flex;align-items:center;gap:8px;border:0;background:transparent;font:inherit;color:var(--k);cursor:pointer;min-height:34px;padding:0}
+.tv-lgb b{font-size:12.5px;letter-spacing:1.4px}.tv-lgb span{font-size:12px;opacity:.8}
+.tv-lga{margin-left:auto;border:0;background:transparent;color:var(--m);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;min-height:34px}
+.tv-lr{border-bottom:1px solid #f1eee8}.tv-lr:hover{background:#fcfbf8}
+.tv-ck{width:16px;height:16px;border-radius:50%;border:1.8px solid var(--m)}
+.tv-ln{border:0;background:transparent;text-align:left;font:inherit;padding:0;cursor:pointer;min-width:0;display:flex;flex-direction:column}
+.tv-ln b{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#2b2925}
+.tv-ln span{font-size:11.5px;color:#8a857b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-ln:hover b{text-decoration:underline}
+.tv-lt{display:flex;gap:4px;flex-wrap:wrap}.tv-ld{font-size:12px;color:#b3aea4}.tv-ld.on{color:#3a2fb8;font-weight:600}
+.tv-lempty{padding:14px;text-align:center;color:#a8a399;font-size:12.5px}
+@media(hover:hover){.tv-lr .tv-acts{opacity:.35;transition:opacity .15s}.tv-lr:hover .tv-acts,.tv-lr:focus-within .tv-acts{opacity:1}}
+.tv-time{overflow-x:auto;padding-bottom:4px}
+.tv-tg{display:grid;grid-template-columns:118px repeat(4,minmax(170px,1fr));gap:8px;min-width:820px}
+.tv-tch{padding:4px 8px}.tv-tch b{font-size:13px;display:block}.tv-tch span{font-size:11.5px;color:#8a857b}
+.tv-trh{background:var(--s);border-left:4px solid var(--m);border-radius:10px;padding:10px;color:var(--k)}
+.tv-trh b{font-size:12px;letter-spacing:1.4px;display:block}.tv-trh span{font-size:12px}
+.tv-tc{background:#faf9f6;border:1px dashed #e0dcd2;border-radius:10px;padding:7px;display:flex;flex-direction:column;gap:6px;min-height:76px;transition:background .12s,border-color .12s}
+.tv-tc.nd{background:#f3f1ec}.tv-tc.over{background:#eef4ff;border-color:#2383e2;border-style:solid}
+.tv-tk{background:#fff;border:1px solid #eeebe4;border-left:3px solid var(--m);border-radius:8px;padding:6px 8px 6px 4px;display:flex;align-items:flex-start;gap:4px;flex-wrap:wrap}
+.tv-tkh{cursor:grab;color:#c4bfb5;font-size:14px;line-height:1.3;padding:0 3px;touch-action:none;user-select:none}
+.tv-tkn{flex:1;min-width:0;border:0;background:transparent;text-align:left;font:inherit;font-size:12.5px;font-weight:600;line-height:1.35;cursor:pointer;padding:0;color:#2b2925}
+.tv-tkd{width:100%;padding-left:18px;font-size:11px;color:#3a2fb8}
+.tv-src{opacity:.35}.tv-ghost{position:fixed;z-index:10050;pointer-events:none;box-shadow:0 10px 26px rgba(0,0,0,.18);transform:rotate(1.5deg)}
+.tv-hint{font-size:12px;color:#6d685e;background:#fff;border-radius:10px;padding:9px 12px;margin:12px 0 0;display:inline-block}
+.tv-cf{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tv-cfb{font:inherit;font-size:12.5px;border-radius:999px;padding:0 12px;min-height:34px;background:#fff;border:1px solid #e3dfd6;cursor:pointer;color:#2b2925}
+.tv-cfb.on{background:#1f1e1c;color:#fff;border-color:#1f1e1c}
+.tv-cards{column-width:260px;column-gap:12px}
+.tv-card{break-inside:avoid;margin:0 0 12px;background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.05);border-top:5px solid var(--m);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.tv-cardt{display:flex;gap:8px;align-items:center}.tv-pp{font-size:10.5px;font-weight:700;color:var(--k);background:var(--s);border-radius:6px;padding:2px 7px}
+.tv-cdd{font-size:11px;color:#3a2fb8;margin-left:auto}
+.tv-cardn{border:0;background:transparent;text-align:left;font:inherit;font-size:14px;font-weight:700;line-height:1.35;padding:0;cursor:pointer;color:#2b2925}
+.tv-cardnote{font-size:12.5px;color:#55534e;background:#fffbea;border-radius:8px;padding:7px 9px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:8;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
+.tv-cardf{border-top:1px solid #f3f1ec;padding-top:8px}
+.tv-focus{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:18px;align-items:start}
+.tv-fl{display:flex;flex-direction:column;gap:10px}
+.tv-fh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.tv-fh b{font-size:20px}.tv-fh span{font-size:12.5px;color:#8a857b}
+.tv-fh .tv-fdone{margin-left:auto;color:#2f5b44;background:#eaf4ee;border-radius:999px;padding:4px 10px}
+.tv-slot{background:#fff;border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 3px 14px rgba(0,0,0,.05);border-left:5px solid var(--m)}
+.tv-sn{font-size:26px;color:#d9d5cc;width:24px;text-align:center}
+.tv-sb2{flex:1;min-width:0;display:flex;flex-direction:column}
+.tv-stt{border:0;background:transparent;text-align:left;font:inherit;font-size:16px;font-weight:700;padding:0;cursor:pointer;color:#2b2925}
+.tv-sb2 span{font-size:12px;color:#8a857b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-sok{border:0;background:var(--m);color:#fff;border-radius:10px;min-height:40px;padding:0 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tv-sx{border:0;background:transparent;color:#a8a399;font-size:20px;width:32px;height:40px;cursor:pointer}
+.tv-sempty{border:2px dashed #dcd8cf;border-radius:16px;padding:16px;text-align:center;color:#8a857b;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.tv-auto{border:0;background:#1f1e1c;color:#fff;border-radius:10px;min-height:38px;padding:0 14px;font:inherit;font-size:13px;cursor:pointer}
+.tv-fr{background:#fff;border-radius:16px;padding:14px;box-shadow:0 3px 14px rgba(0,0,0,.05);max-height:70vh;overflow:auto}
+.tv-frh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}.tv-frh b{font-size:14px}.tv-frh span{font-size:11.5px;color:#8a857b}
+.tv-fi{display:flex;gap:8px;align-items:center;padding:6px;border-bottom:1px solid #f1eee8}
+.tv-fdot{width:8px;height:8px;border-radius:50%;background:var(--m);flex:0 0 auto}
+.tv-fin{flex:1;min-width:0;font-size:13px;font-weight:500}.tv-fin em{font-style:normal;font-size:11px;margin-left:6px;color:#3a2fb8;background:#eef0ff;border-radius:5px;padding:1px 6px}.tv-fin em.ov{color:#a3261d;background:#fdeceb}
+.tv-fpk{border:0;background:transparent;color:#3a2fb8;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;min-height:34px;white-space:nowrap}.tv-fpk:disabled{color:#c4bfb5;cursor:default}
+@media(max-width:760px){
+  .tv-q{margin-left:0;flex:1}.tv-q input{width:100%}
+  .tv-lh{display:none}
+  .tv-lr{grid-template-columns:22px minmax(0,1fr);row-gap:6px}
+  .tv-lr .tv-lt,.tv-lr .tv-ld{grid-column:2}.tv-lr .tv-acts{grid-column:1/-1;justify-content:flex-start;padding-left:32px}
+  .tv-a{min-width:40px;height:38px}
+  .tv-focus{grid-template-columns:1fr}.tv-fr{max-height:none}
+  .tv-slot{flex-wrap:wrap}.tv-sok{min-height:44px}
+}
 .tcol-hd{--main:#C2553F;--ink:#7A2E21;--soft:#FBEDE8;padding:16px 16px 14px;background:#fff;border-top:4px solid var(--main);border-bottom:1px solid #f0ede6}
 .tcol-hd.p-med{--main:#B8862F;--ink:#6E4D12;--soft:#FBF3E2}
 .tcol-hd.p-low{--main:#4E8B6A;--ink:#2F5B44;--soft:#EAF4EE}
@@ -1376,7 +1456,9 @@ button.tp-sp-n{border:0;padding:0;cursor:pointer;font-family:inherit}button.tp-s
   </div>
 </div>
 <div id="page-tasks" class="page">
-  <div class="grid3">
+  <div id="tv-barw"></div>
+  <div id="tv-alt" hidden></div>
+  <div class="grid3" id="tv-board">
     <div class="tcol">
       <header class="tcol-hd p-high">
         <div class="tcol-hd-row">
@@ -6285,12 +6367,154 @@ function ndShouldShow(t){
   // มีวันแล้ว -> โชว์เฉพาะที่ "ยังไม่ถึง" (upcoming) เท่านั้น เพราะ overdue/ongoing/วันนี้ ไปอยู่หน้า Main แล้ว ไม่ต้องซ้ำ
   return getStatus(t)==='upcoming';
 }
+// ---------- Tasks: สลับมุมมอง (7 พ.ย. — canvas "Tasks · มุมมองแบบอื่น" ทั้ง 4 แบบ) ----------
+var TV_VIEWS=[['board','บอร์ด','<rect x="3" y="4" width="5" height="16" rx="1.5"></rect><rect x="10" y="4" width="5" height="11" rx="1.5"></rect><rect x="17" y="4" width="4" height="7" rx="1.5"></rect>'],
+ ['list','รายการ','<path d="M8 6h13M8 12h13M8 18h13"></path><circle cx="4" cy="6" r="1"></circle><circle cx="4" cy="12" r="1"></circle><circle cx="4" cy="18" r="1"></circle>'],
+ ['time','ตามเวลา','<rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M3 9h18M8 2v4M16 2v4"></path>'],
+ ['card','การ์ด','<rect x="3" y="3" width="8" height="8" rx="1.5"></rect><rect x="13" y="3" width="8" height="5" rx="1.5"></rect><rect x="13" y="10" width="8" height="11" rx="1.5"></rect><rect x="3" y="13" width="8" height="8" rx="1.5"></rect>'],
+ ['focus','โฟกัส','<circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="4"></circle><circle cx="12" cy="12" r="1"></circle>']];
+var TV_PRI=[['High','high','HIGH','ด่วน'],['Medium','med','MEDIUM','ปานกลาง'],['Low','low','LOW','ไม่รีบ']];
+var TV_TAGS=[['AI','🤖 AI'],['VDO','📹 VDO'],['WEB','🌐 Web'],['REPORT','📊 Report'],['BOT','🤖 Bot'],['สินค้า','📦 สินค้า'],['เอกสาร','📋 เอกสาร'],['CODE','💻 Code'],['SALE','💰 Sale'],['LABEL','🏷 Label']];
+var _tvView='board',_tvQ='',_tvCardF='all',_tvFold={};
+try{_tvView=localStorage.getItem('khum_tv_view')||'board';_tvFold=JSON.parse(localStorage.getItem('khum_tv_fold')||'{}')||{};}catch(e){}
+if(!TV_VIEWS.some(function(v){return v[0]===_tvView;}))_tvView='board';
+function tvIc(p,sz){return '<svg width="'+(sz||15)+'" height="'+(sz||15)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';}
+function tvBarHtml(){
+  return '<div class="tv-bar"><div class="tv-sw" role="tablist" aria-label="มุมมองหน้า Tasks">'+TV_VIEWS.map(function(v){var on=v[0]===_tvView;return '<button type="button" role="tab" aria-selected="'+on+'" class="tv-sb'+(on?' on':'')+'" onclick="tvSet(\''+v[0]+'\')">'+tvIc(v[2])+'<span>'+v[1]+'</span></button>';}).join('')+'</div>'
+    +'<label class="tv-q"><span aria-hidden="true">🔎</span><input type="search" id="tv-q" placeholder="ค้นหางาน" aria-label="ค้นหางาน" value="'+escH(_tvQ)+'" oninput="tvSearch(this.value)"></label></div>';
+}
+function tvSet(v){_tvView=v;try{localStorage.setItem('khum_tv_view',v);}catch(e){}tvRender();}
+var _tvQT=null;function tvSearch(q){_tvQ=q;clearTimeout(_tvQT);_tvQT=setTimeout(function(){renderNDColumnsFromCache();},180);}
+function tvMatch(t){if(!_tvQ)return true;var q=_tvQ.toLowerCase();return (t.name||'').toLowerCase().indexOf(q)>=0||tvNote(t).toLowerCase().indexOf(q)>=0;}
+function tvTasks(){return (noDateTasks||[]).filter(function(t){return ndShouldShow(t)&&tvMatch(t);});}
+function tvNote(t){if(!t.note)return '';var d=document.createElement('div');d.innerHTML=t.note;return (d.innerText||d.textContent||'').replace(/\s+/g,' ').trim();}
+function tvTagsHtml(t){var up=(t.name||'').toUpperCase(),h='',n=0;TV_TAGS.forEach(function(k){if(n<4&&up.indexOf(k[0])>=0){h+='<span class="tv-tag">'+k[1]+'</span>';n++;}});return h;}
+function tvSortPri(a,b){var o={High:0,Medium:1,Low:2};return (o[a.priority]||1)-(o[b.priority]||1)||((a.actionDate||'9')<(b.actionDate||'9')?-1:1);}
+function tvDateLbl(t){return t.actionDate?fmtShort(t.actionDate)+(t.endDate&&t.endDate!==t.actionDate?' – '+fmtShort(t.endDate):''):'';}
+function tvActs(t){var sn=escH(t.name||''),pOn=isPinned(t.id);
+  return '<span class="tv-acts"><button type="button" class="tv-a ok" title="เสร็จแล้ว" aria-label="เสร็จแล้ว" data-id="'+t.id+'" data-n="'+sn+'" onclick="tvDone(this.dataset.id,this.dataset.n)">✓</button>'
+   +'<button type="button" class="tv-a'+(pOn?' on':'')+'" title="'+(pOn?'ถอดหมุด':'ปักหมุดไว้หน้า Main')+'" aria-label="ปักหมุด" aria-pressed="'+pOn+'" data-id="'+t.id+'" onclick="togglePin(this.dataset.id)">📌</button>'
+   +'<button type="button" class="tv-a" title="ลงวันที่" aria-label="ลงวันที่" data-id="'+t.id+'" data-n="'+sn+'" onclick="assignDate(this.dataset.id,this.dataset.n)">📅</button>'
+   +'<button type="button" class="tv-a del" title="ลบ (กด 2 ครั้ง)" aria-label="ลบงาน" data-id="'+t.id+'" onclick="tvDel(this)">🗑</button></span>';}
+function tvDone(id,n){doDoneND(id,n);tvFocusDone(id);setTimeout(tvRender,160);}
+function tvDel(b){if(b.dataset.arm){delNDFast(b.dataset.id);setTimeout(tvRender,160);return;}b.dataset.arm='1';b.textContent='ลบ?';b.classList.add('arm');setTimeout(function(){if(b.isConnected){delete b.dataset.arm;b.textContent='🗑';b.classList.remove('arm');}},2500);}
+function tvOpen(id){var t=findAnyTask(id);if(!t)return;showModal('<div class="modal-title">รายละเอียดงาน <button class="modal-x" onclick="closeModal()">×</button></div>'+tcCard(t,{move:true}));}
+function tvRender(){
+  var bar=document.getElementById('tv-barw'),board=document.getElementById('tv-board'),alt=document.getElementById('tv-alt');if(!bar||!board||!alt)return;
+  var qf=document.activeElement&&document.activeElement.id==='tv-q';
+  if(!qf)bar.innerHTML=tvBarHtml();else bar.querySelectorAll('.tv-sb').forEach(function(b,i){var on=TV_VIEWS[i][0]===_tvView;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);});
+  board.hidden=_tvView!=='board';alt.hidden=_tvView==='board';
+  var pg=document.getElementById('page-tasks');if(pg)pg.setAttribute('data-view',_tvView);
+  if(_tvView==='board')return;
+  alt.innerHTML=_tvView==='list'?tvListHtml():_tvView==='time'?tvTimeHtml():_tvView==='card'?tvCardHtml():tvFocusHtml();
+  if(_tvView==='focus')tvFocusPull();
+}
+// A · รายการ
+function tvFold(k){_tvFold[k]=!_tvFold[k];try{localStorage.setItem('khum_tv_fold',JSON.stringify(_tvFold));}catch(e){}tvRender();}
+function tvListHtml(){
+  var all=tvTasks(),h='<div class="tv-list" role="table" aria-label="งานทั้งหมด"><div class="tv-lh" role="row"><span></span><span role="columnheader">ชื่องาน</span><span role="columnheader">แท็ก</span><span role="columnheader">เริ่ม</span><span role="columnheader" class="r">ทำ</span></div>';
+  TV_PRI.forEach(function(p){
+    var items=all.filter(function(t){return t.priority===p[0];}).sort(tvSortPri),f=!!_tvFold[p[1]];
+    h+='<div class="tv-lg p-'+p[1]+'" role="row"><button type="button" class="tv-lgb" aria-expanded="'+!f+'" onclick="tvFold(\''+p[1]+'\')">'+tvIc(f?'<path d="M9 6l6 6-6 6"></path>':'<path d="M6 9l6 6 6-6"></path>',14)+'<b>'+p[2]+'</b><span>'+p[3]+' · '+items.length+' งาน</span></button><button type="button" class="tv-lga" onclick="openAddND(\''+p[0]+'\')">+ เพิ่มในกลุ่มนี้</button></div>';
+    if(f)return;
+    if(!items.length)h+='<div class="tv-lempty">ไม่มีงาน</div>';
+    items.forEach(function(t){var nt=tvNote(t);
+      h+='<div class="tv-lr p-'+p[1]+'" role="row" id="nd-row-'+t.id+'"><span class="tv-ck" aria-hidden="true"></span>'
+        +'<button type="button" class="tv-ln" data-id="'+t.id+'" onclick="tvOpen(this.dataset.id)"><b>'+escH(t.name||'')+'</b>'+(nt?'<span>📝 '+escH(nt.slice(0,90))+'</span>':'')+'</button>'
+        +'<span class="tv-lt">'+tvTagsHtml(t)+'</span><span class="tv-ld'+(t.actionDate?' on':'')+'">'+(tvDateLbl(t)||'ไม่มีวันที่')+'</span>'+tvActs(t)+'</div>';});
+  });
+  return h+'</div>';
+}
+// B · ตามเวลา (ความสำคัญ × ช่วงเวลา) — ลากการ์ดข้ามช่อง = เปลี่ยนความสำคัญ/ลงวัน
+function tvBucket(t){if(!t.actionDate)return 0;var d=diffD(TODAY_STR,t.actionDate);return d<=7?1:d<=30?2:3;}
+function tvBucketCols(){return [['ไม่มีวันที่','ยังไม่ได้วางแผน'],['7 วันข้างหน้า',fmtShort(addDays(TODAY_STR,1))+' – '+fmtShort(addDays(TODAY_STR,7))],['ภายในเดือน',fmtShort(addDays(TODAY_STR,8))+' – '+fmtShort(addDays(TODAY_STR,30))],['หลังจากนั้น','ตั้งแต่ '+fmtShort(addDays(TODAY_STR,31))]];}
+function tvTimeHtml(){
+  var all=tvTasks(),C=tvBucketCols(),h='<div class="tv-time"><div class="tv-tg"><span></span>'+C.map(function(c){return '<div class="tv-tch"><b>'+c[0]+'</b><span>'+c[1]+'</span></div>';}).join('');
+  TV_PRI.forEach(function(p){
+    var items=all.filter(function(t){return t.priority===p[0];});
+    h+='<div class="tv-trh p-'+p[1]+'"><b>'+p[2]+'</b><span>'+p[3]+' · '+items.length+'</span></div>';
+    for(var ci=0;ci<4;ci++){
+      var cell=items.filter(function(t){return tvBucket(t)===ci;}).sort(tvSortPri);
+      h+='<div class="tv-tc'+(ci?'':' nd')+'" data-pri="'+p[0]+'" data-b="'+ci+'">'+cell.map(function(t){
+        return '<div class="tv-tk p-'+p[1]+'" id="nd-row-'+t.id+'" data-id="'+t.id+'" data-pri="'+p[0]+'" data-b="'+ci+'"><span class="tv-tkh" title="ลากเพื่อย้าย" aria-hidden="true">⠿</span><button type="button" class="tv-tkn" data-id="'+t.id+'" onclick="tvOpen(this.dataset.id)">'+escH(t.name||'')+'</button>'
+          +(t.actionDate?'<span class="tv-tkd">'+tvDateLbl(t)+'</span>':'')+'</div>';}).join('')+'</div>';
+    }
+  });
+  return h+'</div><p class="tv-hint">💡 ลากการ์ด (จับ ⠿) ไปช่องอื่น: ขึ้น/ลงแถว = เปลี่ยนความสำคัญ · ไปทางขวา = ลงวันเริ่มให้ (พรุ่งนี้ / อีก 8 วัน / อีก 31 วัน) แล้วกด 📅 ในรายละเอียดเพื่อแก้วันได้</p></div>';
+}
+var _tvDrag=null;
+document.addEventListener('pointerdown',function(e){
+  var hd=e.target.closest&&e.target.closest('.tv-tkh');if(!hd)return;var c=hd.closest('.tv-tk');if(!c)return;
+  e.preventDefault();var r=c.getBoundingClientRect(),g=c.cloneNode(true);g.classList.add('tv-ghost');g.style.width=r.width+'px';g.style.left=r.left+'px';g.style.top=r.top+'px';document.body.appendChild(g);c.classList.add('tv-src');
+  _tvDrag={id:c.dataset.id,pri:c.dataset.pri,b:+c.dataset.b,g:g,c:c,ox:e.clientX-r.left,oy:e.clientY-r.top};
+});
+document.addEventListener('pointermove',function(e){if(!_tvDrag)return;_tvDrag.g.style.left=(e.clientX-_tvDrag.ox)+'px';_tvDrag.g.style.top=(e.clientY-_tvDrag.oy)+'px';
+  var over=document.elementsFromPoint(e.clientX,e.clientY).filter(function(x){return x.classList&&x.classList.contains('tv-tc');})[0];
+  document.querySelectorAll('.tv-tc.over').forEach(function(x){if(x!==over)x.classList.remove('over');});if(over)over.classList.add('over');});
+document.addEventListener('pointerup',function(e){if(!_tvDrag)return;var d=_tvDrag;_tvDrag=null;d.g.remove();d.c.classList.remove('tv-src');
+  var cell=document.querySelector('.tv-tc.over');document.querySelectorAll('.tv-tc.over').forEach(function(x){x.classList.remove('over');});if(!cell)return;
+  var np=cell.dataset.pri,nb=+cell.dataset.b,t=findAnyTask(d.id);if(!t)return;
+  if(np!==d.pri){[noDateTasks,allActiveTasks].forEach(function(a){a.forEach(function(x){if(x.id===d.id)x.priority=np;});});apiS({action:'editTask',id:d.id,priority:np});showToast('✅ เปลี่ยนเป็น '+np+' แล้ว');}
+  if(nb!==d.b){
+    if(nb===0){showToast('งานที่มีวันแล้ว ย้ายกลับ "ไม่มีวันที่" ไม่ได้ — แก้วันในรายละเอียดงาน');}
+    else{doAssign(d.id,addDays(TODAY_STR,nb===1?1:nb===2?8:31));return;}
+  }
+  renderNDColumnsFromCache();
+});
+// C · การ์ด
+function tvCardF(f){_tvCardF=f;tvRender();}
+function tvCardHtml(){
+  var all=tvTasks().sort(tvSortPri),cnt=function(fn){return all.filter(fn).length;};
+  var F=[['all','ทั้งหมด',function(){return true;}],['High','🔴 ด่วน',function(t){return t.priority==='High';}],['Medium','🟡 ปานกลาง',function(t){return t.priority==='Medium';}],['Low','🟢 ไม่รีบ',function(t){return t.priority==='Low';}],['note','📝 มีโน้ต',function(t){return !!tvNote(t);}],['date','📅 มีวันที่',function(t){return !!t.actionDate;}]];
+  var cur=F.filter(function(x){return x[0]===_tvCardF;})[0]||F[0];
+  var h='<div class="tv-cf" role="group" aria-label="กรองการ์ด">'+F.map(function(x){var on=x===cur;return '<button type="button" class="tv-cfb'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="tvCardF(\''+x[0]+'\')">'+x[1]+' '+cnt(x[2])+'</button>';}).join('')+'</div>';
+  var list=all.filter(cur[2]);
+  if(!list.length)return h+'<div class="tv-lempty" style="background:#fff;border-radius:14px">ไม่มีงานในตัวกรองนี้</div>';
+  h+='<div class="tv-cards">';
+  list.forEach(function(t){var p=TV_PRI.filter(function(x){return x[0]===t.priority;})[0]||TV_PRI[1],nt=tvNote(t),tg=tvTagsHtml(t);
+    h+='<article class="tv-card p-'+p[1]+'" id="nd-row-'+t.id+'"><div class="tv-cardt"><span class="tv-pp">'+p[3]+'</span>'+(t.actionDate?'<span class="tv-cdd">📅 '+tvDateLbl(t)+'</span>':'')+'</div>'
+      +'<button type="button" class="tv-cardn" data-id="'+t.id+'" onclick="tvOpen(this.dataset.id)">'+escH(t.name||'')+'</button>'
+      +(nt?'<div class="tv-cardnote">'+escH(nt.slice(0,400))+'</div>':'')+(tg?'<div class="tv-lt">'+tg+'</div>':'')
+      +'<div class="tv-cardf">'+tvActs(t)+'</div></article>';});
+  return h+'</div>';
+}
+// D · โฟกัส — เลือก 3 งานสำหรับวันนี้ (localStorage khum_focus_v1 + sync key ui__focus)
+var TV_FKEY='khum_focus_v1';
+function tvFLoad(){var o=null;try{o=JSON.parse(localStorage.getItem(TV_FKEY)||'null');}catch(e){}if(!o||o.d!==TODAY_STR)o={d:TODAY_STR,ids:[],done:0,ts:o&&o.ts||0};return o;}
+function tvFSave(o){o.ts=Date.now();try{localStorage.setItem(TV_FKEY,JSON.stringify(o));}catch(e){}
+  if(typeof nxPutKey==='function'&&!(typeof _nxSync!=='undefined'&&_nxSync.off)){clearTimeout(tvFSave._t);tvFSave._t=setTimeout(function(){try{nxPutKey('ui__focus',JSON.stringify(o),o.ts,function(){});}catch(e){}},1500);}}
+var _tvFPulled=0;
+function tvFocusPull(){if(Date.now()-_tvFPulled<20000||typeof nxGetKeys!=='function'||(typeof _nxSync!=='undefined'&&_nxSync.off))return;_tvFPulled=Date.now();
+  try{nxGetKeys(['ui__focus'],function(st,got){if(st!=='ok'||!got||!got.ui__focus||!got.ui__focus.html)return;var o=null;try{o=JSON.parse(got.ui__focus.html);}catch(e){}
+    var l=tvFLoad();if(o&&o.d===TODAY_STR&&(o.ts||0)>(l.ts||0)){try{localStorage.setItem(TV_FKEY,JSON.stringify(o));}catch(e){}if(_tvView==='focus')tvRender();}});}catch(e){}}
+function tvFocusPool(){var seen={},out=[];[overdueTasks||[],todayTasks||[],noDateTasks||[]].forEach(function(a){a.forEach(function(t){if(!t||!t.id||seen[t.id]||t.done)return;if(a===noDateTasks&&!ndShouldShow(t))return;seen[t.id]=1;out.push(t);});});return out;}
+function tvPick(id){var o=tvFLoad();if(o.ids.indexOf(id)>=0)return;if(o.ids.length>=3){showToast('เลือกได้ 3 งาน — เอาออกก่อน 1 งาน');return;}o.ids.push(id);tvFSave(o);tvRender();}
+function tvUnpick(id){var o=tvFLoad();o.ids=o.ids.filter(function(x){return x!==id;});tvFSave(o);tvRender();}
+function tvFocusDone(id){var o=tvFLoad();if(o.ids.indexOf(id)>=0){o.ids=o.ids.filter(function(x){return x!==id;});o.done=(o.done||0)+1;tvFSave(o);}}
+function tvAuto(){var o=tvFLoad(),pool=tvFocusPool().filter(function(t){return o.ids.indexOf(t.id)<0;}).sort(function(a,b){var od=(a.actionDate&&a.actionDate<=TODAY_STR?0:1)-(b.actionDate&&b.actionDate<=TODAY_STR?0:1);return od||tvSortPri(a,b);});
+  while(o.ids.length<3&&pool.length)o.ids.push(pool.shift().id);tvFSave(o);tvRender();}
+function tvFocusHtml(){
+  var o=tvFLoad(),pool=tvFocusPool(),by={};pool.forEach(function(t){by[t.id]=t;});
+  var picks=o.ids.map(function(id){return by[id]||findAnyTask(id);}).filter(Boolean);
+  if(picks.length!==o.ids.length){o.ids=picks.map(function(t){return t.id;});tvFSave(o);}
+  var h='<div class="tv-focus"><section class="tv-fl" aria-label="โฟกัสวันนี้"><div class="tv-fh"><b>วันนี้ทำ 3 อย่างนี้ก่อน</b><span>'+fmtThai(TODAY_STR)+'</span><span class="tv-fdone">เสร็จแล้ววันนี้ '+(o.done||0)+'</span></div>';
+  picks.forEach(function(t,i){var p=TV_PRI.filter(function(x){return x[0]===t.priority;})[0]||TV_PRI[1],nt=tvNote(t),st=t.actionDate&&t.actionDate<TODAY_STR?'เลยกำหนด · ':t.actionDate===TODAY_STR?'วันนี้ · ':'';
+    h+='<div class="tv-slot p-'+p[1]+'" id="nd-row-'+t.id+'"><b class="tv-sn">'+(i+1)+'</b><div class="tv-sb2"><button type="button" class="tv-stt" data-id="'+t.id+'" onclick="tvOpen(this.dataset.id)">'+escH(t.name||'')+'</button><span>'+st+p[3]+(nt?' · '+escH(nt.slice(0,60)):'')+'</span></div>'
+      +'<button type="button" class="tv-sok" data-id="'+t.id+'" data-n="'+escH(t.name||'')+'" onclick="tvDone(this.dataset.id,this.dataset.n)">✓ เสร็จ</button><button type="button" class="tv-sx" title="เอาออก" aria-label="เอาออกจากโฟกัส" data-id="'+t.id+'" onclick="tvUnpick(this.dataset.id)">×</button></div>';});
+  if(picks.length<3)h+='<div class="tv-sempty">กด “+ เลือก” จากรายการด้านขวา (ได้อีก '+(3-picks.length)+' งาน) <button type="button" class="tv-auto" onclick="tvAuto()">✨ เลือกให้อัตโนมัติ</button></div>';
+  var rest=pool.filter(function(t){return o.ids.indexOf(t.id)<0&&tvMatch(t);}).sort(function(a,b){var od=(a.actionDate&&a.actionDate<=TODAY_STR?0:1)-(b.actionDate&&b.actionDate<=TODAY_STR?0:1);return od||tvSortPri(a,b);});
+  h+='</section><aside class="tv-fr" aria-label="งานที่เหลือ"><div class="tv-frh"><b>งานที่เหลือ · '+rest.length+'</b><span>ค้าง/วันนี้ก่อน แล้วด่วนก่อน</span></div>';
+  rest.slice(0,40).forEach(function(t){var p=TV_PRI.filter(function(x){return x[0]===t.priority;})[0]||TV_PRI[1],st=t.actionDate&&t.actionDate<TODAY_STR?'<em class="ov">เลยกำหนด</em>':t.actionDate===TODAY_STR?'<em>วันนี้</em>':'';
+    h+='<div class="tv-fi p-'+p[1]+'"><span class="tv-fdot" aria-hidden="true"></span><span class="tv-fin">'+escH(t.name||'')+st+'</span><button type="button" class="tv-fpk" data-id="'+t.id+'" onclick="tvPick(this.dataset.id)"'+(picks.length>=3?' disabled':'')+'>+ เลือก</button></div>';});
+  if(rest.length>40)h+='<div class="tv-lempty">+ อีก '+(rest.length-40)+' งาน · ใช้ช่องค้นหาด้านบน</div>';
+  return h+'</aside></div>';
+}
 var _ndCnt={high:0,med:0,low:0};
 function renderNDColumnsFromCache(){
   ['High','Medium','Low'].forEach(function(pri){
     var id=pri==='High'?'nd-high':pri==='Medium'?'nd-med':'nd-low';
     var countId=pri==='High'?'nd-count-high':pri==='Medium'?'nd-count-med':'nd-count-low';
-    var list=noDateTasks.filter(function(t){return t.priority===pri&&ndShouldShow(t);});
+    var list=noDateTasks.filter(function(t){return t.priority===pri&&ndShouldShow(t)&&tvMatch(t);});
     list.sort(function(a,b){
       var ad=a.actionDate||'9999-99-99', bd=b.actionDate||'9999-99-99';
       return ad<bd?-1:ad>bd?1:0;
@@ -6311,6 +6535,7 @@ function renderNDColumnsFromCache(){
   });
   var tot=_ndCnt.high+_ndCnt.med+_ndCnt.low;
   ['high','med','low'].forEach(function(k){var pc=tot?Math.round(_ndCnt[k]*100/tot):0,b=document.getElementById('nd-bar-'+k),pe=document.getElementById('nd-pct-'+k);if(b)b.style.width=pc+'%';if(pe)pe.textContent=tot?pc+'% ของงานทั้งหมด':'';});
+  tvRender();
   attachNDDragOnce();
 }
 function renderNDTasks(){

@@ -243,6 +243,14 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   `--main`, icon tile `.tcol-ic`, EN `.tcol-en` + Thai `.tcol-th` ด่วน/ปานกลาง/ไม่รีบ, big count `#nd-count-<k>`, 40px + button `.tcol-add-btn`,
   share bar `#nd-bar-<k>` + `#nd-sub-<k>` "ไม่มีวันที่ n · มีวันที่ m" + `#nd-pct-<k>` % of all Tasks-page tasks) filled in
   `renderNDColumnsFromCache` (`_ndCnt`). Old `.tcol-band*` CSS is unused. Test: test_thdr.py (seeds `khum_sess_v1` because LIFF_ID is set).
+- Tasks views (7 Nov, Dech: canvas "Tasks · มุมมองแบบอื่น" — all 4): bar `#tv-barw` (`tvBarHtml`: switcher บอร์ด/รายการ/ตามเวลา/การ์ด/โฟกัส +
+  search `#tv-q` → `_tvQ`, also filters the board via `tvMatch`) above `#tv-board` (old grid3) and `#tv-alt` (`tvRender`, called at the end of
+  `renderNDColumnsFromCache`; view in localStorage `khum_tv_view`). Same task set as the board (`tvTasks` = noDateTasks ∩ ndShouldShow).
+  List `tvListHtml` (groups foldable `khum_tv_fold`, row actions `tvActs`: ✓ / 📌 / 📅 / 2-tap 🗑) · Time `tvTimeHtml` (rows priority × buckets
+  `tvBucket`: none / 1–7 d / 8–30 d / >30 d; pointer drag on ⠿ `.tv-tkh` → `editTask priority` and/or `doAssign` date tomorrow/+8/+31; can't drop
+  back to "none") · Cards `tvCardHtml` (CSS columns, filter chips `_tvCardF`) · Focus `tvFocusHtml` (3 picks/day localStorage `khum_focus_v1`
+  {d,ids,done,ts}, synced key `ui__focus`; pool = overdue + today + Tasks list; ✨ auto-pick). Title click → `tvOpen` (tcCard in a modal).
+  `#tv-board[hidden]` needs `display:none!important` (grid3 CSS). Test: test_tv.py.
 - Scopes added in appsscript.json: spreadsheets, drive (user authorized).
 
 - LINE login (3 Nov code, installed + enforced 7 Nov — see Pending 1): `gas/dashboard-auth.gs` + frontend `authBoot/authLogin/authLost` (index.html, top of script).
