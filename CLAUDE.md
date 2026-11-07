@@ -130,6 +130,10 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   status chip `NX_WST` plan/doing/done/wait/stop; `nxLstItem/nxLstAdd`) used by the template's ปฏิทินคอนเทนต์; quick images: click the picture area
   (gallery/list) or 📷 `.nxw-cam` (board card) → `nxWImgPick`, or drag an image file onto any `[data-wid]` tile (capture-phase drop handlers) →
   `nxWImgFile` (900px → Drive). Gallery item = div with image button + body button. Panels got a soft circle decoration. Test: test_nxw2.py.
+  Item actions (7 Nov "ให้กดลบได้"): hover/focus bar `.nxw-acts` on every tile (`nxWActs`: ↑↓ list/metrics, ‹› gallery, 🗑 2-tap; board card = 📷 + 🗑)
+  → `nxWItemAct`; block delete `.nxw-delb` "🗑 ลบบล็อก" (2-tap, `nxWDelBlock`) in the view-tab header; always visible on touch (`hover:none`).
+  New items left empty (Esc / click away) are removed (`nxWNewCleanup` → `_nxWP.cancel`, run by `nxWPClose` unless saved/deleted). Metric rows are
+  `div.nxmet-w` > button. Test: test_nxw3.py (23 checks).
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Trip tab (5 Nov, from a travel-dashboard image Dech sent): tab `trip` between Calendar and Tasks → `#page-trip > #tp`, `renderTrip()`,
   all code prefixed `tp`. Data localStorage `rudy_trips_v1` {trips:[{id,name,start,end,transport,calAdded,stops:[{id,name,country,date,
