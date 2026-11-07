@@ -126,6 +126,10 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Shared edit popup `#nx-wpop` (`nxWPop` fields text/area/num/select/color/img; images → `uploadImagePost` Drive lh3 only, `nxWImg` filters src).
   `/แม่แบบ Dashboard` (k 'dash') inserts the whole layout + turns on page option "เต็มความกว้าง" (`n.wide` → `.nx-doc.wide` 1240px, `nxSetWide`,
   checkbox in ⋯). Test: test_nxw.py, test_dash.py.
+  7 Nov later ("UX UI ไม่เหมือน ให้แนบรูปได้"): widget view-tab header `.nxw-vt` (`NX_WVIEW`), list widget `lst` (`nxLstHtml`: 74×56 thumb + title + sub +
+  status chip `NX_WST` plan/doing/done/wait/stop; `nxLstItem/nxLstAdd`) used by the template's ปฏิทินคอนเทนต์; quick images: click the picture area
+  (gallery/list) or 📷 `.nxw-cam` (board card) → `nxWImgPick`, or drag an image file onto any `[data-wid]` tile (capture-phase drop handlers) →
+  `nxWImgFile` (900px → Drive). Gallery item = div with image button + body button. Panels got a soft circle decoration. Test: test_nxw2.py.
   Roadmap / checklist for the Note page: `NOTE-CHECKLIST.md` (tick items there when done).
 - Trip tab (5 Nov, from a travel-dashboard image Dech sent): tab `trip` between Calendar and Tasks → `#page-trip > #tp`, `renderTrip()`,
   all code prefixed `tp`. Data localStorage `rudy_trips_v1` {trips:[{id,name,start,end,transport,calAdded,stops:[{id,name,country,date,
