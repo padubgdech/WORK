@@ -136,3 +136,6 @@ var all = authProps_().getProperties();
 var ses = Object.keys(all).filter(function (k) { return k.indexOf('ses_') === 0; });
 Logger.log('enforce=' + (all.AUTH_ENFORCE || '-') + ' channel=' + (all.AUTH_LIFF_CHANNEL ? 'set' : '-') + ' owners=' + authOwners_().length + ' sessions=' + ses.length);
 }
+
+// ตั้ง Channel ID ของ LINE Login (KHUMTONE Login · LIFF 2010672874-XBO6g9Zh) — ตั้งแล้ว 7 พ.ย. 2026
+function authSetChannel() { authProps_().setProperty('AUTH_LIFF_CHANNEL', '2010672874'); Logger.log('AUTH_LIFF_CHANNEL = ' + authProps_().getProperty('AUTH_LIFF_CHANNEL')); }

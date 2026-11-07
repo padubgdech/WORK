@@ -1469,7 +1469,7 @@ var TODAY=new Date(), TODAY_STR=d2s(TODAY);
 
 /* ===== ยืนยันตัวตนด้วย LINE — ครั้งเดียวต่อเครื่อง แล้ว GAS ให้กุญแจ session 30 วัน (ต่ออายุเองเมื่อใช้งาน) =====
    LIFF_ID ว่าง = ปิดระบบนี้ (ทำงานเหมือนเดิม) · GAS ฝั่ง: gas/dashboard-auth.gs */
-var LIFF_ID='';
+var LIFF_ID='2010672874-XBO6g9Zh';
 var AUTH_KEY='khum_sess_v1',_authBusy=false,_authWait=[];
 // ขอ token ใหม่จาก LINE ได้ 1 ครั้งต่อ 2 นาที (การ login ทำให้โหลดหน้าใหม่ จึงจำไว้ใน sessionStorage กันวนไม่จบ)
 function authReloginOk(){try{var t=Number(sessionStorage.getItem('khum_relogin')||0);if(Date.now()-t<120000)return false;sessionStorage.setItem('khum_relogin',String(Date.now()));}catch(e){}return true;}
