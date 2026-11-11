@@ -219,6 +219,15 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Expense rows show the stay range + "📄 ใบจอง" chip; booking rows show the range and a clickable price → expense. Day plan `.tp-day-stay`:
   every night "🏨 พักที่ X คืนที่ i/N" + price/nights, check-out day "🧳 เช็กเอาต์ X time"; stop.hotel lines with the same name are hidden. Test: test_stay.py.
   (Trip tests' `setup` in test_trip.py now seeds `khum_sess_v1` because login is on.)
+  Day flow (11 Nov "นอนเมืองนี้ check out เช้าแล้วเที่ยวอีกเมือง · ที่เที่ยวมีเวลาเริ่ม/จบ · ลบ Rudy แนะนำ · map กรองรายวัน"): `stop.days` = nights
+  (dialog label "นอนกี่คืน" + hint `#tps-nt` `tpStopNightHint`: nights, check-out morning = date+days, next stop). `tpNightInfo(t,d)` = where you sleep
+  night d (hotel booking range first, else stop.hotel of the latest stop covering d); `tpDayFlow` = am (night d-1) / items (spots by time + non-hotel
+  bookings) / pm. Day plan = `tpFlowHtml`: เช้า 🧳 เช็กเอาต์ (or 🏨 ออกจากที่พัก if same) → timeline → "➜ เดินทางไป <city>" when the city changes →
+  คืนนี้ 🌙 นอนที่ X (or dashed "ยังไม่ได้ใส่ที่พัก"). Spots have `end` (stop dialog row + day plan: two time inputs, duration `tpDur`).
+  Rudy box removed from the stop dialog (`tpRudyBoxHtml` kept, unused). Map day filter `#tp-mdays` above the map (`tpMapDaysHtml`, `_tpMapDay`,
+  `tpMapDaySel` also switches the day plan; day-plan "🗺 ดูวันนี้บนแผนที่" = same filter): markers carry `span[data-kind=st|sp|ht]` →
+  `tpMapDayApply` hides others (`.off`), renumbers spots in day order, hides the trip route (`eng.mainRoute`), draws am hotel → spots → pm hotel
+  (`eng.dayLine`, layer `tp-day` / Leaflet polyline) and fits it; strip shows the ordered list `.tp-mdays-l`. Test: test_flow.py.
   Zone explorer (6 Nov "พิมพ์ประเทศ/จังหวัดใน map ให้เลือก zone พร้อมรายละเอียด"): map tool "🔎 ประเทศ / จังหวัด" → `tpZoneOpen` (panel `#tp-mpan`)
   → `tpZoneSearch` = 2 Nominatim queries (plain + 'จังหวัด<q>' for Thai text / featuretype=state otherwise), ranked country > province > city
   → `tpZoneShow(r)`: boundary via Nominatim lookup polygon_geojson (threshold 0.005) drawn by engine `shape(geojson)` (ML layers `tp-zone-f/-l`,
