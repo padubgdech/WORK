@@ -1337,6 +1337,45 @@ button.tp-mk{border:0;background:transparent;padding:0;cursor:pointer}
 .tp-nav{flex:0 0 auto;font-size:12px;font-weight:600;color:#2f6fd6;text-decoration:none;border:1px solid #cfe0fb;border-radius:9px;padding:6px 10px;background:#f2f7ff}
 .tp-day-add{margin-top:10px;width:100%}
 .tp-mk.dim{opacity:.18;filter:grayscale(1)}
+.tp-pr-sub{font-size:12.5px;color:#6b7189;margin:-6px 0 12px}
+.tp-pr-days{display:flex;flex-wrap:wrap;gap:6px}.tp-pr-days button{border:1px solid #e3e5ee;background:#fff;border-radius:11px;padding:5px 10px;font-family:inherit;font-size:12px;color:#3d4258;display:flex;flex-direction:column;align-items:center;line-height:1.2;min-height:40px;justify-content:center;cursor:pointer}
+.tp-pr-days button small{font-size:10px;color:#8a90a6}.tp-pr-days button.on{background:#1d2033;border-color:#1d2033;color:#fff}.tp-pr-days button.on small{color:#c9cbe0}
+.tp-pr-ck{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:5px 0;cursor:pointer}.tp-pr-ck input{width:17px;height:17px;accent-color:#1d2033}
+.tp-pr-hint{font-size:11.5px;color:#6b7189;background:#f7f7fb;border-radius:10px;padding:8px 10px;margin-top:10px;line-height:1.5}
+.tp-pr-line{font-size:12.5px;color:#5a4300;background:#fff7e6;border-radius:12px;padding:10px 12px;line-height:1.5}.tp-pr-line .btn-submit{display:block;text-align:center;text-decoration:none;margin-top:8px}
+#tp-print{display:none}
+@media print{
+@page{size:A4;margin:0}
+body.tp-printing{background:#fff!important}
+body.tp-printing>*:not(#tp-print){display:none!important}
+body.tp-printing #tp-print{display:block}
+}
+#tp-print,#tp-print *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.tp-pp{width:210mm;height:296.5mm;box-sizing:border-box;padding:14mm 14mm 0;position:relative;overflow:hidden;page-break-after:always;break-after:page;background:#fff;color:#22201c;font-family:inherit}
+.tp-pp:last-child{page-break-after:auto;break-after:auto}
+.tp-pp header{display:flex;align-items:flex-end;gap:5mm;border-bottom:2.5px solid var(--pc);padding-bottom:3.5mm}
+.tp-pp header .n{font-size:58px;font-weight:700;line-height:.85;color:var(--pc)}
+.tp-pp header .tt{display:flex;flex-direction:column;gap:1px}.tp-pp header small{font-size:10px;letter-spacing:.1em;color:#8a8478}
+.tp-pp header b{font-size:21px}.tp-pp header span{font-size:13px;color:#57524a}
+.tp-pr-main{display:flex;gap:6mm;margin-top:6mm}
+.tp-pr-tl{flex:1;min-width:0}
+.tp-pr-r{display:flex;gap:3mm;align-items:stretch;break-inside:avoid}
+.tp-pr-r .tm{width:15mm;text-align:right;font-size:11.5px;font-weight:700;color:#57524a;padding-top:5px}
+.tp-pr-r .ln{width:4mm;display:flex;flex-direction:column;align-items:center}.tp-pr-r .ln::before{content:'';width:9px;height:9px;border-radius:50%;background:var(--c,#c9a227);margin-top:7px;flex:0 0 9px}.tp-pr-r .ln i{flex:1;width:1px;background:#e2ddd2}
+.tp-pr-r .bd{flex:1;border-radius:7px;padding:4px 8px 8px;font-size:12.5px;display:flex;flex-direction:column;gap:1px;margin-bottom:2mm}
+.tp-pr-r .bd small{font-size:10.5px;color:#7a7468}.tp-pr-r .bd .ck{font-size:10px;color:#a29c90}
+.tp-pr-r em{display:inline-block;min-width:16px;height:16px;border-radius:8px;color:#fff;font-size:10px;font-style:normal;text-align:center;line-height:16px;margin-right:5px;padding:0 3px;box-sizing:border-box;vertical-align:1px}
+.tp-pr-r.am{--c:#e8a33a}.tp-pr-r.am .bd{background:#fff6ea}
+.tp-pr-r.bk{--c:#c9a227}.tp-pr-r.bk .bd{background:#fff8e5}
+.tp-pr-r.pm{--c:#5b52c9}.tp-pr-r.pm .bd{background:#eef0ff;color:#2a2470}
+.tp-pr-mv{margin:0 0 2mm 22mm;font-size:11px;font-weight:700;color:#5b52c9}
+.tp-pr-map{width:250px;flex:0 0 250px;display:flex;flex-direction:column;gap:2mm}.tp-pr-map small{font-size:9.5px;color:#8a8478;line-height:1.45}
+.tp-pm{position:relative;overflow:hidden;border-radius:8px;background:#eef1ec}.tp-pm img{position:absolute;width:256px;height:256px;max-width:none}.tp-pm svg{position:absolute;left:0;top:0}
+.tp-pm-a{position:absolute;right:3px;bottom:2px;font-size:7px;color:#555;background:rgba(255,255,255,.75);padding:0 3px;border-radius:3px}
+.tp-pp footer{position:absolute;left:14mm;right:14mm;bottom:14mm;display:flex;gap:4mm}
+.tp-pr-box{flex:1;border:1px solid #ece7dc;border-radius:8px;padding:3mm 4mm;display:flex;flex-direction:column}.tp-pr-box span{font-size:9.5px;letter-spacing:.06em;color:#8a8478}.tp-pr-box b{font-size:18px}
+.tp-pr-box.nt{flex:2;min-height:26mm;background:repeating-linear-gradient(#fff 0 7mm,#efeae0 7mm calc(7mm + 1px))}.tp-pr-box.nt span{background:#fff;align-self:flex-start}
+.tp-pp .pg{position:absolute;right:14mm;bottom:7mm;font-size:9px;color:#a29c90}
 .tp-mk.off,.tp-lfwrap:has(>.tp-mk.off){display:none!important}
 .tp-dname:has(i em){padding-left:24px}.tp-dname i:has(em){width:18px;height:18px;top:1px;display:flex;align-items:center;justify-content:center}.tp-dname i em{font-style:normal;font-size:10.5px;font-weight:700;color:#fff}
 .tp-sp-tw{display:inline-flex;align-items:center;gap:3px}.tp-sp-tw i{font-style:normal;color:#8a90a6;font-size:12px}
@@ -4417,7 +4456,7 @@ function renderTrip(){
   if(d.cur!==t.id){d.cur=t.id;tpStore(d,true);}
   var h='<div class="tp-head"><div class="tp-trips" role="tablist" aria-label="ทริป">'+d.trips.map(function(x){return '<button type="button" role="tab" aria-selected="'+(x.id===t.id)+'" class="tp-pill'+(x.id===t.id?' on':'')+'" data-id="'+x.id+'" onclick="tpSwitch(this.dataset.id)">'+tpEsc(x.name)+'</button>';}).join('')
     +'<button type="button" class="tp-pill add" onclick="tpTripDlg()">+ ทริปใหม่</button></div>'
-    +'<div class="tp-head-acts"><button type="button" class="tp-btn-l" onclick="tpCopyPlan()" title="คัดลอกแผนทั้งทริปเป็นข้อความ">📋 คัดลอกแผน</button><button type="button" class="tp-btn-l" onclick="tpTripDlg(\''+t.id+'\')">แก้ทริป / งบ</button>'
+    +'<div class="tp-head-acts"><button type="button" class="tp-btn-l" onclick="tpPrintDlg()" title="พิมพ์แผนรายวัน 1 วันต่อ 1 หน้า หรือบันทึกเป็น PDF">🖨 พิมพ์ / PDF</button><button type="button" class="tp-btn-l" onclick="tpCopyPlan()" title="คัดลอกแผนทั้งทริปเป็นข้อความ">📋 คัดลอกแผน</button><button type="button" class="tp-btn-l" onclick="tpTripDlg(\''+t.id+'\')">แก้ทริป / งบ</button>'
     +'<button type="button" class="tp-btn-l" onclick="tpToCal()"'+(t.calAdded?' disabled':'')+'>'+(t.calAdded?'✓ อยู่ในปฏิทินแล้ว':'📅 ลงปฏิทิน')+'</button></div></div>';
   h+='<div class="tp-grid"><div class="tp-col tp-left">'+tpNextHtml(t)+tpExpHtml(t)+tpBookHtml(t)+tpPackHtml(t)+'</div>'
     +'<div class="tp-col tp-mid">'+tpTimelineHtml(t)+tpDayHtml(t)+'</div>'
@@ -5267,6 +5306,101 @@ function tpCopy(text,msg){
 // ---- ของที่ต้องเตรียม: ชุดพื้นฐาน ----
 function tpPackBasic(){tpMut(function(t){t.pack=t.pack||[];var have=t.pack.map(function(x){return x.t;});TP_PACK0.forEach(function(x){if(have.indexOf(x)<0)t.pack.push({id:tpUid(),t:x,done:false});});});showToast('เพิ่มชุดพื้นฐานแล้ว');}
 function tpPackClearDone(){tpMut(function(t){t.pack=(t.pack||[]).filter(function(x){return !x.done;});});}
+// ---------- พิมพ์ / บันทึก PDF: 1 วัน = 1 หน้า (แบบ A บน canvas "Trip · สรุปพิมพ์ PDF") ----------
+var TP_PCOL=['#e8833a','#3a8de8','#2fa36b','#8a63d2','#d6455a','#1f9a8a','#c9a227'];
+var _tpPr={days:null,map:true,bk:true,ex:true,note:false};
+try{var _tpPrS=JSON.parse(localStorage.getItem('tp_print_opt')||'null');if(_tpPrS){_tpPr.map=_tpPrS.map!==false;_tpPr.bk=_tpPrS.bk!==false;_tpPr.ex=_tpPrS.ex!==false;_tpPr.note=!!_tpPrS.note;}}catch(e){}
+function tpIsLine(){return /\bLine\//i.test(navigator.userAgent||'');}
+function tpPrintDlg(){
+  var t=tpCur(tpLoad());if(!t){showToast('ยังไม่มีทริป');return;}
+  var days=tpExpDays(t);if(!days.length){showToast('ใส่วันเริ่มทริปก่อน');return;}
+  if(!_tpPr.days||_tpPr.tid!==t.id){_tpPr.days=days.slice();_tpPr.tid=t.id;}
+  _tpPr.days=_tpPr.days.filter(function(d){return days.indexOf(d)>=0;});
+  var all=_tpPr.days.length===days.length;
+  var ck=function(k,lb){return '<label class="tp-pr-ck"><input type="checkbox"'+(_tpPr[k]?' checked':'')+' onchange="_tpPr.'+k+'=this.checked;tpPrSaveOpt()"> '+lb+'</label>';};
+  showModal('<div class="modal-title">🖨 พิมพ์ / บันทึก PDF <button class="modal-x" onclick="closeModal()" aria-label="ปิด">×</button></div>'
+    +'<div class="tp-pr-sub">'+tpEsc(t.name||'ทริป')+' · 1 วันต่อ 1 หน้า (A4)</div>'
+    +'<div class="fld"><label>เลือกวัน</label><div class="tp-pr-days" role="group" aria-label="เลือกวัน"><button type="button" class="'+(all?'on':'')+'" aria-pressed="'+all+'" onclick="tpPrDay(\'all\')">ทั้งหมด</button>'
+    +days.map(function(d,i){var dm=tpDM(d),on=_tpPr.days.indexOf(d)>=0;return '<button type="button" class="'+(on?'on':'')+'" aria-pressed="'+on+'" data-d="'+d+'" onclick="tpPrDay(this.dataset.d)"><b>'+dm[0]+' '+dm[1]+'</b><small>วันที่ '+(i+1)+'</small></button>';}).join('')+'</div></div>'
+    +'<div class="fld"><label>ใส่ในหน้า</label>'+ck('map','แผนที่เส้นทางของวัน')+ck('bk','การจอง + รหัส')+ck('ex','ค่าใช้จ่ายวันนี้')+ck('note','ช่องจดโน้ต')+'</div>'
+    +(tpIsLine()?'<div class="tp-pr-line">แอป LINE สั่งพิมพ์ไม่ได้ — กดปุ่มนี้เพื่อเปิดใน Safari / Chrome แล้วจะขึ้นหน้าพิมพ์ให้เอง<a class="btn-submit" href="'+location.origin+location.pathname+'?openExternalBrowser=1&amp;tpprint=1" target="_blank" rel="noopener">↗ เปิดในเบราว์เซอร์</a></div>'
+      :'<button class="btn-submit" id="tp-pr-go" onclick="tpPrintGo()">⬇ บันทึกเป็น PDF</button>')
+    +'<div class="tp-pr-hint">หน้าต่างพิมพ์ของเครื่องจะเปิดขึ้น → เลือก <b>บันทึกเป็น PDF / Save as PDF</b> (iPhone: กดแชร์ → บันทึกลงไฟล์)</div>');
+}
+function tpPrSaveOpt(){try{localStorage.setItem('tp_print_opt',JSON.stringify({map:_tpPr.map,bk:_tpPr.bk,ex:_tpPr.ex,note:_tpPr.note}));}catch(e){}}
+function tpPrDay(d){
+  var t=tpCur(tpLoad()),days=tpExpDays(t);
+  if(d==='all')_tpPr.days=_tpPr.days.length===days.length?[]:days.slice();
+  else{var i=_tpPr.days.indexOf(d);if(i>=0)_tpPr.days.splice(i,1);else _tpPr.days.push(d);}
+  _tpPr.days.sort();
+  var all=_tpPr.days.length===days.length;
+  document.querySelectorAll('.tp-pr-days button').forEach(function(b){var on=b.dataset.d?_tpPr.days.indexOf(b.dataset.d)>=0:all;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});
+}
+function tpThaiDate(d){var x=new Date(d+'T00:00:00'),w=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'][x.getDay()],dm=tpDM(d);return 'วัน'+w+' '+dm[0]+' '+dm[1]+' '+(x.getFullYear()+543);}
+// แผนที่นิ่งสำหรับพิมพ์: ภาพ OSM วางต่อกัน + เส้นทาง/หมุดเป็น SVG ทับ
+function tpStaticMap(pts,W,H){
+  if(!pts.length)return '';
+  var px=function(lat,lng,z){var s=256*Math.pow(2,z),r=lat*Math.PI/180;return [(lng+180)/360*s,(1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*s];};
+  var z=15;
+  if(pts.length>1)for(z=16;z>3;z--){var a=pts.map(function(p){return px(p.lat,p.lng,z);}),xs=a.map(function(q){return q[0];}),ys=a.map(function(q){return q[1];});if(Math.max.apply(0,xs)-Math.min.apply(0,xs)<=W-56&&Math.max.apply(0,ys)-Math.min.apply(0,ys)<=H-56)break;}
+  var P=pts.map(function(p){return px(p.lat,p.lng,z);}),X=P.map(function(q){return q[0];}),Y=P.map(function(q){return q[1];});
+  var cx=(Math.max.apply(0,X)+Math.min.apply(0,X))/2,cy=(Math.max.apply(0,Y)+Math.min.apply(0,Y))/2,x0=cx-W/2,y0=cy-H/2,n=Math.pow(2,z),h='';
+  for(var tx=Math.floor(x0/256);tx<=Math.floor((x0+W)/256);tx++)for(var ty=Math.floor(y0/256);ty<=Math.floor((y0+H)/256);ty++){if(ty<0||ty>=n)continue;var wx=((tx%n)+n)%n;
+    h+='<img src="https://tile.openstreetmap.org/'+z+'/'+wx+'/'+ty+'.png" alt="" style="left:'+Math.round(tx*256-x0)+'px;top:'+Math.round(ty*256-y0)+'px">';}
+  var Q=P.map(function(q){return [q[0]-x0,q[1]-y0];}),line=Q.map(function(q){return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' ');
+  var svg='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" aria-hidden="true">'+(Q.length>1?'<polyline points="'+line+'" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round" opacity=".85"/><polyline points="'+line+'" fill="none" stroke="#6b5cff" stroke-width="2.6" stroke-dasharray="6 4" stroke-linejoin="round"/>':'');
+  pts.forEach(function(p,i){var q=Q[i];svg+=p.k==='ht'?'<circle cx="'+q[0]+'" cy="'+q[1]+'" r="9" fill="#fff" stroke="#5b52c9" stroke-width="2"/><text x="'+q[0]+'" y="'+(q[1]+3.5)+'" font-size="9" text-anchor="middle">🏨</text>'
+    :'<circle cx="'+q[0]+'" cy="'+q[1]+'" r="8.5" fill="'+p.c+'" stroke="#fff" stroke-width="1.6"/><text x="'+q[0]+'" y="'+(q[1]+3.2)+'" font-size="9" font-weight="700" fill="#fff" text-anchor="middle" font-family="sans-serif">'+p.n+'</text>';});
+  return '<div class="tp-pm" style="width:'+W+'px;height:'+H+'px">'+h+svg+'</svg><span class="tp-pm-a">© OpenStreetMap</span></div>';
+}
+function tpPrintPage(t,d,i,N){
+  var f=tpDayFlow(t,d),col=TP_PCOL[i%TP_PCOL.length],ds=tpDayStops(t,d);
+  if(f.am&&f.am.s&&ds.indexOf(f.am.s)<0)ds=[f.am.s].concat(ds);
+  var city=ds.map(function(s){return tpEsc(s.name);}).join(' → '),rows='',k=0,pts=[],last=f.am&&f.am.s?f.am.s.id:null;
+  var row=function(tm,cls,body){return '<div class="tp-pr-r '+cls+'"><div class="tm">'+tm+'</div><div class="ln"><i></i></div><div class="bd">'+body+'</div></div>';};
+  if(f.am){var b=f.am.b,co=b&&tpBkCoOf(t,b),ct=b?(b.endTime||(co&&co.time)||''):'';rows+=row(ct||'เช้า','am',(f.same?'🏨 ออกจากที่พัก ':'🧳 เช็กเอาต์ ')+'<b>'+tpEsc(f.am.name)+'</b>');if(f.am.lat!=null)pts.push({lat:f.am.lat,lng:f.am.lng,k:'ht'});}
+  f.items.forEach(function(it){
+    if(it.k==='bk'){var b=it.b,bt=TP_BOOK.find(function(q){return q[0]===b.type;})||TP_BOOK[6];rows+=row(b.time?tpEsc(b.time):'','bk','<b>'+bt[1]+' '+tpEsc(b.title||bt[2])+'</b>'+(_tpPr.bk&&(b.code||b.note)?'<small>'+(b.code?'รหัส '+tpEsc(b.code):'')+(b.code&&b.note?' · ':'')+tpEsc(b.note||'')+'</small>':''));return;}
+    var o=it.o,x=o.x,c=TP_SOFT[(o.s.color==null?o.si:o.s.color)%TP_SOFT.length][1];
+    if(last&&o.s.id!==last)rows+='<div class="tp-pr-mv">➜ เดินทางไป '+tpEsc(o.s.name)+'</div>';last=o.s.id;k++;
+    if(x.lat!=null)pts.push({lat:x.lat,lng:x.lng,k:'sp',n:k,c:c});
+    rows+=row(x.time?tpEsc(x.time):'','sp" style="--c:'+c,'<b><em style="background:'+c+'">'+k+'</em>'+tpEsc(x.name)+'</b><small>'+(x.time?tpEsc(x.time)+(x.end?'–'+tpEsc(x.end):''):'ไม่ระบุเวลา')+' · '+tpEsc(o.s.name)+(x.time&&x.end&&tpDur(x.time,x.end)?' · '+tpDur(x.time,x.end):'')+'</small>'+(x.note?'<small>'+tpEsc(x.note)+'</small>':'')+'<span class="ck">☐ ไปแล้ว</span>');
+  });
+  if(!k)rows+='<div class="tp-pr-mv" style="color:#8a8478">ยังไม่มีที่เที่ยวในวันนี้</div>';
+  if(f.pm&&f.pm.s&&last&&f.pm.s.id!==last)rows+='<div class="tp-pr-mv">➜ เดินทางไป '+tpEsc(f.pm.s.name)+'</div>';
+  if(f.pm){var pb=f.pm.b;rows+=row('คืนนี้','pm','🌙 นอนที่ <b>'+tpEsc(f.pm.name)+'</b>'+((f.pm.n||(pb&&pb.time&&f.pm.i===1)||(_tpPr.bk&&pb&&pb.code))?'<small>'+[f.pm.n?'คืน '+f.pm.i+'/'+f.pm.n:'',pb&&pb.time&&f.pm.i===1?'เช็กอิน '+tpEsc(pb.time):'',_tpPr.bk&&pb&&pb.code?'รหัส '+tpEsc(pb.code):''].filter(String).join(' · ')+'</small>':'')+(f.pm.h&&f.pm.h.addr?'<small>'+tpEsc(f.pm.h.addr)+'</small>':''));if(f.pm.lat!=null)pts.push({lat:f.pm.lat,lng:f.pm.lng,k:'ht'});}
+  var km=function(a,b){var dx=(a.lng-b.lng)*111*Math.cos(a.lat*Math.PI/180),dy=(a.lat-b.lat)*111;return Math.sqrt(dx*dx+dy*dy);};
+  if(pts.length>2&&pts[0].k==='ht'&&km(pts[0],pts[1])>30)pts.shift(); // ย้ายเมือง: ที่พักเมื่อคืนอยู่ไกล → ไม่ใส่ในแผนที่ (ไม่งั้นซูมออกจนเห็นไม่ชัด)
+  if(pts.length>2&&pts[pts.length-1].k==='ht'&&km(pts[pts.length-1],pts[pts.length-2])>30)pts.pop();
+  var map=_tpPr.map?tpStaticMap(pts,250,280):'';
+  var exs=(t.exp||[]).filter(function(x){return x.date===d;}).reduce(function(a,x){return a+(+x.amt||0);},0);
+  var foot=(_tpPr.ex?'<div class="tp-pr-box"><span>ใช้จ่ายวันนี้</span><b>'+tpMoney(exs)+'</b></div>':'')+(_tpPr.note?'<div class="tp-pr-box nt"><span>โน้ต</span></div>':'');
+  return '<section class="tp-pp" style="--pc:'+col+'"><header><div class="n">'+(i+1)+'</div><div class="tt"><small>'+tpEsc(t.name||'ทริป')+' · วันที่ '+(i+1)+' จาก '+N+'</small><b>'+tpThaiDate(d)+'</b><span>'+(city||'—')+'</span></div></header>'
+    +'<div class="tp-pr-main"><div class="tp-pr-tl">'+rows+'</div>'+(map?'<div class="tp-pr-map">'+map+'<small>เส้นประ = ลำดับการเดินทางวันนี้<br>🏨 ที่พักเช้า → ที่เที่ยวตามเวลา → ที่พักคืนนี้</small></div>':'')+'</div>'
+    +(foot?'<footer>'+foot+'</footer>':'')+'<div class="pg">KHUMTONE WORK · หน้า '+(i+1)+'/'+N+'</div></section>';
+}
+function tpPrintGo(){
+  var t=tpCur(tpLoad());if(!t)return;var all=tpExpDays(t),sel=(_tpPr.days||[]).filter(function(d){return all.indexOf(d)>=0;});
+  if(!sel.length){showToast('เลือกอย่างน้อย 1 วัน');return;}
+  var old=document.getElementById('tp-print');if(old)old.remove();
+  var box=document.createElement('div');box.id='tp-print';
+  box.innerHTML=sel.map(function(d){return tpPrintPage(t,d,all.indexOf(d),all.length);}).join('');
+  document.body.appendChild(box);
+  var btn=document.getElementById('tp-pr-go');if(btn){btn.disabled=true;btn.textContent='กำลังเตรียมหน้า…';}
+  var imgs=[].slice.call(box.querySelectorAll('img')),done=false;
+  var go=function(){if(done)return;done=true;closeModal();document.body.classList.add('tp-printing');
+    var end=function(){document.body.classList.remove('tp-printing');window.removeEventListener('afterprint',end);};
+    window.addEventListener('afterprint',end);setTimeout(function(){try{window.print();}catch(e){showToast('เครื่องนี้สั่งพิมพ์ไม่ได้');end();}},60);};
+  if(!imgs.length){go();return;}
+  var left=imgs.length;imgs.forEach(function(im){if(im.complete){if(--left===0)go();return;}im.onload=im.onerror=function(){if(--left===0)go();};});
+  setTimeout(go,6000); // แผนที่โหลดช้า → พิมพ์เลย
+}
+// เปิดจาก LINE → เบราว์เซอร์ภายนอก (?tpprint=1) → ไปหน้า Trip แล้วเปิดหน้าต่างพิมพ์
+function tpPrintBoot(){
+  try{var u=new URL(location.href);u.searchParams.delete('tpprint');u.searchParams.delete('openExternalBrowser');history.replaceState(null,'',u.pathname+(u.search||'')+u.hash);}catch(e){}
+  var b=document.querySelector('.tab[data-tab="trip"]');if(b)goTab('trip',b);
+  var n=0,iv=setInterval(function(){n++;var t=tpCur(tpLoad());if((t&&tpExpDays(t).length)||n>20){clearInterval(iv);if(t)tpPrintDlg();}},500);
+}
 // ---- คัดลอกแผนทั้งทริป (ส่ง LINE / เก็บใน Note) ----
 function tpPlanText(t){
   var L=['✈️ '+t.name];if(t.start)L.push('📅 '+tpDM(t.start).join(' ')+(t.end&&t.end!==t.start?' – '+tpDM(t.end).join(' '):''));
@@ -7976,6 +8110,7 @@ function init(){
   },3000);
   try{TABS_ORDER0=tabsDefault();tabsApply();setTimeout(tabsPull,4500);}catch(e){}
   restoreLastTab(); // กลับไปหน้าที่เปิดอยู่ล่าสุดก่อน reload (ไม่ใช่ Main เสมอ)
+  if(/[?&]tpprint=1/.test(location.search))setTimeout(tpPrintBoot,1200);
   rcInit(); // ปุ่มแชท Rudy มุมขวาล่าง
 }
 authBoot(init);

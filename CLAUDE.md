@@ -228,6 +228,13 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   `tpMapDaySel` also switches the day plan; day-plan "🗺 ดูวันนี้บนแผนที่" = same filter): markers carry `span[data-kind=st|sp|ht]` →
   `tpMapDayApply` hides others (`.off`), renumbers spots in day order, hides the trip route (`eng.mainRoute`), draws am hotel → spots → pm hotel
   (`eng.dayLine`, layer `tp-day` / Leaflet polyline) and fits it; strip shows the ordered list `.tp-mdays-l`. Test: test_flow.py.
+  Print / PDF (11 Nov, Dech chose canvas page "Trip · สรุปพิมพ์ PDF" แบบ A = 1 day per A4 page): head button "🖨 พิมพ์ / PDF" → `tpPrintDlg`
+  (day chips `_tpPr.days`, options map/bk/ex/note saved in localStorage `tp_print_opt`) → `tpPrintGo` builds `#tp-print` (`tpPrintPage` from
+  `tpDayFlow`: big day number colour `TP_PCOL`, Thai date `tpThaiDate`, timeline am → bookings/spots (start–end, ☐) → "➜ เดินทางไป" → คืนนี้,
+  static map `tpStaticMap` = OSM tile <img>s + SVG route/pins (far am/pm hotel >30 km dropped), footer ใช้จ่ายวันนี้ + lined note box), waits for
+  tiles (≤6 s), `body.tp-printing` + window.print(); `@media print` hides everything else, `@page A4 margin 0`, `.tp-pp` 210×296.5mm.
+  LINE in-app browser can't print → dialog shows link `?openExternalBrowser=1&tpprint=1` → external browser logs in, `tpPrintBoot` opens Trip + dialog.
+  Test: test_print.py (note: pg.evaluate of an expression ending in a function CALLS it — that was a fake "double print").
   Zone explorer (6 Nov "พิมพ์ประเทศ/จังหวัดใน map ให้เลือก zone พร้อมรายละเอียด"): map tool "🔎 ประเทศ / จังหวัด" → `tpZoneOpen` (panel `#tp-mpan`)
   → `tpZoneSearch` = 2 Nominatim queries (plain + 'จังหวัด<q>' for Thai text / featuretype=state otherwise), ranked country > province > city
   → `tpZoneShow(r)`: boundary via Nominatim lookup polygon_geojson (threshold 0.005) drawn by engine `shape(geojson)` (ML layers `tp-zone-f/-l`,
