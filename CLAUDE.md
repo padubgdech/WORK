@@ -211,6 +211,14 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   (cat via `TP_AI_CAT`, date 'pre' before the trip). Expense card shows "การจองที่ยังไม่ใส่ราคา" `.tp-bkp` (`tpBkPending`: not check-out
   `b.co`/title "เช็กเอาต์…", not type other, not `b.noPrice`) with a price input + บันทึก / × (= no cost). Booking rows show a price chip
   `.tp-bk-pr`; deleting a booking deletes its linked expense. Test: test_bkp.py.
+  Hotel stay range + cross-links (11 Nov "ที่พักระบุวันที่พักได้ · ใบจองลิงก์ไป plan และค่าใช้จ่าย"): hotel bookings have `b.end` (check-out, `b.endTime`);
+  old AI data with a separate check-out booking (`co`, title "เช็กเอาต์ <title>") is read via `tpBkEnd`/`tpBkCoOf` (kept in sync when edited). AI save now
+  sets `end` instead of creating a check-out booking. Booking dialog: type hotel → `tpStayFields('tpb')` เช็กอิน/เช็กเอาต์ + nights + avg/night
+  (`tpStayCalc`) instead of date/time; links `.tp-lnk` "🗓 ดูในแผนรายวัน" (`tpGoDay`) / "💰 ค่าใช้จ่าย" (`tpGoExp`). Expense dialog: cat hotel → stay fields
+  (`exp.d1/d2`); saving with dates and no booking creates a linked hotel booking (`x.bk`); with a booking updates its dates/title; link "📄 เปิดใบจอง".
+  Expense rows show the stay range + "📄 ใบจอง" chip; booking rows show the range and a clickable price → expense. Day plan `.tp-day-stay`:
+  every night "🏨 พักที่ X คืนที่ i/N" + price/nights, check-out day "🧳 เช็กเอาต์ X time"; stop.hotel lines with the same name are hidden. Test: test_stay.py.
+  (Trip tests' `setup` in test_trip.py now seeds `khum_sess_v1` because login is on.)
   Zone explorer (6 Nov "พิมพ์ประเทศ/จังหวัดใน map ให้เลือก zone พร้อมรายละเอียด"): map tool "🔎 ประเทศ / จังหวัด" → `tpZoneOpen` (panel `#tp-mpan`)
   → `tpZoneSearch` = 2 Nominatim queries (plain + 'จังหวัด<q>' for Thai text / featuretype=state otherwise), ranked country > province > city
   → `tpZoneShow(r)`: boundary via Nominatim lookup polygon_geojson (threshold 0.005) drawn by engine `shape(geojson)` (ML layers `tp-zone-f/-l`,

@@ -1403,6 +1403,17 @@ button.tp-sp-n{border:0;padding:0;cursor:pointer;font-family:inherit}button.tp-s
 .tp-mp-d{white-space:pre-line}
 @media(max-width:760px){.tp-poicats{left:6px;right:6px;top:auto;bottom:8px}}
 .tp-poi-st{flex:0 0 auto;align-self:center;font-size:11px;color:#3d4258;background:rgba(255,255,255,.92);border-radius:99px;padding:4px 10px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.tp-stay[hidden],#tpb-dw[hidden]{display:none}.tp-stay-n{font-size:12.5px;color:#6d685e;margin:-4px 0 10px}
+.tp-links{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 12px}
+.tp-lnk{border:1px solid #e3dfd6;background:#fff;border-radius:999px;min-height:36px;padding:0 13px;font:inherit;font-size:12.5px;cursor:pointer;color:#2b2925}
+.tp-lnk:hover{background:#f6f5f1}
+.tp-ex-bk{border:0;background:#eef0ff;color:#3a2fb8;border-radius:6px;font:inherit;font-size:11px;padding:2px 7px;cursor:pointer;margin:2px 0 0;align-self:flex-start}
+button.tp-bk-pr{border:0;font:inherit;cursor:pointer}
+.tp-day-stay{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-direction:column;gap:6px}
+.tp-day-stay li{display:flex;align-items:center;gap:8px;background:#f1f6ff;border-radius:10px;padding:4px 6px 4px 4px}
+.tp-day-stay li.out{background:#fff6ea}
+.tp-day-stay li>button:first-child{flex:1;min-width:0;border:0;background:transparent;text-align:left;font:inherit;font-size:13px;padding:6px 8px;cursor:pointer;color:#2b2925}
+.tp-day-stay small{color:#6d685e}
 .tp-bkp{background:#fff8ec;border:1px solid #f6dfb2;border-radius:12px;padding:8px 10px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px;font-size:12.5px}.tp-bkp>b{font-size:12px;color:#7a4d00}
 .tp-bkp-r{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0}.tp-bkp-t{flex:1 1 140px;min-width:0;display:flex;flex-direction:column;font-weight:600}.tp-bkp-t small{font-weight:400;font-size:11px;color:#6b7189}
 .tp-bkp-r input{width:116px;border:1px solid #e3e5ee;border-radius:8px;padding:7px 8px;font-size:13px;font-family:inherit}.tp-bkp-r select{border:1px solid #e3e5ee;border-radius:8px;padding:6px 4px;font-size:12px;font-family:inherit;background:#fff}
@@ -4430,7 +4441,7 @@ function tpExpHtml(t){
   var lastG=null;
   h+='<ul class="tp-exl">'+(list.length?list.map(function(x){var c=TP_CATS.find(function(q){return q[0]===x.cat;})||TP_CATS[6];
       var g='';if(_tpSort==='day'){var k=x.date||'';if(k!==lastG){lastG=k;var sub=list.filter(function(y){return (y.date||'')===k;}).reduce(function(a,y){return a+(+y.amt||0);},0);g='<li class="tp-ex-g"><span>'+tpEsc(tpExpDayLabel(t,k))+'</span><b>'+tpMoney(sub)+'</b></li>';}}
-      return g+'<li><i class="tp-av">'+tpEsc(tpIni(x.who))+'</i><div class="tp-ex-t"><button type="button" class="tp-ex-e" data-id="'+x.id+'" onclick="tpExpEdit(this.dataset.id)" title="แก้รายการ"><b>'+tpEsc(x.note||c[1])+'</b></button><small>'+c[2]+' '+c[1]+(x.who?' · '+tpEsc(x.who):'')+'</small>'+tpExpDaySel(t,days,x.date||'','tp-ex-d',' data-id="'+x.id+'" onchange="tpExpSetDay(this.dataset.id,this.value)" aria-label="วันที่ของรายการ"')+'</div><span class="tp-ex-a">'+tpMoney(x.amt)+tpOrig(x)+'</span>'
+      return g+'<li><i class="tp-av">'+tpEsc(tpIni(x.who))+'</i><div class="tp-ex-t"><button type="button" class="tp-ex-e" data-id="'+x.id+'" onclick="tpExpEdit(this.dataset.id)" title="แก้รายการ"><b>'+tpEsc(x.note||c[1])+'</b></button><small>'+c[2]+' '+c[1]+(x.who?' · '+tpEsc(x.who):'')+(function(){var st=x.cat==='hotel'?tpExpStay(t,x):['',''];return st[0]?' · '+tpEsc(tpRangeLbl(st[0],st[1])):'';})()+'</small>'+(x.bk&&tpExpBk(t,x)?'<button type="button" class="tp-ex-bk" data-id="'+x.bk+'" onclick="tpBookDlg(this.dataset.id)" title="เปิดใบจอง">📄 ใบจอง</button>':'')+tpExpDaySel(t,days,x.date||'','tp-ex-d',' data-id="'+x.id+'" onchange="tpExpSetDay(this.dataset.id,this.value)" aria-label="วันที่ของรายการ"')+'</div><span class="tp-ex-a">'+tpMoney(x.amt)+tpOrig(x)+'</span>'
       +'<button type="button" class="tp-x" aria-label="ลบรายการ" data-id="'+x.id+'" onclick="tpExpDel(this.dataset.id)">×</button></li>';}).join(''):'<li class="tp-none">ยังไม่มีรายการ'+(_tpFilter!=='all'?'ในหมวดนี้':'')+'</li>')+'</ul>';
   h+='<form class="tp-exf" onsubmit="event.preventDefault();tpExpAdd(this)"><select name="cat" aria-label="หมวด">'+TP_CATS.map(function(c){return '<option value="'+c[0]+'"'+((_tpFilter===c[0])?' selected':'')+'>'+c[2]+' '+c[1]+'</option>';}).join('')+'</select>'
     +'<input name="note" placeholder="รายการ เช่น โรงแรมคืนแรก" aria-label="รายการ"><input name="who" placeholder="ใครจ่าย" aria-label="ใครจ่าย" value="'+tpEsc(t.lastWho||'เดช')+'"><span class="tp-exf-amt"><input name="amt" type="number" inputmode="decimal" min="0" step="any" placeholder="'+(t.cur?'จำนวน':'บาท')+'" aria-label="จำนวนเงิน" required>'+tpCurSel(t)+'</span>'
@@ -4944,23 +4955,33 @@ function tpCurSel(t){var c=t.cur;if(!c)return '';return '<select name="cur" aria
 // แก้รายการค่าใช้จ่าย
 function tpExpEdit(id){
   var t=tpCur(tpLoad());if(!t)return;var x=(t.exp||[]).find(function(y){return y.id===id;});if(!x)return;var days=tpExpDays(t);
-  var cur=x.oc||'THB',val=x.oc?x.oa:x.amt;
+  var cur=x.oc||'THB',val=x.oc?x.oa:x.amt,st=tpExpStay(t,x),xb=tpExpBk(t,x);
   showModal('<div class="modal-title">แก้ค่าใช้จ่าย <button class="modal-x" onclick="closeModal()" aria-label="ปิด">×</button></div>'
     +'<div class="fld"><label for="tpe-n">รายการ</label><input id="tpe-n" value="'+tpEsc(x.note||'')+'"></div>'
-    +'<div class="fld"><label for="tpe-c">หมวด</label><select id="tpe-c">'+TP_CATS.map(function(c){return '<option value="'+c[0]+'"'+(c[0]===x.cat?' selected':'')+'>'+c[2]+' '+c[1]+'</option>';}).join('')+'</select></div>'
-    +'<div style="display:flex;gap:10px"><div class="fld" style="flex:1"><label for="tpe-a">จำนวน</label><input id="tpe-a" type="number" inputmode="decimal" step="any" min="0" value="'+(+val||0)+'"></div>'
+    +'<div class="fld"><label for="tpe-c">หมวด</label><select id="tpe-c" onchange="var hw=document.getElementById(\'tpe-hw\');if(hw)hw.hidden=this.value!==\'hotel\'">'+TP_CATS.map(function(c){return '<option value="'+c[0]+'"'+(c[0]===x.cat?' selected':'')+'>'+c[2]+' '+c[1]+'</option>';}).join('')+'</select></div>'
+    +'<div style="display:flex;gap:10px"><div class="fld" style="flex:1"><label for="tpe-a">จำนวน</label><input id="tpe-a" type="number" inputmode="decimal" step="any" min="0" value="'+(+val||0)+'" oninput="tpStayCalc(\'tpe\')"></div>'
     +'<div class="fld" style="width:110px"><label for="tpe-u">สกุล</label><select id="tpe-u"><option value="THB">บาท</option>'+(t.cur||x.oc?'<option value="'+(t.cur||x.oc)+'"'+(cur!=='THB'?' selected':'')+'>'+(t.cur||x.oc)+'</option>':'')+'</select></div></div>'
     +'<div style="display:flex;gap:10px"><div class="fld" style="flex:1"><label for="tpe-w">ใครจ่าย</label><input id="tpe-w" value="'+tpEsc(x.who||'')+'"></div>'
     +'<div class="fld" style="flex:1"><label for="tpe-d">วัน</label>'+(days.length?tpExpDaySel(t,days,x.date||'','',' id="tpe-d"'):'<input id="tpe-d" type="date" value="'+(x.date&&x.date!=='pre'?x.date:'')+'">')+'</div></div>'
+    +tpStayFields('tpe',st[0],st[1],x.cat!=='hotel')
+    +(xb||st[0]?'<div class="tp-links">'+(xb?'<button type="button" class="tp-lnk" data-id="'+xb.id+'" onclick="tpGoBook(this.dataset.id)">📄 เปิดใบจอง'+(xb.code?' · '+tpEsc(xb.code):'')+'</button>':'')+(st[0]&&days.indexOf(st[0])>=0?'<button type="button" class="tp-lnk" data-d="'+st[0]+'" onclick="tpGoDay(this.dataset.d)">🗓 ดูในแผนรายวัน</button>':'')+'</div>':'')
     +'<button class="btn-submit" onclick="tpExpEditSave(\''+id+'\')">✓ บันทึก</button><button type="button" class="tp-del-trip" onclick="if(!this.classList.contains(\'arm\')){this.classList.add(\'arm\');this.textContent=\'กดอีกครั้งเพื่อลบ\';return;}closeModal();tpExpDel(\''+id+'\')">ลบรายการนี้</button>');
+  setTimeout(function(){tpStayCalc('tpe');},30);
 }
 function tpExpEditSave(id){
   var a=parseFloat(document.getElementById('tpe-a').value);if(!(a>=0)){showToast('ใส่จำนวนเงิน');return;}
   var u=document.getElementById('tpe-u').value,n=document.getElementById('tpe-n').value.trim(),c=document.getElementById('tpe-c').value,w=document.getElementById('tpe-w').value.trim(),dt=document.getElementById('tpe-d').value;
   var t0=tpCur(tpLoad());if(u!=='THB'&&!tpFx(t0)){showToast('ใส่อัตราแลกเปลี่ยนใน “แก้ทริป” ก่อน');return;}
-  closeModal();
+  var hi=c==='hotel'?(document.getElementById('tpe-in')||{}).value||'':'',ho=c==='hotel'?(document.getElementById('tpe-out')||{}).value||'':'';
+  if(hi&&ho&&ho<=hi){showToast('เช็กเอาต์ต้องหลังวันเช็กอิน');return;}
+  closeModal();var made=false;
   tpMut(function(t){var x=(t.exp||[]).find(function(y){return y.id===id;});if(!x)return;x.note=n;x.cat=c;x.who=w;if(dt)x.date=dt;else delete x.date;
+    if(c==='hotel'){if(hi){x.d1=hi;x.d2=ho;}else{delete x.d1;delete x.d2;}
+      var b=tpExpBk(t,x);
+      if(!b&&hi){b={id:tpUid(),type:'hotel',title:n||'ที่พัก',date:hi,time:'',code:'',link:'',note:''};if(ho)b.end=ho;t.book=t.book||[];t.book.push(b);x.bk=b.id;made=true;}
+      else if(b&&b.type==='hotel'&&hi){var co=tpBkCoOf(t,b);b.date=hi;if(ho){b.end=ho;if(co)co.date=ho;}if(n&&b.title!==n){if(co)co.title='เช็กเอาต์ '+n;b.title=n;}}}
     if(u!=='THB'){x.oa=a;x.oc=u;x.amt=Math.round(a*tpFx(t)*100)/100;}else{x.amt=a;delete x.oa;delete x.oc;}});
+  if(made)showToast('🏨 ลงในการจองและแผนรายวันแล้ว');
 }
 // อัตราแลกเปลี่ยนล่าสุด (บาทต่อ 1 หน่วย) — open.er-api.com (ฟรี ไม่ต้องใช้ key)
 function tpFetchRate(){
@@ -4983,7 +5004,14 @@ function tpDayHtml(t){
     +(hasNone?'<button type="button" role="tab" aria-selected="'+(d==='none')+'" class="tp-dt'+(d==='none'?' on':'')+'" data-d="none" onclick="tpDaySel(this.dataset.d)"><b>ไม่ระบุ</b><small>วัน</small></button>':'')+'</div>';
   var ds=d==='none'?[]:tpDayStops(t,d),sp=tpDaySpots(t,d),bk=d==='none'?[]:(t.book||[]).filter(function(b){return b.date===d;}),exs=d==='none'?0:(t.exp||[]).filter(function(x){return x.date===d;}).reduce(function(a,x){return a+(+x.amt||0);},0);
   h+='<div class="tp-day-hd"><div><b>'+(d==='none'?'ที่เที่ยวที่ยังไม่ระบุวัน':ds.length?ds.map(function(s){return tpEsc(s.name);}).join(' → '):'ยังไม่มีเมืองในวันนี้')+'</b>'+(d!=='none'&&exs?'<small>ใช้จ่ายวันนี้ '+tpMoney(exs)+'</small>':'')+'</div><span class="tp-wx" id="tp-wx" aria-live="polite"></span></div>';
-  var hts=d==='none'?[]:tpHotelOf(t,d);
+  var hb=d==='none'?[]:tpHotelBks(t).map(function(b){var e=tpBkEnd(t,b),n=tpNights(b.date,e);if(!e)return d===b.date?{b:b,k:'in',i:1,n:0}:null;if(d>=b.date&&d<e)return {b:b,k:'night',i:tpNights(b.date,d)+1,n:n};if(d===e)return {b:b,k:'out',e:e};return null;}).filter(Boolean);
+  var hbIds={};hb.forEach(function(o){hbIds[o.b.id]=1;var co=tpBkCoOf(t,o.b);if(co)hbIds[co.id]=1;});
+  bk=bk.filter(function(b){return !hbIds[b.id]&&!(b.type==='hotel'&&!tpBkIsCo(b)&&tpBkEnd(t,b));});
+  if(hb.length)h+='<ul class="tp-day-stay">'+hb.map(function(o){var b=o.b,ex=tpBkExp(t,b),co=tpBkCoOf(t,b),ct=b.endTime||(co&&co.time)||'';
+    return '<li class="'+o.k+'"><button type="button" data-id="'+b.id+'" onclick="tpBookDlg(this.dataset.id)">'+(o.k==='out'?'🧳 เช็กเอาต์ ':'🏨 พักที่ ')+'<b>'+tpEsc(b.title||'ที่พัก')+'</b>'+(o.k==='night'?' <small>คืนที่ '+o.i+'/'+o.n+'</small>':o.k==='out'?(ct?' <small>'+tpEsc(ct)+'</small>':''):(b.time?' <small>เช็กอิน '+tpEsc(b.time)+'</small>':''))+'</button>'
+      +(ex&&o.k!=='out'?'<button type="button" class="tp-bk-pr" data-id="'+ex.id+'" onclick="tpExpEdit(this.dataset.id)" title="ค่าที่พัก">'+tpMoney(ex.amt)+(o.n?' <small>/ '+o.n+' คืน</small>':'')+'</button>':'')+'</li>';}).join('')+'</ul>';
+  var hbNames=hb.map(function(o){return (o.b.title||'').toLowerCase();});
+  var hts=d==='none'?[]:tpHotelOf(t,d).filter(function(o){var n=(o.h.name||'').toLowerCase();return !hbNames.some(function(x){return x&&(x.indexOf(n)>=0||n.indexOf(x)>=0);});});
   if(hts.length)h+='<ul class="tp-day-ht">'+hts.map(function(o){return '<li><span>🏨 <b>'+tpEsc(o.h.name)+'</b>'+(hts.length>1?' <small>'+tpEsc(o.s.name)+'</small>':'')+'</span>'+(o.h.lat!=null?'<a class="tp-nav" href="https://www.google.com/maps/dir/?api=1&amp;destination='+o.h.lat+','+o.h.lng+'" target="_blank" rel="noopener" aria-label="นำทางกลับที่พัก">กลับที่พัก</a>':'<button type="button" class="tp-btn-l" data-id="'+o.s.id+'" onclick="tpStopDlg(this.dataset.id)">ปักหมุด</button>')+'</li>';}).join('')+'</ul>';
   if(bk.length)h+='<ul class="tp-day-bk">'+bk.map(function(b){var k=TP_BOOK.find(function(q){return q[0]===b.type;})||TP_BOOK[6];return '<li><button type="button" data-id="'+b.id+'" onclick="tpBookDlg(this.dataset.id)">'+k[1]+' '+(b.time?'<b>'+tpEsc(b.time)+'</b> ':'')+tpEsc(b.title||k[2])+(b.code?' · '+tpEsc(b.code):'')+'</button></li>';}).join('')+'</ul>';
   h+=sp.length?'<ol class="tp-day-l">'+sp.map(function(o){var x=o.x,c=TP_SOFT[(o.s.color==null?o.si:o.s.color)%TP_SOFT.length][1];
@@ -5030,26 +5058,44 @@ function tpBookHtml(t){
   var bk=(t.book||[]).slice().sort(function(a,b){return ((a.date||'9')+(a.time||''))<((b.date||'9')+(b.time||''))?-1:1;});
   return '<section class="tp-card tp-book" aria-label="การจองและเอกสาร"><div class="tp-card-h">การจอง & เอกสาร<span class="tp-cnt">'+bk.length+'</span><button type="button" class="tp-btn-d tpa-btn" style="margin-left:auto" onclick="tpAiDlg()">📷 อ่านใบจอง</button><button type="button" class="tp-btn-l" onclick="tpBookDlg()">+ เพิ่ม</button></div>'
     +(bk.length?'<ul class="tp-bkl">'+bk.map(function(b){var k=TP_BOOK.find(function(q){return q[0]===b.type;})||TP_BOOK[6];
-      return '<li><button type="button" class="tp-bk-m" data-id="'+b.id+'" onclick="tpBookDlg(this.dataset.id)"><span class="tp-bk-ic" aria-hidden="true">'+k[1]+'</span><span class="tp-bk-t"><b>'+tpEsc(b.title||k[2])+'</b><small>'+(b.date?tpExpDayLabel(t,b.date):'ไม่ระบุวัน')+(b.time?' · '+tpEsc(b.time):'')+(b.note?' · '+tpEsc(b.note.slice(0,40)):'')+'</small></span></button>'+(function(){var ex=tpBkIsCo(b)?null:tpBkExp(t,b);return ex?'<span class="tp-bk-pr">'+tpMoney(ex.amt)+'</span>':'';})()
+      return '<li><button type="button" class="tp-bk-m" data-id="'+b.id+'" onclick="tpBookDlg(this.dataset.id)"><span class="tp-bk-ic" aria-hidden="true">'+k[1]+'</span><span class="tp-bk-t"><b>'+tpEsc(b.title||k[2])+'</b><small>'+(b.type==='hotel'&&tpBkEnd(t,b)?tpEsc(tpRangeLbl(b.date,tpBkEnd(t,b))):b.date?tpExpDayLabel(t,b.date):'ไม่ระบุวัน')+(b.time?' · '+tpEsc(b.time):'')+(b.note?' · '+tpEsc(b.note.slice(0,40)):'')+'</small></span></button>'+(function(){var ex=tpBkIsCo(b)?null:tpBkExp(t,b);return ex?'<button type="button" class="tp-bk-pr" data-id="'+ex.id+'" onclick="tpExpEdit(this.dataset.id)" title="เปิดค่าใช้จ่าย">'+tpMoney(ex.amt)+'</button>':'';})()
         +(b.code?'<button type="button" class="tp-bk-code" data-c="'+tpEsc(b.code)+'" onclick="tpCopy(this.dataset.c,\'คัดลอกรหัสแล้ว\')" title="คัดลอกรหัสจอง">'+tpEsc(b.code)+'</button>':'')
         +(b.link?'<a class="tp-bk-ln" href="'+tpEsc(b.link)+'" target="_blank" rel="noopener" aria-label="เปิดลิงก์ '+tpEsc(b.title||'')+'">↗</a>':'')+'</li>';}).join('')+'</ul>'
       :'<div class="tp-none">เก็บเที่ยวบิน ที่พัก รหัสจอง ลิงก์ใบจองไว้ที่นี่ — กด “📷 อ่านใบจอง” แล้วส่งรูปที่แคป Rudy จะกรอกให้</div>')+'</section>';
 }
 function tpBookDlg(id){
   var t=tpCur(tpLoad());if(!t)return;var b=id?(t.book||[]).find(function(x){return x.id===id;}):null,days=tpExpDays(t);
+  var isH=b?b.type==='hotel':false,bex=b?tpBkExp(t,b):null;
   showModal('<div class="modal-title">'+(b?'แก้การจอง':'เพิ่มการจอง / เอกสาร')+' <button class="modal-x" onclick="closeModal()" aria-label="ปิด">×</button></div>'
-    +'<div class="fld"><label>ประเภท</label><div class="tp-bk-types" role="group" aria-label="ประเภท">'+TP_BOOK.map(function(k,i){var on=b?b.type===k[0]:i===0;return '<button type="button" class="tp-bk-ty'+(on?' on':'')+'" aria-pressed="'+on+'" data-k="'+k[0]+'" onclick="document.querySelectorAll(\'.tp-bk-ty\').forEach(function(x){x.classList.remove(\'on\');x.setAttribute(\'aria-pressed\',\'false\')});this.classList.add(\'on\');this.setAttribute(\'aria-pressed\',\'true\')">'+k[1]+' '+k[2]+'</button>';}).join('')+'</div></div>'
+    +'<div class="fld"><label>ประเภท</label><div class="tp-bk-types" role="group" aria-label="ประเภท">'+TP_BOOK.map(function(k,i){var on=b?b.type===k[0]:i===0;return '<button type="button" class="tp-bk-ty'+(on?' on':'')+'" aria-pressed="'+on+'" data-k="'+k[0]+'" onclick="document.querySelectorAll(\'.tp-bk-ty\').forEach(function(x){x.classList.remove(\'on\');x.setAttribute(\'aria-pressed\',\'false\')});this.classList.add(\'on\');this.setAttribute(\'aria-pressed\',\'true\');var hw=document.getElementById(\'tpb-hw\');if(hw)hw.hidden=this.dataset.k!==\'hotel\';var dw=document.getElementById(\'tpb-dw\');if(dw)dw.hidden=this.dataset.k===\'hotel\'">'+k[1]+' '+k[2]+'</button>';}).join('')+'</div></div>'
     +'<div class="fld"><label for="tpb-t">ชื่อ</label><input id="tpb-t" value="'+tpEsc(b?b.title:'')+'" placeholder="เช่น TG634 BKK→TPE, โรงแรมใกล้ MRT Ximen"></div>'
-    +'<div style="display:flex;gap:10px"><div class="fld" style="flex:1"><label for="tpb-d">วัน</label><input id="tpb-d" type="date" value="'+(b&&b.date||'')+'"'+(days.length?' min="'+addDays(days[0],-60)+'"':'')+'></div><div class="fld" style="width:120px"><label for="tpb-h">เวลา</label><input id="tpb-h" type="time" value="'+tpEsc(b&&b.time||'')+'"></div></div>'
+    +'<div id="tpb-dw"'+(isH?' hidden':'')+'><div style="display:flex;gap:10px"><div class="fld" style="flex:1"><label for="tpb-d">วัน</label><input id="tpb-d" type="date" value="'+(b&&b.date||'')+'"'+(days.length?' min="'+addDays(days[0],-60)+'"':'')+'></div><div class="fld" style="width:120px"><label for="tpb-h">เวลา</label><input id="tpb-h" type="time" value="'+tpEsc(b&&b.time||'')+'"></div></div></div>'
+    +tpStayFields('tpb',b&&b.date,b?tpBkEnd(t,b):'',!isH)
     +(function(){var ex=b?tpBkExp(t,b):null,val=ex?(ex.oc?ex.oa:ex.amt):'';return '<div style="display:flex;gap:10px"><div class="fld" style="flex:1"><label for="tpb-p">ราคา (ใส่เองได้ — จะลงในค่าใช้จ่าย)</label><input id="tpb-p" type="number" inputmode="decimal" min="0" step="any" value="'+(val||'')+'" placeholder="เช่น ราคาห้องพักทั้งหมด"></div>'
       +(t.cur?'<div class="fld" style="width:100px"><label for="tpb-u">สกุล</label><select id="tpb-u"><option value="THB">บาท</option><option value="'+t.cur+'"'+(ex&&ex.oc?' selected':'')+'>'+t.cur+'</option></select></div>':'')+'</div>';})()
     +'<div class="fld"><label for="tpb-c">รหัสจอง / เลขที่นั่ง</label><input id="tpb-c" value="'+tpEsc(b?b.code:'')+'" placeholder="เช่น ABC123" autocapitalize="characters"></div>'
     +'<div class="fld"><label for="tpb-l">ลิงก์ใบจอง (ถ้ามี)</label><input id="tpb-l" type="url" value="'+tpEsc(b?b.link:'')+'" placeholder="https://"></div>'
     +'<div class="fld"><label for="tpb-n">หมายเหตุ / ที่อยู่</label><textarea id="tpb-n" rows="2" placeholder="เช่น เช็กอิน 15:00 · ที่อยู่ภาษาจีนให้แท็กซี่">'+tpEsc(b?b.note:'')+'</textarea></div>'
+    +(b&&(bex||(b.date&&days.indexOf(b.date)>=0))?'<div class="tp-links">'+(b.date&&days.indexOf(b.date)>=0?'<button type="button" class="tp-lnk" data-d="'+b.date+'" onclick="tpGoDay(this.dataset.d)">🗓 ดูในแผนรายวัน · '+tpEsc(tpExpDayLabel(t,b.date))+'</button>':'')+(bex?'<button type="button" class="tp-lnk" data-id="'+bex.id+'" onclick="tpGoExp(this.dataset.id)">💰 ค่าใช้จ่าย '+tpMoney(bex.amt)+'</button>':'')+'</div>':'')
     +'<button class="btn-submit" onclick="tpBookSave(\''+(b?b.id:'')+'\')">✓ บันทึก</button>'
     +(b?'<button type="button" class="tp-del-trip" onclick="if(!this.classList.contains(\'arm\')){this.classList.add(\'arm\');this.textContent=\'กดอีกครั้งเพื่อลบ\';return;}closeModal();tpMut(function(t){t.book=(t.book||[]).filter(function(x){return x.id!==\''+b.id+'\';});t.exp=(t.exp||[]).filter(function(x){return x.bk!==\''+b.id+'\';});})">ลบรายการนี้</button>':''));
   setTimeout(function(){var i=document.getElementById('tpb-t');if(i)i.focus();},50);
 }
+// ---------- ที่พักระบุช่วงวัน + ลิงก์ ใบจอง ↔ แผนรายวัน ↔ ค่าใช้จ่าย (11 พ.ย.) ----------
+function tpBkCoOf(t,b){return (t.book||[]).find(function(x){return x!==b&&tpBkIsCo(x)&&x.title==='เช็กเอาต์ '+(b.title||'');});}
+function tpBkEnd(t,b){if(!b||b.type!=='hotel'||tpBkIsCo(b))return b&&b.end||'';if(b.end)return b.end;var co=tpBkCoOf(t,b);return co?co.date:'';}
+function tpNights(a,b){return a&&b&&b>a?Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/864e5):0;}
+function tpRangeLbl(a,b){if(!a)return '';var A=tpDM(a),n=tpNights(a,b);if(!n)return A.join(' ');var B=tpDM(b);return (A[1]===B[1]?A[0]+'–'+B[0]+' '+B[1]:A.join(' ')+' – '+B.join(' '))+' · '+n+' คืน';}
+function tpExpBk(t,x){return x&&x.bk?(t.book||[]).find(function(b){return b.id===x.bk;}):null;}
+function tpExpStay(t,x){var b=tpExpBk(t,x);if(b&&b.type==='hotel')return [b.date||'',tpBkEnd(t,b)];return [x.d1||'',x.d2||''];}
+function tpHotelBks(t){return (t.book||[]).filter(function(b){return b.type==='hotel'&&!tpBkIsCo(b)&&b.date;});}
+function tpGoDay(d){closeModal();var t=tpCur(tpLoad());if(!t||tpExpDays(t).indexOf(d)<0){showToast('วันนี้อยู่นอกช่วงทริป');return;}_tpDay=d;tpDaySel(d);var el=document.querySelector('#tp .tp-day');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function tpGoExp(id){closeModal();setTimeout(function(){tpExpEdit(id);},60);}
+function tpGoBook(id){closeModal();setTimeout(function(){tpBookDlg(id);},60);}
+function tpStayFields(pre,a,b,hide){var n=tpNights(a,b);return '<div id="'+pre+'-hw" class="tp-stay"'+(hide?' hidden':'')+'><div style="display:flex;gap:10px"><div class="fld" style="flex:1"><label for="'+pre+'-in">เช็กอิน</label><input id="'+pre+'-in" type="date" value="'+(a||'')+'" oninput="tpStayCalc(\''+pre+'\')"></div><div class="fld" style="flex:1"><label for="'+pre+'-out">เช็กเอาต์</label><input id="'+pre+'-out" type="date" value="'+(b||'')+'" oninput="tpStayCalc(\''+pre+'\')"></div></div><div class="tp-stay-n" id="'+pre+'-nn" aria-live="polite">'+(n?n+' คืน':'เลือกวันเช็กอิน–เช็กเอาต์')+'</div></div>';}
+function tpStayCalc(pre){var a=(document.getElementById(pre+'-in')||{}).value,b=(document.getElementById(pre+'-out')||{}).value,o=document.getElementById(pre+'-out'),el=document.getElementById(pre+'-nn');
+  if(o&&a)o.min=addDays(a,1);var n=tpNights(a,b),amt=parseFloat((document.getElementById(pre==='tpe'?'tpe-a':'tpb-p')||{}).value);
+  if(el)el.textContent=n?n+' คืน'+(amt>0?' · เฉลี่ยคืนละ '+(Math.round(amt/n*100)/100).toLocaleString('en-US'):''):(a&&b?'เช็กเอาต์ต้องหลังเช็กอิน':'เลือกวันเช็กอิน–เช็กเอาต์');}
 // ---------- การจอง ↔ ค่าใช้จ่าย (6 พ.ย. "ใส่การจองแต่ไม่มีราคา → ให้พิมพ์ราคาเอง") ----------
 function tpBkIsCo(b){return b.co||/^เช็กเอาต์/.test(b.title||'');}
 function tpBkExp(t,b){return (t.exp||[]).find(function(x){return x.bk===b.id;})||(t.exp||[]).find(function(x){return !x.bk&&b.title&&x.note===b.title;});}
@@ -5080,12 +5126,15 @@ function tpBookSave(id){
   var ty=document.querySelector('.tp-bk-ty.on'),ln=document.getElementById('tpb-l').value.trim();
   if(ln&&!/^https?:\/\//i.test(ln))ln='https://'+ln;
   var v={type:ty?ty.dataset.k:'other',title:document.getElementById('tpb-t').value.trim(),date:document.getElementById('tpb-d').value,time:document.getElementById('tpb-h').value,code:document.getElementById('tpb-c').value.trim(),link:ln,note:document.getElementById('tpb-n').value.trim()};
+  if(v.type==='hotel'){var hi=document.getElementById('tpb-in').value,ho=document.getElementById('tpb-out').value;if(hi&&ho&&ho<=hi){showToast('เช็กเอาต์ต้องหลังวันเช็กอิน');return;}v.date=hi||v.date;v.end=ho||'';}
   if(!v.title&&!v.code){showToast('ใส่ชื่อหรือรหัสจองก่อน');return;}
   var pr=parseFloat((document.getElementById('tpb-p')||{}).value),pu=(document.getElementById('tpb-u')||{}).value||'THB';
   var t0=tpCur(tpLoad());if(pr>0&&pu!=='THB'&&!tpFx(t0)){showToast('ใส่อัตราแลกเปลี่ยนใน “แก้ทริป / งบ” ก่อน');return;}
   closeModal();
-  tpMut(function(t){t.book=t.book||[];var b=id?t.book.find(function(x){return x.id===id;}):null;if(!b){b={id:tpUid()};t.book.push(b);}Object.keys(v).forEach(function(k){b[k]=v[k];});
-    var ex=tpBkExp(t,b);if(pr>0){delete b.noPrice;tpBkSetPrice(t,b,pr,pu);if(ex)ex.note=b.title||ex.note;}}); // ลบราคาออก = ค่าใช้จ่ายเดิมยังอยู่ (ลบเองในรายการค่าใช้จ่าย)
+  tpMut(function(t){t.book=t.book||[];var b=id?t.book.find(function(x){return x.id===id;}):null;if(!b){b={id:tpUid()};t.book.push(b);}var oldT=b.title;Object.keys(v).forEach(function(k){b[k]=v[k];});if(!b.end)delete b.end;
+    if(b.type==='hotel'){var co=(t.book||[]).find(function(x){return x!==b&&tpBkIsCo(x)&&x.title==='เช็กเอาต์ '+(oldT||'');});if(co){if(b.end){co.date=b.end;co.title='เช็กเอาต์ '+(b.title||'');}else b.end=co.date;}
+      var lx=tpBkExp(t,b);if(lx){lx.d1=b.date||'';lx.d2=b.end||'';}}
+    var ex=tpBkExp(t,b);if(pr>0){delete b.noPrice;tpBkSetPrice(t,b,pr,pu);if(ex)ex.note=b.title||ex.note;}if(b.type==='hotel'){var lx2=tpBkExp(t,b);if(lx2){lx2.cat='hotel';lx2.d1=b.date||'';lx2.d2=b.end||'';}}}); // ลบราคาออก = ค่าใช้จ่ายเดิมยังอยู่ (ลบเองในรายการค่าใช้จ่าย)
 }
 function tpCopy(text,msg){
   function ok(){showToast(msg||'คัดลอกแล้ว');}
@@ -5458,8 +5507,8 @@ function tpAiSave(quiet){
     on.forEach(function(x){
       if(dup(x)){nB--;return;} // อ่านรูปเดิมซ้ำ → ไม่ลงซ้ำ
       var nt=[x.from&&x.to?x.from+' → '+x.to:'',x.endDate&&x.type!=='hotel'?'ถึง '+tpDM(x.endDate).join(' ')+(x.endTime?' '+x.endTime:''):'',x.type==='hotel'&&x.endDate?'เช็กเอาต์ '+tpDM(x.endDate).join(' ')+(x.endTime?' '+x.endTime:''):'',x.people?x.people+' คน':'',x.address,x.note].filter(String).join(' · ');
-      var bid=tpUid();t.book.push({id:bid,type:x.type,title:x.title||(TP_BOOK.find(function(k){return k[0]===x.type;})||TP_BOOK[6])[2],date:x.date,time:x.time,code:x.code,link:imgUrl[x.img]||'',note:nt,ai:1});nB++;
-      if(x.type==='hotel'&&x.endDate){t.book.push({id:tpUid(),type:'hotel',title:'เช็กเอาต์ '+(x.title||'ที่พัก'),date:x.endDate,time:x.endTime,code:x.code,link:'',note:'',ai:1,co:1});}
+      var bid=tpUid(),nb={id:bid,type:x.type,title:x.title||(TP_BOOK.find(function(k){return k[0]===x.type;})||TP_BOOK[6])[2],date:x.date,time:x.time,code:x.code,link:imgUrl[x.img]||'',note:nt,ai:1};
+      if(x.type==='hotel'&&x.endDate&&x.endDate>(x.date||'')){nb.end=x.endDate;if(x.endTime)nb.endTime=x.endTime;}t.book.push(nb);nB++;
       var thb=+x.thb||0;
       if(x.doExp&&thb>0){var o={id:tpUid(),bk:bid,cat:TP_AI_CAT[x.type]||'other',who:t.lastWho||'',amt:thb,note:x.title||'',at:Date.now(),date:t.start&&TODAY_STR<t.start?'pre':(tpExpDays(t).indexOf(TODAY_STR)>=0?TODAY_STR:'')};
         if(x.price&&x.cur&&x.cur!=='THB'){o.oa=x.price;o.oc=x.cur;}if(!o.date)delete o.date;t.exp.push(o);nE++;}
