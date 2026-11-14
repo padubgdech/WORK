@@ -1378,6 +1378,12 @@ body.tp-printing #tp-print{display:block}
 .tp-pp .pg{position:absolute;right:14mm;bottom:7mm;font-size:9px;color:#a29c90}
 .tp-mk.off,.tp-lfwrap:has(>.tp-mk.off){display:none!important}
 .tp-dname:has(i em){padding-left:24px}.tp-dname i:has(em){width:18px;height:18px;top:1px;display:flex;align-items:center;justify-content:center}.tp-dname i em{font-style:normal;font-size:10.5px;font-weight:700;color:#fff}
+.tp-sp{flex-wrap:wrap;row-gap:6px}
+.tp-sp>input.tp-sp-nm{flex:1 1 140px;min-width:0;font-weight:600}
+.tp-sp>select,.tp-sp>.tp-sp-tw{order:2}.tp-sp>.tp-x{order:1}
+.tp-sp>select{margin-left:26px;flex:0 1 160px;max-width:160px}.tp-sp>.tp-sp-tw{margin-left:26px}
+.tp-sp .tp-sp-tw input.tp-sp-tm{flex:0 0 auto;width:96px;border:1px solid #e3e5ee;background:#fff;border-radius:8px;padding:3px 4px;font-size:12px}
+.tp-sp::after{content:'';order:1;flex-basis:100%;height:0}
 .tp-sp-tw{display:inline-flex;align-items:center;gap:3px}.tp-sp-tw i{font-style:normal;color:#8a90a6;font-size:12px}
 .tp-nt{font-size:12px;color:#4b5068;background:#f4f2ff;border-radius:10px;padding:8px 10px;margin:-4px 0 12px;line-height:1.5}.tp-nt:empty{display:none}.tp-nt b{color:#3d33b8}
 .tp-flow{gap:0!important}
@@ -6122,7 +6128,7 @@ function tpSpotRender(){
     if(x.date&&days.indexOf(x.date)<0){var dm=tpDM(x.date);opts+='<option value="'+x.date+'" selected>'+dm[0]+' '+dm[1]+' (นอกช่วง)</option>';}
     return '<div class="tp-sp" data-i="'+i+'"><button type="button" class="tp-sp-n'+(x.lat==null?' nopin':'')+'" style="background:'+c+'" title="'+(x.lat==null?'ยังไม่มีหมุด — กดเพื่อปักบนแผนที่':'ปักหมุดแล้ว — กดเพื่อย้ายตำแหน่ง')+'" aria-label="'+(x.lat==null?'ปักหมุด':'ย้ายหมุด')+' '+tpEsc(x.name||'')+'" onclick="tpDlgMap(+this.parentNode.dataset.i)">'+(i+1)+'</button>'
       +(x.lat==null?'<button type="button" class="tp-sp-pin" onclick="tpDlgMap(+this.parentNode.dataset.i)">📍 ปัก</button>':'')
-      +'<input value="'+tpEsc(x.name)+'" aria-label="ชื่อที่เที่ยว '+(i+1)+'" oninput="(window._tpSpots[+this.parentNode.dataset.i]||{}).name=this.value">'
+      +'<input class="tp-sp-nm" value="'+tpEsc(x.name)+'" aria-label="ชื่อที่เที่ยว '+(i+1)+'" oninput="(window._tpSpots[+this.parentNode.dataset.i]||{}).name=this.value">'
       +'<select aria-label="วันที่ไป" onchange="(window._tpSpots[+this.parentNode.dataset.i]||{}).date=this.value">'+opts+'</select>'
       +'<span class="tp-sp-tw"><input type="time" class="tp-sp-tm" value="'+tpEsc(x.time||'')+'" aria-label="เวลาเริ่ม '+tpEsc(x.name||'')+'" onchange="(window._tpSpots[+this.closest(\'.tp-sp\').dataset.i]||{}).time=this.value"><i aria-hidden="true">–</i><input type="time" class="tp-sp-tm" value="'+tpEsc(x.end||'')+'" aria-label="เวลาจบ '+tpEsc(x.name||'')+'" onchange="(window._tpSpots[+this.closest(\'.tp-sp\').dataset.i]||{}).end=this.value"></span>'
       +'<button type="button" class="tp-x" aria-label="เอาออก" onclick="window._tpSpots.splice(+this.parentNode.dataset.i,1);tpSpotRender();tpDlgMapMarks()">×</button></div>';
