@@ -22,7 +22,8 @@ Personal task dashboard for Dech (KHUMTONE). Thai UI. Read this before changing 
   Installed 29 Oct 2026, `setupRepeatProperty` run (property created). `USE_MAIN_DATA=true` in index.html.
   Pinned tasks (same file): Notion checkbox "Pinned" (`setupPinnedProperty` run). `getMainData` returns `pinned:[{id,created}]`
   (+ their subtasks); actions `getPinned`, `setPinned` (id, pinned=true|false); `addTask` with `pin=1` → pins the new task.
-  Dashboard deployment = **version 197** (7 Nov 2026: auth installed but OFF + secrets from Script Properties; 196 = readBooking AI).
+  Dashboard deployment = **version 198** (26 Nov: `callAction_` forwards the caller's `_s` session via `_dxSess_` — since login was enforced on 7 Nov the
+  internal doGet calls were blocked by `authGuard_`, so getMainData returned no today/overdue tasks/events). Before that: version 197 (7 Nov 2026: auth installed but OFF + secrets from Script Properties; 196 = readBooking AI).
 - Frontend pinned band (design "D compact", canvas artifact "ปักหมุดงาน — 4 แบบ"): `#main-pinned` above the Main grid.
   Shows every Pinned task that is still active (`allActiveTasks`+today+overdue; done ones drop out) — dated or not (Dech: "ปักได้ทุกงาน").
   Undated: age badge (days since Notion created_time) + "วันนี้"; setting a date auto-unpins. Dated: "เริ่ม <date>" badge, stays pinned

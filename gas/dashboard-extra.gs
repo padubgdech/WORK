@@ -18,12 +18,15 @@ return null;
 }
 
 // ---------- เปิดแอปคำขอเดียว ----------
+var _dxSess_ = '';
 function callAction_(params) {
+if (_dxSess_ && !params._s) params._s = _dxSess_;
 var out = doGet({ parameter: params });
 try { return JSON.parse(out.getContent()); } catch (err) { return null; }
 }
 
 function getMainData_(p) {
+_dxSess_ = p._s || '';
 var date = p.date || Utilities.formatDate(new Date(), 'Asia/Bangkok', 'yyyy-MM-dd');
 var today = callAction_({ action: 'getTasks', date: date }) || {};
 var overdue = callAction_({ action: 'getOverdueTasks' }) || {};
